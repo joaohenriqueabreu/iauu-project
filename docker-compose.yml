@@ -7,8 +7,8 @@ services:
                         - "27017:27017"
                 volumes:
                         - db:/data/db
-                networks:
-                        iauu_net:
+                # networks:
+                #         iauu_net:
         # api:
         #         build: ./api
         #         container_name: api
