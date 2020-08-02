@@ -13,52 +13,42 @@ services:
                 volumes:
                         - db:/data/db
                 networks:
-                        iauu_net:                                
-        dbadmin:
-                build: ./dbadmin
-                container_name: dbadmin
-                ports:
-                        - "8081:8081"
-                environment:
-                        ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_ROOT_USERNAME}
-                        ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_ROOT_PASSWORD}
-                networks:
                         iauu_net:
         api:
                 build: ./api
                 container_name: api
-                volumes:
-                        - ./api:/usr/app
-                        - /usr/app/node_modules
+                # volumes:
+                #         - ./api:/usr/app
+                #         - /usr/app/node_modules
                 ports:
                         - "4444:4444"
                 networks:
                         iauu_net:
                 depends_on: 
                         - db
-                          #        web:
-                          #                build: ./web
-                          #                container_name: web
-                          #                volumes:
-                          #                        - ./web:/usr/app
-                          #                        - /usr/app/node_modules
-                          #                ports:
-                          #                        - "3333:3333"
-                          #                networks:
-                          #                        iauu_net:
-                          #                depends_on:
-                          #                        - api                                
+       web:
+               build: ./web
+               container_name: web
+        #        volumes:
+        #                - ./web:/usr/app
+        #                - /usr/app/node_modules
+               ports:
+                       - "3333:3333"
+               networks:
+                       iauu_net:
+               depends_on:
+                       - api
         server:
                 build: ./server
-                container_name: server   
-                restart: always                   
+                container_name: server
+                restart: always
                 ports:
                         - "8080:80"
                 networks:
                         iauu_net:
                 depends_on: 
-                        - api                
+                        - api
 networks:
-        iauu_net:        
+        iauu_net:
 volumes:
-        db:        
+        db:
