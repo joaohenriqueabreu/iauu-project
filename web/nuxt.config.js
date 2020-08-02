@@ -212,10 +212,10 @@ export default {
     extend(config, ctx) {},
     transpile: ['@nuxtjs/auth']
     // babelrc: true
-  }
+  },
 
-  // server: {
-  // port: 3333
-  // host: '0.0.0.0'
-  // }
+  server: {
+    port: 3000,
+    host: '0.0.0.0'
+  }
 }
