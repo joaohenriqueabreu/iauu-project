@@ -1,0 +1,31 @@
+// Shadow
+$shadow: 0 0 20px rgba(0, 0, 0, 0.7); 
+$lightShadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+$higherShadow: 0 0 40px rgba(0, 0, 0, 0.5);
+
+
+// Transition effects
+$transition: all 0.5s ease;
+
+// For z-index
+$above:     10;
+$secondLayer: 20;
+$thridLayer: 30;
+$moveToTop: 100;
+$base: 0;
+$below:     -1;
+
+// Spacing 
+$space: 0.5rem;
+
+// font-sizes
+$small: 10px;
+$regular: 12px;
+$large: 15px;
+$huge: 20px;
+
+$bold: 700;
+
+// border-radius
+$rounded: 50rem;
+$edges: 1rem;

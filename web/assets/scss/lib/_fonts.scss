@@ -1,0 +1,34 @@
+body {
+    font-family: Gotham;
+    letter-spacing: 0.5px;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialised !important;
+    text-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.005)
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: regular;
+    font-style: normal;
+    src: url('~static/fonts/gotham/GothamRounded-Light.otf');
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: 300;
+    font-style: normal;
+    src: url('~static/fonts/gotham/GothamRounded-Medium.otf');
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: 700;
+    font-style: normal;
+    src: url('~static/fonts/gotham/GothamRounded-Bold.otf');
+}
+
+// @font-face {
+//     font-family: FontAwesome;
+//     font-weight: 700;
+//     font-style: normal;    
+// }

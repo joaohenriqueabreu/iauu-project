@@ -1,0 +1,104 @@
+version: '3.7'
+services:
+        db:
+                build: ./db
+                container_name: db
+                ports:
+                        - "27017:27017"
+                environment:
+                        MONGO_INITDB_ROOT_USERNAME: root
+                        MONGO_INITDB_ROOT_PASSWORD: example
+                volumes:
+                        - db:/data/db
+                networks:
+                        iauu_net:                                
+        dbadmin:
+                build: ./dbadmin
+                container_name: dbadmin
+                ports:
+                        - "8081:8081"
+                environment:
+                        ME_CONFIG_MONGODB_ADMINUSERNAME: root
+                        ME_CONFIG_MONGODB_ADMINPASSWORD: example
+                networks:
+                        iauu_net:
+        api:
+                build: ./api
+                container_name: api
+                volumes:
+                        - ./api:/usr/app
+                        - /usr/app/node_modules
+                ports:
+                        - "3002:3000"
+                networks:
+                        iauu_net:
+                depends_on: 
+                        - db
+        web:
+                build: ./web
+                container_name: web
+                volumes:
+                        - ./web:/usr/app
+                        - /usr/app/node_modules
+                ports:
+                        - "3001:3000"
+                networks:
+                        iauu_net:
+                depends_on:
+                        - api
+        server:
+                build: ./server
+                container_name: server
+                volumes:                  
+                        - ./server/conf:/etc/nginx/conf.d                          
+                ports:
+                        - "80:80"
+                networks:
+                        - iauu_net
+                depends_on: 
+                        - db
+                        - web
+                        - api
+        cache:
+                build: ./cache
+                container_name: cache
+                ports:
+                        - "22122:22122"
+                networks:
+                        - iauu_net
+        blogdb:
+                build: ./blogdb
+                container_name: blogdb
+                ports:
+                        - "3306:3306"
+                environment:
+                        MYSQL_DATABASE: exampledb
+                        MYSQL_USER: exampleuser
+                        MYSQL_PASSWORD: examplepass 
+                volumes:
+                        - blogdb:/var/lib/mysql        
+                networks:
+                        blog_net:                         
+        blog:
+                build: ./blog
+                container_name: blog
+                ports:
+                        - "8001:80"
+                environment:
+                        WORDPRESS_DB_HOST: blogdb
+                        WORDPRESS_DB_USER: exampleuser
+                        WORDPRESS_DB_PASSWORD: examplepass
+                        WORDPRESS_DB_NAME: exampledb
+                volumes:
+                        - wordpress:/var/www/html                         
+                networks:
+                        blog_net:    
+                depends_on:
+                        - blogdb
+networks:
+        iauu_net:
+        blog_net:   
+volumes:
+        db:
+        blogdb:
+        wordpress:        

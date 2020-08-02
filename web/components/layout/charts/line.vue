@@ -1,0 +1,27 @@
+<script>
+import { Line } from 'vue-chartjs'
+
+export default {
+  extends: Line,
+  props: {
+    data: { type: Object, default: null },
+    options: { type: Object, default: null }
+  },
+  computed: {
+    chartOptions() {
+      return {
+        ...this.options,
+        responsive: true,
+        tooltips: {
+          enabled: false
+        }
+      }
+    }
+  },
+  mounted() {
+    this.renderChart(this.data, this.chartOptions)
+  }
+}
+</script>
+
+<style lang="scss"></style>
