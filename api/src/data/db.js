@@ -32,15 +32,16 @@ mongoose.connection.on('error', (error) => {
 })
 
 const run = async () => {
-  const username    = encodeURIComponent(process.env.DB_USERNAME)
-  const password    = encodeURIComponent(process.env.DB_PASSWORD)
+  // const username    = encodeURIComponent(process.env.DB_USERNAME)
+  // const password    = encodeURIComponent(process.env.DB_PASSWORD)
   const hostname    = encodeURIComponent(process.env.DB_HOSTNAME)
   const dbname      = encodeURIComponent(process.env.DB_NAME)   
-  const authSource  = encodeURIComponent(process.env.DB_AUTH_SOURCE)   
+  // const authSource  = encodeURIComponent(process.env.DB_AUTH_SOURCE)   
   const dbport      = encodeURIComponent(process.env.DB_PORT)
   
   // await mongoose.connect(`mongodb://${username}:${password}@${hostname}:${dbport}/${dbname}?authSource=${authSource}`, connectionOptions)
-  await mongoose.connect(`mongodb://${username}:${password}@${hostname}:${dbport}/${dbname}`, connectionOptions)
+  // await mongoose.connect(`mongodb://${username}:${password}@${hostname}:${dbport}/${dbname}`, connectionOptions)
+  await mongoose.connect(`mongodb://${hostname}:${dbport}/${dbname}`, connectionOptions)
 }
 
 run().catch(error => console.error(error))

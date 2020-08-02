@@ -8,8 +8,8 @@ WORKDIR /usr/app
 RUN mkdir node_modules && chown node:node node_modules
 
 COPY ./.env.production .env
-# COPY package.json .
-COPY . .
+COPY package.json .
+# COPY . .
 
 RUN npm install
 
