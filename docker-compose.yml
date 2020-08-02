@@ -26,7 +26,7 @@ services:
                         iauu_net:
                 depends_on: 
                         - db
-       web:
+        web:
                build: ./web
                container_name: web
         #        volumes:
