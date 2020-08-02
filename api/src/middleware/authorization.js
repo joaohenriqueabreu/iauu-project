@@ -1,7 +1,7 @@
 require('dotenv').config()
 const jwt = require('express-jwt')
 
-const authorize = jwt({ secret: process.env.AUTH_SECRET })
+const authorize = jwt({ secret: process.env.AUTH_SECRET, algorithms: ['HS256'] })
 const owner = (req, res, next) => {
   // Should always come after authorize 
   console.log('Checking if user owns request...')
