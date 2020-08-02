@@ -1,8 +1,5 @@
-db.createUser(
-  {
-      user: "api",
-      pwd: passwordPrompt(),
-      roles: [
-        { role: "readWrite", db: "iauu" }
-      ]
-  });
+db.createUser({
+  user: "iauu",
+  pwd: "admiauu",
+  roles: [{ role: "readWrite", db: "iauu" }]
+});

@@ -8,11 +8,12 @@ WORKDIR /usr/app
 RUN mkdir node_modules && chown node:node node_modules
 
 COPY ./.env.production .env
-COPY package.json .
+# COPY package.json .
+COPY . .
 
 RUN npm install
 
-EXPOSE 3333
+EXPOSE 3000
 
 ENV HOST 0.0.0.0
 

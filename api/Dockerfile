@@ -7,9 +7,10 @@ WORKDIR /usr/app
 RUN npm install -g nodemon
 RUN mkdir node_modules && chown node:node node_modules
 
-COPY package.json .
+# COPY package.json .
+COPY . .
 
-RUN npm install --quiet
+RUN npm install
 
 EXPOSE 4444
 
