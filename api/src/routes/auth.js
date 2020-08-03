@@ -13,7 +13,7 @@ api.post('/login/google', validationMiddleware.social, authController.googleLogi
 api.post('/verify', validationMiddleware.verify, authController.verify)
 api.post('/verify/resend', validationMiddleware.verify, authController.resendVerification)
 api.post('/role', authorizationMiddleware.authorize, validationMiddleware.role, authController.assignRole)
-api.post('/validate', jwt({ secret: process.env.AUTH_SECRET }), authController.validate)
+api.post('/validate', authorizationMiddleware.authorize, authController.validate)
 api.delete('/login', authController.logoff)
 
 api.post('/register', validationMiddleware.newCrendentials, authController.register)

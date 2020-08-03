@@ -2,8 +2,12 @@
   <div>
     <modal ref="modal">
       <template v-slot:header>
-        <div class="horizontal d-flex justify-content-between">          
-          <nuxt-link v-if="!$empty(presentation.artist)" :to="`/search/artists/${presentation.artist.slug}`" class="horizontal middle">
+        <div class="horizontal d-flex justify-content-between">
+          <nuxt-link
+            v-if="!$empty(presentation.artist)"
+            :to="`/search/artists/${presentation.artist.slug}`"
+            class="horizontal middle"
+          >
             <avatar
               class="mr-4"
               :src="presentation.artist.user.photo"
@@ -31,7 +35,10 @@
           <h6>Apresentação contratada</h6>
         </div>
         <div class="boxed mb-4">
-          <presentation-price :presentation="presentation" class="horizontal center middle"></presentation-price>
+          <presentation-price
+            :presentation="presentation"
+            class="horizontal center middle"
+          ></presentation-price>
         </div>
         <div>
           <presentation-product :presentation="presentation" hide-price></presentation-product>
@@ -43,32 +50,46 @@
       <template v-if="!readOnly" v-slot:footer>
         <div v-if="hasConfirmedPresentation && waitingForConfirmation">
           <small>
-            Você já confirmou a apresentação! Obrigado. Estamos aguardando a confirmação do artista para iniciar os procedimentos de pagamento.
-            Caso não haja confirmação até dia <b>{{ confirmationDueDate | date }}</b> a apresentação será encerrada automaticamente e o pagamento será processado.
+            Você já confirmou a apresentação! Obrigado. Estamos aguardando a confirmação do artista
+            para iniciar os procedimentos de pagamento. Caso não haja confirmação até dia
+            <b>{{ confirmationDueDate | date }}</b> a apresentação será encerrada automaticamente e
+            o pagamento será processado.
           </small>
         </div>
         <div class="horizontal center middle mb-3">
-          <div class="mr-5" v-if="canConfirmPresentation && hasPresentationStarted && !hasConfirmedPresentation">
+          <div
+            v-if="canConfirmPresentation && hasPresentationStarted && !hasConfirmedPresentation"
+            class="mr-5"
+          >
             <form-button @action="confirm">
               Confirmar Realização
             </form-button>
           </div>
-          <div v-if="hasPresentationStarted && hasConfirmedPresentation" class="clickable my-4" @click="openFeedbackModal">
+          <div
+            v-if="hasPresentationStarted && hasConfirmedPresentation"
+            class="clickable my-4"
+            @click="openFeedbackModal"
+          >
             <h4><u>Enviar Feedback</u></h4>
           </div>
           <div>
-            <h5 v-if="!hasPresentationStarted" @click="openConfirmCancelModal" class="error">Cancelar Apresentação</h5>
+            <h5 v-if="!hasPresentationStarted" class="error" @click="openConfirmCancelModal">
+              Cancelar Apresentação
+            </h5>
           </div>
         </div>
         <div v-if="hasPresentationStarted && !hasConfirmedPresentation">
-          <small>Apresentação realizada em {{ presentation.timeslot.start_dt | date }}, caso houve algum problema com a apresentação entrar em contato conosco imediatamente.</small>
+          <small
+            >Apresentação realizada em {{ presentation.timeslot.start_dt | date }}, caso houve algum
+            problema com a apresentação entrar em contato conosco imediatamente.</small
+          >
         </div>
       </template>
     </modal>
     <modal ref="cancel" height="tiny">
       <template v-slot:main>
         <div class="horizontal middle center full-height">
-          <h6 v-if="!hasPresentationStarted">Tem certeza que quer cancelar a apresentação? </h6>
+          <h6 v-if="!hasPresentationStarted">Tem certeza que quer cancelar a apresentação?</h6>
           <h6 v-else>Não é possível cancelar a apresentação após sua data de realização</h6>
         </div>
       </template>
@@ -79,7 +100,11 @@
         </div>
       </template>
     </modal>
-    <presentation-feedback ref="feedback" @sent="handleFeedback" :presentation="presentation"></presentation-feedback>
+    <presentation-feedback
+      ref="feedback"
+      :presentation="presentation"
+      @sent="handleFeedback"
+    ></presentation-feedback>
   </div>
 </template>
 
@@ -88,9 +113,9 @@ import { mapActions } from 'vuex'
 import BasePresentation from '../base'
 
 export default {
-  extends: BasePresentation,  
+  extends: BasePresentation,
   props: {
-    readOnly: { type: Boolean, default: true },
+    readOnly: { type: Boolean, default: true }
   },
   data() {
     return {
@@ -108,10 +133,10 @@ export default {
       return this.presentation.confirm_status.includes('contractor')
     },
     waitingForConfirmation() {
-      return ! this.presentation.confirm_status.includes('artist')
+      return !this.presentation.confirm_status.includes('artist')
     },
     confirmationDueDate() {
-      return this.moment(this.presentation.end_dt).add(15, 'days');
+      return this.moment(this.presentation.end_dt).add(15, 'days')
     }
   },
   methods: {
@@ -137,7 +162,7 @@ export default {
       try {
         await this.confirmPresentation(this.presentation.id)
         this.$toast.success(
-          "Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento. Por favor, reserve alguns minutos para avaliar o artista, seu feedback é muito importante.", 
+          'Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento. Por favor, reserve alguns minutos para avaliar o artista, seu feedback é muito importante.',
           { duration: 10000 }
         )
 
@@ -150,7 +175,7 @@ export default {
     async cancel() {
       try {
         await this.cancelPresentation(this.presentation.id)
-        this.$toast.info("Apresentação cancelada")
+        this.$toast.info('Apresentação cancelada')
         this.$emit('cancelled', this.presentation.id)
         this.closeCancelModal()
       } catch (error) {

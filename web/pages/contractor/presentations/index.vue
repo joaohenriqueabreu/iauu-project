@@ -1,37 +1,59 @@
 <template>
   <div>
-    <div class="vertical mb-4" v-if="!$empty(openPresentations)">
+    <div v-if="!$empty(openPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Próximas apresentações contratadas</h6>
-      <div v-for="(presentation, index) in openPresentations" :key="index" @click="open(presentation.id)">
+      <div
+        v-for="(presentation, index) in openPresentations"
+        :key="index"
+        @click="open(presentation.id)"
+      >
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
-      <hr>
+      <hr />
     </div>
-    <div class="vertical mb-4" v-if="!$empty(pendingConfirmPresentations)">
+    <div v-if="!$empty(pendingConfirmPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Apresentações realizadas (aguardando confirmação)</h6>
-      <div v-for="(presentation, index) in pendingConfirmPresentations" :key="index" @click="open(presentation.id)">
+      <div
+        v-for="(presentation, index) in pendingConfirmPresentations"
+        :key="index"
+        @click="open(presentation.id)"
+      >
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
-      <hr>
+      <hr />
     </div>
-    <div class="vertical mb-4" v-if="!$empty(completedPresentations)">
+    <div v-if="!$empty(completedPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Apresentações concluídas</h6>
-      <div v-for="(presentation, index) in completedPresentations" :key="index" @click="open(presentation.id)">
+      <div
+        v-for="(presentation, index) in completedPresentations"
+        :key="index"
+        @click="open(presentation.id)"
+      >
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
-      <hr>
+      <hr />
     </div>
-    <div class="vertical mb-4" v-if="!$empty(cancelledPresentations)">
+    <div v-if="!$empty(cancelledPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Apresentações canceladas</h6>
-      <div v-for="(presentation, index) in cancelledPresentations" :key="index" @click="open(presentation.id)">
+      <div
+        v-for="(presentation, index) in cancelledPresentations"
+        :key="index"
+        @click="open(presentation.id)"
+      >
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
     </div>
     <div v-if="presentations.length === 0" class="mb-4">
-      Nenhuma apresentação confirmada <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
+      Nenhuma apresentação confirmada
+      <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
     </div>
     <!-- Data loaded from state -->
-    <presentation-details v-if="!$empty(presentationState)" ref="presentation" :read-only="false" @confirmed="handleConfirmedPresentaion">
+    <presentation-details
+      v-if="!$empty(presentationState)"
+      ref="presentation"
+      :read-only="false"
+      @confirmed="handleConfirmedPresentaion"
+    >
     </presentation-details>
   </div>
 </template>
@@ -50,7 +72,12 @@ export default {
     await store.dispatch('presentation/loadPresentations')
   },
   computed: {
-    ...mapGetters('presentation', ['openPresentations', 'pendingConfirmPresentations', 'completedPresentations', 'cancelledPresentations']),
+    ...mapGetters('presentation', [
+      'openPresentations',
+      'pendingConfirmPresentations',
+      'completedPresentations',
+      'cancelledPresentations'
+    ]),
     ...mapState({ presentations: (state) => state.presentation.presentations }),
     ...mapState({ presentationState: (state) => state.presentation.presentation })
   },

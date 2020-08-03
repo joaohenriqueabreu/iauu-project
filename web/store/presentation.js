@@ -1,8 +1,8 @@
-import Proposal from '@/models/proposal'
-import Presentation from '@/models/presentation'
 import _ from 'lodash'
 import moment from 'moment'
 import { getField, updateField } from 'vuex-map-fields'
+import Presentation from '@/models/presentation'
+import Proposal from '@/models/proposal'
 
 export const state = () => ({
   proposal: new Proposal(),
@@ -44,14 +44,20 @@ export const actions = {
     commit('set_presentation', data)
   },
   async sendCounterOffer({ state, commit }, counterOffer) {
-    await this.$axios.post(`presentations/${state.presentation.id}/proposal/counterOffer`, { counterOffer })
+    await this.$axios.post(`presentations/${state.presentation.id}/proposal/counterOffer`, {
+      counterOffer
+    })
   },
   async acceptCounterOffer({ state, commit }) {
-    const { data } = await this.$axios.put(`presentations/${state.presentation.id}/proposal/counterOffer`)
+    const { data } = await this.$axios.put(
+      `presentations/${state.presentation.id}/proposal/counterOffer`
+    )
     commit('set_presentation', data)
   },
   async rejectCounterOffer({ state, commit }) {
-    const { data } = await this.$axios.delete(`presentations/${state.presentation.id}/proposal/counterOffer`)
+    const { data } = await this.$axios.delete(
+      `presentations/${state.presentation.id}/proposal/counterOffer`
+    )
     commit('set_presentation', data)
   },
   async acceptProposal({ commit }, id) {
@@ -84,11 +90,26 @@ export const getters = {
   hasMessage: (state) => state.message !== undefined,
   getMessage: (state) => state.message,
 
-  openProposals: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'proposal'),
-  rejectedProposals: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'rejected'),
-  
-  openPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isAfter(moment())),
-  pendingConfirmPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isBefore(moment())),
-  completedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
-  cancelledPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'cancelled'),
+  openProposals: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'proposal'),
+  rejectedProposals: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'rejected'),
+
+  openPresentations: (state) =>
+    _.filter(
+      state.presentations,
+      (presentation) =>
+        presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isAfter(moment())
+    ),
+  pendingConfirmPresentations: (state) =>
+    _.filter(
+      state.presentations,
+      (presentation) =>
+        presentation.status === 'accepted' &&
+        moment(presentation.timeslot.end_dt).isBefore(moment())
+    ),
+  completedPresentations: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
+  cancelledPresentations: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'cancelled')
 }

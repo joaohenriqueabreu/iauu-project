@@ -49,7 +49,7 @@ export default {
     iconHelper() {
       return !this.$utils.empty(this.icon) ? this.icon : 'search'
     }
-  },
+  }
 }
 </script>
 

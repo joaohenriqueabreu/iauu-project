@@ -4,7 +4,7 @@
   <p>
     A sua privacidade é importante para nós.
     política do iauu respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no site
-    a href=https://www.iauu.com.br>iauu</a>, e outros sites que possuímos e operamos.
+    <a href=https://www.iauu.com.br>iauu</a>, e outros sites que possuímos e operamos.
   </p>
   <p>
     Solicitamos informações pessoais apenas quando realmente precisamos delas para lhe fornecer um serviço.

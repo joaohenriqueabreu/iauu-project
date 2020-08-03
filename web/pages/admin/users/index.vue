@@ -3,22 +3,33 @@
     <div class="vertical mb-5">
       <div class="horizontal middle mb-4">
         <h4 class="mr-4">Usuários</h4>
-        <form-input class="full-width mr-5" v-model="searchTerm" @enter="handleSearchUsers" @blur="handleSearchUsers" placeholder="Pesquisa" icon="user"></form-input>
+        <form-input
+          v-model="searchTerm"
+          class="full-width mr-5"
+          placeholder="Pesquisa"
+          icon="user"
+          @enter="handleSearchUsers"
+          @blur="handleSearchUsers"
+        ></form-input>
       </div>
       <div class="horizontal">
-        <span v-for="role in ['artist', 'contractor']" 
-          :key="role" 
-          :class="{role, selected: role === filter}" 
-          class="role-badge mr-4 horizontal center middle clickable" 
-          @click="filterByRole(role)">
+        <span
+          v-for="role in ['artist', 'contractor']"
+          :key="role"
+          :class="{ role, selected: role === filter }"
+          class="role-badge mr-4 horizontal center middle clickable"
+          @click="filterByRole(role)"
+        >
           <font-awesome :icon="roleIcon(role)" class="mr-2"></font-awesome>
           {{ roleLabel(role) }}s
         </span>
-        <span v-for="status in ['active', 'blocked', 'pending']" 
-          :key="status" 
-          :class="{status, selected: status === filter}" 
-          class="status-badge mr-4 horizontal center middle clickable" 
-          @click="filterByStatus(status)">
+        <span
+          v-for="status in ['active', 'blocked', 'pending']"
+          :key="status"
+          :class="{ status, selected: status === filter }"
+          class="status-badge mr-4 horizontal center middle clickable"
+          @click="filterByStatus(status)"
+        >
           <font-awesome :icon="statusIcon(status)" class="mr-2"></font-awesome>
           {{ statusLabel(status) }}s
         </span>
@@ -36,10 +47,14 @@
         <tbody>
           <tr v-for="user in users" :key="user.id" @click="openUserManagementModal(user)">
             <td class="text-center">
-              <h6 class="role-badge icon-only" :class="user.role"><font-awesome :icon="roleIcon(user.role)"></font-awesome></h6>
+              <h6 class="role-badge icon-only" :class="user.role">
+                <font-awesome :icon="roleIcon(user.role)"></font-awesome>
+              </h6>
             </td>
             <td class="text-center">
-              <div class="status-badge icon-only" :class="user.status"><font-awesome :icon="statusIcon(user.status)"></font-awesome></div>
+              <div class="status-badge icon-only" :class="user.status">
+                <font-awesome :icon="statusIcon(user.status)"></font-awesome>
+              </div>
             </td>
             <td class="py-3 cap horizontal middle">
               <span class="mr-2">{{ user.name }}</span>
@@ -50,7 +65,12 @@
         </tbody>
       </table>
     </perfect-scrollbar>
-    <user-management ref="user" :user="selectedUser" :stats="userStats" @updated="loadUsers"></user-management>
+    <user-management
+      ref="user"
+      :user="selectedUser"
+      :stats="userStats"
+      @updated="loadUsers"
+    ></user-management>
   </div>
 </template>
 
@@ -58,17 +78,24 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import UserManagement from '@/components/admin/user'
 export default {
-  async asyncData({ store }) {
-    await store.dispatch('admin/loadUsers')
-  },
   components: {
     UserManagement
+  },
+  async asyncData({ store }) {
+    await store.dispatch('admin/loadUsers')
   },
   computed: {
     ...mapState({ allUsers: (state) => state.admin.users }),
     ...mapState({ selectedUser: (state) => state.admin.user }),
     ...mapState({ userStats: (state) => state.admin.stats.users }),
-    ...mapGetters('admin', ['adminUsers', 'artistUsers', 'contractorUsers', 'pendingUsers', 'activeUsers', 'blockedUsers']),
+    ...mapGetters('admin', [
+      'adminUsers',
+      'artistUsers',
+      'contractorUsers',
+      'pendingUsers',
+      'activeUsers',
+      'blockedUsers'
+    ])
   },
   data() {
     return {
@@ -77,20 +104,20 @@ export default {
       users: []
     }
   },
-  mounted() {
-    this.users = this.allUsers
-  },
   watch: {
     allUsers(value) {
       this.users = value
     }
+  },
+  mounted() {
+    this.users = this.allUsers
   },
   methods: {
     ...mapActions('admin', ['loadUsers', 'loadUserStats', 'searchUsers']),
     async handleSearchUsers() {
       if (this.$empty(this.searchTerm)) {
         await this.loadUsers()
-        return 
+        return
       }
 
       await this.searchUsers(this.searchTerm)
@@ -104,8 +131,12 @@ export default {
 
       this.filter = role
 
-      if (role === 'artist') { this.users = this.artistUsers }
-      if (role === 'contractor') { this.users = this.contractorUsers }
+      if (role === 'artist') {
+        this.users = this.artistUsers
+      }
+      if (role === 'contractor') {
+        this.users = this.contractorUsers
+      }
     },
     filterByStatus(status) {
       if (this.filter === status) {
@@ -116,30 +147,56 @@ export default {
 
       this.filter = status
 
-      if (status === 'pending') { this.users = this.pendingUsers }
-      if (status === 'active') { this.users = this.activeUsers }
-      if (status === 'blocked') { this.users = this.blockedUsers }
+      if (status === 'pending') {
+        this.users = this.pendingUsers
+      }
+      if (status === 'active') {
+        this.users = this.activeUsers
+      }
+      if (status === 'blocked') {
+        this.users = this.blockedUsers
+      }
     },
     statusLabel(status) {
-      if (status === 'pending') { return 'Aguardando verificação' }
-      if (status === 'active') { return 'Ativo' }
-      if (status === 'blocked') { return 'Bloqueado' }
+      if (status === 'pending') {
+        return 'Aguardando verificação'
+      }
+      if (status === 'active') {
+        return 'Ativo'
+      }
+      if (status === 'blocked') {
+        return 'Bloqueado'
+      }
       return ''
     },
     statusIcon(status) {
-      if (status === 'pending') { return 'ellipsis-h' }
-      if (status === 'active') { return 'check' }
-      if (status === 'blocked') { return 'lock' }
+      if (status === 'pending') {
+        return 'ellipsis-h'
+      }
+      if (status === 'active') {
+        return 'check'
+      }
+      if (status === 'blocked') {
+        return 'lock'
+      }
       return ''
     },
     roleLabel(role) {
-      if (role === 'artist') { return 'Artista' }
-      if (role === 'contractor') { return 'Contratante' }
+      if (role === 'artist') {
+        return 'Artista'
+      }
+      if (role === 'contractor') {
+        return 'Contratante'
+      }
       return ''
     },
     roleIcon(role) {
-      if (role === 'artist') { return 'music' }
-      if (role === 'contractor') { return 'dollar-sign' }
+      if (role === 'artist') {
+        return 'music'
+      }
+      if (role === 'contractor') {
+        return 'dollar-sign'
+      }
       return ''
     },
     verificationLabel(verified) {
@@ -148,7 +205,7 @@ export default {
     async openUserManagementModal(user) {
       await this.loadUserStats(user.id)
       this.$refs.user.openModal()
-    },
+    }
   }
 }
 </script>
@@ -177,7 +234,9 @@ table {
   padding: 4 * $space;
 }
 
-.role-badge, .status-badge, .verification-label {
+.role-badge,
+.status-badge,
+.verification-label {
   &.icon-only {
     width: 25px;
     height: 25px;
@@ -194,19 +253,31 @@ table {
   }
 
   // Role specific classes
-  &.admin { background: $layer1; }
-  &.artist { background: $layer5; }
-  &.contractor { 
-    background: $brandLayer; 
+  &.admin {
+    background: $layer1;
+  }
+  &.artist {
+    background: $layer5;
+  }
+  &.contractor {
+    background: $brandLayer;
     color: $layer5;
   }
 
   // Status specific classes
-  &.pending { background: $layer5; }
-  &.active { background: $green; }
-  &.blocked { background: $error;  }
+  &.pending {
+    background: $layer5;
+  }
+  &.active {
+    background: $green;
+  }
+  &.blocked {
+    background: $error;
+  }
 
-  &.verified { background: $green; }
+  &.verified {
+    background: $green;
+  }
 }
 
 .login-as {

@@ -114,7 +114,8 @@ export default {
     'nuxt-socket-io',
     '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+    '@nuxtjs/ngrok'
   ],
   optimizedImages: {
     optimizeImages: true,
@@ -186,10 +187,12 @@ export default {
   },
   io: {
     // module options
-    sockets: [{
-      name: 'chat',
-      url: 'http://localhost:500'
-    }]
+    sockets: [
+      {
+        name: 'chat',
+        url: 'http://localhost:500'
+      }
+    ]
   },
   sentry: {
     dsn: process.env.SENTRY_DSN,
@@ -205,6 +208,7 @@ export default {
    ** Build configuration
    */
   build: {
+    // analyze: true,
     /*
      ** You can extend webpack config here
      */

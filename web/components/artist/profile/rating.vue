@@ -1,7 +1,13 @@
 <template>
   <div>
     <div v-if="!readOnly">
-      <font-awesome v-for="star in MAX_RATE" :key="star" @click="rate(star)" :icon="selectedStar(star)" class="clickable">
+      <font-awesome
+        v-for="star in MAX_RATE"
+        :key="star"
+        :icon="selectedStar(star)"
+        class="clickable"
+        @click="rate(star)"
+      >
       </font-awesome>
     </div>
     <div v-else>
@@ -20,7 +26,12 @@
           <font-awesome class="icon" icon="star-half-alt"></font-awesome>
         </div>
         <div v-if="noStar > 0">
-          <font-awesome v-for="star in noStar" :key="`-${star}`" class="icon" :icon="['far', 'star']">
+          <font-awesome
+            v-for="star in noStar"
+            :key="`-${star}`"
+            class="icon"
+            :icon="['far', 'star']"
+          >
           </font-awesome>
         </div>
         <div v-if="amount > 0">
@@ -37,7 +48,7 @@ export default {
     score: { type: Number, default: 1 },
     amount: { type: Number, default: 0 },
     short: { type: Boolean, default: false },
-    readOnly: { type: Boolean, default: true },
+    readOnly: { type: Boolean, default: true }
   },
   data() {
     return {
@@ -45,9 +56,6 @@ export default {
       hoverValue: 0,
       MAX_RATE: 5
     }
-  },
-  mounted() {
-    this.value = this.score
   },
   computed: {
     filledStars() {
@@ -64,6 +72,9 @@ export default {
       return this.MAX_RATE - (this.filledStars + this.halfStar)
     }
   },
+  mounted() {
+    this.value = this.score
+  },
   methods: {
     selectedStar(star) {
       if (star <= this.value) {
@@ -73,7 +84,9 @@ export default {
       return ['far', 'star']
     },
     rate(rating) {
-      if (this.readOnly) { return }
+      if (this.readOnly) {
+        return
+      }
 
       this.value = rating
       this.$emit('rated', this.value)

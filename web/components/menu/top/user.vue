@@ -1,6 +1,6 @@
 <style lang="scss">
 .menu-items {
-  h6 { 
+  h6 {
     margin-right: 5 * $space;
   }
   @include desktop {

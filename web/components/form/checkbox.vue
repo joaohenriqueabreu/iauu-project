@@ -1,6 +1,12 @@
 <template>
   <div class="horizontal middle">
-    <input ref="checkbox" type="checkbox" v-bind:checked="checked" v-on:change="$emit('change', $event.target.checked)" class="clickable mr-2">
+    <input
+      ref="checkbox"
+      type="checkbox"
+      :checked="checked"
+      class="clickable mr-2"
+      @change="$emit('change', $event.target.checked)"
+    />
     <span @click="click">
       <font-awesome v-if="checked" icon="check"></font-awesome>
     </span>
@@ -28,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input[type="checkbox"] {
+input[type='checkbox'] {
   display: none;
 
   + span {
@@ -51,5 +57,4 @@ input[type="checkbox"] {
     }
   }
 }
-
 </style>

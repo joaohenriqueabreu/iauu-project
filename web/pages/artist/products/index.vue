@@ -8,15 +8,19 @@
       </h5>
     </div>
     <div class="align-items-stretch full-height">
-      <carousel :per-page="2" :navigationEnabled="true">
+      <carousel :per-page="2" :navigation-enabled="true">
         <slide v-for="(product, index) in products" :key="index">
           <div class="product mr-4">
-            <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct">
+            <product-info
+              :product="product"
+              :not-items="notItems(product.items)"
+              class="full-height"
+              @edit="editProduct"
+            >
             </product-info>
           </div>
-          
         </slide>
-      </carousel>      
+      </carousel>
     </div>
     <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
   </div>

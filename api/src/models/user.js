@@ -81,7 +81,6 @@ class User extends BaseModel {
 
   getRoleId() {
     console.log('Getting role id...')
-    console.log(this)
     if (this.role === 'artist' && this.artist !== undefined) {
       return this.artist.id
     }

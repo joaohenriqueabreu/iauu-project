@@ -1,5 +1,5 @@
 import pluralize from 'pluralize'
-import { Model } from 'vue-mc'
+import Model from '../models/model'
 
 const utils = {
   pluralize: (value, count) => pluralize(value, count),
@@ -36,13 +36,15 @@ const utils = {
 
     return false
   },
-  isMobile: () =>  {
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  isMobile: () => {
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    ) {
       return true
     } else {
       return false
     }
-  }, 
+  },
   delay: () => {
     return setTimeout(() => {}, 5000)
   }

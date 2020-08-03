@@ -51,8 +51,12 @@ export default {
   },
   computed: {
     proposedTimeslots() {
-      return this.$collection.filter(this.timeslots, (timeslot) => timeslot.type === 'event' && timeslot.id.startsWith(PROPOSED_TIMESLOT_ID_PREFIX))
-    },
+      return this.$collection.filter(
+        this.timeslots,
+        (timeslot) =>
+          timeslot.type === 'event' && timeslot.id.startsWith(PROPOSED_TIMESLOT_ID_PREFIX)
+      )
+    }
   },
   methods: {
     ...mapActions('schedule', ['loadSchedule', 'appendTimeslot', 'deselectTimeslot']),

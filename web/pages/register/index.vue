@@ -14,8 +14,9 @@
           v-model="credentials.passwordConfirmation"
           placeholder="Confirme sua senha"
         ></form-password>
-        <form-checkbox class="my-4" v-model="credentials.accept_terms">
-          Li e estou de acordo com os <u><nuxt-link class="ml-2" to="terms">Termos de Uso da plataforma</nuxt-link></u>
+        <form-checkbox v-model="credentials.accept_terms" class="my-4">
+          Li e estou de acordo com os
+          <u><nuxt-link class="ml-2" to="terms">Termos de Uso da plataforma</nuxt-link></u>
         </form-checkbox>
         <div v-if="error" class="mt-2 error">
           Problemas ao registrar sua conta
@@ -64,7 +65,6 @@ export default {
     termsAccepted(value) {
       if (value) {
         this.termsError = false
-        return
       }
     }
   },

@@ -33,30 +33,30 @@
           </div>
           <div v-else class="horizontal center middle">
             <form-input
-              class="search-filter"
-              label="Pesquisa livre"
               v-show="currentFilter === 'term'"
               v-model="term"
+              class="search-filter"
+              label="Pesquisa livre"
               placeholder="Aniversário, Casamento, Rock Anos 80, ..."
             ></form-input>
             <form-location
-              class="search-filter"
-              label="Filtrar Localização"
               v-show="currentFilter === 'address'"
               v-model="location"
+              class="search-filter"
+              label="Filtrar Localização"
               placeholder="Próximo de"
             ></form-location>
             <form-range
-              class="search-filter"
-              label="Faixa de preço"
               v-show="currentFilter === 'price'"
               v-model="price"
+              class="search-filter"
+              label="Faixa de preço"
               filter-name="currency"
             ></form-range>
             <form-select
+              v-show="currentFilter === 'sort'"
               class="search-filter"
               label="Ordernar resultados"
-              v-show="currentFilter === 'sort'"
               :allow-input="false"
               icon="sort-alpha-down"
               placeholder="Ordenar por"
@@ -173,7 +173,7 @@ export default {
     font-size: $huge;
   }
 
-  [data-icon="times"] {
+  [data-icon='times'] {
     @include desktop {
       position: absolute;
       right: 10 * $space;

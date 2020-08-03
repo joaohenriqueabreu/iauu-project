@@ -4,7 +4,7 @@
       <h4 class="mr-4">Status do sistema:</h4>
       <div class="stat-status" :class="status"></div>
     </div>
-    <div class="row mb-4" v-if="!$empty(usersStats)">
+    <div v-if="!$empty(usersStats)" class="row mb-4">
       <div class="col-sm-4">
         <div class="stat-box">
           <h6 class="mb-4">Usuários</h6>
@@ -40,7 +40,7 @@
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
 export default {
-  async asyncData({ store }) {    
+  async asyncData({ store }) {
     await store.dispatch('admin/loadUsersStats')
     await store.dispatch('admin/loadPresentationsStats')
 
@@ -80,29 +80,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .stat-status {
-    &.active {
-      background: $green;
-    }
-
-    &.error {
-      background: $error;
-    }
-
-    width: 20px;
-    height: 20px;
-    border-radius: $rounded;
-    box-shadow: $shadow;
+.stat-status {
+  &.active {
+    background: $green;
   }
 
-  .stat-box {
-    background: $layer4;
-    box-shadow: $shadow;
-    padding: 2 * $space;
+  &.error {
+    background: $error;
   }
 
-  .chart-wrapper {
-    max-height: 20vh;
-    max-width: 80vw;
-  }
+  width: 20px;
+  height: 20px;
+  border-radius: $rounded;
+  box-shadow: $shadow;
+}
+
+.stat-box {
+  background: $layer4;
+  box-shadow: $shadow;
+  padding: 2 * $space;
+}
+
+.chart-wrapper {
+  max-height: 20vh;
+  max-width: 80vw;
+}
 </style>

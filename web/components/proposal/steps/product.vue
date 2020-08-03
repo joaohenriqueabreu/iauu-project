@@ -3,7 +3,7 @@
     <div class="mb-5 vertical">
       <h6 class="mb-2">Escolha o produto do artista que você deseja contratar</h6>
     </div>
-    <carousel class="full-height" :navigationEnabled="true">
+    <carousel class="full-height" :navigation-enabled="true">
       <slide v-for="(product, index) in products" :key="index" class="mr-5">
         <overlay>
           <template v-slot:default>

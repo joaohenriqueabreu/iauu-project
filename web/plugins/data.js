@@ -29,11 +29,11 @@ const timeFilter = (value) => {
 }
 
 const oneDecimal = (value) => {
-  return (Math.round(value * 100) / 100).toFixed(1);
+  return (Math.round(value * 100) / 100).toFixed(1)
 }
 
 const twoDecimals = (value) => {
-  return (Math.round(value * 100) / 100).toFixed(2);
+  return (Math.round(value * 100) / 100).toFixed(2)
 }
 
 // Registering custom filters

@@ -15,11 +15,9 @@
 <script>
 export default {
   props: {
-    presentation: { type: Object, default: () => {}}
+    presentation: { type: Object, default: () => {} }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

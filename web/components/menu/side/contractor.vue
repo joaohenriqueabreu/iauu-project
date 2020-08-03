@@ -24,6 +24,6 @@
 <script>
 import UserMenu from './user'
 export default {
-  extends: UserMenu,
+  extends: UserMenu
 }
 </script>

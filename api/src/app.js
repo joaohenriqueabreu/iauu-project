@@ -37,7 +37,7 @@ const corsOptions = {
   },
 }
 
-app.options('*', cors(corsOptions))
+// app.options('*', cors(corsOptions))
 app.use(cors())
 app.use(helmet())
 app.use(compression())
@@ -65,6 +65,6 @@ const socketServer = require('./sockets/server')
 const webSocketPort = process.env.PORT || 500
 
 // Wire up the server to listen to our port 500
-// socketServer.listen(webSocketPort, () => {
-//   console.log(`Socket server listening on port: ${webSocketPort}`)
-// })
+socketServer.listen(webSocketPort, () => {
+  console.log(`Socket server listening on port: ${webSocketPort}`)
+})

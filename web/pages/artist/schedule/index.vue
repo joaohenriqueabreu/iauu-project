@@ -25,7 +25,10 @@
           @rejected="handleRejectProposal"
         ></proposal>
         <presentation
-          v-if="!$empty(presentation) && ['accepted', 'completed', 'cancelled'].includes(presentation.status)"
+          v-if="
+            !$empty(presentation) &&
+              ['accepted', 'completed', 'cancelled'].includes(presentation.status)
+          "
           ref="presentation"
           :read-only="false"
           @confirmed="handleConfirmPresentation"
@@ -124,7 +127,9 @@ export default {
       await this.loadMySchedule()
       this.$refs.calendar.refresh()
       this.$refs.proposal.closeModal()
-      this.$toast.success('Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato')
+      this.$toast.success(
+        'Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato'
+      )
     },
     async handleRejectProposal(id) {
       await this.loadMySchedule()

@@ -1,4 +1,4 @@
-import { Model } from 'vue-mc'
+import Model  from './model'
 import User from './user'
 import Media from './media'
 

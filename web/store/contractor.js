@@ -1,9 +1,8 @@
 import Vue from 'vue'
+import { getField, updateField } from 'vuex-map-fields'
 import Artist from '@/models/artist'
 import Proposal from '@/models/proposal'
 import Contractor from '~/models/contractor'
-
-import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
   contractor: null,

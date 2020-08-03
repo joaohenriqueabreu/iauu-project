@@ -10,12 +10,12 @@
 <script>
 export default {
   props: {
-    presentation: { type: Object, default: () => {}}
+    presentation: { type: Object, default: () => {} }
   },
   computed: {
     encodedMapsLocation() {
       return encodeURI(`http://maps.google.com/maps?q=${this.presentation.address.display}`)
-    },
+    }
   }
 }
 </script>

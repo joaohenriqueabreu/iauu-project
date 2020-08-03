@@ -11,20 +11,31 @@
         <div class="top-right pt-1 pr-2">
           <font-awesome icon="check-circle" class="m-0"></font-awesome>
         </div>
-        <h6 class="mb-4">Prezados integrantes do(a) <u>{{ proposal.artist.company_name }}</u>,</h6>
+        <h6 class="mb-4">
+          Prezados integrantes do(a) <u>{{ proposal.artist.company_name }}</u
+          >,
+        </h6>
         <p class="mb-5">
-          Solicito orçamento 
-          <span v-if="!$empty(proposal.product) && proposal.product.name !== 'custom'">do formato <b>{{ proposal.product.name }}</b></span> 
-          <span v-if="!$empty(proposal.title)">para o evento <u>{{ proposal.title }}</u></span>
-          a ser realizado <span v-if="!$empty(proposal.location)">na <u>{{ proposal.location.toString() }}</u></span>
-          <span v-if="!$empty(proposal.timeslots)">em <u>{{ proposal.timeslots[0].start_dt | longDate }}</u></span>
+          Solicito orçamento
+          <span v-if="!$empty(proposal.product) && proposal.product.name !== 'custom'"
+            >do formato <b>{{ proposal.product.name }}</b></span
+          >
+          <span v-if="!$empty(proposal.title)"
+            >para o evento <u>{{ proposal.title }}</u></span
+          >
+          a ser realizado
+          <span v-if="!$empty(proposal.location)"
+            >na <u>{{ proposal.location.toString() }}</u></span
+          >
+          <span v-if="!$empty(proposal.timeslots)"
+            >em <u>{{ proposal.timeslots[0].start_dt | longDate }}</u></span
+          >
         </p>
         <div class="vertical center">
           <h1><font-awesome icon="signature"></font-awesome></h1>
           <hr class="light thick" />
           <h6>{{ $auth.user.name }}</h6>
         </div>
-        
 
         <!-- <div>
           {{ proposal.title }}
@@ -43,21 +54,21 @@
           <div class="d-flex justify-content-end">
             <h4>{{ proposal.product.price | currency }}</h4>
           </div> -->
-        </div>
-      </div>
-      <div class="half-width horizontal middle center">
-        <div v-if="areAllStepsCompleted">
-          <form-button @action="submitProposal">Enviar!</form-button>
-        </div>
-        <div v-else class="vertical middle center">
-          <h6>
-            Ainda faltam alguns detalhes para finalizar a proposta
-            <font-awesome icon="frown"></font-awesome>
-          </h6>
-          <small>Finalize os detalhes da apresentação para poder enviar a proposta</small>
-        </div>
       </div>
     </div>
+    <div class="half-width horizontal middle center">
+      <div v-if="areAllStepsCompleted">
+        <form-button @action="submitProposal">Enviar!</form-button>
+      </div>
+      <div v-else class="vertical middle center">
+        <h6>
+          Ainda faltam alguns detalhes para finalizar a proposta
+          <font-awesome icon="frown"></font-awesome>
+        </h6>
+        <small>Finalize os detalhes da apresentação para poder enviar a proposta</small>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -68,8 +79,7 @@ export default {
   computed: {
     areAllStepsCompleted() {
       return (
-        !this.$empty(this.completedSteps) &&
-        this.completedSteps.length >= this.steps.length - 1 // do not count confirm step
+        !this.$empty(this.completedSteps) && this.completedSteps.length >= this.steps.length - 1 // do not count confirm step
       )
     }
   },
@@ -101,6 +111,6 @@ export default {
 }
 
 p {
-  line-height: 20px;;
+  line-height: 20px;
 }
 </style>

@@ -8,7 +8,8 @@
         <font-awesome
           class="minimize"
           :icon="minimized ? 'angle-double-right' : 'angle-double-left'"
-          @click="minimize">
+          @click="minimize"
+        >
         </font-awesome>
       </div>
     </header>
@@ -21,7 +22,6 @@
 </template>
 
 <script>
-import Logo from '@/components/layout/logo'
 import AdminMenu from '@/components/menu/side/admin'
 import ArtistMenu from '@/components/menu/side/artist'
 import ContractorMenu from '@/components/menu/side/contractor'
@@ -40,7 +40,7 @@ export default {
     minimize() {
       this.minimized = !this.minimized
       this.$emit('minimize', this.minimized)
-    },
+    }
   }
 }
 </script>

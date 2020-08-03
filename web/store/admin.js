@@ -57,7 +57,7 @@ export const actions = {
     commit('set_presentations', data)
   },
   async searchUsers({ commit }, term) {
-    const { data } = await this.$axios.get('admin/users', { params: { search: term }})
+    const { data } = await this.$axios.get('admin/users', { params: { search: term } })
     commit('set_users', data)
   },
   async blockUser({ commit }, { id }) {
@@ -87,11 +87,16 @@ export const getters = {
   activeUsers: (state) => _.filter(state.users, (user) => user.status === 'active'),
   blockedUsers: (state) => _.filter(state.users, (user) => user.status === 'blocked'),
 
-  proposalPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'proposal'),
-  rejectedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'rejected'),
-  acceptedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'accepted'),
-  completedPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
-  cancelledPresentations: (state) => _.filter(state.presentations, (presentation) => presentation.status === 'cancelled'),
+  proposalPresentations: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'proposal'),
+  rejectedPresentations: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'rejected'),
+  acceptedPresentations: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'accepted'),
+  completedPresentations: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
+  cancelledPresentations: (state) =>
+    _.filter(state.presentations, (presentation) => presentation.status === 'cancelled'),
 
-  usersStats: (state) => state.stats.users !== undefined ? state.stats.users[0] : {}
+  usersStats: (state) => (state.stats.users !== undefined ? state.stats.users[0] : {})
 }

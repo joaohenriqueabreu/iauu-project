@@ -1,24 +1,38 @@
 <template>
   <div>
-    <div class="vertical" v-if="!$empty(openProposals)">
+    <div v-if="!$empty(openProposals)" class="vertical">
       <h6 class="mb-4">Propostas Enviadas</h6>
-      <div v-for="(presentation, index) in openProposals" :key="index" @click="open(presentation.id)">
+      <div
+        v-for="(presentation, index) in openProposals"
+        :key="index"
+        @click="open(presentation.id)"
+      >
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
-      <hr>
+      <hr />
     </div>
-    <div class="vertical" v-if="!$empty(rejectedProposals)">
+    <div v-if="!$empty(rejectedProposals)" class="vertical">
       <h6 class="mb-4">Propostas Recusadas</h6>
-      <div v-for="(presentation, index) in rejectedProposals" :key="index" @click="open(presentation.id)">
+      <div
+        v-for="(presentation, index) in rejectedProposals"
+        :key="index"
+        @click="open(presentation.id)"
+      >
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
-      <hr>
+      <hr />
     </div>
     <div v-if="presentations.length === 0" class="mb-4">
-      Nenhuma proposta enviada <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
+      Nenhuma proposta enviada
+      <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
     </div>
     <!-- Data loaded from state -->
-    <proposal-details v-if="!$empty(presentationState)" ref="proposal" @cancelled="cancelledProposal" :read-only="false">
+    <proposal-details
+      v-if="!$empty(presentationState)"
+      ref="proposal"
+      :read-only="false"
+      @cancelled="cancelledProposal"
+    >
     </proposal-details>
   </div>
 </template>

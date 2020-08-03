@@ -5,12 +5,19 @@
     </template>
     <template v-slot:main>
       <div class="full-height">
-        <div class="mb-4">Conta pra gente como foi sua experiência com <b>{{ otherParty.user.name }}</b></div>
+        <div class="mb-4">
+          Conta pra gente como foi sua experiência com <b>{{ otherParty.user.name }}</b>
+        </div>
         <div class="mb-4 horizontal middle center">
           <rating :read-only="false" @rated="setRating"></rating>
         </div>
         <div class="mb-4">
-          <form-textarea class="full-width" placeholder="O que mais o artista fez que te encantou ou que você não curtiu? Conta pra gente" :rows="5" v-model="feedback.notes"></form-textarea>
+          <form-textarea
+            v-model="feedback.notes"
+            class="full-width"
+            placeholder="O que mais o artista fez que te encantou ou que você não curtiu? Conta pra gente"
+            :rows="5"
+          ></form-textarea>
         </div>
         <small>Agradecemos seu feedback!</small>
       </div>
@@ -27,7 +34,7 @@
 import { mapActions } from 'vuex'
 export default {
   props: {
-    presentation: { type: Object, default: () => {}},
+    presentation: { type: Object, default: () => {} }
   },
   data() {
     return {
@@ -58,12 +65,12 @@ export default {
       this.feedback.rating = rating
     },
     async send() {
-      await this.sendFeedback({ 
-        id: this.presentation.artist.id, 
+      await this.sendFeedback({
+        id: this.presentation.artist.id,
         presentation: {
           id: this.presentation.id
         },
-        feedback: this.feedback 
+        feedback: this.feedback
       })
       this.$toast.success('Obrigado pelo seu feedback!')
       this.closeModal()
@@ -73,6 +80,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

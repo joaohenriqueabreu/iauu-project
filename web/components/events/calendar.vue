@@ -79,11 +79,17 @@ export default {
     },
     unavailableTimeslots() {
       const self = this
-      return this.$collection.filter(this.timeslots, (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot))
+      return this.$collection.filter(
+        this.timeslots,
+        (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot)
+      )
     },
     availableTimeslots() {
       const self = this
-      return this.$collection.filter(this.timeslots, (timeslot) => !self.$empty(timeslot) && !self.isUnavailable(timeslot))
+      return this.$collection.filter(
+        this.timeslots,
+        (timeslot) => !self.$empty(timeslot) && !self.isUnavailable(timeslot)
+      )
     },
     headerButtons: () => {
       return {
@@ -250,7 +256,9 @@ export default {
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
         if (!this.$empty(timeslot)) {
-          this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot)))
+          this.calendarEvents.push(
+            this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot))
+          )
         }
       })
     },

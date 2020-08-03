@@ -1,12 +1,14 @@
 <template>
   <div>
-    <h6 class="mb-4">Escolha uma opção de data e  horário para a apresentação:</h6>
+    <h6 class="mb-4">Escolha uma opção de data e horário para a apresentação:</h6>
     <carousel class="horizontal center middle">
       <slide
         v-for="(timeslot, index) in timeslots"
         :key="index"
         class="timeslot"
-        :class="{ selected: !$empty(selectedTimeslot) && selectedTimeslot.start_dt === timeslot.start_dt }"
+        :class="{
+          selected: !$empty(selectedTimeslot) && selectedTimeslot.start_dt === timeslot.start_dt
+        }"
       >
         <div @click="select(timeslot)">
           <div class="horizontal mb-2">

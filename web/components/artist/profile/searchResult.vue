@@ -1,6 +1,6 @@
 <template>
   <div class="result" @click="$emit('select', artist)">
-    <div class="logo" v-if="!$empty(artist.user)">
+    <div v-if="!$empty(artist.user)" class="logo">
       <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
       <avatar :src="artist.user.photo" :username="artist.user.name" :size="100"></avatar>
     </div>

@@ -1,34 +1,36 @@
 <template>
   <div>
     <main>
-    <h5 class="mb-4">Atualize seu perfil</h5>
-    <div class="horizontal middle mb-4">
-      <div class="mr-5">
-        <image-uploader ref="avatarUploader" :rounded="true" @uploaded="setAvatar">
-          <avatar :src="avatarImg" :size="150" @click="uploadAvatar"></avatar>
-        </image-uploader>
+      <h5 class="mb-4">Atualize seu perfil</h5>
+      <div class="horizontal middle mb-4">
+        <div class="mr-5">
+          <image-uploader ref="avatarUploader" :rounded="true" @uploaded="setAvatar">
+            <avatar :src="avatarImg" :size="150" @click="uploadAvatar"></avatar>
+          </image-uploader>
+        </div>
+        <div class="full-width">
+          <form-input v-model="name" icon="user" label="Nome"></form-input>
+        </div>
       </div>
-      <div class="full-width">
-        <form-input v-model="name" icon="user" label="Nome"></form-input>
+      <div class="boxed mb-4">
+        <h6>Atualize suas informações pessoais</h6>
+        <small
+          >Não se preocupe, somente com sua autorização, suas informações serão
+          compartilhadas</small
+        >
+        <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone"></form-masked>
       </div>
-    </div>
-    <div class="boxed mb-4">
-      <h6>Atualize suas informações pessoais</h6>
-      <small>Não se preocupe, somente com sua autorização, suas informações serão compartilhadas</small>
-      <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone"></form-masked>
-    </div>
-    <div class="boxed">
-      <h6>Conecte suas redes sociais</h6>
-      <div class="my-4 vertical half-width">
-        <facebook-login></facebook-login>
-        <google-login></google-login>
+      <div class="boxed">
+        <h6>Conecte suas redes sociais</h6>
+        <div class="my-4 vertical half-width">
+          <facebook-login></facebook-login>
+          <google-login></google-login>
+        </div>
       </div>
-
-    </div>
-  </main>
-  <footer class="full-width m-4 horizontal center middle">
-    <form-button @action="saveProfile">Salvar</form-button>
-  </footer>
+    </main>
+    <footer class="full-width m-4 horizontal center middle">
+      <form-button @action="saveProfile">Salvar</form-button>
+    </footer>
   </div>
 </template>
 
@@ -38,6 +40,10 @@ import { mapFields } from 'vuex-map-fields'
 import FacebookLogin from '@/components/auth/facebook'
 import GoogleLogin from '@/components/auth/google'
 export default {
+  components: {
+    'facebook-login': FacebookLogin,
+    'google-login': GoogleLogin
+  },
   async asyncData({ app, store, error, $sentry }) {
     try {
       await store.dispatch('contractor/loadContractor')
@@ -45,10 +51,6 @@ export default {
       $sentry.captureException(e)
       error({ statusCode: 404, message: 'Perfil não encontrado' })
     }
-  },
-  components: {
-    'facebook-login': FacebookLogin,
-    'google-login': GoogleLogin
   },
   data() {
     return {
@@ -67,7 +69,7 @@ export default {
         : this.$config.defaultAvatarImgUrl
     }
   },
-methods: {
+  methods: {
     ...mapActions('contractor', ['saveProfile']),
     ...mapMutations('contractor', { updateProfile: 'update_profile' }),
     uploadAvatar() {
@@ -81,6 +83,4 @@ methods: {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

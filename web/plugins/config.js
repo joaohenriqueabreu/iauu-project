@@ -29,7 +29,7 @@ const config = {
     layer5: '#5f5f5f',
     layer7: '#afafaf',
     layer10: '#efefef',
-    white: '#fefefe' 
+    white: '#fefefe'
   }
 }
 

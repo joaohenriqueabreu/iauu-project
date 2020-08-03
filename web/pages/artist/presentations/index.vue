@@ -2,7 +2,11 @@
   <div>
     <div class="vertical">
       <h6 class="mb-4">Próximas apresentações</h6>
-      <div v-for="(presentation, index) in presentations" :key="index" @click="open(presentation.id)">
+      <div
+        v-for="(presentation, index) in presentations"
+        :key="index"
+        @click="open(presentation.id)"
+      >
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
     </div>

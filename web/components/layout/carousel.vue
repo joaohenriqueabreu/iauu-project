@@ -1,5 +1,12 @@
 <template>
-  <vue-carousel :perPageCustom="[[0, 1], [768, 2], [1024, 3]]" :navigationEnabled="navigate">
+  <vue-carousel
+    :per-page-custom="[
+      [0, 1],
+      [768, 2],
+      [1024, 3]
+    ]"
+    :navigation-enabled="navigate"
+  >
     <slot></slot>
   </vue-carousel>
 </template>

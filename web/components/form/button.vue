@@ -1,7 +1,13 @@
 <template>
   <div>
     <fade-transition :duration="300" mode="out-in">
-      <div v-if="!submitted" key="submitting" class="button" :class="{ disabled, small }" @click="submit">
+      <div
+        v-if="!submitted"
+        key="submitting"
+        class="button"
+        :class="{ disabled, small }"
+        @click="submit"
+      >
         <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
@@ -67,7 +73,9 @@ input {
   border: none;
   outline: none;
   @include desktop {
-    &:not(.small) { min-width: 150px; }
+    &:not(.small) {
+      min-width: 150px;
+    }
   }
 
   &.disabled {

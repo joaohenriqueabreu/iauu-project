@@ -4,8 +4,15 @@
     <modal ref="modal">
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
-          <div class="horizontal middle" v-if="!$empty(presentation.artist) && !$empty(presentation.artist.user)">
-            <avatar v-if="!$empty(presentation.artist.user.photo)" :src="presentation.artist.user.photo" :username="presentation.artist.name"></avatar>
+          <div
+            v-if="!$empty(presentation.artist) && !$empty(presentation.artist.user)"
+            class="horizontal middle"
+          >
+            <avatar
+              v-if="!$empty(presentation.artist.user.photo)"
+              :src="presentation.artist.user.photo"
+              :username="presentation.artist.name"
+            ></avatar>
             <div class="vertical middle">
               <h6>Proposta enviada para</h6>
               <h5>{{ presentation.artist.user.name }}</h5>
@@ -20,9 +27,17 @@
         <h6 class="mb-2">Datas oferecidas para o artista</h6>
         <small v-if="$empty(presentation.timeslot)">Aguardando resposta do artista</small>
         <div class="my-4 horizontal center middle">
-          <div v-for="(timeslot, index) in presentation.proposal.timeslots" :key="index" class="mr-4 vertical">
-            <h6 :class="hasSelectedTimeslot(timeslot) ? 'selected' : ''" class="timeslot">{{ timeslot.start_dt | datetime }}</h6>
-            <small v-if="hasSelectedTimeslot(timeslot)" class="timeslot selected">Escolhida pelo artista</small>
+          <div
+            v-for="(timeslot, index) in presentation.proposal.timeslots"
+            :key="index"
+            class="mr-4 vertical"
+          >
+            <h6 :class="hasSelectedTimeslot(timeslot) ? 'selected' : ''" class="timeslot">
+              {{ timeslot.start_dt | datetime }}
+            </h6>
+            <small v-if="hasSelectedTimeslot(timeslot)" class="timeslot selected"
+              >Escolhida pelo artista</small
+            >
           </div>
         </div>
         <div class="mx-4 mb-4 vertical center middle">
@@ -32,21 +47,33 @@
         <div class="boxed mb-4">
           <presentation-address :presentation="presentation"></presentation-address>
         </div>
-        <div v-if="hasCounterOffer && !hasAcceptedCounterOffer && !hasRejectedCounterOffer" class="mb-4 mx-4 vertical middle center">
+        <div
+          v-if="hasCounterOffer && !hasAcceptedCounterOffer && !hasRejectedCounterOffer"
+          class="mb-4 mx-4 vertical middle center"
+        >
           <h6 class="mb-4">O artista te enviou um orçamento para sua apresentação</h6>
-          <h5 class="mb-4">{{ presentation.proposal.counterOffer.price | currency }} para {{ presentation.proposal.counterOffer.duration }} horas de apresentação</h5>
+          <h5 class="mb-4">
+            {{ presentation.proposal.counterOffer.price | currency }} para
+            {{ presentation.proposal.counterOffer.duration }} horas de apresentação
+          </h5>
           <div class="horizontal middle center">
-            <form-button @action="replyCounterOffer(true)" class="mr-4">Aceitar</form-button>
+            <form-button class="mr-4" @action="replyCounterOffer(true)">Aceitar</form-button>
             <h6 class="clickable" @click="replyCounterOffer(false)">Recusar</h6>
           </div>
         </div>
         <div v-if="hasRejectedCounterOffer" class="mb-4 mx-4 vertical middle center">
           <h6 class="mb-2">Orçamento enviado <u>reprovado</u></h6>
-          <h5 class="mb-4">{{ presentation.proposal.counterOffer.price | currency }} para {{ presentation.proposal.counterOffer.duration }} horas de apresentação</h5>
+          <h5 class="mb-4">
+            {{ presentation.proposal.counterOffer.price | currency }} para
+            {{ presentation.proposal.counterOffer.duration }} horas de apresentação
+          </h5>
         </div>
         <div v-if="hasAcceptedCounterOffer" class="mb-4 mx-4 accepted-counter-offer">
           <h6>Orçamento aprovado</h6>
-          <h5 class="mb-4">{{ presentation.proposal.counterOffer.price | currency }} para {{ presentation.proposal.counterOffer.duration }} horas de apresentação</h5>
+          <h5 class="mb-4">
+            {{ presentation.proposal.counterOffer.price | currency }} para
+            {{ presentation.proposal.counterOffer.duration }} horas de apresentação
+          </h5>
         </div>
         <div class="boxed">
           <presentation-product ref="product" :presentation="presentation"></presentation-product>
@@ -60,7 +87,10 @@
         <chat v-if="!$empty(presentation)" :presentation="presentation"></chat>
       </template>
       <template v-slot:footer>
-        <div class="horizontal middle center mb-2" v-if="hasCounterOffer && !hasAcceptedCounterOffer">
+        <div
+          v-if="hasCounterOffer && !hasAcceptedCounterOffer"
+          class="horizontal middle center mb-2"
+        >
           Aguardando definição de orçamento
         </div>
         <div class="horizontal center middle full-height">
@@ -79,27 +109,42 @@ import BasePresentation from '../base'
 
 export default {
   extends: BasePresentation,
-  async mounted() {
-    if (this.presentation.proposal.timeslots.length === 1) {
-      await this.selectTimeslot({ id: this.presentation.id, timeslot: this.presentation.proposal.timeslots[0] })
-    }
-  },
   computed: {
     hasCounterOffer() {
-      return !this.$empty(this.presentation.proposal.counterOffer) && 
+      return (
+        !this.$empty(this.presentation.proposal.counterOffer) &&
         this.presentation.proposal.counterOffer.status !== 'void'
+      )
     },
     hasAcceptedCounterOffer() {
-      return !this.$empty(this.presentation.proposal.counterOffer) && 
+      return (
+        !this.$empty(this.presentation.proposal.counterOffer) &&
         this.presentation.proposal.counterOffer.status === 'accepted'
+      )
     },
     hasRejectedCounterOffer() {
-      return !this.$empty(this.presentation.proposal.counterOffer) && 
+      return (
+        !this.$empty(this.presentation.proposal.counterOffer) &&
         this.presentation.proposal.counterOffer.status === 'rejected'
-    },
+      )
+    }
+  },
+  async mounted() {
+    if (this.presentation.proposal.timeslots.length === 1) {
+      await this.selectTimeslot({
+        id: this.presentation.id,
+        timeslot: this.presentation.proposal.timeslots[0]
+      })
+    }
   },
   methods: {
-    ...mapActions('presentation', ['acceptProposal', 'rejectProposal', 'selectTimeslot', 'acceptCounterOffer', 'rejectCounterOffer']),
+    ...mapActions('presentation', [
+      'acceptProposal',
+      'rejectProposal',
+      'selectTimeslot',
+      'acceptCounterOffer',
+      'rejectCounterOffer'
+    ]),
     openModal() {
       return this.$refs.modal.open()
     },
@@ -122,10 +167,14 @@ export default {
     async replyCounterOffer(accepted) {
       if (accepted) {
         await this.acceptCounterOffer(this.presentation.id)
-        this.$toast.success('Orçamento aprovado! Obrigado o artista irá confirmar a apresentação em breve')
+        this.$toast.success(
+          'Orçamento aprovado! Obrigado o artista irá confirmar a apresentação em breve'
+        )
       } else {
         await this.rejectCounterOffer(this.presentation.id)
-        this.$toast.info('Orçamento reprovado. Entre em contato com o artista ou aguarde novo orçamento')
+        this.$toast.info(
+          'Orçamento reprovado. Entre em contato com o artista ou aguarde novo orçamento'
+        )
       }
 
       this.closeModal()

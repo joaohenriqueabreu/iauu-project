@@ -44,7 +44,7 @@ export default {
 
       return this.presentation.artist.user.name
     }
-  },
+  }
 }
 </script>
 

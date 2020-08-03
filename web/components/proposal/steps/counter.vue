@@ -7,7 +7,11 @@
           :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"
           @click="goToStep(step)"
         ></font-awesome>
-        <div class="progress" v-if="!isLastStep(step)" :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"></div>
+        <div
+          v-if="!isLastStep(step)"
+          class="progress"
+          :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"
+        ></div>
       </div>
     </div>
   </div>
@@ -24,7 +28,7 @@ export default {
     return {
       icons: ['calendar-alt', 'shopping-cart', 'coffee', 'guitar']
     }
-  },  
+  },
   methods: {
     isStepCompleted(step) {
       return this.completed.includes(step)
@@ -35,8 +39,8 @@ export default {
     goToStep(step) {
       this.$emit('goto', step)
     },
-    isLastStep(step) {      
-      return (this.steps - 1) === step
+    isLastStep(step) {
+      return this.steps - 1 === step
     }
   }
 }
