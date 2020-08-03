@@ -115,7 +115,7 @@ export default {
     '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
     '@nuxtjs/toast',
-    '@nuxtjs/ngrok'
+    // '@nuxtjs/ngrok'
   ],
   // optimizedImages: {
   //   optimizeImages: true,
