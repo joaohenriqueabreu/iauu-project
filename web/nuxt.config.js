@@ -214,7 +214,8 @@ export default {
      */
 
     extend(config, ctx) {},
-    transpile: ['@nuxtjs/auth']
+    terser: false
+    //transpile: ['@nuxtjs/auth']
     // babelrc: true
   },
 
