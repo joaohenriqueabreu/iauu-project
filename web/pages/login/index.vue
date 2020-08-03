@@ -135,7 +135,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/imgs/concert.png?webp');
+    background-image: url('~assets/imgs/concert.png');
     height: 100%;
     width: 100%;
     opacity: 0.2;

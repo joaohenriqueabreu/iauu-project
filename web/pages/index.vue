@@ -66,7 +66,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/imgs/home.jpg?webp');
+    background-image: url('~assets/imgs/home.jpg');
     height: 110vh;
     width: 100%;
     opacity: 0.2;

@@ -65,7 +65,7 @@ export default {}
   }
 
   .artist {
-    background-image: url('~assets/imgs/general/artist-signup.jpg?webp');
+    background-image: url('~assets/imgs/general/artist-signup.jpg');
 
     @include mobile {
       margin-top: -10vh;
@@ -73,7 +73,7 @@ export default {}
   }
 
   .contractor {
-    background-image: url('~assets/imgs/general/contractor-signup.jpg?webp');
+    background-image: url('~assets/imgs/general/contractor-signup.jpg');
   }
 }
 </style>

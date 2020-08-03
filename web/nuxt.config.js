@@ -98,7 +98,7 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
-    '@aceforth/nuxt-optimized-images'
+    // '@aceforth/nuxt-optimized-images'
   ],
   /*
    ** Nuxt.js modules
@@ -117,17 +117,17 @@ export default {
     '@nuxtjs/toast',
     '@nuxtjs/ngrok'
   ],
-  optimizedImages: {
-    optimizeImages: true,
-    defaultImageLoader: 'img-loader',
-    optipng: {
-      optimizationLevel: 3
-    },
-    webp: {
-      preset: 'default',
-      quality: 75
-    }
-  },
+  // optimizedImages: {
+  //   optimizeImages: true,
+  //   defaultImageLoader: 'img-loader',
+  //   optipng: {
+  //     optimizationLevel: 3
+  //   },
+  //   webp: {
+  //     preset: 'default',
+  //     quality: 75
+  //   }
+  // },
   axios: {
     // baseURL: process.env.API_URL,
     baseURL: '/api/v1/'

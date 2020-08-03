@@ -123,11 +123,11 @@ export default {
     margin-top: -10vh;
 
     &.artist {
-      background-image: url('~assets/imgs/general/artist-signup.jpg?webp');
+      background-image: url('~assets/imgs/general/artist-signup.jpg');
     }
 
     &.contractor {
-      background-image: url('~assets/imgs/general/contractor-signup.jpg?webp');
+      background-image: url('~assets/imgs/general/contractor-signup.jpg');
     }
   }
 }
