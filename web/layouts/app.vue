@@ -45,18 +45,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// header {
+//   position: relative;
+//   min-height: 10vh;
+//   padding: 10px 0;
+//   background: transparent;
+//   z-index: $above;
+// }
+
 header {
-  position: relative;
-  min-height: 10vh;
-  padding: 10px 0;
-  background: transparent;
+  position: fixed;
+  width: 100vw;
   z-index: $above;
+  height: 10vh;
+  background: transparent;
 }
 
 main {
-  position: relative;
-  padding: 0 20px;
-  padding-bottom: 8 * $space;
+  position: relative;  
+  padding-top: 10vh;
+  padding-left: 2vw;
+  padding-bottom: 20vh;
 
   @include desktop {
     &.full {

@@ -2,9 +2,7 @@ require('dotenv').config()
 
 export default {
   mode: 'universal',
-  // mode: 'spa',
   env: {
-    // baseURL: process.env.BASE_URL,
     fileStackApiKey: process.env.FILESTACK_API_KEY
   },
   /*
@@ -73,36 +71,18 @@ export default {
   plugins: [
     { src: '@/plugins/config' },
     { src: '@/plugins/utils' },
-    // { src: '@/plugins/http' },
-    // { src: '@/plugins/auth' },
-
-    // { src: '@/plugins/ui' },
     { src: '@/plugins/icons' },
     { src: '@/plugins/data' },
     { src: '@/plugins/dictionary' },
-    // { src: '@/plugins/full-calendar' },
-
     { src: '@/plugins/ui', mode: 'client' },
-    // { src: '@/plugins/icons', mode: 'client' },
-    // { src: '@/plugins/data', mode: 'client' },
-    // { src: '@/plugins/dictionary', mode: 'client' },
     { src: '@/plugins/full-calendar', mode: 'client' },
     { src: '@/plugins/html2canvas', mode: 'client' }
-    // { src: '@/plugins/full-calendar', ssr: false }
   ],
-  // serverMiddleware: [{ path: 'api/v1', handler: '@/plugins/proxy.js' }],
 
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    // '@nuxtjs/eslint-module',
-    // '@aceforth/nuxt-optimized-images'
-  ],
-  /*
-   ** Nuxt.js modules
-   */
+  buildModules: [],
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
@@ -115,19 +95,7 @@ export default {
     '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
     '@nuxtjs/toast',
-    // '@nuxtjs/ngrok'
   ],
-  // optimizedImages: {
-  //   optimizeImages: true,
-  //   defaultImageLoader: 'img-loader',
-  //   optipng: {
-  //     optimizationLevel: 3
-  //   },
-  //   webp: {
-  //     preset: 'default',
-  //     quality: 75
-  //   }
-  // },
   axios: {
     // baseURL: process.env.API_URL,
     baseURL: '/api/v1/'
@@ -139,13 +107,6 @@ export default {
     scopeKey: 'role',
     strategies: {
       facebook: {
-        // response_type: 'token', // Use auth code flow
-        // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
-        // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        // authorization_endpoint: '/login/facebook',
-        // access_token_endpoint: '/login/facebook',
-        // userinfo_endpoint: `${process.env.API_URL}/login/facebook`,
-        // userinfo_endpoint: '/login/facebook',
         client_id: process.env.FACEBOOK_CLIENT_ID,
         access_token_endpoint: false,
         userinfo_endpoint: false,
@@ -153,12 +114,6 @@ export default {
         redirect_uri: `${process.env.WEB_URL}/login/facebook/`
       },
       google: {
-        // response_type: 'code', // Use auth code flow
-        // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
-        // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        // userinfo_endpoint: `${process.env.API_URL}/login/google`,
-        // userinfo_endpoint: 'validate',
-        // scope: ['public_profile', 'email', 'user_birthday']
         client_id: process.env.GOOGLE_CLIENT_ID,
         userinfo_endpoint: false,
         redirect_uri: `${process.env.WEB_URL}/login/google/`
@@ -179,10 +134,6 @@ export default {
           user: { url: 'validate', method: 'post', propertyName: false }
         }
       }
-      // tokenRequired: false,
-      // tokenName: 'Authorization',
-      // tokenType: 'bearer',
-      // globalToken: true
     }
   },
   io: {
@@ -208,15 +159,8 @@ export default {
    ** Build configuration
    */
   build: {
-    // analyze: true,
-    /*
-     ** You can extend webpack config here
-     */
-
     extend(config, ctx) {},
     terser: false
-    //transpile: ['@nuxtjs/auth']
-    // babelrc: true
   },
 
   server: {
