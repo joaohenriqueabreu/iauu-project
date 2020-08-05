@@ -65,6 +65,7 @@ main {
   position: relative;  
   padding-top: 10vh;
   padding-left: 2vw;
+  padding-right: 1vw;
   padding-bottom: 20vh;
 
   @include desktop {

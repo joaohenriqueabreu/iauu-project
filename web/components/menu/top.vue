@@ -1,5 +1,5 @@
 <template>
-  <nav :class="theme" class="navbar d-flex justify-content-between">
+  <nav class="navbar d-flex justify-content-between">
     <div class="mainmenu vertical">
       <div v-if="$auth.loggedIn" class="horizontal mt-2">
         <product-setup v-if="$auth.hasScope('artist')" class="mr-3"></product-setup>

@@ -15,6 +15,7 @@ module.exports = class AssignRoleService extends AuthService {
     await this.createRole()
     await this.saveRole()
     this.assignUserRole()
+    this.activateUser()
     await this.saveUser()
     await this.generateAccessToken()
     return this
@@ -66,5 +67,10 @@ module.exports = class AssignRoleService extends AuthService {
     }
 
     throw new Error('No role assigned')    
+  }
+
+  activateUser() {
+    this.user.status = 'active'
+    return this
   }
 }

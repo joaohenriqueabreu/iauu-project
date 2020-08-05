@@ -42,7 +42,9 @@ module.exports = class GoogleLoginService extends SocialLoginService {
       email: this.socialData.email,
       name: this.socialData.name,
       password: this.socialData.sub,
-      facebook_id: this.socialData.sub,
+      social: {
+        ...{ google_id: this.socialData.id }
+      },
       photo: this.socialData.picture,
       verification: {
         is_verified: true

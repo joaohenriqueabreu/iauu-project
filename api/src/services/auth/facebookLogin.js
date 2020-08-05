@@ -7,7 +7,7 @@ module.exports = class FacebookLoginService extends SocialLoginService {
     super(token)
   }
 
-  async fetchProfile() {    
+  async fetchProfile() {
     const { data } = await axios.get(
       `https://graph.facebook.com/v2.12/me?fields=about,name,picture{url},email,birthday&access_token=${this.token}`
     )
@@ -16,12 +16,12 @@ module.exports = class FacebookLoginService extends SocialLoginService {
       throw new Error('Unable to get user data from Facebook')
     }
 
-    this.socialData = data
+    return data
   }
 
   async lookupUserFromSocial() {
     await this.lookupUser({
-      $or: [{ facebook_id: this.socialData.id }, { email: this.socialData.email }],
+      $or: [{ 'social.facebook_id': this.socialData.id }, { email: this.socialData.email }],
     })
 
     if (this.user === undefined || User.notFound(this.user)) {
@@ -29,8 +29,8 @@ module.exports = class FacebookLoginService extends SocialLoginService {
       return this
     }
 
-    if (this.user.facebook_id === undefined || this.user.facebook_id === null) {
-      this.user.facebook_id = this.socialData.id
+    if (this.user.social.facebook_id === undefined || this.user.social.facebook_id === null) {
+      this.user.social.facebook_id = this.socialData.id
     }
 
     return this
@@ -41,7 +41,9 @@ module.exports = class FacebookLoginService extends SocialLoginService {
       email: this.socialData.email,
       name: this.socialData.name,
       password: this.socialData.id, // writing a "fake" pwd that will not be encrypted, but is required for saving
-      facebook_id: this.socialData.id,
+      social: {
+        ...{ facebook_id: this.socialData.id }
+      },
       photo: this.socialData.picture.data.url,
       verification: {
         is_verified: true

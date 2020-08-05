@@ -11,7 +11,7 @@ const userSchema = new Schema({
   role: { type: String, enum: ['artist', 'contractor', 'admin'] },
   name: { type: String, required: true },
   access_token: { type: String, required: true, select: false },
-  status: { type: String, enum: ['pending', 'active', 'blocked'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'unassigned', 'active', 'blocked'], default: 'pending' },
   photo: { type: String },
   first_name: { type: String },
   last_name: { type: String },
@@ -29,8 +29,10 @@ const userSchema = new Schema({
     token: { type: String },
     referred_by: { type: db.Schema.Types.ObjectId, ref: 'User' }
   },
-  facebook_id: { type: String},
-  google_id: { type: String },
+  social: {
+    facebook_id: { type: String},
+    google_id: { type: String },
+  },
   artist: {
     type: db.Schema.Types.ObjectId,
     ref: 'Artist'
@@ -59,7 +61,7 @@ class User extends BaseModel {
 
   static fetchWithSensitiveDataById(id) {
     return this.findById(id)
-      .select('+password +access_token +verification')
+      .select('+password +access_token +verification +verification.token')
       .populate('artist')
       .populate('contractor')
   }
