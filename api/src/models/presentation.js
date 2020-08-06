@@ -9,6 +9,8 @@ const timeslotSchema = require('./schemas/timeslot')
 
 const { Schema } = db
 
+const defaultFee = process.env.PLATAFORM_FEE || 0.12
+
 const slugfy = function (slug) {
   return this.company_name !== undefined 
     ? this.company_name.toLowerCase().replace(' ', '-')
@@ -24,7 +26,7 @@ const presentationSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Artist'
   },
-
+  fee: { type: Number, required: true, default: defaultFee },
   address: addressSchema,
 
   /**
@@ -47,6 +49,24 @@ const presentationSchema = new Schema({
 class Presentation extends BaseModel {
   constructor() {
     super()
+  }
+
+  get current_price() {
+    if (this.status === 'proposal') {
+      if (this.proposal.custom) {
+        if (this.proposal.counterOffer !== undefined) {}
+      }
+    }
+
+    return this.price
+  }
+
+  get current_duration() {
+    if (this.status === 'proposal') {
+
+    }
+
+    return this.price
   }
 }
 

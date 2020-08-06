@@ -27,7 +27,10 @@ const userSchema = new Schema({
   admin_token: { type: String }, // Grants access to login as users
   referral: {
     token: { type: String },
-    referred_by: { type: db.Schema.Types.ObjectId, ref: 'User' }
+    from: { 
+      type: db.Schema.Types.ObjectId, 
+      ref: 'User' 
+    }
   },
   social: {
     facebook_id: { type: String},

@@ -50,9 +50,14 @@ module.exports = class AuthService extends BaseService {
   generateVerificationToken() {
     this.user.verification.token = GenerateTokenService.generateSimple()
     return this
-  }  
+  }
 
-  async generateUserPayload() {    
+  generateReferralToken() {
+    this.user.referral.token = GenerateTokenService.generateSimple()
+    return this
+  }
+
+  async generateUserPayload() {
     this.payload = await GenerateTokenService.getUserPayload(this.user)    
     return this
   }

@@ -17,11 +17,13 @@
             </overlay>
           </a>
           <div class="dropdown-menu dropdown-menu-right submenu" aria-labelledby="dropdownMenuButton">
-            <div v-if="$auth.hasScope('artist')">
-              <nuxt-link to="/artist/schedule">
+            <div class="horizontal middle">
+              <nuxt-link :to="$auth.hasScope('artist') ? '/artist/schedule' : '/contractor/presentations'">
+                <avatar :src="$auth.user.photo" :username="$auth.user.name" class="mr-2"></avatar>
                 <h5>{{ $auth.user.name }}</h5>
               </nuxt-link>
             </div>
+            <hr>
             <admin-menu v-if="$auth.hasScope('admin')"></admin-menu>
             <artist-menu v-if="$auth.hasScope('artist')"></artist-menu>
             <contractor-menu v-if="$auth.hasScope('contractor')"></contractor-menu>
