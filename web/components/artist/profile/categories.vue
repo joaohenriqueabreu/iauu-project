@@ -86,7 +86,7 @@ export default {
     categoryImg(item) {
       try {
         return require(`@/assets/imgs/categories/${item}.jpg`)
-      } catch {
+      } catch (error) {
         return require('@/assets/imgs/concert.png')
       }
     },
