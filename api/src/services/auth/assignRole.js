@@ -1,5 +1,6 @@
 const AuthService = require('./auth')
 const { Artist, Contractor } = require('../../models')
+const BadRequestException = require('../../exception/bad')
 
 module.exports = class AssignRoleService extends AuthService {
   constructor(data, role) {
@@ -12,7 +13,9 @@ module.exports = class AssignRoleService extends AuthService {
 
   async assign() {
     await this.searchUserById(this.id)
-    await this.createRole()
+    this.ensureUserWasFound()
+      .ensureUserIsNotYetAssigned()
+      .createRole()
     await this.saveRole()
     this.assignUserRole()
     this.activateUser()
@@ -21,7 +24,15 @@ module.exports = class AssignRoleService extends AuthService {
     return this
   }
 
-  async createRole() {
+  ensureUserIsNotYetAssigned() {
+    if (this.user.status !== 'unassigned') {
+      throw new BadRequestException('User already assigned')
+    }
+
+    return this
+  }
+
+  createRole() {
     this.user.role = this.role
 
     if (this.role === 'artist') {

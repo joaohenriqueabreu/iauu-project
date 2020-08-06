@@ -14,6 +14,16 @@ const cors = require('cors')
 
 // init db and connect
 const db = require('./data/db')
+const initDb = async () => {
+  try {
+    await db.connect()
+  } catch (error) {
+    console.log(error)
+    process.exit(0)
+  }
+}
+
+initDb()
 
 // Express config
 const app = express()

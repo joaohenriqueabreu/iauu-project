@@ -22,7 +22,7 @@ module.exports = class ResetPasswordService extends AuthService {
   }
 
   async reset() {
-    console.log('Renewing password...')     
+    console.log('Renewing password...')
     await this.lookupUser({ 'verification.token': this.token })   
     await this.validateUser('Invalid token provided')
     await this.encryptPassword(this.newPassword) 

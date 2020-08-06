@@ -1,5 +1,6 @@
 require('dotenv').config()
-const db = require('../data/db')
+// const db = require('../data/db')
+const db = require('mongoose')
 const BaseModel = require('./base')
 
 const address = require('./schemas/address')

@@ -1,4 +1,5 @@
-const db = require('../data/db')
+// const db = require('../data/db')
+const db = require('mongoose')
 const { forEach } = require('../seeds/social')
 
 module.exports = class BaseModel {

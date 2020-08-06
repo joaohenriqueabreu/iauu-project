@@ -1,4 +1,5 @@
-const db = require('../../data/db')
+// const db = require('../../data/db')
+const db = require('mongoose')
 const baseSchemaOptions = require('../schemas/options')
 
 const counterOfferSchema = new db.Schema({

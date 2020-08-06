@@ -11,7 +11,7 @@
         "dev": "nodemon -L src/app.js",
         "stop": "pkill --signal SIGINT reforma.ai.server",
         "migrate": "./node_modules/.bin/migrate -c src",
-        "test": "jest --detectOpenHandles --forceExit"
+        "test": "mocha"
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",
@@ -46,10 +46,12 @@
         "uuid": "^8.3.0"
     },
     "devDependencies": {
+        "chai": "^4.2.0",
         "eslint": "^7.6.0",
         "eslint-config-strongloop": "^2.1.0",
-        "jest": "^26.2.2",
-        "nodemon": "^1.14.12"
+        "mocha": "^8.1.1",
+        "nodemon": "^1.14.12",
+        "sinon": "^9.0.2"
     },
     "jest": {
         "testEnvironment": "node"

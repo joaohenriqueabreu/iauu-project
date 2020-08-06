@@ -84,10 +84,8 @@ export default {
    */
   buildModules: [],
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     '@nuxtjs/proxy',
     '@nuxtjs/auth',
@@ -101,7 +99,7 @@ export default {
     baseURL: '/api/v1/'
   },
   proxy: {
-    '/api/v1': process.env.API_URL
+    '/api/v1': `${process.env.API_URL}:${process.env.HTTP_PORT}`
   },
   auth: {
     scopeKey: 'role',
@@ -141,7 +139,8 @@ export default {
     sockets: [
       {
         name: 'chat',
-        url: 'http://localhost:500'
+        // url: 'http://localhost:500'
+        url: `${process.env.API_URL}:${process.env.SOCKET_PORT}`
       }
     ]
   },

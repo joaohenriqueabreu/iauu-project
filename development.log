@@ -1,0 +1,10 @@
+- Need to install optimization image packages:
+https://github.com/juliomrqz/nuxt-optimized-images#optimization-packages
+
+- Using PM2 as process manager to run web and api process on AWS
+https://pm2.keymetrics.io/
+
+- Migrated to using mocha and chai testing in place for jest, so we use a single test framework across web and api (cypress uses mocha)
+https://mochajs.org/#installation
+https://www.chaijs.com/
+https://github.com/sinonjs/sinon

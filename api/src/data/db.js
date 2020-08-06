@@ -16,6 +16,7 @@ const connectionOptions = {
 mongoose.Promise = Promise
 mongoose.connection.on('connected', () => {
   console.log('Connection Established')
+  return
 })
 
 mongoose.connection.on('reconnected', () => {
@@ -34,7 +35,7 @@ mongoose.connection.on('error', (error) => {
   console.log('ERROR: ' + error)
 })
 
-const run = async () => {
+async function connect () {
   const username    = encodeURIComponent(process.env.DB_USERNAME)
   const password    = encodeURIComponent(process.env.DB_PASSWORD)
   const hostname    = encodeURIComponent(process.env.DB_HOSTNAME)
@@ -56,6 +57,7 @@ const run = async () => {
   }
 
   if (process.env.DB_CONNECTION_TYPE === 'full') {
+    console.log('Attempting full db connection...')
     await mongoose.connect(`mongodb://${username}:${password}@${hostname}:${dbport}/${dbname}`, connectionOptions)
     return
   }
@@ -63,6 +65,4 @@ const run = async () => {
   throw new Error('Missing connection type config')
 }
 
-run().catch(error => console.error(error))
-
-module.exports = mongoose
+module.exports = { connect }

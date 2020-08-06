@@ -18,7 +18,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right submenu" aria-labelledby="dropdownMenuButton">
             <div class="horizontal middle">
-              <nuxt-link :to="$auth.hasScope('artist') ? '/artist/schedule' : '/contractor/presentations'">
+              <nuxt-link :to="$auth.hasScope('artist') ? '/artist/schedule' : '/contractor/presentations'" class="horizontal middle">
                 <avatar :src="$auth.user.photo" :username="$auth.user.name" class="mr-2"></avatar>
                 <h5>{{ $auth.user.name }}</h5>
               </nuxt-link>

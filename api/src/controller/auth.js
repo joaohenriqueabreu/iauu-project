@@ -8,12 +8,11 @@ const ResetPasswordService = require('../services/auth/resetPassword')
 const FacebookLoginService = require('../services/auth/facebookLogin')
 const GoogleLoginService = require('../services/auth/googleLogin')
 const AssignRoleService = require('../services/auth/assignRole')
-const GenerateTokenService = require('../services/auth/generateToken')
 
 class AuthController extends BaseController {
   register(req, res, next) {
-    const { name, email, password, role } = req.data
-    const registerUserSvc = new RegisterUserService(name, email, password, role)
+    const { name, email, password, token } = req.data
+    const registerUserSvc = new RegisterUserService(name, email, password, token)
 
     registerUserSvc.register()
       .then(() => res.status(200).json({ message: 'Successfully registered. Please verify account' }))

@@ -1,4 +1,5 @@
-const db = require('../../data/db')
+// const db = require('../../data/db')
+const db = require('mongoose')
 const BaseModel = require('../base')
 const coordinates = require('./coordinates')
 const baseSchemaOptions = require('../schemas/options')

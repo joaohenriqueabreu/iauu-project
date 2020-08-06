@@ -1,4 +1,5 @@
-const db = require('../../data/db')
+// const db = require('../../data/db')
+const db = require('mongoose')
 const mediaSchema = require('./media')
 const baseSchemaOptions = require('../schemas/options')
 

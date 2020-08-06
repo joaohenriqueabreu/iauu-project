@@ -81,6 +81,15 @@ module.exports = class AuthService extends BaseService {
     return this
   }
 
+  ensureUserWasFound() {
+    if (User.notFound(this.user) || !this.user instanceof User) {
+      throw new BadRequestException('Invalid conditions...')
+    }
+
+    console.log('User found...')
+    return this
+  }
+
   async encryptPassword(password) {
     const hash = await bcrypt.hashSync(password, 2)
     this.user.password = hash

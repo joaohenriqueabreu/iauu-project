@@ -1,4 +1,5 @@
-const db = require('../../data/db')
+// const db = require('../../data/db')
+const db = require('mongoose')
 const baseSchemaOptions = require('../schemas/options')
 const timeslotSchema = require('./timeslot')
 const productSchema = require('./product')

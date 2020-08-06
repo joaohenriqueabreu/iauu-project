@@ -1,5 +1,6 @@
 const _ = require('lodash')
-const db = require('../../data/db')
+// const db = require('../../data/db')
+const db = require('mongoose')
 const BaseModel = require('../base')
 const baseSchemaOptions = require('../schemas/options')
 

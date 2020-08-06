@@ -45,7 +45,7 @@
           </div>
         </div>
       </template>
-      <template v-slot:user-avatar="{ user }"><div></div></template>
+      <!-- <template v-slot:user-avatar="{ user }"><div></div></template> -->
       <template v-slot:text-message-body="{ message }">
         <div class="vertical">
           <h6 v-if="message.author !== 'me'" class="mb-2">{{ message.author }}</h6>
