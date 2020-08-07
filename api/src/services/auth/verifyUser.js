@@ -18,7 +18,7 @@ module.exports = class VerifyUserService extends AuthService {
     await this.validateLogin()
     this.isTokenExpired()
     await this.generateAccessToken()
-    await this.setUserAsVerified()
+    this.setUserAsVerified()
     await this.saveUser()
 
     this.sendWelcomeMail()

@@ -34,7 +34,7 @@ export default {
         return
       }
 
-      throw new Error('something is wrong')
+      throw new Error('Something is wrong')
     }
   }
 }

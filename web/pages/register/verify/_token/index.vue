@@ -43,8 +43,6 @@ export default {
     ...mapActions('protected', ['verify', 'resendVerify', 'release']),
     handleVerified() {
       this.$toast.success('Conta verificada com sucesso! Bem vindo a Iauu')
-      const self = this
-      setTimeout(() => self.$router.push('/'), 3000)
     },
     handleFailed() {
       this.$toast.error('Seu token de verification é inválido ou está expirado.')

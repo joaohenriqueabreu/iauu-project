@@ -23,8 +23,7 @@ module.exports = class GenerateTokenService {
         const now = Math.floor(Date.now() / 1000)
         const payload = {
             id:     user.id,
-            // Role must be an arrah for frontend $auth handle access scope
-            role:   [user.role],
+            role:   [user.role], // Role must be an array for frontend $auth handle access scope
             email:  user.email,
             name:   user.name,
             photo:  user.photo,

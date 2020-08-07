@@ -1,9 +1,9 @@
 <template>
-  <main class="vertical middle center">
+  <div class="vertical middle center">
     <h3 class="no-cap">
       Enviamos um link para seu email com as instruções de login
     </h3>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -16,6 +16,6 @@ export default {
 
 <style lang="scss" scoped>
 div {
-  height: 80vh;
+  height: 90vh;
 }
 </style>

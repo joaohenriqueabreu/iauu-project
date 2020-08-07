@@ -124,6 +124,14 @@ export default {
           user: { url: 'validate', method: 'post', propertyName: false }
         }
       },
+      verify: {
+        _scheme: 'local',
+        endpoints: {
+          login: { url: 'verify', method: 'post', propertyName: false },
+          logout: { url: 'login', method: 'delete' },
+          user: { url: 'validate', method: 'post', propertyName: false }
+        }
+      },
       admin: {
         _scheme: 'local',
         endpoints: {

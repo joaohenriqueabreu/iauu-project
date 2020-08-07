@@ -20,6 +20,7 @@ module.exports = class AssignRoleService extends AuthService {
     this.assignUserRole()
     this.activateUser()
     await this.saveUser()
+    await this.searchUserById(this.user.id) // Refresh user to prevent populate buffer issues
     await this.generateAccessToken()
     return this
   }
