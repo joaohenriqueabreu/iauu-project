@@ -28,28 +28,31 @@
             </div>
           </div>
           <div class="vertical middle mb-5">
-            <h6 class="mb-2">Adicionar items</h6>
-            <small>Liste aqui os itens deste formato</small>
-            <div class="horizontal middle justify-content-between mb-2">
-              <form-input
-                v-model="newItem"
-                class="full-width mb-5"
-                icon="list-ol"
-                placeholder="Iluminação, Apresentação, Fogos de Artifício, etc..."
-              ></form-input>
-              <font-awesome icon="plus" class="ml-5 clickable" @click="addItem"></font-awesome>
-            </div>
-            <div
-              v-for="(item, itemIndex) in product.items"
-              :key="itemIndex"
-              class="items d-flex justify-content-between"
-            >
-              <span>{{ item }}</span>
-              <font-awesome
-                icon="times"
-                class="clickable"
-                @click="removeItem(itemIndex)"
-              ></font-awesome>
+            <div class="mb-5">
+              <h6 class="mb-2">Adicionar items</h6>
+              <small>Liste aqui os itens deste formato</small>
+              <div class="horizontal middle justify-content-between mb-2">
+                <form-input
+                  v-model="newItem"
+                  class="full-width"
+                  icon="list-ol"
+                  placeholder="Iluminação, Apresentação, Fogos de Artifício, etc..."
+                  @enter="addItem"
+                ></form-input>
+                <font-awesome icon="plus" class="ml-5 clickable" @click="addItem"></font-awesome>
+              </div>
+              <div
+                v-for="(item, itemIndex) in product.items"
+                :key="itemIndex"
+                class="items d-flex justify-content-between"
+              >
+                <span>{{ item }}</span>
+                <font-awesome
+                  icon="times"
+                  class="clickable"
+                  @click="removeItem(itemIndex)"
+                ></font-awesome>
+              </div>
             </div>
             <div class="vertical d-flex justify-content-between mb-2">
               <h6>Adicionar Fotos e Vídeos de suas apresetações</h6>
@@ -155,6 +158,7 @@ export default {
     },
     addItem() {
       this.product.items.push(this.newItem)
+      this.newItem = ''
     },
     removeItem(index) {
       this.$delete(this.product.items, index)

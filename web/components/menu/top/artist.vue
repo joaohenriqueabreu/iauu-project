@@ -10,6 +10,9 @@
       <nuxt-link to="/artist/products">
         <h6>Formatos de apresentação</h6>
       </nuxt-link>
+      <nuxt-link to="/referral">
+        <h6>Renda passiva</h6>
+      </nuxt-link>
       <nuxt-link to="/artist/profile">
         <h6>Perfil</h6>
       </nuxt-link>

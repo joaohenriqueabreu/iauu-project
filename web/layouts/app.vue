@@ -45,14 +45,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// header {
-//   position: relative;
-//   min-height: 10vh;
-//   padding: 10px 0;
-//   background: transparent;
-//   z-index: $above;
-// }
-
 header {
   position: fixed;
   width: 100vw;

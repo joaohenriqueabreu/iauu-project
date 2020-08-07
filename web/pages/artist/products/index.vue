@@ -16,6 +16,7 @@
               :not-items="notItems(product.items)"
               class="full-height"
               @edit="editProduct"
+              @copy="copyProduct"
             >
             </product-info>
           </div>
@@ -54,6 +55,10 @@ export default {
     },
     editProduct(product) {
       this.$refs.productForm.editProduct(product)
+    },
+    async copyProduct(product) {
+      await this.saveProduct(product)
+      this.$toast.success('Produto copiado')
     },
     openItemForm(item) {
       this.$refs.productItem.openModal()

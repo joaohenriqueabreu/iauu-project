@@ -1,11 +1,12 @@
 <template>
   <div class="login">
     <div class="bg"></div>
-    <form>
+    <form v-if="!$empty($v)">
       <h5>Entre</h5>
-      <form-email v-model="credentials.email" @input="resetError"></form-email>
-      <form-password v-model="credentials.password" @input="resetError"></form-password>
-      <form-validation :active="hasError">Usuário ou senha inválidos</form-validation>
+      <form-email v-model="$v.credentials.email.$model" @input="resetError"></form-email>
+      <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
+      <form-password v-model="$v.credentials.password.$model" @input="resetError"></form-password>
+      <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
       <div class="mb-2"></div>
       <div class="forgot-password" @click="openForgotPasswordModal">
         <span>Esqueceu sua senha?</span>
@@ -26,9 +27,9 @@
         <div class="vertical middle center">
           <span>Entre com o seu email para solicitar uma nova senha</span>
           <form-email v-model="forgotPasswordForEmail" class="full-width px-5"></form-email>
-          <form-validation :active="$utils.empty(forgotPasswordForEmail)"
-            >Entre com um email válido</form-validation
-          >
+          <form-validation :active="$utils.empty(forgotPasswordForEmail)">
+            Entre com um email válido
+          </form-validation>
         </div>
       </template>
       <template v-slot:footer>
@@ -43,6 +44,8 @@
 </template>
 
 <script>
+import Vuelidate from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 import FacebookLogin from '@/components/auth/facebook'
 import GoogleLogin from '@/components/auth/google'
@@ -58,8 +61,13 @@ export default {
         email: '',
         password: ''
       },
-      forgotPasswordForEmail: '',
-      hasError: false
+      forgotPasswordForEmail: ''
+    }
+  },
+  validations: {
+    credentials: {
+      email: { required, email },
+      password: { required }
     }
   },
   created() {
@@ -78,14 +86,18 @@ export default {
     ...mapActions('auth', ['login']),
     ...mapActions('protected', ['forgotPassword']),
     async login() {
+      this.$v.$touch()
+      if (this.$v.credentials.$invalid) { 
+        this.$toast.error('Formulário inválido')
+        return
+      }
+
       try {
         await this.$auth.loginWith('user', {
           data: this.credentials
         })
         this.$router.push('/artist/schedule')
       } catch (error) {
-        console.log(error)
-        this.hasError = true
         this.$refs.login.reset()
       }
     },

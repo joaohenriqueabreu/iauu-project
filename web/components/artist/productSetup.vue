@@ -9,7 +9,7 @@
 </template>
 
 <style lang="scss" scoped>
-h6 {
-  color: $layer2 !important;
-}
+// h6 {
+//   color: $layer2 !important;
+// }
 </style>

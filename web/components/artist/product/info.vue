@@ -11,6 +11,9 @@
       </image-uploader>
       <div v-else class="media" :style="{ 'background-image': `url(${productPhoto})` }"></div>
       <div class="product">
+        <div class="copy clickable" @click="copyProduct">
+          <h4 class="brand-hover"><font-awesome icon="copy"></font-awesome></h4>
+        </div>
         <div v-if="!proposalView" class="title" @click="editProduct">
           <h2 class="cap mb-2">{{ product.name }}</h2>
           <font-awesome icon="edit" class="ml-4"></font-awesome>
@@ -84,6 +87,12 @@ export default {
     editProduct() {
       this.$emit('edit', this.product)
     },
+    copyProduct() {
+      const product = this.$object.clone(this.product)
+      product.id = null
+      product.name = `Cópia de ${product.name}`
+      this.$emit('copy', product)
+    },
     removeProduct() {
       this.$emit('remove', this.product.id)
     },
@@ -132,16 +141,17 @@ h6 {
 .product {
   @extend .vertical, .middle, .center;
   width: 100%;
-  // height: 100%;
-  // background: $layer3;
-  // border-bottom-left-radius: $edges;
-  // border-bottom-right-radius: $edges;
-  // box-shadow: $shadow;
   padding: 4 * $space;
   position: relative;
 
   // main {
   background: none !important;
+
+  .copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
 
   .title {
     @extend .horizontal, .middle, .center, .full-width, .clickable;

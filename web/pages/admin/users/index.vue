@@ -12,27 +12,33 @@
           @blur="handleSearchUsers"
         ></form-input>
       </div>
-      <div class="horizontal">
-        <span
-          v-for="role in ['artist', 'contractor']"
-          :key="role"
-          :class="{ role, selected: role === filter }"
-          class="role-badge mr-4 horizontal center middle clickable"
-          @click="filterByRole(role)"
-        >
-          <font-awesome :icon="roleIcon(role)" class="mr-2"></font-awesome>
-          {{ roleLabel(role) }}s
-        </span>
-        <span
-          v-for="status in ['active', 'blocked', 'pending']"
-          :key="status"
-          :class="{ status, selected: status === filter }"
-          class="status-badge mr-4 horizontal center middle clickable"
-          @click="filterByStatus(status)"
-        >
-          <font-awesome :icon="statusIcon(status)" class="mr-2"></font-awesome>
-          {{ statusLabel(status) }}s
-        </span>
+      <div class="horizontal d-flex justify-content-between">
+        <div class="horizontal">
+          <span
+            v-for="role in ['artist', 'contractor']"
+            :key="role"
+            :class="{ role, selected: role === filter }"
+            class="role-badge mr-4 horizontal center middle clickable"
+            @click="filterByRole(role)"
+          >
+            <font-awesome :icon="roleIcon(role)" class="mr-2"></font-awesome>
+            {{ roleLabel(role) }}s
+          </span>
+          <span
+            v-for="status in ['active', 'blocked', 'pending']"
+            :key="status"
+            :class="{ status, selected: status === filter }"
+            class="status-badge mr-4 horizontal center middle clickable"
+            @click="filterByStatus(status)"
+          >
+            <font-awesome :icon="statusIcon(status)" class="mr-2"></font-awesome>
+            {{ statusLabel(status) }}s
+          </span>
+        </div>
+        <div class="horizontal clickable brand-hover" @click="exportCsv">
+          <font-awesome class="mr-2" icon="file-excel"></font-awesome>
+          <h6>Exportar</h6>
+        </div>
       </div>
     </div>
     <perfect-scrollbar>
@@ -95,7 +101,17 @@ export default {
       'pendingUsers',
       'activeUsers',
       'blockedUsers'
-    ])
+    ]),
+    usersData() {
+      if (this.users === undefined) { return [] }
+      let data = []
+      const self = this
+      this.users.forEach((user) => {
+        data.push([user.id, user.email, user.name, self.roleLabel(user.role)])
+      })
+
+      return data
+    }
   },
   data() {
     return {
@@ -188,6 +204,7 @@ export default {
       if (role === 'contractor') {
         return 'Contratante'
       }
+
       return ''
     },
     roleIcon(role) {
@@ -205,6 +222,9 @@ export default {
     async openUserManagementModal(user) {
       await this.loadUserStats(user.id)
       this.$refs.user.openModal()
+    },
+    exportCsv() {
+      this.$csv.download(this.$csv.convert(JSON.stringify(this.usersData)))
     }
   }
 }

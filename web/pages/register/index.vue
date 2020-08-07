@@ -39,10 +39,14 @@
 import { mapActions } from 'vuex'
 import FacebookLogin from '@/components/auth/facebook'
 import GoogleLogin from '@/components/auth/google'
+import QueryString from 'query-string'
 export default {
   components: {
     'facebook-login': FacebookLogin,
     'google-login': GoogleLogin
+  },
+  async asyncData({ store, route }) {
+    
   },
   data() {
     return {
@@ -59,6 +63,15 @@ export default {
   computed: {
     termsAccepted() {
       return this.credentials.accept_terms
+    },
+    referralToken() {
+      if (window === undefined) { return }
+      const token = QueryString.parse(window.location.search)
+      if (token.from !== undefined) {
+        return { token: token.from }
+      }
+
+      return {}
     }
   },
   watch: {
@@ -78,7 +91,7 @@ export default {
 
       this.$auth.setToken('local', null)
       try {
-        await this.register(this.credentials)
+        await this.register({ ...this.credentials, ...this.referralToken })
         this.$router.push('/register/verify')
       } catch (error) {
         this.$sentry.captureException(error)

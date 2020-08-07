@@ -41,6 +41,14 @@ export default {
     color: $brand;
   }
 }
+
+.dropdown-menu {
+  background: $layer1;
+  color: $brand;
+  .dropdown-item {
+    color: $brand !important;
+  }
+}
 </style>
 
 <style lang="scss">

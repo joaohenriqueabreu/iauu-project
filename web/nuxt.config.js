@@ -102,6 +102,8 @@ export default {
     '/api/v1': `${process.env.API_URL}:${process.env.HTTP_PORT}`
   },
   auth: {
+    plugins: [{ src: '@/plugins/auth.js', ssr: false }],
+    resetOnError: true,
     scopeKey: 'role',
     strategies: {
       facebook: {

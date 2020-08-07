@@ -21,15 +21,15 @@ module.exports = class AuthenticateUserService extends AuthService
 
     async validateLogin() {
       if (User.notFound(this.user)) {
-        throw new UnauthorizedException('Invalid credentials provided')
+        throw new UnauthorizedException('Email ou senha inválidos')
       }
 
       if (! await this.validatePassword(this.password)) {
-        throw new UnauthorizedException('Invalid credentials provided')
+        throw new UnauthorizedException('Email ou senha inválidos')
       }
 
       if (! this.user.verification.is_verified) {
-        throw new UnauthorizedException('User not verified')
+        throw new UnauthorizedException('Conta ainda não foi verificada. Acesse seu email e acesse o link de verificação enviado.')
       }
 
       return this

@@ -225,3 +225,11 @@ a {
   border-bottom: 5px solid $layer3;
   border-radius: rounded;
 }
+
+.brand-hover {
+  transition: $transition;
+  &:hover {
+    transition: $transition;
+    color: $brandLayer;
+  }
+}

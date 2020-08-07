@@ -2,7 +2,9 @@
   <div>
     <div class="horizontal middle d-flex justify-content-end m-4">
       <h4 class="mr-4">Status do sistema:</h4>
-      <div class="stat-status" :class="status"></div>
+      <div class="stat-status mr-5" :class="status"></div>
+      <h4 class="mr-4">Ping:</h4>
+      <h4>{{ pingTime }}ms</h4>
     </div>
     <div v-if="!$empty(usersStats)" class="row mb-4">
       <div class="col-sm-4">
@@ -39,21 +41,27 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
   async asyncData({ store }) {
     await store.dispatch('admin/loadUsersStats')
     await store.dispatch('admin/loadPresentationsStats')
 
     let status = 'active'
+    let pingTime = 0
     try {
+      const start = moment()
       await store.dispatch('admin/status')
+      const end = moment()
+      pingTime = end.diff(start)
     } catch (error) {
       console.log(error)
       status = 'error'
     }
 
     return {
-      status
+      status,
+      pingTime
     }
   },
   mounted() {
@@ -66,11 +74,11 @@ export default {
     },
     contractorsCount() {
       const contractors = _.filter(this.usersStats.roles, (role) => role._id === 'contractor')
-      return contractors[0].count
+      return contractors.length > 0 ? contractors[0].count : 0
     },
     artistsCount() {
       const artists = _.filter(this.usersStats.roles, (role) => role._id === 'artist')
-      return artists[0].count
+      return artists.length > 0 ? artists[0].count : 0
     },
     dailySignups() {
       return []

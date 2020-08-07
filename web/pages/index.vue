@@ -26,15 +26,20 @@
       <h1 class="mb-4">Contrate sua banda agora</h1>
       <nuxt-link to="/search">Vamos lá!</nuxt-link>
     </div>
+    <footer>
+      <cookie-law buttonText="OK" message="Nosso site utiliza cookies para melhorar a sua experiência"></cookie-law>
+    </footer>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import CookieLaw from 'vue-cookie-law'
 import SearchArtist from '@/components/artist/searchInput'
 export default {
   components: {
-    'search-artist': SearchArtist
+    SearchArtist,
+    CookieLaw
   },
   mounted() {
     if (

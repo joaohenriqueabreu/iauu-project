@@ -36,6 +36,36 @@ const twoDecimals = (value) => {
   return (Math.round(value * 100) / 100).toFixed(2)
 }
 
+// https://stackoverflow.com/questions/7034754/how-to-set-a-file-name-using-window-open
+const download = (csv) => {
+  var downloadLink = document.createElement("a");
+  var blob = new Blob(["\ufeff", csv]);
+  var url = URL.createObjectURL(blob);
+  downloadLink.href = url;
+  downloadLink.download = `${moment().format('YYYYMMDDHHmmss')}users.csv`;
+
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+}
+
+// https://stackoverflow.com/questions/11257062/converting-json-object-to-csv-format-in-javascript
+const convert = (data) => {
+  var array = typeof data != 'object' ? JSON.parse(data) : data;
+  var str = '';
+  for (var i = 0; i < array.length; i++) {
+    var line = '';
+    for (var index in array[i]) {
+        if (line != '') line += ','
+        line += array[i][index];
+    }
+
+    str += line + '\r\n';
+  }
+
+  return str;
+}
+
 // Registering custom filters
 Vue.filter('date', dateFilter)
 Vue.filter('longDate', longDateFilter)
@@ -50,4 +80,5 @@ export default ({ app }, inject) => {
   inject('math', math)
   inject('object', { clone })
   inject('moment', moment)
+  inject('csv', { download, convert })
 }

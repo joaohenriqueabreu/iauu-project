@@ -1,5 +1,6 @@
 const AuthService = require('./auth')
 const { User, Artist, Contractor } = require('../../models')
+const GenerateTokenService = require('./generateToken')
 
 module.exports = class RegisterAdminUserService extends AuthService {
   constructor(name, email, password) {
@@ -19,6 +20,7 @@ module.exports = class RegisterAdminUserService extends AuthService {
     await this.encryptPassword(this.password)
     this.populateAdminInfo()
     await this.generateAccessToken()
+    this.generateAdminToken()
     await this.saveUser()    
 
     console.log('Registered admin user...')
@@ -28,6 +30,11 @@ module.exports = class RegisterAdminUserService extends AuthService {
   populateAdminInfo() {
     this.user.role = 'admin'
     this.user.verification.is_verified = true
+    return this
+  }
+
+  generateAdminToken() {
+    this.user.admin_token = GenerateTokenService.generateSimple()
     return this
   }
 
