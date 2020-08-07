@@ -131,6 +131,7 @@ export default {
     this.activeTab = 'stats'
   },
   methods: {
+    ...mapActions('protected', ['renewAuth']),
     ...mapActions('artist', ['saveProfile']),
     ...mapMutations('artist', { updateProfile: 'update_profile' }),
 
@@ -150,6 +151,7 @@ export default {
     async setAvatar({ url }) {
       this.updateProfile({ prop: 'user.photo', data: url })
       await this.saveProfile()
+      await this.renewAuth()
     }
   }
 }
@@ -171,7 +173,6 @@ form {
 
   main {
     @extend .vertical, .center, .middle;
-    min-height: 70vh;
     position: relative;
     margin-bottom: 5 * $space;
     .logo {

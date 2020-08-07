@@ -19,6 +19,11 @@ module.exports = class AuthenticateUserService extends AuthService
       return this
     }
 
+    async searchUser() {
+      this.user = await User.findById(this.id).populate('artist').populate('contractor')
+      return this
+    }
+
     async validateLogin() {
       if (User.notFound(this.user)) {
         throw new UnauthorizedException('Email ou senha inválidos')
@@ -30,6 +35,18 @@ module.exports = class AuthenticateUserService extends AuthService
 
       if (! this.user.verification.is_verified) {
         throw new UnauthorizedException('Conta ainda não foi verificada. Acesse seu email e acesse o link de verificação enviado.')
+      }
+
+      return this
+    }
+
+    async validateNonPasswordLogin() {
+      if (User.notFound(this.user)) {
+        throw new UnauthorizedException('Invalid credentials provided')
+      }
+
+      if (! this.user.verification.is_verified) {
+        throw new UnauthorizedException('User not verified')
       }
 
       return this

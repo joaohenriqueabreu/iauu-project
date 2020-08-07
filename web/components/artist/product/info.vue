@@ -11,7 +11,7 @@
       </image-uploader>
       <div v-else class="media" :style="{ 'background-image': `url(${productPhoto})` }"></div>
       <div class="product">
-        <div class="copy clickable" @click="copyProduct">
+        <div v-if="!proposalView" class="copy clickable" @click="copyProduct">
           <h4 class="brand-hover"><font-awesome icon="copy"></font-awesome></h4>
         </div>
         <div v-if="!proposalView" class="title" @click="editProduct">

@@ -8,6 +8,7 @@ const ResetPasswordService = require('../services/auth/resetPassword')
 const FacebookLoginService = require('../services/auth/facebookLogin')
 const GoogleLoginService = require('../services/auth/googleLogin')
 const AssignRoleService = require('../services/auth/assignRole')
+const RenewAuthService = require('../services/auth/renewAuth')
 
 class AuthController extends BaseController {
   register(req, res, next) {
@@ -98,15 +99,21 @@ class AuthController extends BaseController {
     const resetPasswordService = new ResetPasswordService({ token, password })
 
     resetPasswordService.reset()
-      .then(() => {
-        res.status(200).json({ message: 'Successfully generated reset password token' })
-      })
+      .then(() => { res.status(200).json({ message: 'Successfully generated reset password token' }) })
       .catch((error) => next(error))
   }
 
   validate(req, res) {
     console.log('Request authorized...')
     res.status(200).json(req.user)
+  }
+
+  renewAuth(req, res, next) {
+    const renewAuthService = new RenewAuthService(req.user)
+
+    renewAuthService.renew()
+      .then(() => { res.status(200).json(renewAuthService.getUser()) })
+      .catch((error) => next(error))
   }
 
   logoff(req, res) {

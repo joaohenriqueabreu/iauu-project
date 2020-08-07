@@ -15,7 +15,7 @@ module.exports = class LoginAsUserService extends LoginUserService
     async login() {
       await this.authorizeAdmin()
       await this.searchUser()
-      await this.validateLogin()
+      await this.validateNonPasswordLogin()
       await this.generateAccessToken()
       await this.saveUser()
       await this.renewAdminToken()
@@ -29,23 +29,6 @@ module.exports = class LoginAsUserService extends LoginUserService
       
       if (User.notFound(this.admin) && !this.admin instanceof User) {
         throw new UnauthorizedException('Invalid token')
-      }
-
-      return this
-    }
-
-    async searchUser() {
-      this.user = await User.findById(this.id).populate('artist').populate('contractor')
-      return this
-    }
-
-    async validateLogin() {
-      if (User.notFound(this.user)) {
-        throw new UnauthorizedException('Invalid credentials provided')
-      }
-
-      if (! this.user.verification.is_verified) {
-        throw new UnauthorizedException('User not verified')
       }
 
       return this

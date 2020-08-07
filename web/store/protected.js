@@ -24,6 +24,10 @@ export const actions = {
     const { data } = await this.$axios.post('verify/resend', { token: verifyToken })
     commit('set_token', data)
   },
+  async renewAuth({ commit }) {
+    const { data } = await this.$axios.get('users/renew')
+    this.$auth.setUserToken(data.access_token)
+  },
   release({ commit }) {
     // No need to hold token as $auth handles it
     commit('release_token')
