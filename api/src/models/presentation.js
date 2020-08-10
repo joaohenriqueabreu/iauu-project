@@ -12,12 +12,6 @@ const { Schema } = db
 
 const defaultFee = process.env.PLATAFORM_FEE || 0.12
 
-const slugfy = function (slug) {
-  return this.company_name !== undefined 
-    ? this.company_name.toLowerCase().replace(' ', '-')
-    : this.user.name.toLowerCase().replace(' ', '-')
-}
-
 const presentationSchema = new Schema({  
   contractor: {
     type: Schema.Types.ObjectId,

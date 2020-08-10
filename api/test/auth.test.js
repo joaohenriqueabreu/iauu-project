@@ -24,6 +24,7 @@ const ResetPasswordService = require('../src/services/auth/resetPassword')
 // const FacebookLoginService = require('../src/services/auth/facebookLogin')
 // const GoogleLoginService = require('../src/services/auth/googleLogin')
 const AssignRoleService = require('../src/services/auth/assignRole')
+const GenerateTokenService = require('../src/services/auth/generateToken')
 
 const name = 'User Name'
 const pwd = '123456'
@@ -82,8 +83,8 @@ describe('Auth testing', function () {
     })
   
     it('should save user with referrer', async function () {
-      const registerUserSvc = new RegisterUserService('Referred user', 'referred@iauu.com.br', '654321', user.referral.token)
-      await registerUserSvc.register()
+      const registerUserSvc = new RegisterUserService('Referred user', 'referred@iauu.com.br', '654321')
+      await registerUserSvc.register(user.referral.token)
   
       const referredUser = await User.findById(registerUserSvc.getUser().id)
         .select('+referral.from')
@@ -268,6 +269,10 @@ describe('Auth testing', function () {
       user.contrator = undefined
       await user.save()
     })
+
+    describe('Artist assignment', () => {
+      
+    })
   
     it('should create artist', async () => {
       const assigRoleSvc = new AssignRoleService({ id: user.id }, 'artist')
@@ -277,14 +282,30 @@ describe('Auth testing', function () {
       artistUser.artist.should.be.instanceof(Artist)
       artistUser.status.should.be.equal('active')
     })
+
+    it('should save user with artist', async function () {
+      const assigRoleSvc = new AssignRoleService({ id: user.id }, 'artist')
+      await assigRoleSvc.assign()
+
+      const assignedUser = assigRoleSvc.getUser()
+      assignedUser.artist.should.be.instanceof(Artist)
+      const registerUserSvc = new RegisterUserService('Artist user', 'artist@iauu.com.br', '654321')
+      await registerUserSvc.register(null, GenerateTokenService.encryptId(assignedUser.artist.id))
+  
+      const artistUserId = registerUserSvc.getUser().id
+      const artistUser = await User.findById(artistUserId).populate('artist')
+      artistUser.artist.should.be.instanceof(Artist)
+      artistUser.verification.is_verified = false
+      artistUser.status.should.be.equal('assigned')
+    })
   
     it('should create contractor', async () => {
       const assigRoleSvc = new AssignRoleService({ id: user.id }, 'contractor')
       await assigRoleSvc.assign()
   
-      const artistUser = await User.findById(user.id).populate('contractor')
-      artistUser.status.should.be.equal('active')
-      artistUser.contractor.should.be.instanceof(Contractor)
+      const contractorUser = await User.findById(user.id).populate('contractor')
+      contractorUser.status.should.be.equal('active')
+      contractorUser.contractor.should.be.instanceof(Contractor)
     })
   
     it('should not assign for active user', async () => {

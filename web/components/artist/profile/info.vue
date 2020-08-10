@@ -47,7 +47,7 @@ export default {
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
     ...mapFields('artist', {
-      companyName: 'artist.company_name',
+      companyName: 'artist.name',
       story: 'artist.story',
       document: 'artist.document',
       phone: 'artist.phone'

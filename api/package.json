@@ -11,7 +11,7 @@
         "dev": "nodemon -L src/app.js",
         "stop": "pkill --signal SIGINT reforma.ai.server",
         "migrate": "./node_modules/.bin/migrate -c src",
-        "test": "mocha"
+        "test": "mocha --timeout 5000"
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",

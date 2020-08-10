@@ -2,12 +2,12 @@
   <div class="result" @click="$emit('select', artist)">
     <div v-if="!$empty(artist.user)" class="logo">
       <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
-      <avatar :src="artist.user.photo" :username="artist.user.name" :size="100"></avatar>
+      <avatar :src="artist.photo" :username="artist.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
       <div class="col-sm-6">
         <div>
-          <h2>{{ artist.company_name || artist.name }}</h2>
+          <h2>{{ artist.name }}</h2>
         </div>
         <div>
           <h6 class="cat-badge">{{ artist.category.name }}</h6>
@@ -80,8 +80,7 @@ export default {
   methods: {
     // TODO This is not best neither the correct for this to be - refactor to the model (?) in the future, or send from the backend
     getSlug() {
-      const name = this.artist.company_name || this.artist.name
-      return name.toLowerCase().replace(' ', '-')
+      return this.artist.name.toLowerCase().replace(' ', '-')
     }
   }
 }

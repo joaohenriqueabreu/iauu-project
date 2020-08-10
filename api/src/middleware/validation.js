@@ -32,7 +32,8 @@ const newCrendentials = (req, res, next) => {
     name: validateRequest.string().required(),
     email: validateRequest.string().email().required(),
     password: validateRequest.string().required(),
-    token: validateRequest.string().optional()
+    referral_token: validateRequest.string().optional(),
+    artist_token: validateRequest.string().optional()
   })
 
   return validate(req.body, req, next, schema)

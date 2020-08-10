@@ -47,13 +47,14 @@ export default {
     await store.dispatch('admin/loadUsersStats')
     await store.dispatch('admin/loadPresentationsStats')
 
-    let status = 'active'
+    let status = 'good'
     let pingTime = 0
     try {
       const start = moment()
       await store.dispatch('admin/status')
       const end = moment()
       pingTime = end.diff(start)
+      if (pingTime > 100) { status = 'warning' }
     } catch (error) {
       console.log(error)
       status = 'error'
@@ -89,13 +90,9 @@ export default {
 
 <style lang="scss" scoped>
 .stat-status {
-  &.active {
-    background: $green;
-  }
-
-  &.error {
-    background: $error;
-  }
+  &.good { background: $green; }
+  &.warning { background: $warning; }
+  &.error { background: $error; }
 
   width: 20px;
   height: 20px;

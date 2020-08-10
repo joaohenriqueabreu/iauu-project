@@ -11,6 +11,7 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
+            data-test="top-menu"
           >
             <overlay :rounded="true">
               <avatar :src="$auth.user.photo" :username="$auth.user.name"></avatar>
@@ -30,6 +31,12 @@
             <admin-menu v-if="$auth.hasScope('admin')"></admin-menu>
             <artist-menu v-if="$auth.hasScope('artist')"></artist-menu>
             <contractor-menu v-if="$auth.hasScope('contractor')"></contractor-menu>
+            <nuxt-link to="/user/profile">
+              <h6>Perfil</h6>
+            </nuxt-link>
+            <nuxt-link to="/logout">
+              <h6>Sair</h6>
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -139,6 +146,7 @@ h6 {
   left: 0;
   width: 100vw;
   transition: $transition;
+  z-index: $moveToTop;
   &.filled {
     transition: $transition;
     background: $layer1;

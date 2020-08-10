@@ -10,10 +10,10 @@
           >
             <avatar
               class="mr-4"
-              :src="presentation.artist.user.photo"
-              :username="presentation.artist.user.name"
+              :src="presentation.artist.photo"
+              :username="presentation.artist.name"
             ></avatar>
-            <h5>{{ presentation.artist.user.name }}</h5>
+            <h5>{{ presentation.artist.name }}</h5>
           </nuxt-link>
           <div class="d-flex align-items-end">
             <span class="identifier">Apresentação</span>

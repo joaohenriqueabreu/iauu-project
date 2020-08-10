@@ -23,7 +23,7 @@ module.exports = class SearchArtistProfileService extends BaseService
 
     async lookupArtist() {
       console.log('Searching for artist from slug...')      
-      this.artist = await Artist.findOne({ slug: this.slug }).populate('user')
+      this.artist = await Artist.findOne({ slug: this.slug }).populate('users')
       return this
     }
 

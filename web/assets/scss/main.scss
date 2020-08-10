@@ -233,3 +233,14 @@ a {
     color: $brandLayer;
   }
 }
+
+.dropdown-menu {
+  z-index: $moveToTop !important;
+  div, h6, a {
+    z-index: $moveToTop !important;
+  }
+}
+
+div {
+  z-index: auto;
+}

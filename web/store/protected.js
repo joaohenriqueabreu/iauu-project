@@ -1,8 +1,15 @@
+import { getField, updateField } from 'vuex-map-fields'
+
 export const state = () => ({
-  token: null
+  token: null,
+  user: {}
 })
 
 export const mutations = {
+  updateField,
+  set_user(state, data) {
+    state.user = data
+  },
   set_token(state, token) {
     state.token = token
   },
@@ -12,6 +19,14 @@ export const mutations = {
 }
 
 export const actions = {
+  async loadUser({ commit }) {
+    const { data } = await this.$axios.get('users/profile')
+    commit('set_user', data)
+  },
+  async saveProfile({ commit, state }) {
+    const { data } = await this.$axios.put('users/profile', { profile: state.user })
+    commit('set_user', data)
+  },
   register({ commit }, credentials) {
     return this.$axios.post('register', credentials)
   },
@@ -42,4 +57,8 @@ export const actions = {
     const { data } = await this.$axios.post('login/facebook', { token })
     commit('set_token', data)
   }
+}
+
+export const getters = {
+  getField
 }

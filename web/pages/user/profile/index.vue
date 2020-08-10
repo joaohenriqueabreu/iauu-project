@@ -29,13 +29,13 @@
       </div>
     </main>
     <footer class="full-width m-4 horizontal center middle">
-      <form-button @action="saveProfile">Salvar</form-button>
+      <form-button @action="handleSaveUserProfile">Salvar</form-button>
     </footer>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 import FacebookLogin from '@/components/auth/facebook'
 import GoogleLogin from '@/components/auth/google'
@@ -46,7 +46,7 @@ export default {
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
-      await store.dispatch('contractor/loadContractor')
+      await store.dispatch('protected/loadUser')
     } catch (e) {
       $sentry.captureException(e)
       error({ statusCode: 404, message: 'Perfil não encontrado' })
@@ -58,26 +58,33 @@ export default {
     }
   },
   computed: {
-    ...mapState({ contractor: (state) => state.contractor.contractor }),
-    ...mapFields('contractor', {
-      name: 'contractor.user.name',
-      phone: 'contractor.phone'
+    ...mapState({ user: (state) => state.protected.user }),
+    ...mapFields('protected', {
+      name: 'user.name',
+      phone: 'user.phone',
+      email: 'user.email',
+      photo: 'user.photo',
     }),
     avatarImg() {
-      return !this.$utils.empty(this.contractor.user.photo)
-        ? this.contractor.user.photo
+      return !this.$utils.empty(this.photo)
+        ? this.photo
         : this.$config.defaultAvatarImgUrl
     }
   },
   methods: {
-    ...mapActions('contractor', ['saveProfile']),
-    ...mapMutations('contractor', { updateProfile: 'update_profile' }),
+    ...mapActions('protected', ['renewAuth', 'saveProfile']),
     uploadAvatar() {
       this.$refs.avatarUploader.upload()
     },
-    async setAvatar({ url }) {
-      this.updateProfile({ prop: 'user.photo', data: url })
+    async handleSaveUserProfile() {
       await this.saveProfile()
+      this.$toast.success('Perfil salvo com sucesso!')
+    },
+    async setAvatar({ url }) {
+      this.photo = url
+      await this.saveProfile()
+      await this.renewAuth()
+      this.$toast.success('Foto atualizada!')
     }
   }
 }

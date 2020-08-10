@@ -16,13 +16,13 @@ module.exports = class ContractorService extends BaseService
 
     async lookupMe() {
       console.log('Searching for contractor from user...')
-      this.contractor = await Contractor.findOne({ user: this.userId }).populate('user')
+      this.contractor = await Contractor.findOne({ user: this.userId }).populate('users')
       return this
     }
 
     async lookupContractor() {
       console.log('Searching for contractor...')
-      this.contractor = await Contractor.findById(this.id).populate('user')
+      this.contractor = await Contractor.findById(this.id).populate('users')
       return this
     }
 

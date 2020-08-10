@@ -1,6 +1,5 @@
 require('dotenv').config()
 const api = require('express').Router()
-const jwt = require('express-jwt')
 const authController = require('../controller/auth')
 const adminController = require('../controller/admin')
 const validationMiddleware = require('../middleware/validation')
@@ -21,6 +20,10 @@ api.post('/reset/forgot', validationMiddleware.forgotPassword, authController.fo
 api.post('/reset/authorize', validationMiddleware.verify, authController.authorizeFromVerification)
 api.post('/reset/password', validationMiddleware.verify, validationMiddleware.resetPassword, authController.resetPassword)
 
+api.get('/users/profile', authorizationMiddleware.authorize, authController.userProfile)
+api.put('/users/profile', authorizationMiddleware.authorize, validationMiddleware.profile, authController.updateProfile)
+
 api.get('/users/renew', authorizationMiddleware.authorize, authController.renewAuth)
+api.get('/users/exchange', authorizationMiddleware.authorize, authController.encryptRoleId)
 
 module.exports = api

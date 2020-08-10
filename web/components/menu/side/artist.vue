@@ -13,9 +13,9 @@
         <font-awesome icon="search-dollar"></font-awesome>
         <span v-show="!minimized">Propostas</span>
       </nuxt-link>
-      <nuxt-link to="/artist/profile" :class="{ routed: routed('profile') }">
-        <font-awesome icon="user"></font-awesome>
-        <span v-show="!minimized">Perfil</span>
+      <nuxt-link to="/artist/profile" :class="{ routed: routed('account') }">
+        <font-awesome icon="guitar"></font-awesome>
+        <span v-show="!minimized">Banda</span>
       </nuxt-link>
     </div>
   </div>

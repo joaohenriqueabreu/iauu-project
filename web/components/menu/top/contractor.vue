@@ -10,12 +10,6 @@
       <nuxt-link to="/referral">
         <h6>Renda passiva</h6>
       </nuxt-link>
-      <nuxt-link to="/contractor/profile">
-        <h6>Perfil</h6>
-      </nuxt-link>
-      <nuxt-link to="/logout">
-        <h6>Sair</h6>
-      </nuxt-link>
     </div>
   </div>
 </template>

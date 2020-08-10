@@ -4,11 +4,12 @@ module.exports = class SaveUserProfileService extends AuthService
 {
     constructor(user, data) {
       super(user)
-      this.user = user
-      this.data = data
+      this.id = user.id
+      this.data = data.profile
     }
 
-    async save() {      
+    async save() {
+      await this.searchUserById(this.id)
       await this.validateUser()
       await this.sanitizeData()
       await this.populateModel()
@@ -22,7 +23,7 @@ module.exports = class SaveUserProfileService extends AuthService
       delete this.data['role']
       delete this.data['artist']
       delete this.data['contractor']
-      delete this.data['email']
+      delete this.data['email'] // Email should have special handling
       delete this.data['date_created']
       delete this.data['__v']
       return this

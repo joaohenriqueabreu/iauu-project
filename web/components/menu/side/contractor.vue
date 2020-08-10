@@ -13,7 +13,7 @@
         <font-awesome icon="search-dollar"></font-awesome>
         <span v-show="!minimized">Propostas</span>
       </nuxt-link>
-      <nuxt-link to="/contractor/profile" :class="{ routed: routed('profile') }">
+      <nuxt-link to="/user/account" :class="{ routed: routed('profile') }">
         <font-awesome icon="user"></font-awesome>
         <span v-show="!minimized">Perfil</span>
       </nuxt-link>

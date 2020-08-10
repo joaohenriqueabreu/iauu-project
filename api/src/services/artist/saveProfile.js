@@ -27,13 +27,12 @@ module.exports = class SaveArtistProfileService extends ArtistService
       await this.populateSlug(0)
       await this.populateModel()
       await this.saveArtist()
-      await this.updateUser()
       return this
     }
 
     async lookupArtist() {
       console.log('Searching for artist...')
-      this.artist = await Artist.findById(this.id).populate('user')
+      this.artist = await Artist.findById(this.id).populate('users')
       return this
     }
 
@@ -58,13 +57,13 @@ module.exports = class SaveArtistProfileService extends ArtistService
     }
 
     async populateSlug(suffix) {
-      if (this.data['company_name'] === undefined ||
-        this.data['company_name'] === this.artist.company_name) {
+      if (this.data['name'] === undefined ||
+        this.data['name'] === this.artist.name) {
         console.log('No name changes...')
         return this
       }
 
-      let slug = slugfy(this.data['company_name'])
+      let slug = slugfy(this.data['name'])
 
       // Assign suffix if any
       if (suffix > 0) {
@@ -84,22 +83,10 @@ module.exports = class SaveArtistProfileService extends ArtistService
 
     populateModel() {
       for (let prop in this.data) {
-        this.artist[prop] = this.data[prop]        
+        this.artist[prop] = this.data[prop]
       }      
 
-      console.log('Artist ready to save...')      
-      return this
-    }
-
-    async updateUser() {
-      // Check if we need to save something
-      console.log('Checking if user needs saving...')
-      if (this.artist.user.photo === this.userData.photo) { 
-        return
-      }
-      console.log('User needs saving...')
-      const saveUserProfileService = new SaveUserProfileService(this.artist.user, this.userData)
-      await saveUserProfileService.save()
+      console.log('Artist ready to save...')
       return this
     }
 }

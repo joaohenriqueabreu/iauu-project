@@ -14,10 +14,7 @@
         <h6>Renda passiva</h6>
       </nuxt-link>
       <nuxt-link to="/artist/profile">
-        <h6>Perfil</h6>
-      </nuxt-link>
-      <nuxt-link to="/logout">
-        <h6>Sair</h6>
+        <h6>Gerenciar banda</h6>
       </nuxt-link>
     </div>
   </div>

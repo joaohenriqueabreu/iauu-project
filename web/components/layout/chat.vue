@@ -114,13 +114,13 @@ export default {
       return [
         {
           id: this.presentation.artist.user.id,
-          name: this.presentation.artist.user.name,
-          imageUrl: this.presentation.artist.user.photo
+          name: this.presentation.artist.name,
+          imageUrl: this.presentation.artist.photo
         },
         {
           id: this.presentation.contractor.user.id,
-          name: this.presentation.contractor.user.name,
-          imageUrl: this.presentation.contractor.user.photo
+          name: this.presentation.contractor.name,
+          imageUrl: this.presentation.contractor.photo
         }
       ]
     },

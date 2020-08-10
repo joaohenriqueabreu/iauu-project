@@ -100,9 +100,14 @@ module.exports = class AuthService extends BaseService {
     return result
   }
 
+  activateUser() {
+    this.user.status = 'active'
+    return this
+  }
+
   async saveUser() {
-    console.log('Trying to save user...')    
-    if (this.user.isModified) {      
+    console.log('Trying to save user...')
+    if (this.user.isModified) {
       await this.user.save()
       console.log('User updated...')
     }

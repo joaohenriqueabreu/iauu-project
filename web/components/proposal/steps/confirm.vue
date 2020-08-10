@@ -12,7 +12,7 @@
           <font-awesome icon="check-circle" class="m-0"></font-awesome>
         </div>
         <h6 class="mb-4">
-          Prezados integrantes do(a) <u>{{ proposal.artist.company_name }}</u
+          Prezados integrantes do(a) <u>{{ proposal.artist.name }}</u
           >,
         </h6>
         <p class="mb-5">

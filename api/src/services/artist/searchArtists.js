@@ -24,7 +24,7 @@ module.exports = class SearchArtistProfileService extends BaseService
       const condition = this.term !== undefined
         ? {$text: { $search: this.term }}
         : {}
-      this.artists = await Artist.find(condition).populate('user')
+      this.artists = await Artist.find(condition).populate('users')
       console.log('Found artists...')
       return this
     }

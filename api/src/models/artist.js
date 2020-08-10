@@ -14,19 +14,13 @@ const feedbackSchema = require('./schemas/feedback')
 
 const { Schema } = db
 
-const slugfy = function (slug) {
-  return this.company_name !== undefined 
-    ? this.company_name.toLowerCase().replace(' ', '-')
-    : this.user.name.toLowerCase().replace(' ', '-')
-}
-
-const artistSchema = new Schema({  
-  user : {
+const artistSchema = new Schema({
+  users : [{
     type: Schema.Types.ObjectId,
     ref: 'User'
-  },
-
-  company_name: { type: String },
+  }],
+  name: { type: String },
+  photo: { type: String },
   slug: { 
     type: String,
     default: uid()
@@ -67,6 +61,6 @@ class Artist extends BaseModel {
   }
 }
 
-artistSchema.index({ company_name: 'text', story: 'text', 'category.name': 'text', 'category.subcategory': 'text', tags: 'text' })
+artistSchema.index({ name: 'text', story: 'text', 'category.name': 'text', 'category.subcategory': 'text', tags: 'text' })
 artistSchema.loadClass(Artist)
 module.exports = db.model('Artist', artistSchema)

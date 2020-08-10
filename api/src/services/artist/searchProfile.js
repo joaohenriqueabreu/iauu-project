@@ -8,8 +8,8 @@ module.exports = class SearchArtistProfileService extends ArtistService
     }
 
     async search() {
-      await this.lookupArtist()
-      await this.ensureArtistWasFound()
+      await this.searchArtistWithUsers()
+      this.ensureArtistWasFound()
       return this
     }
 }

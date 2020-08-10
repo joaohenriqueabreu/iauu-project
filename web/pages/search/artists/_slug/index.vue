@@ -2,8 +2,8 @@
   <div>
     <div :style="{ 'background-image': `url(${bgImage})` }" class="bg"></div>
     <div class="title">
-      <avatar :src="artist.user.photo" :username="artist.company_name" :size="200"></avatar>
-      <h1>{{ artist.company_name || artist.name }}</h1>
+      <avatar :src="artist.photo" :username="artist.name" :size="200"></avatar>
+      <h1>{{ artist.name }}</h1>
     </div>
     <div class="horizontal center middle mb-4">
       <font-awesome icon="music"></font-awesome>

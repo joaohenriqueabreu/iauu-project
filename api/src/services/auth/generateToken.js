@@ -1,5 +1,8 @@
 const jwt = require('jwt-simple')
 const faker = require('faker')
+const crypto = require('crypto')
+require('dotenv').config()
+
 const { User, Artist, Contractor } = require('../../models')
 
 // 30 days (in seconds)
@@ -44,5 +47,20 @@ module.exports = class GenerateTokenService {
         }
 
         return false
+    }
+
+    static encryptId(id) {
+        // https://www.w3schools.com/nodejs/ref_crypto.asp
+        const encryptionMethod = crypto.createCipher('aes-128-cbc', process.env.CRYPTO_SECRET)
+        let encrypted = encryptionMethod.update(id, 'utf8', 'hex')
+        encrypted += encryptionMethod.final('hex')
+        return encrypted
+    }
+
+    static decryptId(id) {
+        var encryptionMethod = crypto.createDecipher('aes-128-cbc', process.env.CRYPTO_SECRET)
+        var decrypted = encryptionMethod.update(id, 'hex', 'utf8')
+        decrypted += encryptionMethod.final('utf8');
+        return decrypted
     }
 }

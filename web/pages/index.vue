@@ -26,20 +26,25 @@
       <h1 class="mb-4">Contrate sua banda agora</h1>
       <nuxt-link to="/search">Vamos lá!</nuxt-link>
     </div>
-    <footer>
-      <cookie-law buttonText="OK" message="Nosso site utiliza cookies para melhorar a sua experiência"></cookie-law>
-    </footer>
+    <!-- Need to wrap lib on client-only tag as it uses document element -->
+    <client-only>
+      <cookie-policy buttonText="OK" class="cookies">
+        <div slot="message">
+          <h6>Nosso site utiliza cookies para melhorar a sua experiência. Ao utilizar a plataforma você consente com nossa
+          <nuxt-link to="/terms">Política de privacidade</nuxt-link>.
+          </h6>
+        </div>
+      </cookie-policy>
+    </client-only>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import CookieLaw from 'vue-cookie-law'
 import SearchArtist from '@/components/artist/searchInput'
 export default {
   components: {
-    SearchArtist,
-    CookieLaw
+    SearchArtist
   },
   mounted() {
     if (
@@ -111,5 +116,23 @@ export default {
       color: $layer1;
     }
   }
+}
+
+.cookies {
+  background: $layer5;
+  color: $brand;
+
+  a {
+    color: $brand;
+  }
+}
+</style>
+
+<!-- Cookie-law overrides -->
+<style lang="scss">
+.Cookie__button {
+  background: $brandLayer !important;
+  font-weight: $bold;
+  border-radius: $rounded !important;
 }
 </style>

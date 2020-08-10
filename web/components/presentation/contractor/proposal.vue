@@ -9,8 +9,8 @@
             class="horizontal middle"
           >
             <avatar
-              v-if="!$empty(presentation.artist.user.photo)"
-              :src="presentation.artist.user.photo"
+              v-if="!$empty(presentation.artist.photo)"
+              :src="presentation.artist.photo"
               :username="presentation.artist.name"
             ></avatar>
             <div class="vertical middle">

@@ -25,8 +25,23 @@ module.exports = class AssignRoleService extends AuthService {
     return this
   }
 
+  async linkArtist(artist) {
+    console.log('Linking artist to user...')
+    await this.searchUserById(this.id)
+    this.ensureUserWasFound()
+      .ensureUserIsNotYetAssigned()
+    await this.searchArtistById(artist)
+    this.ensureArtistWasFound()
+      .assignUserRole()
+    await this.saveRole()
+    await this.saveUser()
+    await this.searchUserById(this.user.id) // Refresh user to prevent populate buffer issues
+    await this.generateAccessToken()
+    return this
+  }
+
   ensureUserIsNotYetAssigned() {
-    if (this.user.status !== 'unassigned') {
+    if (!['unassigned', 'pending'].includes(this.user.status)) {
       throw new BadRequestException('User already assigned')
     }
 
@@ -59,13 +74,30 @@ module.exports = class AssignRoleService extends AuthService {
     return this
   }
 
+  async searchArtistById(id) {
+    this.user.role = 'artist'
+    this.roleInstance = await Artist.findById(id)
+    return this
+  }
+
+  ensureArtistWasFound() {
+    if (Artist.notFound(this.roleInstance) || !this.roleInstance instanceof Artist) {
+      throw new BadRequestException('Artista não reconhecido')
+    }
+
+    console.log('Artist found...')
+
+    return this
+  }
+
   async saveRole() {
-    this.roleInstance.user = this.user.id
+    this.roleInstance.users.push(this.user.id)
     await this.roleInstance.save()
     return this
   }
 
   assignUserRole() {
+    this.user.status = 'assigned'
     if (this.role === 'artist') {
       console.log('Assigning user as artist...')
       this.user.artist = this.roleInstance.id
@@ -78,11 +110,6 @@ module.exports = class AssignRoleService extends AuthService {
       return this
     }
 
-    throw new Error('No role assigned')    
-  }
-
-  activateUser() {
-    this.user.status = 'active'
-    return this
+    throw new Error('No role assigned')
   }
 }

@@ -66,9 +66,18 @@ export default {
     },
     referralToken() {
       if (window === undefined) { return }
-      const token = QueryString.parse(window.location.search)
-      if (token.from !== undefined) {
-        return { token: token.from }
+      const query = QueryString.parse(window.location.search)
+      if (query.from !== undefined) {
+        return { referral_token: query.from }
+      }
+
+      return {}
+    },
+    artistToken() {
+      if (window === undefined) { return }
+      const query = QueryString.parse(window.location.search)
+      if (query.artist !== undefined) {
+        return { artist_token: query.artist }
       }
 
       return {}
@@ -91,7 +100,7 @@ export default {
 
       this.$auth.setToken('local', null)
       try {
-        await this.register({ ...this.credentials, ...this.referralToken })
+        await this.register({ ...this.credentials, ...this.referralToken, ...this.artistToken })
         this.$router.push('/register/verify')
       } catch (error) {
         this.$sentry.captureException(error)

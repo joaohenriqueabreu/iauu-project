@@ -29,6 +29,11 @@
               </a>
             </li>
             <li class="nav-link">
+              <a class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'">
+                Integrantes
+              </a>
+            </li>
+            <li class="nav-link">
               <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
                 Categorias
               </a>
@@ -42,6 +47,9 @@
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
             <fade-transition mode="out-in">
               <profile-stats v-show="statsTab" key="stats"></profile-stats>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <artist-users v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-users>
             </fade-transition>
             <fade-transition mode="out-in">
               <artist-info v-show="infoTab" ref="info" key="artist"></artist-info>
@@ -69,25 +77,32 @@
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import ProfileStats from '@/components/artist/profile/stats'
 import ArtistInfo from '@/components/artist/profile/info'
+import ArtistUsers from '@/components/artist/profile/users'
 import SocialNetworks from '@/components/artist/profile/social'
 import ArtistCategories from '@/components/artist/profile/categories'
 import SearchTags from '@/components/artist/profile/tags'
 export default {
   components: {
-    'profile-stats': ProfileStats,
-    'artist-info': ArtistInfo,
-    'social-networks': SocialNetworks,
-    'artist-categories': ArtistCategories,
-    'search-tags': SearchTags
+    ProfileStats,
+    ArtistUsers,
+    ArtistInfo,
+    SocialNetworks,
+    ArtistCategories,
+    SearchTags
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
       await store.dispatch('artist/loadArtist')
-      const { data } = await app.$axios.get('categories')
-      return { categories: data }
+      const catResponse = await app.$axios.get('categories')
+      const roleIdResponse = await app.$axios.get('/users/exchange')
+      return { 
+        categories: catResponse.data,
+        shareableId:  roleIdResponse.data
+      }
     } catch (e) {
       $sentry.captureException(e)
       error({ statusCode: 404, message: 'Perfil não encontrado' })
@@ -100,8 +115,14 @@ export default {
   },
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
+    ...mapFields('artist', {
+      photo: 'artist.photo'
+    }),
     statsTab() {
       return this.activeTab === 'stats'
+    },
+    usersTab() {
+      return this.activeTab === 'users'
     },
     infoTab() {
       return this.activeTab === 'info'
@@ -121,9 +142,7 @@ export default {
         : this.$config.defaultBGImgUrl
     },
     avatarImg() {
-      return !this.$utils.empty(this.artist.user.photo)
-        ? this.artist.user.photo
-        : this.$config.defaultAvatarImgUrl
+      return !this.$utils.empty(this.photo) ? this.photo : this.$config.defaultAvatarImgUrl
     }
   },
   created() {
@@ -131,10 +150,7 @@ export default {
     this.activeTab = 'stats'
   },
   methods: {
-    ...mapActions('protected', ['renewAuth']),
     ...mapActions('artist', ['saveProfile']),
-    ...mapMutations('artist', { updateProfile: 'update_profile' }),
-
     uploadBG() {
       this.$refs.bgUploader.upload()
     },
@@ -149,9 +165,8 @@ export default {
       await this.saveProfile()
     },
     async setAvatar({ url }) {
-      this.updateProfile({ prop: 'user.photo', data: url })
+      this.photo = url
       await this.saveProfile()
-      await this.renewAuth()
     }
   }
 }
@@ -216,7 +231,7 @@ form {
   // Overwrite bootstrap styling
   .nav-tabs {
     border-bottom: none;
-    z-index: $moveToTop;
+    z-index: $above;
     .nav-link {
       padding-bottom: 0;
       border: none;

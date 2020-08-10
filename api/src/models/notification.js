@@ -9,12 +9,6 @@ const addressSchema = require('./schemas/address')
 
 const { Schema } = db
 
-const slugfy = function (slug) {
-  return this.company_name !== undefined 
-    ? this.company_name.toLowerCase().replace(' ', '-')
-    : this.user.name.toLowerCase().replace(' ', '-')
-}
-
 const notificationSchema = new Schema({  
   user: {
     type: Schema.Types.ObjectId,

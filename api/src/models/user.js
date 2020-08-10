@@ -2,6 +2,7 @@ require('dotenv').config()
 // const db = require('../data/db')
 const db = require('mongoose')
 const BaseModel = require('./base')
+const personalInfo = require('./schemas/personalInfo')
 const baseSchemaOptions = require('./schemas/options')
 
 const { Schema } = db
@@ -12,7 +13,7 @@ const userSchema = new Schema({
   role: { type: String, enum: ['artist', 'contractor', 'admin'] },
   name: { type: String, required: true },
   access_token: { type: String, required: true, select: false },
-  status: { type: String, enum: ['pending', 'unassigned', 'active', 'blocked'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'unassigned', 'assigned', 'active', 'blocked'], default: 'pending' },
   photo: { type: String },
   first_name: { type: String },
   last_name: { type: String },
@@ -33,6 +34,7 @@ const userSchema = new Schema({
       ref: 'User' 
     }
   },
+  info: { type: personalInfo },
   social: {
     facebook_id: { type: String},
     google_id: { type: String },
