@@ -1,13 +1,16 @@
 <template>
   <div>
-    <div class="px-4 py-2">
+    <div class="px-4 pb-4">
       <h4 v-if="!$utils.empty(term)">Resultados para "{{ term }}"</h4>
       <h4 v-else>Artistas encontrados</h4>
     </div>
-    <div class="search-results">
+    <div class="search-results" v-if="!$empty(artists)">
       <div v-for="(artist, index) in artists" :key="index" class="px-4 mb-4">
-        <artist-info :artist="artist" @select="selectedArtist"></artist-info>
+        <search-result :artist="artist" @select="selectedArtist"></search-result>
       </div>
+    </div>
+    <div v-else class="horizontal center middle py-5">
+      <h6>Nenhum artista encontrado... <font-awesome icon="frown"></font-awesome></h6>
     </div>
     <div class="compensate-filters"></div>
     <div class="filters">
@@ -46,13 +49,16 @@
               label="Filtrar Localização"
               placeholder="Próximo de"
             ></form-location>
-            <form-range
-              v-show="currentFilter === 'price'"
-              v-model="price"
-              class="search-filter"
-              label="Faixa de preço"
-              filter-name="currency"
-            ></form-range>
+            <div class="horizontal center brand-hover" v-show="currentFilter === 'price'">
+              <div class="vertical mr-4 price-range" v-for="(range, index) in $config.priceRanges" :key="`range_${index}`" :class="{ selected: isPriceRangeSelected(index) }">
+                <div class="horizontal center mb-2">
+                  <h6>
+                    <font-awesome v-for="i in parseInt(index)" :key="`search_range_${i}`" icon="dollar-sign" class="mr-1"></font-awesome>
+                  </h6>
+                </div>
+                <h5>{{ range }}</h5>
+              </div>
+            </div>
             <form-select
               v-show="currentFilter === 'sort'"
               class="search-filter"
@@ -76,31 +82,42 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 import SearchResult from '@/components/artist/profile/searchResult'
 export default {
   components: {
-    'artist-info': SearchResult
+    SearchResult
   },
-  async asyncData({ store, app }) {
-    await store.dispatch('contractor/searchArtists', store.state.app.searchFilters)
+  async asyncData({ store, app, query }) {
+    const filters = store.state.contractor.searchFilters
+    if (!app.$empty(query)) {
+      filters.term = query.term
+    }
+
+    // Cleanup empty filters
+    // for (const filter in filters) {
+    //   if (app.$empty(filters[filter])) {
+    //     delete(filters[filter])
+    //   }
+    // }
+
+    await store.dispatch('contractor/searchArtists', filters)
   },
   data() {
     return {
-      term: '',
-      location: '',
-      price: 0,
       selectingFilter: false,
-      currentFilter: ''
+      currentFilter: '',
     }
   },
   computed: {
-    ...mapState({ searchFilters: (state) => state.app.searchFilters }),
-    ...mapState({ artists: (state) => state.contractor.artists })
-  },
-  mounted() {
-    this.term = this.searchFilters.term
-    this.location = this.searchFilters.location
-    this.price = this.searchFilters.price
+    ...mapState({ artists: (state) => state.contractor.artists }),
+    ...mapFields('contractor', {
+      searchFilters: 'searchFilters',
+      term: 'searchFilters.term',
+      location: 'searchFilters.location',
+      price: 'searchFilters.price',
+      sort: 'searchFilters.sort'
+    })
   },
   methods: {
     ...mapActions('contractor', ['loadArtist']),
@@ -126,6 +143,9 @@ export default {
     },
     filter() {
       console.log('filtering...')
+    },
+    isPriceRangeSelected(index) {
+      return this.searchFilters.price === index
     }
   }
 }

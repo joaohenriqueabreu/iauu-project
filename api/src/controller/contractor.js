@@ -8,7 +8,7 @@ const SaveContractorProfileService = require('../services/contractor/saveProfile
 class ContractorController extends BaseController {
   searchArtists(req, res, next) {
     console.log('Searching for artists...')
-    const searchArtistsService = new SearchArtistsService(req.data)
+    const searchArtistsService = new SearchArtistsService(req.user, req.data)
     searchArtistsService.search()
       .then(() => { 
         res.status(200).json(searchArtistsService.getArtists()) 

@@ -1,8 +1,5 @@
 export const state = () => ({
   showMenu: false,
-  searchFilters: {
-    term: ''
-  },
   alert: {
     type: null,
     message: null
@@ -25,9 +22,6 @@ export const mutations = {
   clear_alert(state) {
     state.alert = null
     state.newAlert = false
-  },
-  set_search_filters(state, filters) {
-    state.searchFilters = filters
   }
 }
 
@@ -53,9 +47,6 @@ export const actions = {
     if (process.client) {
       localStorage.removeItem('alert')
     }
-  },
-  setSearchFilters({ commit }, searchFilters) {
-    commit('set_search_filters', searchFilters)
   }
 }
 

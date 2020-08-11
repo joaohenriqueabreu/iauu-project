@@ -3,7 +3,7 @@
     <div class="mainmenu vertical">
       <div v-if="$auth.loggedIn" class="horizontal mt-2">
         <product-setup v-if="$auth.hasScope('artist')" class="mr-3"></product-setup>
-        <div class="dropdown">
+        <div class="dropdown" data-test="top-menu">
           <a
             class="dropdown-toggle"
             href="#"
@@ -11,7 +11,6 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-            data-test="top-menu"
           >
             <overlay :rounded="true">
               <avatar :src="$auth.user.photo" :username="$auth.user.name"></avatar>
@@ -146,7 +145,7 @@ h6 {
   left: 0;
   width: 100vw;
   transition: $transition;
-  z-index: $moveToTop;
+  z-index: $above;
   &.filled {
     transition: $transition;
     background: $layer1;

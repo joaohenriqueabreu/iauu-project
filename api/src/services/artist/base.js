@@ -6,7 +6,7 @@ module.exports = class ArtistService extends BaseService
     constructor({ id, role_id }) {
       super()
       this.id = role_id
-      this.userId = id      
+      this.userId = id
       this.artist = {}
     }
 
@@ -32,7 +32,7 @@ module.exports = class ArtistService extends BaseService
 
     async searchArtistWithUsers() {
       console.log('Searching for artist...')
-      this.artist = await Artist.findById(this.id).populate({ path: 'users', select: 'name email' })
+      this.artist = await Artist.findById(this.id).populate({ path: 'users', select: 'name email photo' })
       return this
     }
 

@@ -14,5 +14,4 @@ const productSchema = new db.Schema({
     items: [String]
 }, baseSchemaOptions)
 
-productSchema.index({ name: 'text', description: 'text', items: 'text' })
 module.exports = productSchema

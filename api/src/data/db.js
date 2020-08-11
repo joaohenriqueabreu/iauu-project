@@ -7,6 +7,7 @@ const connectionOptions = {
     useCreateIndex: true, 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
+    autoIndex: process.env.NODE_ENV !== 'production'
     // useFindAndModify: false,
     // autoReconnect: true,
     // reconnectTries: 1000000,

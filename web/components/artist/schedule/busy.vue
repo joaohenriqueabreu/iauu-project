@@ -19,9 +19,9 @@
             <h6>{{ timeslot.end_dt | time }}</h6>
           </div>
         </div>
-        <form-toggle v-model="timeslot.full_day" class="d-flex justify-content-end"
-          >Dia inteiro?</form-toggle
-        >
+        <form-toggle v-model="timeslot.full_day" class="d-flex justify-content-end">
+          Dia inteiro?
+        </form-toggle>
         <div class="vertical mb-2">
           <form-input v-model="timeslot.title" placeholder="Título" icon="edit"></form-input>
           <form-textarea

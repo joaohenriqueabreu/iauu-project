@@ -15,12 +15,17 @@
           <ul class="nav nav-tabs mt-4">
             <li class="nav-link first">
               <a class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'">
-                Stats
+                Geral
               </a>
             </li>
             <li class="nav-link">
               <a class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'">
                 Informações
+              </a>
+            </li>
+            <li class="nav-link">
+              <a class="nav-link" :class="{ active: presentationsTab }" @click="activeTab = 'presentations'">
+                Apresentações
               </a>
             </li>
             <li class="nav-link">
@@ -49,10 +54,13 @@
               <profile-stats v-show="statsTab" key="stats"></profile-stats>
             </fade-transition>
             <fade-transition mode="out-in">
+              <presentation-config v-show="presentationsTab" ref="presentations"></presentation-config>
+            </fade-transition>
+            <fade-transition mode="out-in">
               <artist-users v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-users>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-info v-show="infoTab" ref="info" key="artist"></artist-info>
+              <artist-info v-show="infoTab" ref="info"></artist-info>
             </fade-transition>
             <fade-transition mode="out-in">
               <social-networks v-show="socialTab" ref="social" key="social"></social-networks>
@@ -81,6 +89,7 @@ import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import ProfileStats from '@/components/artist/profile/stats'
 import ArtistInfo from '@/components/artist/profile/info'
+import PresentationConfig from '@/components/artist/profile/presentations'
 import ArtistUsers from '@/components/artist/profile/users'
 import SocialNetworks from '@/components/artist/profile/social'
 import ArtistCategories from '@/components/artist/profile/categories'
@@ -88,8 +97,9 @@ import SearchTags from '@/components/artist/profile/tags'
 export default {
   components: {
     ProfileStats,
-    ArtistUsers,
+    PresentationConfig,
     ArtistInfo,
+    ArtistUsers,
     SocialNetworks,
     ArtistCategories,
     SearchTags
@@ -121,11 +131,14 @@ export default {
     statsTab() {
       return this.activeTab === 'stats'
     },
-    usersTab() {
-      return this.activeTab === 'users'
+    presentationsTab() {
+      return this.activeTab === 'presentations'
     },
     infoTab() {
       return this.activeTab === 'info'
+    },
+    usersTab() {
+      return this.activeTab === 'users'
     },
     socialTab() {
       return this.activeTab === 'social'

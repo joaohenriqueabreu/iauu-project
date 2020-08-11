@@ -36,6 +36,13 @@ const artistSchema = new Schema({
     name: { type: String },
     subcategories: [String]
   },
+  video: { type: String },
+  proposal: {
+    display_price: { type: Boolean, default: false },
+    avg_price: { type: Number, default: 0 },
+    avg_duration: { type: Number, default: 0 },
+    price_range: { type: Number, min: 1, max: 5, default: 1 },
+  },
 
   products: [productsSchema],
   schedule: [timeslotSchema],
@@ -59,8 +66,16 @@ class Artist extends BaseModel {
 
     return this.feedbacks.length
   }
+
+  get city_location() {
+    if (this.address === undefined) { return '' }
+    return `${this.address.city}, ${this.address.state}`
+  }
 }
 
-artistSchema.index({ name: 'text', story: 'text', 'category.name': 'text', 'category.subcategory': 'text', tags: 'text' })
 artistSchema.loadClass(Artist)
+artistSchema.index(
+  { name: 'text', story: 'text', 'category.name': 'text', 'category.subcategory': 'text', tags: 'text', 'product.name': 'text', 'product.description': 'text', 'product.item': 'text' },
+  {name: 'artist-full-text-search'}
+)
 module.exports = db.model('Artist', artistSchema)

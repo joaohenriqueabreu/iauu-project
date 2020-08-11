@@ -16,10 +16,7 @@
     ></form-textarea>
     <hr />
     <div class="row">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-8">
-        <form-masked v-model="document" icon="id-card" placeholder="CPF/CNPJ" mask="document">
-        </form-masked>
+      <div class="col-sm-12">
         <form-location
           :default="artist.address"
           street
@@ -28,7 +25,13 @@
           prop="address"
           @selected="updateLocation"
         ></form-location>
-        <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone"></form-masked>
+      </div>
+      <div class="col-sm-4">
+        <form-masked v-model="phone" icon="phone" placeholder="Telefone para apresentações" mask="phone"></form-masked>
+      </div>
+      <div class="col-sm-8">
+        <form-masked v-model="document" icon="id-card" placeholder="CPF/CNPJ" mask="document">
+        </form-masked>
       </div>
     </div>
   </div>

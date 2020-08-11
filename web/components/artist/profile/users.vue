@@ -9,22 +9,28 @@
     </div>
     <div>
       <h5 class="mb-4" v-if="!$empty(artist.name)">Integrantes de {{ artist.name }}</h5>
-      <table class="full-width">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(user,index) in users" :key="index">
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+      <perfect-scrollbar>
+        <table class="full-width">
+          <thead>
+            <tr>
+              <td></td>
+              <th>Nome</th>
+              <th>Email</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(user,index) in users" :key="index">
+              <td class="py-3">
+                <avatar :src="user.photo" :username="user.name"></avatar>
+              </td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </perfect-scrollbar>
     </div>
   </div>
 </template>
@@ -75,5 +81,20 @@ export default {
     transition: $transition;
     color: $brandLayer;
   }
+}
+
+table {
+  tr {
+    color: $brand;
+    transition: $transition;
+    &:hover {
+      transition: $transition;
+      background: $layer5;
+    }
+  }
+}
+
+.ps {
+  max-height: 20vh;
 }
 </style>

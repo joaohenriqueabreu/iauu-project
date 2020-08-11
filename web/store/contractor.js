@@ -5,6 +5,9 @@ import Proposal from '@/models/proposal'
 import Contractor from '~/models/contractor'
 
 export const state = () => ({
+  searchFilters: {
+    term: ''
+  },
   contractor: null,
   artists: [],
   artist: null,
@@ -51,6 +54,9 @@ export const mutations = {
   },
   edit_proposal(state, { prop, value }) {
     Vue.set(state.proposal, prop, value)
+  },
+  set_search_filters(state, filters) {
+    state.searchFilters = filters
   }
 }
 
@@ -83,6 +89,9 @@ export const actions = {
   },
   async sendProposal({ state, commit }) {
     await this.$axios.post('presentations/proposal', { proposal: state.proposal })
+  },
+  setSearchFilters({ commit }, searchFilters) {
+    commit('set_search_filters', searchFilters)
   }
 }
 

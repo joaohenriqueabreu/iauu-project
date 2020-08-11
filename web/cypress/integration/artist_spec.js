@@ -11,7 +11,9 @@ describe('Artist pages', () => {
 
   describe('Visit artist pages', () => {
     it('should open incorporate', () => {
-      cy.get('a[data-test="top-menu"]').click()
+      cy.get('div[data-test="top-menu"]').click()
+      cy.contains('Venda mais shows').click()
+      cy.url().should('include', 'artist/incorporate')
     })
   })
 })

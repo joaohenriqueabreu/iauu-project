@@ -49,6 +49,7 @@ export default {
     this.productItems = this.$array.uniq(this.$array.flatten(items))
   },
   methods: {
+    ...mapActions('protected', ['renewAuth']),
     ...mapActions('artist', ['loadProducts', 'saveProduct', 'removeProduct']),
     newProduct() {
       this.$refs.productForm.newProduct()
@@ -68,6 +69,7 @@ export default {
     },
     async save(product) {
       await this.saveProduct(product)
+      await this.renewAuth() // Remove product setup notification
       this.$toast.success('Produto salvo')
     },
     async remove(productId) {

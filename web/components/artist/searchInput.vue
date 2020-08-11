@@ -4,13 +4,13 @@
       v-model="term"
       class="funny"
       :placeholder="placeholder"
-      @enter="$emit('search', term)"
-    >
+      @enter="$emit('search', term)">
     </form-input>
   </div>
 </template>
 
 <script>
+import { mapFields } from 'vuex-map-fields'
 export default {
   data() {
     return {
@@ -22,7 +22,6 @@ export default {
         'Um standup bem engraçado'
       ],
       placeholder: '',
-      term: ''
     }
   },
   watch: {
@@ -56,6 +55,11 @@ export default {
       }
       self.placeholder = self.content[index].substring(0, length)
     }, 100)
+  },
+  computed: {
+    ...mapFields('contractor', {
+      term: 'searchFilters.term'
+    })
   }
 }
 </script>

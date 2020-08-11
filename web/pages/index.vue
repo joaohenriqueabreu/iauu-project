@@ -5,7 +5,7 @@
       <h1 class="text-center">Aperte o play em seu evento</h1>
       <div class="half-width vertical middle center">
         <client-only>
-          <search-artist @seach="search"></search-artist>
+          <search-artist @search="search"></search-artist>
           <nuxt-link ref="searchLink" to="/search">Vamos lá!</nuxt-link>
         </client-only>
       </div>
@@ -57,10 +57,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('app', ['setSearchFilters']),
     search(term) {
-      this.setSearchFilters({ term })
-      this.$router.push('/search')
+      console.log(term)
+      this.$router.push(`/search?term=${encodeURI(term)}`)
     }
   }
 }

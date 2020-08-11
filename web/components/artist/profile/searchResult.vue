@@ -1,26 +1,26 @@
 <template>
   <div class="result" @click="$emit('select', artist)">
-    <div v-if="!$empty(artist.user)" class="logo">
+    <div class="logo">
       <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
       <avatar :src="artist.photo" :username="artist.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
       <div class="col-sm-6">
-        <div>
+        <div class="mb-4">
           <h2>{{ artist.name }}</h2>
         </div>
-        <div>
-          <h6 class="cat-badge">{{ artist.category.name }}</h6>
+        <div class="horizontal">
+          <h6 class="cat-badge mr-4">{{ artist.category.name }}</h6>
+          <div class="horizontal">
+            <font-awesome v-for="index in artist.proposal.price_range" :key="`active_${index}`" icon="dollar-sign" class="price-range active mr-1"></font-awesome>
+            <font-awesome v-for="index in 5 - artist.proposal.price_range" :key="`inactive_${index} `" icon="dollar-sign" class="price-range inactive mr-1"></font-awesome>
+          </div>
         </div>
         <div v-if="!$utils.empty(artist.address)" class="mb-4">
-          <small>{{ artist.address.street }}</small>
+          <small>{{ artist.city_location }}</small>
         </div>
         <div class="horizontal middle">
-          <span
-            v-for="(subcategory, index) in artist.category.subcategories"
-            :key="index"
-            class="sub-badge"
-          >
+          <span v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="sub-badge">
             {{ subcategory }}
           </span>
         </div>
@@ -38,15 +38,7 @@
                   {{ artist.stats.presentations }}
                 </h5>
               </div>
-              <div v-if="false" class="d-flex align-items-end full-height">
-                <div v-if="artist.display_rate" class="horizontal middle">
-                  <client-only>
-                    <h4>R$ {{ rateMin | number('0,0') }} - R$ {{ rateMax | number('0,0') }}</h4>
-                  </client-only>
-                </div>
-                <div v-if="!artist.display_rate" class="horizontal middle">
-                  <span>Entre em contato para orçar</span>
-                </div>
+              <div class="d-flex align-items-end full-height">
               </div>
             </div>
           </div>
@@ -148,6 +140,13 @@ export default {
     background: $layer5;
     margin: 2 * $space;
     box-shadow: $shadow;
+  }
+}
+
+.price-range {
+  color: $brand;
+  &.inactive {
+    color: $layer5;
   }
 }
 </style>

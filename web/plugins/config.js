@@ -30,6 +30,14 @@ const config = {
     layer7: '#afafaf',
     layer10: '#efefef',
     white: '#fefefe'
+  },
+
+  priceRanges: {
+    1: 'R$ 100 - R$ 500',
+    2: 'R$ 500 - R$ 5.000',
+    3: 'R$ 5.000 - R$ 20.000',
+    4: 'R$ 20.000 - R$ 100.000',
+    5: 'R$ 100.000+',
   }
 }
 

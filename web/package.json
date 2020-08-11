@@ -10,8 +10,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern 'pages/incorporate/*' . --fix",
-    "test": "jest",
-    "cypress": "cypress open"
+    "test": "cypress open"
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^1.1.5",
