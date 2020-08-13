@@ -9,10 +9,10 @@ module.exports = class SearchArtistProfileService extends BaseService
       console.log(data)
       if (data !== undefined) {
         // we can search without term
-        if (data.term !== undefined) { this.term = data.term }
-        if (data.location !== undefined) { this.location = data.location }
-        if (data.price !== undefined) { this.price = data.price }
-        if (data.sort !== undefined) { this.sort = data.sort }
+        if (data.term !== undefined && data.term.length > 0) { this.term = data.term }
+        if (data.location !== undefined && data.location.length > 0) { this.location = data.location }
+        if (data.price !== undefined && data.price > 0) { this.price = data.price }
+        if (data.sort !== undefined && data.sort.length > 0) { this.sort = data.sort }
       }
 
       this.conditions = {}
@@ -43,6 +43,7 @@ module.exports = class SearchArtistProfileService extends BaseService
     }
 
     buildTermConditions() {
+      console.log(this.term)
       if (this.term === undefined) { return this }
 
       this.conditions = {

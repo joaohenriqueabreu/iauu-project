@@ -51,14 +51,15 @@ module.exports = class GenerateTokenService {
 
     static encryptId(id) {
         // https://www.w3schools.com/nodejs/ref_crypto.asp
-        const encryptionMethod = crypto.createCipher('aes-128-cbc', process.env.CRYPTO_SECRET)
+        const encryptionMethod = crypto.createCipheriv('aes-256-cbc', process.env.CRYPTO_KEY, process.env.CRYPTO_IV)
         let encrypted = encryptionMethod.update(id, 'utf8', 'hex')
         encrypted += encryptionMethod.final('hex')
         return encrypted
     }
 
     static decryptId(id) {
-        var encryptionMethod = crypto.createDecipher('aes-128-cbc', process.env.CRYPTO_SECRET)
+        let key = crypto.createHash('sha256').update(String(process.env.CRYPTO_SECRET)).digest('base64').substr(0, 32)
+        var encryptionMethod = crypto.createDecipheriv('aes-256-cbc', process.env.CRYPTO_KEY, process.env.CRYPTO_IV)
         var decrypted = encryptionMethod.update(id, 'hex', 'utf8')
         decrypted += encryptionMethod.final('utf8');
         return decrypted

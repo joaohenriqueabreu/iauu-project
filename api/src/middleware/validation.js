@@ -170,10 +170,10 @@ const timeslot = (req, res, next) => {
 
 const search = (req, res, next) => {
   const schema = validateRequest.object({
-    term: validateRequest.string(),
-    location: validateRequest.string(),
-    price: validateRequest.number(),
-    sort: validateRequest.object()
+    term: validateRequest.string().optional().allow(''),
+    location: validateRequest.string().optional().allow(''),
+    price: validateRequest.number().optional().min(1).max(5),
+    sort: validateRequest.string().optional().allow('')
   })
 
   return validate(req.query, req, next, schema)

@@ -14,15 +14,24 @@
     </div>
     <div v-if="!avatar && loaded" class="simple-container d-flex justify-content-between">
       <div class="horizontal middle">
-        <avatar :size="50" :src="networkIcon" class="mr-4"></avatar>
+        <!-- <avatar :size="50" :src="networkIcon" class="mr-4"></avatar> -->
         <a :href="link" target="_blank">
-          <h6>{{ media.url }}</h6>
-          <!-- <link-preview :url="media.url">
-            <template slot-scope="props">{{ props.title }} </template>
+          <!-- <h6>{{ url }}</h6> -->
+          <link-preview :url="url">
+            <template slot-scope="props">
+              <div class="row">
+                <div class="col-sm-6">
+                  <img class="card-img-top" :src="props.img" :alt="props.title" />
+                </div>
+                <div class="col-sm-4">
+                  {{ props.title }} 
+                </div>
+              </div>
+            </template>
             <template slot="loading">
               <div class="loading"></div>
             </template>
-          </link-preview> -->
+          </link-preview>
         </a>
       </div>
       <font-awesome v-if="removable" icon="times" class="clickable ml-5" @click="$emit('remove')">

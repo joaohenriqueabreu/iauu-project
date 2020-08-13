@@ -11,7 +11,7 @@
         "dev": "nodemon -L src/app.js",
         "stop": "pkill --signal SIGINT reforma.ai.server",
         "migrate": "./node_modules/.bin/migrate -c src",
-        "test": "mocha --timeout 5000",
+        "test": "mocha --timeout 50000",
         "test-file": "mocha --timeout 50000 --grep"
     },
     "dependencies": {

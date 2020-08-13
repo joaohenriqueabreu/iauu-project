@@ -2,10 +2,10 @@
   <div class="login">
     <div class="bg"></div>
     <form v-if="!$empty($v)">
-      <h5>Entre</h5>
-      <form-email v-model="$v.credentials.email.$model" @input="resetError"></form-email>
+      <h5 class="mb-4">Entre</h5>
+      <form-email v-model="$v.credentials.email.$model"></form-email>
       <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
-      <form-password v-model="$v.credentials.password.$model" @input="resetError"></form-password>
+      <form-password v-model="$v.credentials.password.$model"></form-password>
       <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
       <div class="mb-2"></div>
       <div class="forgot-password" @click="openForgotPasswordModal">
@@ -34,9 +34,7 @@
       </template>
       <template v-slot:footer>
         <div class="half-width">
-          <form-button :disabled="$utils.empty(forgotPasswordForEmail)" @action="sendForgotPassword"
-            >Enviar</form-button
-          >
+          <form-button :disabled="$utils.empty(forgotPasswordForEmail)" @action="sendForgotPassword">Enviar</form-button>
         </div>
       </template>
     </modal>
@@ -100,9 +98,6 @@ export default {
       } catch (error) {
         this.$refs.login.reset()
       }
-    },
-    resetError() {
-      this.hasError = false
     },
     openForgotPasswordModal() {
       this.$refs.forgotPassword.open()

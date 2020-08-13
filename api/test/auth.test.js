@@ -34,7 +34,7 @@ const socialId = '123456789'
 // Share user among tests
 let user = {}
 
-const shouldLog = false
+const shouldLog = true
 const generalMock = () => { console.log('you have been mocked') }
 
 let sandbox = sinon.createSandbox()
@@ -49,6 +49,7 @@ describe('Auth testing', function () {
     sandbox.stub(RegisterUserService.prototype, 'sendRegistrationMail').callsFake(generalMock)
     sandbox.stub(VerifyUserService.prototype, 'sendWelcomeMail').callsFake(generalMock)
     sandbox.stub(ResetPasswordService.prototype, 'sendPwdChangedMail').callsFake(generalMock)
+    sandbox.stub(ResetPasswordService.prototype, 'sendForgotPasswordMail').callsFake(generalMock)
 
     // Connect to db
     await dbConnection.connect()
@@ -264,23 +265,22 @@ describe('Auth testing', function () {
     beforeEach(async () => {
       user = await User.fetchWithSensitiveDataById(user.id)
       user.verification.is_verified = true
+      user.role = 'none'
       user.status = 'unassigned'
       user.artist = undefined
       user.contrator = undefined
       await user.save()
-    })
-
-    describe('Artist assignment', () => {
-      
     })
   
     it('should create artist', async () => {
       const assigRoleSvc = new AssignRoleService({ id: user.id }, 'artist')
       await assigRoleSvc.assign()
   
-      const artistUser = await User.findById(user.id).populate('artist')
+
+      const artistUser = await User.findById(user.id).populate({ path: 'artist', populate: { path: 'users' }})
       artistUser.artist.should.be.instanceof(Artist)
       artistUser.status.should.be.equal('active')
+      artistUser.artist.users[0].id.should.be.equal(user.id)
     })
 
     it('should save user with artist', async function () {
@@ -311,6 +311,15 @@ describe('Auth testing', function () {
     it('should not assign for active user', async () => {
       user.status = 'active'
       await user.save()
+      const assigRoleSvc = new AssignRoleService({ id: user.id }, 'contractor')
+      try {
+        await assigRoleSvc.assign()
+      } catch (error) {
+        error.should.be.instanceof(BadRequestException)
+      }
+    })
+
+    it('should not assign for invalid role', async () => {
       const assigRoleSvc = new AssignRoleService({ id: user.id }, 'contractor')
       try {
         await assigRoleSvc.assign()

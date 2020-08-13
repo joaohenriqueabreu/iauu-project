@@ -9,10 +9,10 @@ const baseSchemaOptions = require('./schemas/options')
 const { Schema } = db
 
 const contractorSchema = new Schema({
-  user :{
+  user: [{
     type: db.Schema.Types.ObjectId,
     ref: 'User'
-  },
+  }],
 
   public_name: { type: String},
   phone: { type: String }, 

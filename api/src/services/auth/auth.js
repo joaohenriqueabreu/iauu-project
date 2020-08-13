@@ -100,8 +100,26 @@ module.exports = class AuthService extends BaseService {
     return result
   }
 
-  activateUser() {
-    this.user.status = 'active'
+  updateUserStatus() {
+    const verified = this.user.verification.is_verified
+    const assigned = ['artist', 'contractor'].includes(this.user.role)
+
+    if (verified && assigned) {
+      this.user.status = 'active'
+      return this
+    }
+
+    if (!verified && assigned) {
+      this.user.status = 'assigned'
+      return this
+    }
+
+    if (verified && !assigned) {
+      this.user.status = 'unassigned'
+      return this
+    }
+    
+    this.user.status = 'pending'
     return this
   }
 

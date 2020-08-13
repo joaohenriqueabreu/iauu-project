@@ -9,7 +9,7 @@
       @before-close="enableBodyScroll"
     >
       <div class="modal-content" :class="height">
-        <header v-show="!hideHeader" :class="height">
+        <header v-show="!hideHeader" :class="headerCustomHeight">
           <div class="close" @click="close">
             <font-awesome icon="times"></font-awesome>
           </div>
@@ -36,10 +36,15 @@ import { v4 } from 'uuid'
 export default {
   props: {
     height: { type: String, default: 'regular' },
+    headerHeight: { type: String, default: null },
     hideHeader: { type: Boolean, default: false }
   },
   computed: {
-    name: () => v4()
+    name: () => v4(),
+    headerCustomHeight() {
+      if (!this.$empty(this.headerHeight)) { return this.headerHeight }
+      return this.height
+    }
   },
   methods: {
     open() {
@@ -68,6 +73,10 @@ export default {
   border-radius: $edges;
   overflow: inherit;
   background: $layer2;
+}
+
+.vm--container {
+  z-index: $moveToTop !important;
 }
 </style>
 

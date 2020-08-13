@@ -19,6 +19,7 @@ module.exports = class VerifyUserService extends AuthService {
     this.isTokenExpired()
     await this.generateAccessToken()
     this.setUserAsVerified()
+      .updateUserStatus()
     await this.saveUser()
 
     this.sendWelcomeMail()
@@ -71,13 +72,6 @@ module.exports = class VerifyUserService extends AuthService {
 
   setUserAsVerified() {
     this.user.verification.is_verified = true
-
-    // If user was invited by the band or organization, it is already assigned, so activate instead
-    if (this.user.role !== undefined && this.user.role !== null) {
-      return this.activateUser()
-    }
-
-    this.user.status = 'unassigned'
     return this
   }
 

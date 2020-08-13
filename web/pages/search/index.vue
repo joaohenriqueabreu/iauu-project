@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="px-4 pb-4">
-      <h4 v-if="!$utils.empty(term)">Resultados para "{{ term }}"</h4>
-      <h4 v-else>Artistas encontrados</h4>
+      <h4>Artistas encontrados</h4>
     </div>
     <div class="search-results" v-if="!$empty(artists)">
       <div v-for="(artist, index) in artists" :key="index" class="px-4 mb-4">
@@ -17,19 +16,19 @@
       <client-only>
         <fade-transition>
           <div v-if="!selectingFilter" class="filters d-flex justify-content-around">
-            <div class="vertical middle center" @click="showSearchFilter">
+            <div class="vertical middle center" :class="{ applied: isFilterApplied('term') }" @click="showSearchFilter">
               <font-awesome icon="search" class="mb-2"></font-awesome>
               <h6>Pesquisa livre</h6>
             </div>
-            <div class="vertical middle center" @click="showAddressFilter">
+            <div class="vertical middle center" @click="showLocationFilter" :class="{ applied: isFilterApplied('location') }">
               <font-awesome icon="map-marker-alt" class="mb-2"></font-awesome>
               <h6>Filtrar localização</h6>
             </div>
-            <div class="vertical middle center" @click="showPriceFilter">
+            <div class="vertical middle center" @click="showPriceFilter" :class="{ applied: isFilterApplied('price') }">
               <font-awesome icon="dollar-sign" class="mb-2"></font-awesome>
               <h6>Faixa de preço</h6>
             </div>
-            <div class="vertical middle center" @click="showSortFilter">
+            <div class="vertical middle center" @click="showSortFilter" :class="{ applied: isFilterApplied('sort') }">
               <font-awesome icon="sort-alpha-down" class="mb-2"></font-awesome>
               <h6>Ordenar resultados</h6>
             </div>
@@ -41,16 +40,21 @@
               class="search-filter"
               label="Pesquisa livre"
               placeholder="Aniversário, Casamento, Rock Anos 80, ..."
+              @enter="filter"
             ></form-input>
             <form-location
-              v-show="currentFilter === 'address'"
+              v-show="currentFilter === 'location'"
               v-model="location"
               class="search-filter"
               label="Filtrar Localização"
               placeholder="Próximo de"
+              @enter="filter"
             ></form-location>
             <div class="horizontal center brand-hover" v-show="currentFilter === 'price'">
-              <div class="vertical mr-4 price-range" v-for="(range, index) in $config.priceRanges" :key="`range_${index}`" :class="{ selected: isPriceRangeSelected(index) }">
+              <div class="vertical mr-4 price-range" 
+                v-for="(range, index) in $config.priceRanges" :key="`range_${index}`" 
+                :class="{ selected: isPriceRangeSelected(index) }"
+                @click="filter">
                 <div class="horizontal center mb-2">
                   <h6>
                     <font-awesome v-for="i in parseInt(index)" :key="`search_range_${i}`" icon="dollar-sign" class="mr-1"></font-awesome>
@@ -61,6 +65,7 @@
             </div>
             <form-select
               v-show="currentFilter === 'sort'"
+              v-model="sort"
               class="search-filter"
               label="Ordernar resultados"
               :allow-input="false"
@@ -68,7 +73,7 @@
               placeholder="Ordenar por"
               :options="['Relevância', 'Núm de Apresentações', 'Avaliação']"
             ></form-select>
-            <form-button @action="filter">
+            <form-button @action="filter" v-show="['term', 'location', 'sort'].includes(currentFilter)">
               <span class="d-none d-sm-block">Buscar</span>
               <span class=""></span>
             </form-button>
@@ -95,11 +100,11 @@ export default {
     }
 
     // Cleanup empty filters
-    // for (const filter in filters) {
-    //   if (app.$empty(filters[filter])) {
-    //     delete(filters[filter])
-    //   }
-    // }
+    for (const filter in filters) {
+      if (app.$empty(filters[filter])) {
+        delete(filters[filter])
+      }
+    }
 
     await store.dispatch('contractor/searchArtists', filters)
   },
@@ -120,18 +125,17 @@ export default {
     })
   },
   methods: {
-    ...mapActions('contractor', ['loadArtist']),
+    ...mapActions('contractor', ['loadArtist', 'searchArtists']),
     selectedArtist(artist) {
-      // await this.loadArtist(artist.slug)
       this.$router.push(`/search/artists/${artist.slug}`)
     },
     showSearchFilter() {
       this.selectingFilter = true
       this.currentFilter = 'term'
     },
-    showAddressFilter() {
+    showLocationFilter() {
       this.selectingFilter = true
-      this.currentFilter = 'address'
+      this.currentFilter = 'location'
     },
     showPriceFilter() {
       this.selectingFilter = true
@@ -141,8 +145,11 @@ export default {
       this.selectingFilter = true
       this.currentFilter = 'sort'
     },
-    filter() {
-      console.log('filtering...')
+    isFilterApplied(filterName) {
+      return !this.$empty(this.searchFilters[filterName])
+    },
+    async filter() {
+      await this.searchArtists(this.searchFilters)
     },
     isPriceRangeSelected(index) {
       return this.searchFilters.price === index
@@ -182,6 +189,10 @@ export default {
     @include mobile {
       display: none;
     }
+  }
+
+  .applied {
+    color: $brandLayer !important;
   }
 
   .search-filter {

@@ -7,8 +7,8 @@
     </div>
     <div class="horizontal center middle mb-4">
       <font-awesome icon="music"></font-awesome>
-      <h3 class="mr-4">{{ artist.category.name }}</h3>
-      <h3>
+      <h3 class="mr-4 cap">{{ artist.category.name }}</h3>
+      <h3 v-if="artist.rating">
         <rating :score="artist.rating" :amount="artist.feedback_count" short></rating>
       </h3>
     </div>
@@ -51,7 +51,7 @@
         Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
       </h6>
     </div>
-    <div class="story">
+    <div class="story my-5">
       <h4 class="mb-5">Nossa história</h4>
       {{ artist.story }}
     </div>

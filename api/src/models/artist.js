@@ -37,6 +37,7 @@ const artistSchema = new Schema({
     subcategories: [String]
   },
   video: { type: String },
+  background: { type: String },
   proposal: {
     display_price: { type: Boolean, default: false },
     avg_price: { type: Number, default: 0 },

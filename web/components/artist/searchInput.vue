@@ -1,10 +1,6 @@
 <template>
   <div>
-    <form-input
-      v-model="term"
-      class="funny"
-      :placeholder="placeholder"
-      @enter="$emit('search', term)">
+    <form-input v-model="term" class="funny" :placeholder="placeholder" @enter="$emit('search', term)">
     </form-input>
   </div>
 </template>

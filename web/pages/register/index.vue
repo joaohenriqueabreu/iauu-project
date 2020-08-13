@@ -2,18 +2,18 @@
   <div>
     <div class="login">
       <div class="bg"></div>
-      <form>
-        <h5>Cadastre já!</h5>
-        <form-input v-model="credentials.name" placeholder="Nome completo" icon="user"></form-input>
-        <form-email v-model="credentials.email" placeholder="Entre com seu email"></form-email>
-        <form-password
-          v-model="credentials.password"
-          placeholder="Crie uma senha para acessar a plataforma"
-        ></form-password>
-        <form-password
-          v-model="credentials.passwordConfirmation"
-          placeholder="Confirme sua senha"
-        ></form-password>
+      <form v-if="!$empty($v)">
+        <h5 class="mb-4">Cadastre já!</h5>
+        <form-input v-model="$v.credentials.name.$model" placeholder="Nome completo" icon="user"></form-input>
+        <form-validation :active="$v.credentials.name.$error">O nome não pode estar vazio</form-validation>
+        <form-email v-model="$v.credentials.email.$model" placeholder="Entre com seu email"></form-email>
+        <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
+        <form-password v-model="$v.credentials.password.$model" placeholder="Crie uma senha para acessar a plataforma">
+        </form-password>
+        <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
+        <small class="px-4">Mínimo 8 caracteres, combinação de números, caracteres e caracteres especiais (@, !, %, ...)</small>
+        <form-password v-model="$v.credentials.passwordConfirmation.$model" placeholder="Confirme sua senha"></form-password>
+        <form-validation :active="$v.credentials.passwordConfirmation.$error">Confirmação deve ser igual a senha</form-validation>
         <form-checkbox v-model="credentials.accept_terms" class="my-4">
           Li e estou de acordo com os
           <u><nuxt-link class="ml-2" to="terms">Termos de Uso da plataforma</nuxt-link></u>
@@ -21,12 +21,9 @@
         <div v-if="error" class="mt-2 error">
           Problemas ao registrar sua conta
         </div>
-        <div v-if="termsError" class="mt-2 error">
-          Leia e marque que concorda com os termos da plataforma antes de prosseguir
-        </div>
         <div class="mb-4"></div>
         <div>
-          <form-button class="mb-4" @action="signup">Cadastrar</form-button>
+          <form-button class="mb-4" :disabled="$v.credentials.$invalid" @action="signup">Cadastrar</form-button>
           <facebook-login></facebook-login>
           <google-login></google-login>
         </div>
@@ -36,6 +33,8 @@
 </template>
 
 <script>
+import Vuelidate from 'vuelidate'
+import { required, email, sameAs } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 import FacebookLogin from '@/components/auth/facebook'
 import GoogleLogin from '@/components/auth/google'
@@ -45,19 +44,26 @@ export default {
     'facebook-login': FacebookLogin,
     'google-login': GoogleLogin
   },
-  async asyncData({ store, route }) {
-    
-  },
   data() {
     return {
       credentials: {
         email: '',
         password: '',
+        passwordConfirmation: '',
         name: '',
         accept_terms: false
       },
       error: null,
-      termsError: false
+    }
+  },
+  validations: {
+    credentials: {
+      name: { required },
+      email: { required, email },
+      password: { required },
+      passwordConfirmation: {
+        sameAsPassword: sameAs('password')
+      }
     }
   },
   computed: {
@@ -83,18 +89,17 @@ export default {
       return {}
     }
   },
-  watch: {
-    termsAccepted(value) {
-      if (value) {
-        this.termsError = false
-      }
-    }
-  },
   methods: {
     ...mapActions('protected', ['register']),
     async signup() {
+      this.$v.$touch()
+      if (this.$v.credentials.$invalid) { 
+        this.$toast.error('Formulário inválido ou faltando informação')
+        return
+      }
+
       if (!this.credentials.accept_terms) {
-        this.termsError = true
+        this.$toast.error('Você precisa aceitar nossos termos de uso para se cadastrar')
         return
       }
 
@@ -152,5 +157,10 @@ export default {
       background-image: url('~assets/imgs/general/contractor-signup.jpg');
     }
   }
+}
+
+small {
+  font-weight: $bold;
+  color: $layer5;
 }
 </style>

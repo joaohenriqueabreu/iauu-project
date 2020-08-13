@@ -30,7 +30,7 @@ export default class Location extends Model {
       longitude: 0
     }
 
-    this.formatted = ''
+    this.display = ''
 
     if (
       locationData !== undefined &&
@@ -52,14 +52,14 @@ export default class Location extends Model {
       })
     })
 
-    this.formatted = locationData.formatted_address
+    this.display = locationData.formatted_address
     self.coordinates.latitude = locationData.geometry.location.lat()
     self.coordinates.longitude = locationData.geometry.location.lng()
   }
 
   toString() {
-    if (this.formatted.length > 0) {
-      return this.formatted
+    if (this.display.length > 0) {
+      return this.display
     }
 
     const addressDisplay = []

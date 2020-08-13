@@ -10,7 +10,7 @@ const { Schema } = db
 const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true, select: false },
-  role: { type: String, enum: ['artist', 'contractor', 'admin'] },
+  role: { type: String, enum: ['artist', 'contractor', 'admin', 'none'], default: 'none' },
   name: { type: String, required: true },
   access_token: { type: String, required: true, select: false },
   status: { type: String, enum: ['pending', 'unassigned', 'assigned', 'active', 'blocked'], default: 'pending' },

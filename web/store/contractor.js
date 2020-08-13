@@ -6,7 +6,10 @@ import Contractor from '~/models/contractor'
 
 export const state = () => ({
   searchFilters: {
-    term: ''
+    term: '',
+    location: '',
+    sort: '',
+    price: 0,
   },
   contractor: null,
   artists: [],
@@ -62,6 +65,7 @@ export const mutations = {
 
 export const actions = {
   async searchArtists({ commit }, filters) {
+    console.log(filters)
     const { data } = await this.$axios.get('contractors/artists/search', { params: filters })
     commit('set_artists', data)
   },

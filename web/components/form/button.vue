@@ -2,7 +2,7 @@
   <div>
     <fade-transition :duration="300" mode="out-in">
       <div
-        v-if="!submitted"
+        v-if="!submitted && !disabled"
         key="submitting"
         class="button"
         :class="{ disabled, small }"
@@ -11,8 +11,11 @@
         <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
-      <div v-else key="submitted" class="button">
+      <div v-if="submitted && !disabled" key="submitted" class="button">
         <loading :active="true"></loading>
+      </div>
+      <div v-if="disabled" key="submitted">
+        <h6><u>Complete o formulário para salvar</u></h6>
       </div>
     </fade-transition>
   </div>

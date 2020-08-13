@@ -23,7 +23,7 @@
 import { getLinkPreview } from 'link-preview-js'
 export default {
   props: {
-    media: { type: Object, default: () => {} },
+    media: { type: [Object, String], default: () => {} },
     simple: { type: Boolean, default: false },
     avatar: { type: Boolean, default: false },
     removable: { type: Boolean, default: false }
@@ -35,28 +35,32 @@ export default {
     }
   },
   computed: {
+    url() {
+      if (typeof this.media === 'object' && this.media.hasOwnProperty('url')) { return this.media.url }
+      return this.media
+    },
     networkIcon() {
-      if (this.isSocialMatch(this.media.url, this.$config.youtubeSubstringMatch)) {
+      if (this.isSocialMatch(this.url, this.$config.youtubeSubstringMatch)) {
         return require('@/assets/imgs/social/youtube.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.tiktokSubstringMatch)) {
+      if (this.isSocialMatch(this.url, this.$config.tiktokSubstringMatch)) {
         return require('@/assets/imgs/social/tiktok.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.spotifySubstringMatch)) {
+      if (this.isSocialMatch(this.url, this.$config.spotifySubstringMatch)) {
         return require('@/assets/imgs/social/spotify.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.instagramSubstringMatch)) {
+      if (this.isSocialMatch(this.url, this.$config.instagramSubstringMatch)) {
         return require('@/assets/imgs/social/instagram.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.vimeoSubstringMatch)) {
+      if (this.isSocialMatch(this.url, this.$config.vimeoSubstringMatch)) {
         return require('@/assets/imgs/social/vimeo.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.facebookSubstringMatch)) {
+      if (this.isSocialMatch(this.url, this.$config.facebookSubstringMatch)) {
         return require('@/assets/imgs/social/facebook.png')
       }
 
@@ -66,7 +70,7 @@ export default {
   async mounted() {
     // Use proxy server to bypass CORS restriction
     try {
-      this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.media.url}`)
+      this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.url}`)
     } catch (error) {
       this.$sentry.captureException(error)
     }
@@ -100,7 +104,7 @@ export default {
 
 .simple-container {
   @extend .horizontal, .middle, .full-width;
-  border-radius: $rounded;
+  border-radius: $edges;
   padding: $space;
   transition: $transition;
 

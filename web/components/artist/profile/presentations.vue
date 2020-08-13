@@ -6,6 +6,7 @@
           Vídeo principal
           <small>Copie a url de seu video do youtube mais f#(|@ (opcional)</small>
         </form-input>
+        <media-thumbnail v-if="!$empty(video)" :media="video"></media-thumbnail>
       </div>
       <div class="col-sm-12 horizontal middle">
         <form-toggle v-model="displayPrice">

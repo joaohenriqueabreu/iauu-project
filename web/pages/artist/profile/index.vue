@@ -126,7 +126,8 @@ export default {
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
     ...mapFields('artist', {
-      photo: 'artist.photo'
+      photo: 'artist.photo',
+      background: 'artist.background'
     }),
     statsTab() {
       return this.activeTab === 'stats'
@@ -150,8 +151,8 @@ export default {
       return this.activeTab === 'tags'
     },
     backgroundImg() {
-      return !this.$utils.empty(this.artist.media.bg)
-        ? this.artist.media.bg
+      return !this.$utils.empty(this.background)
+        ? this.background
         : this.$config.defaultBGImgUrl
     },
     avatarImg() {
@@ -174,12 +175,14 @@ export default {
       alert(category)
     },
     async setBackground({ url }) {
-      this.updateProfile({ prop: 'media.bg', data: url })
+      this.background = url
       await this.saveProfile()
+      this.$toast.success('Background atualizado')
     },
     async setAvatar({ url }) {
       this.photo = url
       await this.saveProfile()
+      this.$toast.success('Foto atualizada')
     }
   }
 }

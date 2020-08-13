@@ -38,11 +38,8 @@ module.exports = class SaveArtistProfileService extends ArtistService
 
     sanitizeData() {
       console.log('Data cleanup...')
-      // Separate user data (ie: media), will be updated later
-      this.userData = this.data['user']
-
       // Clenup sensitive data, null or not changed data
-      delete this.data['user']
+      delete this.data['users']
       delete this.data['_id']
       delete this.data['__v']
       delete this.data['slug']

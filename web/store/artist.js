@@ -47,8 +47,9 @@ export const actions = {
     commit('set_artist', data)
   },
   async saveProfile({ commit, state }) {
-    await this.$axios.put('artists/profile', { profile: state.artist })
-    this.$toast.success('Artista atualizado com sucesso')
+    const { data } = await this.$axios.put('artists/profile', { profile: state.artist })
+    commit('set_artist', data)
+    this.$toast.success('Perfil atualizado')
   },
   async loadProducts({ commit }) {
     const { data } = await this.$axios.get('artists/products')
@@ -56,7 +57,7 @@ export const actions = {
   },
   async saveProduct({ commit }, product) {
     const { data } = await this.$axios.post('artists/products', { product })
-    commit('set_products', data)    
+    commit('set_products', data)
   },
   async removeProduct({ commit }, { id }) {
     const { data } = await this.$axios.delete(`artists/products/${id}`)
