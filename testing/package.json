@@ -1,0 +1,14 @@
+{
+  "name": "iauu-test",
+  "version": "1.0.0",
+  "description": "iauu | A Vida é um Espetáculo",
+  "author": "João Henrique Aguiar de Areu",
+  "private": true,
+  "scripts": {
+    "test": "cypress open"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "cypress": "^4.12.1"
+  }
+}

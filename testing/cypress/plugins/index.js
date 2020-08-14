@@ -12,10 +12,11 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
-/**
- * @type {Cypress.PluginConfig}
- */
-module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+// const cypressNuxt = require("cypress-nuxt")
+
+module.exports = async (on, config) => { // make sure to include "async"!
+  // on("file:preprocessor", await cypressNuxt.plugin()); // make sure to include "await"!
+
+  // // other plugins...
+  // return config;
 }

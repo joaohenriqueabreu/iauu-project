@@ -71,7 +71,16 @@
       </div>
     </div>
     <div class="proposal">
-      <div class="horizontal middle full-height d-flex justify-content-around">
+      <div v-if="$empty(artist.proposal) || $empty(artist.proposal.display_price)" class="horizontal center middle full-height full-width">
+        <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >
+          Enviar proposta
+        </nuxt-link>
+        <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">
+          <h6 class="hide-mobile">Cadastre-se para contratar este artista</h6>
+          <h6 class="hide-desktop">Cadastre-se</h6>
+        </nuxt-link>
+      </div>
+      <div v-else class="horizontal middle full-height d-flex justify-content-around">
         <div class="vertical">
           <small class="hide-mobile">
             <span v-if="$auth.loggedIn">Valor da apresentação</span>
@@ -88,11 +97,7 @@
           <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ avgDuration }} horas</h4>
         </div>
         <div class="horizontal middle center">
-          <nuxt-link
-            v-if="$auth.loggedIn && $auth.hasScope('contractor')"
-            class="brand-btn"
-            :to="`/proposal/to/artist/${artist.id}`"
-          >
+          <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >
             Enviar proposta
           </nuxt-link>
           <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">

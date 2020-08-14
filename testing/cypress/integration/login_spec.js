@@ -1,7 +1,7 @@
 describe('User Login', () => {
   it('should login with valid email', () => {
-    cy.visit('http://localhost:3000/login')
-    cy.get('input[type=email]').type('andre@shaman.com')
+    cy.visit('/login')
+    cy.get('input[type=email]').type('toca@raul.com.br')
     cy.get('input[type=password]').type('iauu')
     cy.get('div.button').first().click()
     cy.url().should('include', 'artist/schedule')
@@ -36,6 +36,6 @@ describe('User Registration', () => {
     cy.get('input[type=checkbox]').next('span').click()
     cy.get('div.button').first().click()
     cy.url().should('include', 'register/verify')
-    cy.contains('Obrigado por cadastrar')
+    cy.contains('Enviamos um link para seu email com as instruções de login')
   })
 })
