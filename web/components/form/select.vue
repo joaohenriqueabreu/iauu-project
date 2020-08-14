@@ -1,16 +1,17 @@
 <template>
-  <div>
-    <label :for="name">{{ label }}</label>
+  <div class="hide-mobile">
+    <label :for="name" v-if="!$empty(label)">{{ label }}</label>
+    <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <v-selectize v-if="allowInput" :name="name" :settings="settings">
         <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
           >{{ option.display }}
         </option>
       </v-selectize>
-      <select v-else required>
-        <option disabled selected hidden value="" class="placeholder">{{ placeholder }}</option>
-        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
-          >{{ option.display }}
+      <select v-else required :value="value" @change="$emit('input', $event.target.value)">
+        <option disabled selected hidden value="" v-if="!$empty(placeholder)" class="placeholder">{{ placeholder }}</option>
+        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value">
+          {{ option.display }}
         </option>
       </select>
       <font-awesome :icon="iconHelper"></font-awesome>

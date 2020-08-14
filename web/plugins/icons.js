@@ -85,7 +85,8 @@ import {
   faFileExcel,
   faFileCsv,
   faTable,
-  faCopy
+  faCopy,
+  faFlask
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
@@ -223,7 +224,8 @@ library.add(
   faFileExcel,
   faFileCsv,
   faTable,
-  faCopy
+  faCopy,
+  faFlask
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

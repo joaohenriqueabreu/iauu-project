@@ -13,6 +13,7 @@
           <nuxt />
         </main>
       </div>
+      <feedback></feedback>
     </client-only>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <template>
   <div class="form-input">
-    <label :for="name">{{ label }}</label>
+    <label :for="name" v-if="label">{{ label }}</label>
+    <h6 v-else class="mb-2"><slot></slot></h6>
     <textarea
       :value="value"
       :rows="rows"

@@ -120,6 +120,7 @@ export default {
 .cookies {
   background: $layer5;
   color: $brand;
+  z-index: $above;
 
   a {
     color: $brand;
