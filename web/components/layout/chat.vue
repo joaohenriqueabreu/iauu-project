@@ -26,12 +26,8 @@
     >
       <template v-slot:header>
         <div class="horizontal ml-4">
-          <avatar
-            :src="otherParty.photo"
-            :username="otherParty.name"
-            :size="50"
-            class="mr-4"
-          ></avatar>
+          <avatar v-if="!$empty(otherParty.photo)" :src="otherParty.photo" :username="otherParty.name" :size="50" class="mr-4">
+          </avatar>
           <div class="vertical">
             <h6>{{ otherParty.name }}</h6>
             <span class="horizontal middle"
@@ -45,7 +41,6 @@
           </div>
         </div>
       </template>
-      <!-- <template v-slot:user-avatar="{ user }"><div></div></template> -->
       <template v-slot:text-message-body="{ message }">
         <div class="vertical">
           <h6 v-if="message.author !== 'me'" class="mb-2">{{ message.author }}</h6>
@@ -75,22 +70,10 @@ export default {
       socket: {},
       messageList: [],
       icons: {
-        open: {
-          img: OpenIcon,
-          name: 'default'
-        },
-        close: {
-          img: CloseIcon,
-          name: 'default'
-        },
-        file: {
-          img: FileIcon,
-          name: 'default'
-        },
-        closeSvg: {
-          img: CloseIconSvg,
-          name: 'default'
-        }
+        open: { img: OpenIcon, name: 'default' },
+        close: { img: CloseIcon, name: 'default' },
+        file: { img: FileIcon, name: 'default' },
+        closeSvg: { img: CloseIconSvg, name: 'default' }
       },
       titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
       newMessagesCount: 0,
@@ -113,12 +96,12 @@ export default {
     participants() {
       return [
         {
-          id: this.presentation.artist.user.id,
+          id: this.presentation.artist.id,
           name: this.presentation.artist.name,
           imageUrl: this.presentation.artist.photo
         },
         {
-          id: this.presentation.contractor.user.id,
+          id: this.presentation.contractor.id,
           name: this.presentation.contractor.name,
           imageUrl: this.presentation.contractor.photo
         }
@@ -133,10 +116,10 @@ export default {
     },
     otherParty() {
       if (this.$auth.hasScope('artist')) {
-        return this.presentation.contractor.user
+        return this.presentation.contractor
       }
 
-      return this.presentation.artist.user
+      return this.presentation.artist
     }
   },
   mounted() {
@@ -167,7 +150,7 @@ export default {
   methods: {
     parseMyMessage(message) {
       message.author =
-        !this.$empty(message.author) && message.author.id === this.$auth.user.id
+        !this.$empty(message.author) && message.author.id === this.$auth.role_id
           ? 'me'
           : message.author.name
 
@@ -182,7 +165,7 @@ export default {
     onMessageWasSent(message) {
       // Parse author to user id
       message.author = {
-        id: this.$auth.user.id,
+        id: this.$auth.role_id,
         name: this.$auth.user.name
       }
 

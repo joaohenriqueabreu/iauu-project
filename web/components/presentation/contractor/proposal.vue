@@ -5,7 +5,7 @@
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
           <div
-            v-if="!$empty(presentation.artist) && !$empty(presentation.artist.user)"
+            v-if="!$empty(presentation.artist)"
             class="horizontal middle"
           >
             <avatar
@@ -15,7 +15,7 @@
             ></avatar>
             <div class="vertical middle">
               <h6>Proposta enviada para</h6>
-              <h5>{{ presentation.artist.user.name }}</h5>
+              <h5>{{ presentation.artist.name }}</h5>
             </div>
           </div>
           <div class="d-flex align-items-end">

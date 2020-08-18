@@ -1,19 +1,23 @@
 <template>
   <div>
     <div class="dropdown">
-      <a
-        id="dropdownMenuLink"
-        class="dropdown-toggle"
-        href="#"
-        role="button"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <font-awesome :icon="icon"></font-awesome>
+      <a id="dropdownMenuLink" class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <font-awesome icon="bell" :class="!$empty(notifications) ? 'unread' : 'none'"></font-awesome>
+        <div class="num-notifications" v-if="!$empty(notifications)">
+          {{ countUnreadNotifications }}
+        </div>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <slot class="dropdown-item"></slot>
+        <div v-for="(notification, index) in notifications" :key="index" class="dropdown-item vertical">
+          <div>
+            <nuxt-link :to="notificationLink(notification)">
+              <h6>{{ notification.message }}</h6>
+            </nuxt-link>
+          </div>
+          <div class="d-flex justify-content-end">
+            <small>{{ notification.created_at | timeAgo }}</small>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -21,8 +25,35 @@
 
 <script>
 export default {
-  props: {
-    icon: { type: String, default: 'coffee' }
+  data() {
+    return {
+      socket: {},
+      notifications: []
+    }
+  },
+  mounted() {
+    const self = this
+    self.socket = self.$nuxtSocket({
+      name: 'notification',
+      channel: '/notifications'
+    })
+
+    // Enter the presentation room
+    self.socket.emit('login', self.$auth.user)
+
+    /* Listen for events: */
+    self.socket.on('unreadNotifications', (notifications) => { this.notifications = notifications })
+    self.socket.on('newNotification', (notification) => { this.notifications.unshift(notification) })
+  },
+  computed: {
+    countUnreadNotifications() {
+      return !this.$empty(this.notifications) ? this.notifications.length : 0
+    }
+  },
+  methods: {
+    notificationLink(notification) {
+      return '/'
+    }
   }
 }
 </script>
@@ -30,11 +61,22 @@ export default {
 <style lang="scss" scoped>
 [data-icon] {
   margin-top: 2 * $space;
-  color: $brandLayer;
   border-radius: $rounded;
   box-shadow: $shadow;
   font-size: $huge;
   transition: $transition;
+  background: $layer4;
+  padding: $space;
+  width: 30px;
+  height: 30px;
+
+  &.unread {
+    color: $brandLayer;
+  }
+
+  &.none {
+    color: $layer2;
+  }
 
   &:hover {
     transition: $transition;
@@ -42,12 +84,46 @@ export default {
   }
 }
 
+.num-notifications {
+  position: absolute;
+  bottom: -10px;
+  right: 0;
+  background: $brandLayer;
+  font-weight: $bold;
+  width: 17px;
+  height: 17px;
+  border-radius: $rounded;
+  color: $layer5;
+  vertical-align: center;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
 .dropdown-menu {
   background: $layer1;
   color: $brand;
+  padding: 0;
+  margin: 0;
+
   .dropdown-item {
     color: $brand !important;
+    cursor: pointer;
+    padding: 2 * $space;
+    transition: $transition;
+    &:hover {
+      transition: $transition;
+      background: $brandLayer;
+      color: $layer2;
+    }
   }
+}
+
+h6 {
+  color: $brand;
+}
+
+small {
+  color: $layer5;
 }
 </style>
 
@@ -55,16 +131,9 @@ export default {
 // Overwrite bootstrap style
 .dropdown {
   .dropdown-toggle {
+    position: relative;
     &:after {
       display: none;
-    }
-  }
-
-  .dropdown-menu {
-    width: 250px;
-    padding: 2 * $space;
-    .dropdown-item {
-      color: $layer2 !important;
     }
   }
 }

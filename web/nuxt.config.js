@@ -147,14 +147,7 @@ export default {
     }
   },
   io: {
-    // module options
-    sockets: [
-      {
-        name: 'chat',
-        // url: 'http://localhost:500'
-        url: `${process.env.API_URL}:${process.env.SOCKET_PORT}`
-      }
-    ]
+    sockets: [{ url: `${process.env.API_BASE_URL}:${process.env.SOCKET_PORT}` }]
   },
   sentry: {
     dsn: process.env.SENTRY_DSN,

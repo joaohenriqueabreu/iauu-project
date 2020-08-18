@@ -14,6 +14,7 @@ const cors = require('cors')
 
 // init db and connect
 const db = require('./data/db')
+const corsOptiosn = require('./data/cors')
 const initDb = async () => {
   try {
     await db.connect()
@@ -32,20 +33,6 @@ const app = express()
 const router = express.Router()
 const routes = require('./routes')
 const errorMiddleware = require('./middleware/error')
-
-const corsOptions = {
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  origin: function (origin, next) {
-    console.log('New request received...')
-    console.log(`From ${origin}...`)
-    if (process.env.CORS_WHITELIST.indexOf(origin) !== -1) {
-      console.log('Request accepted...')
-      next(null, true)
-    } else {      
-      next(new Error('Not allowed by CORS'))
-    }
-  },
-}
 
 // app.options('*', cors(corsOptions))
 app.use(cors())

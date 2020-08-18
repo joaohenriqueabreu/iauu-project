@@ -20,13 +20,11 @@
         <h6 class="mb-4">{{ presentation.id }}</h6>
         <div class="vertical mb-4">
           <div>Contratante</div>
-          <h6>{{ presentation.contractor.user.name }}</h6>
-          <div>{{ presentation.contractor.user.email }}</div>
+          <h6>{{ presentation.contractor.name }}</h6>
         </div>
         <div class="vertical mb-4">
           <div>Artista</div>
-          <h6>{{ presentation.artist.user.name }}</h6>
-          <div>{{ presentation.artist.user.email }}</div>
+          <h6>{{ presentation.artist.name }}</h6>
         </div>
         <div v-if="presentation.status === 'proposal'">
           <div>Valor em negociação</div>
@@ -90,11 +88,11 @@
     </template>
     <template v-if="!$empty(presentation)" v-slot:footer>
       <div class="horizontal center middle full-height">
-        <form-button class="mr-4" @action="handleLoginAs(presentation.contractor.user.id)"
-          >Fazer login como {{ presentation.contractor.user.name }}</form-button
+        <form-button class="mr-4" @action="handleLoginAs(presentation.contractor.users[0].id)"
+          >Fazer login como {{ presentation.contractor.name }}</form-button
         >
-        <form-button @action="handleLoginAs(presentation.artist.user.id)"
-          >Fazer login como {{ presentation.artist.user.name }}</form-button
+        <form-button @action="handleLoginAs(presentation.artist.users[0].id)"
+          >Fazer login como {{ presentation.artist.name }}</form-button
         >
       </div>
     </template>

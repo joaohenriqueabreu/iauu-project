@@ -1,3 +1,4 @@
+const axios = require('axios')
 const AuthService = require('./auth')
 const { Artist, Contractor } = require('../../models')
 const BadRequestException = require('../../exception/bad')
@@ -39,6 +40,7 @@ module.exports = class AssignRoleService extends AuthService {
       .assignUserToRole()
       .assignRoleToUser()
       .updateUserStatus()
+    await this.generateShareUrls()
     await this.saveRole()
     await this.saveUser()
     await this.searchUserById(this.user.id)
@@ -152,5 +154,10 @@ module.exports = class AssignRoleService extends AuthService {
     if (this.roleInstance.users === undefined) { this.roleInstance.users = [] }
     this.roleInstance.users.push(this.user.id)
     return this
+  }
+
+  async generateShareUrls() {
+    if (this.role !== 'artist') { return this }
+    
   }
 }

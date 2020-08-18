@@ -4,14 +4,7 @@
       <div v-if="$auth.loggedIn" class="horizontal mt-2">
         <product-setup v-if="$auth.hasScope('artist')" class="mr-3"></product-setup>
         <div class="dropdown" data-test="top-menu">
-          <a
-            class="dropdown-toggle"
-            href="#"
-            role="button"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
+          <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <overlay :rounded="true">
               <avatar :src="$auth.user.photo" :username="$auth.user.name"></avatar>
             </overlay>
@@ -150,5 +143,9 @@ h6 {
     transition: $transition;
     background: $layer1;
   }
+}
+
+.dropdown-menu {
+  padding: 2 * $space;
 }
 </style>

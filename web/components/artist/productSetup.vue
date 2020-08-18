@@ -1,6 +1,7 @@
 <template>
   <div>
-    <notification v-if="$auth.user.requires_initial_setup" icon="exclamation-circle">
+    <!-- <notification v-if="$auth.user.requires_initial_setup" icon="exclamation-circle"> -->
+    <notification icon="exclamation-circle">
       <nuxt-link to="/artist/products">
         <h6>Você deve adicionar formatos de apresentação para começar a receber propostas</h6>
       </nuxt-link>

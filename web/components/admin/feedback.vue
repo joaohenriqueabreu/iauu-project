@@ -10,7 +10,7 @@
         </div>
       </h6>
       <div>
-        Por favor nos dê um rápido feedback sobre a aplicação
+        Por favor nos dê um rápido feedback sobre a plataforma
         <u class="clickable" @click="dontShow">Não mostrar mais</u>
       </div>
     </header>
@@ -19,7 +19,7 @@
       <form-select class="mb-2" :allow-input="false" :options="origins" v-model="feedback.origin">
         Como você nos conheceu?
       </form-select>
-      <form-textarea class="mb-2" v-model="feedback.comments">
+      <form-textarea class="mb-2" v-model="feedback.comments" placeholder="Se estiver reportando um erro, seria incrível se puder nos descrever os passos para podermos reproduzí-lo">
         O que tem achado da plataforma?
       </form-textarea>
       <form-button @action="send">Enviar</form-button>

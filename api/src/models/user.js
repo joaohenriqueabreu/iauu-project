@@ -3,6 +3,7 @@ require('dotenv').config()
 const db = require('mongoose')
 const BaseModel = require('./base')
 const personalInfo = require('./schemas/personalInfo')
+const notification = require("./schemas/notification")
 const baseSchemaOptions = require('./schemas/options')
 
 const { Schema } = db
@@ -47,6 +48,7 @@ const userSchema = new Schema({
     type: db.Schema.Types.ObjectId,
     ref: 'Contractor'
   },
+  notifications: [notification],
   last_logged_in: { type: Date },
 }, { ...baseSchemaOptions })
 

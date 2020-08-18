@@ -4,16 +4,16 @@
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
           <div
-            v-if="!$empty(presentation.contractor) && !$empty(presentation.contractor.user)"
+            v-if="!$empty(presentation.contractor)"
             class="horizontal middle"
           >
             <avatar
-              v-if="!$empty(presentation.contractor.user.photo)"
-              :src="presentation.contractor.user.photo"
+              v-if="!$empty(presentation.contractor.photo)"
+              :src="presentation.contractor.photo"
               :username="presentation.contractor.name"
             ></avatar>
             <div class="vertical middle">
-              <h5>{{ presentation.contractor.user.name }}</h5>
+              <h5>{{ presentation.contractor.name }}</h5>
               <h6>Enviou-lhe uma proposta</h6>
             </div>
           </div>
@@ -58,7 +58,7 @@
       </template>
       <template v-slot:footer>
         <div v-if="isCustomProduct && !hasCounterOffer" class="error mb-2">
-          {{ presentation.contractor.user.name }} solicitou um produto personalizado. Envie um
+          {{ presentation.contractor.name }} solicitou um produto personalizado. Envie um
           orçamento para depois confirmar a apresentação.
         </div>
         <div v-if="hasCounterOffer && !hasAcceptedCounterOffer" class="error mb-2">
@@ -147,7 +147,7 @@ export default {
     },
     async dispatchCounterOffer(counterOffer) {
       await this.sendCounterOffer(counterOffer)
-      this.$toast.success(`Orçamento enviado para ${this.presentation.contractor.user.name}`)
+      this.$toast.success(`Orçamento enviado para ${this.presentation.contractor.name}`)
       this.$refs.modal.close()
     }
   }

@@ -12,29 +12,14 @@ Vue.use(VueFilters, {
 })
 
 // Custom filters
-const dateFilter = (value) => {
-  return moment(value).format('DD/MM/YYYY')
-}
+const dateFilter = (value) => { return moment(value).format('DD/MM/YYYY') }
+const longDateFilter = (value) => { return moment(value).format('LL') }
+const datetimeFilter = (value) => { return moment(value).format('DD/MM/YYYY HH:mm') }
+const timeFilter = (value) => { return moment(value).format('HH:mm') }
+const timeAgoFilter = (value) => { return moment(value).fromNow() }
 
-const longDateFilter = (value) => {
-  return moment(value).format('LL')
-}
-
-const datetimeFilter = (value) => {
-  return moment(value).format('DD/MM/YYYY HH:mm')
-}
-
-const timeFilter = (value) => {
-  return moment(value).format('HH:mm')
-}
-
-const oneDecimal = (value) => {
-  return (Math.round(value * 100) / 100).toFixed(1)
-}
-
-const twoDecimals = (value) => {
-  return (Math.round(value * 100) / 100).toFixed(2)
-}
+const oneDecimal = (value) => { return (Math.round(value * 100) / 100).toFixed(1) }
+const twoDecimals = (value) => { return (Math.round(value * 100) / 100).toFixed(2) }
 
 // https://stackoverflow.com/questions/7034754/how-to-set-a-file-name-using-window-open
 const download = (csv) => {
@@ -73,6 +58,7 @@ Vue.filter('datetime', datetimeFilter)
 Vue.filter('time', timeFilter)
 Vue.filter('oneDecimal', oneDecimal)
 Vue.filter('twoDecimals', twoDecimals)
+Vue.filter('timeAgo', timeAgoFilter)
 
 export default ({ app }, inject) => {
   inject('array', array)

@@ -49,10 +49,10 @@
               <span class="mr-2">{{ presentation.proposal.title }}</span>
             </td>
             <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.artist.user.name }}</span>
+              <span class="mr-2">{{ presentation.artist.name }}</span>
             </td>
             <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.contractor.user.name }}</span>
+              <span class="mr-2">{{ presentation.contractor.name }}</span>
             </td>
             <td>{{ presentationDate(presentation) | date }}</td>
           </tr>

@@ -237,6 +237,7 @@ a {
 }
 
 .dropdown-menu {
+  min-width: 250px;
   z-index: $moveToTop !important;
   div, h6, a {
     z-index: $moveToTop !important;

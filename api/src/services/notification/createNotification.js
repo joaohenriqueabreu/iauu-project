@@ -1,57 +1,101 @@
+const eventHandler = require('../../events/handler')
 const BadRequestException = require('../../exception/bad')
 const BaseService = require('../base')
-const Presentation = require('../../models/presentation')
+const { User, BaseModel } = require('../../models')
 
 module.exports = class CreateNotificationService extends BaseService
 {
-    constructor(user, data) {
-      super(user)
+    constructor(from, to, message, type, target) {
+      super()
 
-      if (data === undefined) {
-        throw new BadRequestException('Data is required')
+      if ([undefined, null].includes(from) ||
+        !from instanceof User ||
+        [undefined, null].includes(to) ||
+        !to instanceof User ||
+        [undefined, null].includes(message) ||
+        [undefined, null].includes(type) ||
+        [undefined, null].includes(target) ||
+        !target instanceof BaseModel) {
+          throw new BadRequestException('Informações insuficientes')
+        }
+
+      this.from_id = from.id
+      this.to_id = to.id
+      this.message = message
+      this.type = type
+      this.target = target.id
+
+      this.from = {}
+      this.to = {}
+      this.notification = {}
+    }
+
+    async notify() {
+      await this.searchFromUserById(this.from_id)
+      await this.searchToUserById(this.to_id)
+      this.ensureTypeIsValid()
+        .ensureMessageIsValid()
+        .buildNotification()
+      await this.saveNotification()
+      this.emitNewNotificationEvent()
+      return this
+    }
+
+    async searchFromUserById(id) {
+      this.from = await User.findById(id)
+      if (!this.from instanceof User) {
+        throw new BadRequestException('From user not found')
       }
 
-      this.user = user
-      this.proposal = data.proposal
+      return this
     }
 
-    notify() {
+    async searchToUserById(id) {
+      this.to = await User.findById(id).populate('notifications')
+      if (!this.to instanceof User) {
+        throw new BadRequestException('To user not found')
+      }
 
+      return this
     }
 
-    // async save() {
-    //   await this.ensureProposedTimeslotsDontOverlap()
-    //   await this.createPresentation()
-    //   await this.populateModel()
-    //   await this.savePresentation()
-    //   return this
-    // }
+    ensureTypeIsValid() {
+      if (!['user', 'presentation', 'proposal'].includes(this.type)) {
+        throw new BadRequestException('Invalid notification type')
+      }
 
-    // ensureProposedTimeslotsDontOverlap() {
-    //   return this
-    // }
+      return this
+    }
 
-    // createPresentation() {
-    //   this.presentation = new Presentation()
-    //   this.presentation.status = 'proposal'
-    //   this.contractor = this.user.role_id
-    //   return this
-    // }
+    ensureMessageIsValid() {
+      if (this.message.length === 0) {
+        throw new BadRequestException('Missing notification message')
+      }
 
-    // populateModel() {
-    //   this.presentation.artist = this.proposal.artist.id
-    //   this.presentation.address = this.proposal.location
+      return this
+    }
 
-    //   // delete from incoming data so it's not copied inside model
-    //   delete this.proposal.artist
-    //   delete this.proposal.location
+    buildNotification() {
+      this.notification = {
+        from: this.from.id,
+        type: this.type,
+        message: this.message,
+        target: this.target
+      }
 
-    //   this.presentation.proposal = this.proposal
-    //   return this
-    // }
+      return this
+    }
 
-    // async savePresentation() {
-    //   await this.presentation.save()
-    //   return this
-    // }
+    async saveNotification() {
+      if ([undefined, null].includes(this.to.notifications)) { this.to.notifications = [] }
+      this.to.notifications.push(this.notification)
+      await this.to.save()
+      return this
+    }
+
+    emitNewNotificationEvent() {
+      console.log('Emitting new notification event...')
+      eventHandler.emit('newNotification', this.to, this.notification)
+      return this
+    }
 }

@@ -39,10 +39,10 @@ export default {
     },
     getOtherParty() {
       if (this.$auth.hasScope('artist')) {
-        return this.presentation.contractor.user.name
+        return this.presentation.contractor.name
       }
 
-      return this.presentation.artist.user.name
+      return this.presentation.artist.name
     }
   }
 }

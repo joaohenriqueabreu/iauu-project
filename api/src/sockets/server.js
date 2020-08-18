@@ -1,4 +1,6 @@
 const GetMessageHistoryService = require('../services/message/getMessageHistory')
+const SearchUnreadNotificationsService = require('../services/notification/searchUnreadNotifications')
+const MarkNotificationReadService = require('../services/notification/markNotificationRead')
 const SaveMessageService = require('../services/message/saveMessage')
 
 // Socket config
@@ -7,11 +9,41 @@ const app = require('express')()
 // const sjwt = require('socketio-jwt')
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
-// const chat = require('./sockets/chat')
+const eventHandler = require('../events/handler')
+
+io.of('/notifications').on('connection', (socket) => {
+  console.log('User connected for notifications...')
+
+  // Fetch existing user notifications
+  socket.on('login', async (user) => {
+    console.log('User logged in...')
+    const searchUnreadNotificationsSvc = new SearchUnreadNotificationsService(user)
+    searchUnreadNotificationsSvc.search()
+      .then(() => socket.emit('unreadNotifications', searchUnreadNotificationsSvc.getNotifications()))
+      .catch((error) => socket.emit('error', 'Failed getting unread notifications'))
+
+    eventHandler.on('newNotification', (user, notification) => {
+      console.log('received new notification event...')
+      notification.message = 'Another notification'
+      socket.emit('newNotification', notification)
+    })
+  })
+
+  socket.on('read', (notification) => {
+    const markNotificationReadSvc = new MarkNotificationReadService(user, notification)
+    markNotificationReadSvc.markRead()
+      .then(() => console.log('Marked notification read...'))
+      .catch((error) => socket.emit('error', 'Failed marking notification read'))
+  })
+
+  socket.on('disconnect', () => {
+    console.log('Notifications Disconnected...')
+  })
+})
 
 // To listen to messages
 io.of('/chat').on('connection', (socket) => {
-  console.log('User connected...')
+  console.log('Chat connected...')
   let target = {}, room = {}
 
   socket.on('join', (presentation) => {
@@ -36,7 +68,7 @@ io.of('/chat').on('connection', (socket) => {
   })
   
   socket.on('disconnect', () => {
-    console.log('Disconnected...')
+    console.log('Chat Disconnected...')
   })
 })
 

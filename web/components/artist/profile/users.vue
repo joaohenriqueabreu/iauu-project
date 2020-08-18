@@ -5,7 +5,7 @@
       <h4><span>Compartilhe o link abaixo com os integrantes de sua banda</span></h4>
     </div>
     <div class="link mb-5" @click="share">
-      <span id="user-referral-link" ref="link">{{ artistInviteLink }}</span>
+      <span id="user-referral-link" ref="link">{{ artist.short_url }}</span>
     </div>
     <div>
       <h5 class="mb-4" v-if="!$empty(artist.name)">Integrantes de {{ artist.name }}</h5>

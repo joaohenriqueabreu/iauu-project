@@ -6,10 +6,10 @@
           <div v-if="!$empty(presentation.contractor)" class="horizontal middle">
             <avatar
               class="mr-4"
-              :src="presentation.contractor.user.photo"
-              :username="presentation.contractor.user.name"
+              :src="presentation.contractor.photo"
+              :username="presentation.contractor.name"
             ></avatar>
-            <h5>{{ presentation.contractor.user.name }}</h5>
+            <h5>{{ presentation.contractor.name }}</h5>
           </div>
           <div class="d-flex align-items-end">
             <span class="identifier">Apresentação</span>
