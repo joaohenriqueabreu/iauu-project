@@ -162,10 +162,25 @@ export default {
    ** Build configuration
    */
   build: {
-    extend(config, ctx) {}
-    // terser: false,
-    // minifyCSS: true,
-    // minifyJS: true  
+    extend(config, ctx) {},
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: true,
+        minifyJS: true,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true
+      }
+    },
+    optimization: {
+      minimize: true
+    },
+    optimizeCSS: true,
+    publicPath: 'd1mm4w75bg6dqe.cloudfront.net'
   },
 
   server: {
