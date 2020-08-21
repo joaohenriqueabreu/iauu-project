@@ -1,49 +1,46 @@
 version: '3.7'
 services:
-        db:
-                build: ./db
-                container_name: db
-                ports:
-                        - "27017:27017"
-                volumes:
-                        - db:/data/db
-                # networks:
-                #         iauu_net:
-        # api:
-        #         build: ./api
-        #         container_name: api
+        # db:
+        #         build: ./db
+        #         container_name: db
+        #         ports:
+        #                 - "27017:27017"
         #         volumes:
-        #                 - ./api:/usr/app
-        #                 - /usr/app/node_modules
-        #         ports:
-        #                 - "4444:4444"
+        #                 - db:/data/db
         #         networks:
-        #                 iauu_net:
-        #         depends_on: 
-        #                 - db
-        # web:
-        #        build: ./web
-        #        container_name: web
+        #                  iauu_net:
+        api:
+                build: ./api
+                container_name: api
+                # volumes:
+                #         - /usr/app/node_modules
+                ports:
+                        - "4444:4444"
+                        - "555:555"
+                networks:
+                        iauu_net:
+        web:
+               build: ./web
+               container_name: web
         #        volumes:
-        #                - ./web:/usr/app
         #                - /usr/app/node_modules
-        #        ports:
-        #                - "3000:3000"
-        #        networks:
-        #                iauu_net:
-        #        depends_on:
-        #                - api
-        # server:
-        #         build: ./server
-        #         container_name: server
-        #         restart: always
-        #         ports:
-        #                 - "8080:80"
-        #         networks:
-        #                 iauu_net:
-        #         depends_on: 
-        #                 - api
-# networks:
-        # iauu_net:
+               ports:
+                       - "3000:3000"
+               networks:
+                       iauu_net:
+               depends_on:
+                       - api
+        server:
+                build: ./server
+                container_name: server
+                restart: always
+                ports:
+                        - "80:80"
+                networks:
+                        iauu_net:
+                depends_on: 
+                        - api
+networks:
+        iauu_net:
 volumes:
         db:

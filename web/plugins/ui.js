@@ -5,10 +5,8 @@ import Avatar from 'vue-avatar'
 import Vuelidate from 'vuelidate'
 import VueTheMask from 'vue-the-mask'
 import VueSmoothScroll from 'vue2-smooth-scroll'
-import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import { FadeTransition, SlideYDownTransition } from 'vue2-transitions'
 import VueModal from 'vue-js-modal'
-import VueSweetalert2 from 'vue-sweetalert2'
 import { ToggleButton } from 'vue-js-toggle-button'
 import LinkPrevue from 'link-prevue'
 import Chat from 'vue-beautiful-chat'
@@ -56,8 +54,6 @@ moment.locale('pt-br')
 Vue.use(Modal)
 Vue.use(Vuelidate)
 Vue.use(VueSmoothScroll)
-Vue.use(PerfectScrollbar)
-Vue.use(VueSweetalert2)
 Vue.use(VueModal, { componentName: 'v-modal' })
 Vue.use(VueTheMask)
 Vue.use(Chat)

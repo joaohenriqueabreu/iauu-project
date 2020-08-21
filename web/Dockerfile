@@ -1,20 +1,18 @@
-FROM node:12.18.0
+FROM node:12.18.3-alpine
 
 RUN mkdir /usr/app && chown node:node /usr/app
 
 WORKDIR /usr/app
 
-# RUN npm install -g nodemon
 RUN mkdir node_modules && chown node:node node_modules
 
-COPY ./.env.production .env
-COPY package.json .
-# COPY . .
+COPY . .
 
 RUN npm install
+RUN npm run build
 
 EXPOSE 3000
 
 ENV HOST 0.0.0.0
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

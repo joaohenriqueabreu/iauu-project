@@ -25,40 +25,38 @@
         </span>
       </div>
     </div>
-    <perfect-scrollbar>
-      <table class="full-width">
-        <thead>
-          <th></th>
-          <th>Título</th>
-          <th>Artista</th>
-          <th>Contratante</th>
-          <th>Data</th>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(presentation, index) in presentations"
-            :key="index"
-            @click="openPresentationManagementModal(presentation)"
-          >
-            <td class="text-center">
-              <div class="status-badge icon-only" :class="presentation.status">
-                <font-awesome :icon="statusIcon(presentation.status)"></font-awesome>
-              </div>
-            </td>
-            <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.proposal.title }}</span>
-            </td>
-            <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.artist.name }}</span>
-            </td>
-            <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.contractor.name }}</span>
-            </td>
-            <td>{{ presentationDate(presentation) | date }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </perfect-scrollbar>
+    <table class="full-width">
+      <thead>
+        <th></th>
+        <th>Título</th>
+        <th>Artista</th>
+        <th>Contratante</th>
+        <th>Data</th>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(presentation, index) in presentations"
+          :key="index"
+          @click="openPresentationManagementModal(presentation)"
+        >
+          <td class="text-center">
+            <div class="status-badge icon-only" :class="presentation.status">
+              <font-awesome :icon="statusIcon(presentation.status)"></font-awesome>
+            </div>
+          </td>
+          <td class="py-3 cap">
+            <span class="mr-2">{{ presentation.proposal.title }}</span>
+          </td>
+          <td class="py-3 cap">
+            <span class="mr-2">{{ presentation.artist.name }}</span>
+          </td>
+          <td class="py-3 cap">
+            <span class="mr-2">{{ presentation.contractor.name }}</span>
+          </td>
+          <td>{{ presentationDate(presentation) | date }}</td>
+        </tr>
+      </tbody>
+    </table>
     <presentation-management
       ref="presentation"
       :presentation="selectedPresentation"

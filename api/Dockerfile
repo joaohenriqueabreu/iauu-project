@@ -1,18 +1,15 @@
-FROM node:12.18.0
+FROM node:12.18.3-alpine
 
 RUN mkdir /usr/app && chown node:node /usr/app
 
 WORKDIR /usr/app
 
-RUN npm install -g nodemon
 RUN mkdir node_modules && chown node:node node_modules
 
-COPY package.json .
-# COPY . .
+COPY . .
 
-RUN npm install --quiet
+RUN npm install
 
-EXPOSE 4444
+EXPOSE 4444 555
 
-# --legacy-watch is required for monitoring changes in a mounted volume inside a container
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

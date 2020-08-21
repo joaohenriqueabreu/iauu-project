@@ -2,6 +2,7 @@ require('dotenv').config()
 
 export default {
   mode: 'universal',
+  dev: process.env.NODE_ENV !== 'production',
   env: {
     fileStackApiKey: process.env.FILESTACK_API_KEY
   },
@@ -51,7 +52,6 @@ export default {
   css: [
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css',
-    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
     'selectize/dist/css/selectize.bootstrap3.css'
   ],
   styleResources: {
@@ -77,8 +77,7 @@ export default {
     { src: '@/plugins/ui', mode: 'client' },
     { src: '@/plugins/full-calendar', mode: 'client' },
     { src: '@/plugins/html2canvas', mode: 'client' },
-    { src: '@/plugins/cookies', mode: 'client' },
-    { src: '@/plugins/cypress', mode: 'client' }
+    { src: '@/plugins/cookies', mode: 'client' }
   ],
 
   /*
@@ -163,8 +162,10 @@ export default {
    ** Build configuration
    */
   build: {
-    extend(config, ctx) {},
-    terser: false
+    extend(config, ctx) {}
+    // terser: false,
+    // minifyCSS: true,
+    // minifyJS: true  
   },
 
   server: {

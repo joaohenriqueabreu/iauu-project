@@ -40,7 +40,6 @@
         "mongoose-extend-schema": "^1.0.0",
         "mustache": "^4.0.1",
         "nodemailer": "^6.4.11",
-        "npm-watch": "^0.6.0",
         "socket.io": "^2.3.0",
         "socketio-jwt": "^4.6.2",
         "uid": "^1.0.0",
@@ -52,7 +51,8 @@
         "eslint-config-strongloop": "^2.1.0",
         "mocha": "^8.1.1",
         "nodemon": "^1.14.12",
-        "sinon": "^9.0.2"
+        "sinon": "^9.0.2",
+        "npm-watch": "^0.6.0"
     },
     "jest": {
         "testEnvironment": "node"

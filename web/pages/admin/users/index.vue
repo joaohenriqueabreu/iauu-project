@@ -41,36 +41,34 @@
         </div>
       </div>
     </div>
-    <perfect-scrollbar>
-      <table class="full-width">
-        <thead>
-          <th></th>
-          <th></th>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Admissão</th>
-        </thead>
-        <tbody>
-          <tr v-for="user in users" :key="user.id" @click="openUserManagementModal(user)">
-            <td class="text-center">
-              <h6 class="role-badge icon-only" :class="user.role">
-                <font-awesome :icon="roleIcon(user.role)"></font-awesome>
-              </h6>
-            </td>
-            <td class="text-center">
-              <div class="status-badge icon-only" :class="user.status">
-                <font-awesome :icon="statusIcon(user.status)"></font-awesome>
-              </div>
-            </td>
-            <td class="py-3 cap horizontal middle">
-              <span class="mr-2">{{ user.name }}</span>
-            </td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.created_at | date }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </perfect-scrollbar>
+    <table class="full-width">
+      <thead>
+        <th></th>
+        <th></th>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Admissão</th>
+      </thead>
+      <tbody>
+        <tr v-for="user in users" :key="user.id" @click="openUserManagementModal(user)">
+          <td class="text-center">
+            <h6 class="role-badge icon-only" :class="user.role">
+              <font-awesome :icon="roleIcon(user.role)"></font-awesome>
+            </h6>
+          </td>
+          <td class="text-center">
+            <div class="status-badge icon-only" :class="user.status">
+              <font-awesome :icon="statusIcon(user.status)"></font-awesome>
+            </div>
+          </td>
+          <td class="py-3 cap horizontal middle">
+            <span class="mr-2">{{ user.name }}</span>
+          </td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.created_at | date }}</td>
+        </tr>
+      </tbody>
+    </table>
     <user-management
       ref="user"
       :user="selectedUser"

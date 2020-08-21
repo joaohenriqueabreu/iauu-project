@@ -7,21 +7,19 @@
       <h6 class="mb-2">Escolha os itens que deseja incluir em sua apresentação</h6>
       <p class="mb-5">O artista irá retornar brevemente com o valor final da apresentação</p>
       <div class="vertical mx-5">
-        <perfect-scrollbar>
-          <div
-            v-for="(item, index) in allItems"
-            :key="index"
-            class="items mb-3"
-            :class="{ selected: isCustomItemSelected(item) }"
-            @click="toggleItem(item)"
-          >
-            <div class="horizontal">
-              <font-awesome icon="check" class="mr-5"></font-awesome>
-              <h6 class="mb-2">{{ item }}</h6>
-            </div>
-            <hr />
+        <div
+          v-for="(item, index) in allItems"
+          :key="index"
+          class="items mb-3"
+          :class="{ selected: isCustomItemSelected(item) }"
+          @click="toggleItem(item)"
+        >
+          <div class="horizontal">
+            <font-awesome icon="check" class="mr-5"></font-awesome>
+            <h6 class="mb-2">{{ item }}</h6>
           </div>
-        </perfect-scrollbar>
+          <hr />
+        </div>
       </div>
       <form-textarea
         v-model="notes"
