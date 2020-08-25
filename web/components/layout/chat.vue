@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import CloseIcon from 'vue-beautiful-chat/src/assets/close-icon.png'
-import OpenIcon from 'vue-beautiful-chat/src/assets/logo-no-bg.svg'
-import FileIcon from 'vue-beautiful-chat/src/assets/file.svg'
-import CloseIconSvg from 'vue-beautiful-chat/src/assets/close.svg'
+import CloseIcon from '@/assets/imgs/chat/close-icon.png'
+import OpenIcon from '@/assets/imgs/chat/logo-no-bg.svg'
+import FileIcon from '@/assets/imgs/chat/file.svg'
+import CloseIconSvg from '@/assets/imgs/chat/close.svg'
 
 export default {
   props: {

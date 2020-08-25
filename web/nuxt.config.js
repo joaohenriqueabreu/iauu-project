@@ -2,6 +2,7 @@ require('dotenv').config()
 
 export default {
   mode: 'universal',
+  dev: process.env.NODE_ENV !== 'production',
   env: {
     fileStackApiKey: process.env.FILESTACK_API_KEY
   },
@@ -51,7 +52,6 @@ export default {
   css: [
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css',
-    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
     'selectize/dist/css/selectize.bootstrap3.css'
   ],
   styleResources: {
@@ -78,7 +78,6 @@ export default {
     { src: '@/plugins/fullCalendar', mode: 'client' },
     { src: '@/plugins/html2canvas', mode: 'client' },
     { src: '@/plugins/cookies', mode: 'client' },
-    { src: '@/plugins/cypress', mode: 'client' },
     { src: '@/plugins/facebookPixel', mode: 'client' },
     { src: '@/plugins/googleAnalytics', mode: 'client' }
   ],
@@ -166,7 +165,24 @@ export default {
    */
   build: {
     extend(config, ctx) {},
-    terser: false
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: true,
+        minifyJS: true,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true
+      }
+    },
+    optimization: {
+      minimize: true
+    },
+    optimizeCSS: true,
+    publicPath: 'd1mm4w75bg6dqe.cloudfront.net'
   },
 
   server: {

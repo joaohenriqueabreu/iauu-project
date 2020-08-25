@@ -15,11 +15,9 @@
           </div>
           <slot name="header"></slot>
         </header>
-        <perfect-scrollbar>
-          <main :class="height">
-            <slot name="main"></slot>
-          </main>
-        </perfect-scrollbar>
+        <main :class="height">
+          <slot name="main"></slot>
+        </main>
         <footer :class="height">
           <slot name="footer"></slot>
         </footer>

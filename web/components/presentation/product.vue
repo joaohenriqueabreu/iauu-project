@@ -14,12 +14,10 @@
         Itens <span v-if="presentation.status === 'proposal'">solicitados</span
         ><span v-else>contratados</span>
       </h6>
-      <perfect-scrollbar>
-        <div v-for="(item, index) in presentation.proposal.product.items" :key="index">
-          {{ item }}
-          <hr />
-        </div>
-      </perfect-scrollbar>
+      <div v-for="(item, index) in presentation.proposal.product.items" :key="index">
+        {{ item }}
+        <hr />
+      </div>
     </div>
   </div>
 </template>
