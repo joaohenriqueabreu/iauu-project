@@ -75,10 +75,12 @@ export default {
     { src: '@/plugins/data' },
     { src: '@/plugins/dictionary' },
     { src: '@/plugins/ui', mode: 'client' },
-    { src: '@/plugins/full-calendar', mode: 'client' },
+    { src: '@/plugins/fullCalendar', mode: 'client' },
     { src: '@/plugins/html2canvas', mode: 'client' },
     { src: '@/plugins/cookies', mode: 'client' },
-    { src: '@/plugins/cypress', mode: 'client' }
+    { src: '@/plugins/cypress', mode: 'client' },
+    { src: '@/plugins/facebookPixel', mode: 'client' },
+    { src: '@/plugins/googleAnalytics', mode: 'client' }
   ],
 
   /*
