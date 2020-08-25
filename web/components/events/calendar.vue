@@ -408,11 +408,14 @@ export default {
 }
 
 // Overwrite buttons
-.fc-button,
-fc-button-primary {
-  background: $brandLayer;
+.fc-button, .fc-button-primary {
+  background: $layer5;
   border: none;
-  transition: $transition;
+  transition: $transition;  
+
+  &.fc-button-active {
+    background: $brandLayer !important;
+  }
 
   &:disabled {
     background: transparentize($brandLayer, 0.5);
@@ -420,6 +423,7 @@ fc-button-primary {
 
   &:hover {
     transition: $transition;
+    background: $brandLayer;
   }
 }
 

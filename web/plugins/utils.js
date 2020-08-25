@@ -47,6 +47,10 @@ const utils = {
   },
   delay: () => {
     return setTimeout(() => {}, 5000)
+  },
+  genAbsoluteUrl: (relativeUrl) => {
+    const url = window.location
+    return `${url.protocol}//${url.host}/${relativeUrl}`
   }
 }
 

@@ -8,7 +8,7 @@
         </div>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <div v-for="(notification, index) in notifications" :key="index" class="dropdown-item vertical">
+        <div v-for="(notification, index) in displayNotifications" :key="index" class="dropdown-item vertical">
           <div>
             <nuxt-link :to="notificationLink(notification)">
               <h6>{{ notification.message }}</h6>
@@ -17,6 +17,9 @@
           <div class="d-flex justify-content-end">
             <small>{{ notification.created_at | timeAgo }}</small>
           </div>
+        </div>
+        <div class="dropdown-item">
+          <nuxt-link to="/user/notifications">Ver mais</nuxt-link>
         </div>
       </div>
     </div>
@@ -48,6 +51,9 @@ export default {
   computed: {
     countUnreadNotifications() {
       return !this.$empty(this.notifications) ? this.notifications.length : 0
+    },
+    displayNotifications() {
+      return this.$array.slice(this.notifications, 0, this.$config.maxNotificationsDisplayed)
     }
   },
   methods: {

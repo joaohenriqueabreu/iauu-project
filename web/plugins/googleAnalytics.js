@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 /* eslint-disable */
 export default ({ app }) => {
   /* Only run on client-side and only in production mode */
@@ -25,7 +23,7 @@ export default ({ app }) => {
     'ga'
   )
   /* Set the current page */
-  ga('create', process.env.GOOGLE_ANALYTICS_ID, 'auto')
+  ga('create', process.env.googleAnalyticsKey, 'auto')
   /* Every time the route changes (fired on initialization too) */
   app.router.afterEach((to, from) => {
     /* We tell Google Analytics to add a `pageview` */

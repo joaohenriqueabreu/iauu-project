@@ -13,7 +13,7 @@
           <nuxt />
         </main>
       </div>
-      <feedback></feedback>
+      <feedback v-if="showFeedback"></feedback>
     </client-only>
   </div>
 </template>
@@ -35,7 +35,10 @@ export default {
   },
   computed: {
     ...mapState({ theme: (state) => state.layout.theme }),
-    ...mapState({ alert: (state) => state.app.alert })
+    ...mapState({ alert: (state) => state.app.alert }),
+    showFeedback() {
+      return process.env.BETA_MODE
+    }
   },
   methods: {
     minimize(value) {

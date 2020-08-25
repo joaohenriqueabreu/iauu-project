@@ -11,19 +11,14 @@
       <carousel :per-page="2" :navigation-enabled="true">
         <slide v-for="(product, index) in products" :key="index">
           <div class="product mr-4">
-            <product-info
-              :product="product"
-              :not-items="notItems(product.items)"
-              class="full-height"
-              @edit="editProduct"
-              @copy="copyProduct"
-            >
+            <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct" @copy="copyProduct" @preview="openPreviewModal">
             </product-info>
           </div>
         </slide>
       </carousel>
     </div>
     <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
+    <product-preview ref="preview"></product-preview>
   </div>
 </template>
 
@@ -32,10 +27,12 @@ import { mapState, mapActions } from 'vuex'
 
 import ProductForm from '@/components/artist/product/form'
 import ProductInfo from '@/components/artist/product/info'
+import ProductPreview from '@/components/artist/product/preview'
 export default {
   components: {
-    'product-form': ProductForm,
-    'product-info': ProductInfo
+    ProductForm,
+    ProductInfo,
+    ProductPreview
   },
   async asyncData({ store, app }) {
     await store.dispatch('artist/loadProducts')
@@ -66,6 +63,9 @@ export default {
     },
     openConfirmRemove(productId) {
       this.$refs.removeProductDialog.openModal(productId)
+    },
+    openPreviewModal(product) {
+      this.$refs.preview.openModal(product)
     },
     async save(product) {
       await this.saveProduct(product)

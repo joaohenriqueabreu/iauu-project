@@ -4,7 +4,9 @@ export default {
   mode: 'universal',
   dev: process.env.NODE_ENV !== 'production',
   env: {
-    fileStackApiKey: process.env.FILESTACK_API_KEY
+    fileStackApiKey: process.env.FILESTACK_API_KEY,
+    googleAnalyticsKey: process.env.GOOGLE_ANALYTICS_KEY,
+    facebookPixelKey: process.env.FACEBOOK_PIXEL_KEY
   },
   /*
    ** Headers of the page
@@ -181,8 +183,7 @@ export default {
     optimization: {
       minimize: true
     },
-    optimizeCSS: true,
-    publicPath: 'd1mm4w75bg6dqe.cloudfront.net'
+    optimizeCSS: true
   },
 
   server: {

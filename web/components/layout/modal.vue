@@ -15,9 +15,11 @@
           </div>
           <slot name="header"></slot>
         </header>
-        <main :class="height">
-          <slot name="main"></slot>
-        </main>
+        <scrollbar>
+          <main :class="height">
+            <slot name="main"></slot>
+          </main>
+        </scrollbar>
         <footer :class="height">
           <slot name="footer"></slot>
         </footer>
@@ -82,7 +84,7 @@ export default {
 .modal-content {
   z-index: $above;
   background: $layer2;
-  padding: 2 * $space;
+  position: relative;
 
   // &.tiny {
   //   height: 50vh;
@@ -137,10 +139,19 @@ export default {
     &.regular {
       height: 75vh;
     }
+
+    margin-bottom: 10vh;
   }
 
   footer {
-    position: relative;
+    @extend .vertical, .middle;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: $above;
+    background: $layer2;
+    width: 100%;
+
     &.tiny {
       height: 5vh;
     }

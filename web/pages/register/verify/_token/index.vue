@@ -42,7 +42,7 @@ export default {
   methods: {
     ...mapActions('protected', ['verify', 'resendVerify', 'release']),
     handleVerified() {
-      this.$toast.success('Conta verificada com sucesso! Bem vindo a Iauu')
+      this.$toast.success('Conta verificada com sucesso! Bem vindo a iauü')
     },
     handleFailed() {
       this.$toast.error('Seu token de verification é inválido ou está expirado.')

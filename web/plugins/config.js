@@ -38,7 +38,9 @@ const config = {
     3: 'R$ 5.000 - R$ 20.000',
     4: 'R$ 20.000 - R$ 100.000',
     5: 'R$ 100.000+',
-  }
+  },
+
+  maxNotificationsDisplayed: 5
 }
 
 export default ({ app }, inject) => {

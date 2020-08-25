@@ -51,6 +51,18 @@ const convert = (data) => {
   return str;
 }
 
+const copyToClipboard = (value) => {
+  const el = document.createElement('textarea')
+  el.value = value
+  el.setAttribute('readonly', '')
+  el.style.position = 'absolute'
+  el.style.left = '-9999px'
+  document.body.appendChild(el)
+  el.select()
+  document.execCommand('copy')
+  document.body.removeChild(el)
+}
+
 // Registering custom filters
 Vue.filter('date', dateFilter)
 Vue.filter('longDate', longDateFilter)
@@ -67,4 +79,5 @@ export default ({ app }, inject) => {
   inject('object', { clone })
   inject('moment', moment)
   inject('csv', { download, convert })
+  inject('copyToClipboard', copyToClipboard)
 }

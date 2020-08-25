@@ -1,5 +1,4 @@
 /* eslint-disable */
-require('dotenv').config()
 export default ({ app, store }) => {
   /* Only run on client-side and only in production mode */
   //if (process.env.NODE_ENV !== "production") return
@@ -26,10 +25,9 @@ export default ({ app, store }) => {
       'script',
       'https://connect.facebook.net/en_US/fbevents.js'
       );
-      fbq('init', 'XXXXXXXXX-XXXXX')
+      fbq('init', process.env.facebookPixelKey)
       app.router.afterEach((to, from) => {
         /* Fire a page view on each route change */
-       console.log("fire pageview", store.state)
        fbq("track", "PageView")
       })
     }

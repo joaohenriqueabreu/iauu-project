@@ -26,6 +26,9 @@
             <nuxt-link to="/user/profile">
               <h6>Perfil</h6>
             </nuxt-link>
+            <nuxt-link to="/user/notifications">
+              <h6>Notificações</h6>
+            </nuxt-link>
             <nuxt-link to="/logout">
               <h6>Sair</h6>
             </nuxt-link>

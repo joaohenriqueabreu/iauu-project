@@ -9,7 +9,7 @@
 <script>
 export default {
   mounted() {
-    this.$toast.success('Obrigado por se cadastrar na iauu')
+    this.$toast.success('Obrigado por se cadastrar na iauü')
   }
 }
 </script>

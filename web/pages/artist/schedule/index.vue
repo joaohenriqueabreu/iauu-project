@@ -37,6 +37,7 @@
       </div>
     </div>
     <div class="horizontal middle center text-right">
+      <h6 class="mr-3">Legenda:</h6>
       <div class="horizontal middle mr-4">
         <span class="event-subtitle proposal"></span>
         <h6>Proposta</h6>
