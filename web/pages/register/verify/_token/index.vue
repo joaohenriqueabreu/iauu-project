@@ -30,8 +30,11 @@ export default {
   async mounted() {
     this.$refs.verify.open()
     try {
-      await this.verify(this.$route.params.token)
-      this.$auth.setUserToken(this.accessToken)
+      await this.$auth.loginWith('verify', { 
+        data: {
+          token: this.$route.params.token
+        }
+      })
 
       setTimeout(this.handleVerified, 3000)
     } catch (error) {

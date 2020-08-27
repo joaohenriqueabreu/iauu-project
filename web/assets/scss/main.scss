@@ -199,8 +199,12 @@ a {
   right: 0px;
 }
 
-.toast-container {
+.toasted-container {
   max-width: 50vw;
+  .toasted {
+    padding: 2 * $space;
+    background: $brand;
+  }
 }
 
 .one-line {
@@ -247,3 +251,4 @@ a {
 div {
   z-index: auto;
 }
+

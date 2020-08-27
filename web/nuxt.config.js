@@ -159,20 +159,22 @@ export default {
   toast: {
     position: 'bottom-left',
     duration: 5000,
-    containerClass: 'toast-container',
-    iconPack: 'fontawesome'
+    containerClass: 'toast-container'
   },
   /*
    ** Build configuration
    */
   build: {
     extend(config, ctx) {},
+    parallel: true,
+    cache: true,
+    hardsource: true,
     html: {
       minify: {
         collapseBooleanAttributes: true,
         decodeEntities: true,
-        minifyCSS: true,
-        minifyJS: true,
+        minifyCSS: false,
+        minifyJS: false,
         processConditionalComments: true,
         removeEmptyAttributes: true,
         removeRedundantAttributes: true,

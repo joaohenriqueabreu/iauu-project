@@ -63,7 +63,6 @@ module.exports = class SearchArtistProfileService extends BaseService
     }
 
     async searchArtists() {
-      mongoose.set('debug', true)
       console.log('Searching for artists by term...')
       
       this.artists = await Artist.find(this.conditions).populate('users')
