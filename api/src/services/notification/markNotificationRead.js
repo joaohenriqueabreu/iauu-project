@@ -9,14 +9,14 @@ module.exports = class CreateNotificationService extends BaseService
       super()
 
       this.id = user.id
-      this.notification = notification.id
+      this.notificationId = notification.id
 
       this.to = {}
     }
 
     async markRead() {
       await this.searchToUserById(this.id)
-      this.internalMarkNotificationRead()
+      this.deleteNotification()
       await this.saveNotification()
       return this
     }
@@ -30,9 +30,17 @@ module.exports = class CreateNotificationService extends BaseService
       return this
     }
 
+    deleteNotification() {
+      this.to.notifications = _.filter(this.to.notifications, (notification) => {
+        return notification.id !== this.notificationId
+      })
+
+      return this
+    }
+
     internalMarkNotificationRead() {
       _.forEach(this.to.notifications, (notification) => {
-        if (notification.id === this.notification && !notification.read) {
+        if (notification.id === this.notificationId && !notification.read) {
           notification.read = true
           return
         }
@@ -44,5 +52,9 @@ module.exports = class CreateNotificationService extends BaseService
     async saveNotification() {
       await this.to.save()
       return this
+    }
+
+    getNotifications() {
+      return this.to.notifications
     }
 }

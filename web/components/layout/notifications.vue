@@ -9,16 +9,15 @@
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
         <div v-for="(notification, index) in displayNotifications" :key="index" class="dropdown-item vertical">
-          <div>
-            <nuxt-link :to="notificationLink(notification)">
-              <h6>{{ notification.message }}</h6>
-            </nuxt-link>
-          </div>
-          <div class="d-flex justify-content-end">
-            <small>{{ notification.created_at | timeAgo }}</small>
+          <div @click="readNotification(notification)">
+            <h6>{{ notification.message }}</h6>
+            <div class="d-flex justify-content-end">
+              <small>{{ notification.created_at | timeAgo }}</small>
+            </div>
+            <hr/>
           </div>
         </div>
-        <div class="dropdown-item">
+        <div class="dropdown-item" v-if="notifications.length > $config.maxNotificationsDisplayed">
           <nuxt-link to="/user/notifications">Ver mais</nuxt-link>
         </div>
       </div>
@@ -47,6 +46,7 @@ export default {
     /* Listen for events: */
     self.socket.on('unreadNotifications', (notifications) => { this.notifications = notifications })
     self.socket.on('newNotification', (notification) => { this.notifications.unshift(notification) })
+    self.socket.on('notificationRead', (notifications) => { this.notifications = notifications })
   },
   computed: {
     countUnreadNotifications() {
@@ -54,11 +54,21 @@ export default {
     },
     displayNotifications() {
       return this.$array.slice(this.notifications, 0, this.$config.maxNotificationsDisplayed)
+    },
+    userRole() {
+      return this.$auth.hasScope('artist') ? 'artist' : 'contractor'
     }
   },
   methods: {
     notificationLink(notification) {
+      if (notification.type === 'user') { return '/user/profile' }
+      if (notification.type === 'proposal') { return `/${this.userRole}/proposals` }
+      if (notification.type === 'presentation') { return `/${this.userRole}/presentations` }
       return '/'
+    },
+    readNotification(notification) {
+      this.socket.emit('read', this.$auth.user, notification)
+      this.$router.push(this.notificationLink(notification))
     }
   }
 }
@@ -120,6 +130,10 @@ export default {
       transition: $transition;
       background: $brandLayer;
       color: $layer2;
+      hr { 
+        transition: $transition;
+        display: none;
+      }
     }
   }
 }
@@ -130,6 +144,11 @@ h6 {
 
 small {
   color: $layer5;
+}
+
+hr {
+  margin: 0;
+  border-top-color: $layer2;
 }
 </style>
 
