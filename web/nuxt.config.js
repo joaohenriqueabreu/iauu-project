@@ -6,6 +6,7 @@ export default {
   env: {
     fileStackApiKey: process.env.FILESTACK_API_KEY,
     googleAnalyticsKey: process.env.GOOGLE_ANALYTICS_KEY,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
     facebookPixelKey: process.env.FACEBOOK_PIXEL_KEY
   },
   /*
@@ -20,6 +21,10 @@ export default {
         hid: 'description',
         name: 'description',
         content: process.env.npm_package_description || ''
+      },
+      {
+        name:'google-signin-client_id',
+        content: process.env.GOOGLE_CLIENT_ID
       }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
@@ -63,7 +68,6 @@ export default {
       '@/assets/scss/lib/_colors.scss',
       '@/assets/scss/lib/_variables.scss',
       '@/assets/scss/lib/_responsive.scss',
-      'bootstrap/scss/bootstrap',
       '@/assets/scss/main.scss'
     ]
   },
@@ -81,7 +85,8 @@ export default {
     { src: '@/plugins/html2canvas', mode: 'client' },
     { src: '@/plugins/cookies', mode: 'client' },
     { src: '@/plugins/facebookPixel', mode: 'client' },
-    { src: '@/plugins/googleAnalytics', mode: 'client' }
+    { src: '@/plugins/googleAnalytics', mode: 'client' },
+    { src: '@/plugins/socialLogin', mode: 'client' },
   ],
 
   /*
@@ -111,22 +116,26 @@ export default {
     resetOnError: true,
     scopeKey: 'role',
     strategies: {
-      facebook: {
-        client_id: process.env.FACEBOOK_CLIENT_ID,
-        access_token_endpoint: false,
-        userinfo_endpoint: false,
-        scope: ['public_profile', 'email', 'user_birthday'],
-        redirect_uri: `${process.env.WEB_URL}/login/facebook/`
-      },
-      google: {
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        userinfo_endpoint: false,
-        redirect_uri: `${process.env.WEB_URL}/login/google/`
-      },
       user: {
         _scheme: 'local',
         endpoints: {
           login: { url: 'login', method: 'post', propertyName: false },
+          logout: { url: 'login', method: 'delete' },
+          user: { url: 'validate', method: 'post', propertyName: false }
+        }
+      },
+      facebook: {
+        _scheme: 'local',
+        endpoints: {
+          login: { url: 'login/facebook', method: 'post', propertyName: false },
+          logout: { url: 'login', method: 'delete' },
+          user: { url: 'validate', method: 'post', propertyName: false }
+        }
+      },
+      google: {
+        _scheme: 'local',
+        endpoints: {
+          login: { url: 'login/google', method: 'post', propertyName: false },
           logout: { url: 'login', method: 'delete' },
           user: { url: 'validate', method: 'post', propertyName: false }
         }

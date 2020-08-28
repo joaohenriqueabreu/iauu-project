@@ -9,8 +9,10 @@ export default {
     }
   },
   methods: {
-    login() {
-      this.$auth.loginWith('google')
+    async login() {
+      const googleUser = await this.$gAuth.signIn()
+      this.$emit('granted', googleUser.getAuthResponse().access_token)
+      return false
     }
   }
 }

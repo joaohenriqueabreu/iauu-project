@@ -4,7 +4,7 @@ const axios = require('axios')
 
 module.exports = class GoogleLoginService extends SocialLoginService {
   constructor(token) {
-    super(token)    
+    super(token)
   }
 
   async fetchProfile() {
@@ -17,7 +17,7 @@ module.exports = class GoogleLoginService extends SocialLoginService {
       throw new Error('Unable to get user data from Google')
     }
 
-    this.socialData = data
+    return data
   }
 
   async lookupUserFromSocial() {
@@ -30,14 +30,17 @@ module.exports = class GoogleLoginService extends SocialLoginService {
       return this
     }
 
-    if (this.user.google_id === undefined || this.user.google_id === null) {
-      this.user.google_id = this.socialData.sub
+    console.log('User found from social data...')
+
+    if (this.user.social.google_id === undefined || this.user.social.google_id === null) {
+      this.user.social.google_id = this.socialData.sub
     }
 
     return this
   }  
 
   async populateFromSocialData() {
+    console.log('User not found. Populating from social data...')
     this.user = new User({
       email: this.socialData.email,
       name: this.socialData.name,
