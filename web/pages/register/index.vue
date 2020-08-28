@@ -25,7 +25,7 @@
         <div>
           <form-button class="mb-4" :disabled="$v.credentials.$invalid" @action="signup">Cadastrar</form-button>
           <facebook-login @granted="loginWithFacebook"></facebook-login>
-          <google-login></google-login>
+          <google-login @granted="loginWithGoogle"></google-login>
         </div>
       </form>
     </div>
