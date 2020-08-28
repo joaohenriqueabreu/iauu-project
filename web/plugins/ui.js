@@ -24,6 +24,7 @@ import MediaViewer from '@/components/media/viewer'
 import MediaThumbnail from '@/components/media/thumbnail'
 import Rating from '@/components/artist/profile/rating'
 import Feedback from '@/components/admin/feedback'
+import Share from '@/components/layout/share'
 
 import LineChart from '@/components/layout/charts/line'
 import StatsDonut from '@/components/layout/charts/statsDonut'
@@ -96,6 +97,7 @@ Vue.component('media-thumbnail', MediaThumbnail)
 Vue.component('attachment', Attachment)
 Vue.component('rating', Rating)
 Vue.component('feedback', Feedback)
+Vue.component('share', Share)
 
 Vue.component('stats-donut', StatsDonut)
 Vue.component('line-chart', LineChart)

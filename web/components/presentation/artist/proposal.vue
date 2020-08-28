@@ -65,7 +65,7 @@
           O contratante deve aceitar o orçamento para poder confirmar a apresentação
         </div>
         <div v-if="!hasSelectedTimeslot" class="error mb-2">
-          Selecione uma opção de data para evento
+          Selecione uma opção de data para o evento
         </div>
         <div class="horizontal center middle full-height">
           <div

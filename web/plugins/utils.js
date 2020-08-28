@@ -50,7 +50,7 @@ const utils = {
   },
   genAbsoluteUrl: (relativeUrl) => {
     const url = window.location
-    return `${url.protocol}//${url.host}/${relativeUrl}`
+    return `${url.protocol}//${url.host}${relativeUrl}`
   }
 }
 

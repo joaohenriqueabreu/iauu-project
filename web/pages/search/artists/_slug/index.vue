@@ -3,9 +3,11 @@
     <div :style="{ 'background-image': `url(${bgImage})` }" class="bg"></div>
     <div class="title">
       <avatar :src="artist.photo" :username="artist.name" :size="200"></avatar>
-      <h1>{{ artist.name }}</h1>
+      <div class="horizontal">
+        <h1 class="mr-4">{{ artist.name }}</h1>
+      </div>
     </div>
-    <div class="horizontal center middle mb-4">
+    <div class="horizontal center middle position-relative mb-4">
       <font-awesome icon="music"></font-awesome>
       <h3 class="mr-4 cap">{{ artist.category.name }}</h3>
       <h3 v-if="artist.rating">
@@ -43,29 +45,34 @@
         </div>
       </div>
     </div>
-    <div v-if="artist.is_premium" class="verified">
-      <h1 class="mr-4">
-        <font-awesome icon="grin-stars"></font-awesome>
-      </h1>
-      <h6>
-        Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
-      </h6>
-    </div>
-    <div class="story my-5">
-      <h4 class="mb-5">Nossa história</h4>
-      {{ artist.story }}
-    </div>
-    <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
-      <h4 class="mb-5">O que falam sobre nosso show?</h4>
-      <div v-for="(feedback, index) in artist.feedbacks" :key="index" class="horizontal">
-        <div v-if="!$empty(feedback.notes)">
-          <div class="testemonial">
-            <h6 class="mb-2">{{ feedback.from.name }}</h6>
-            <div class="horizontal mb-4">
-              <h6 class="mr-2">{{ feedback.rating }}</h6>
-              <font-awesome icon="star"></font-awesome>
+    <div>
+      <div class="mt-4 mr-4 d-flex justify-content-end">
+        <share></share>
+      </div>
+      <div v-if="artist.is_premium" class="verified">
+        <h1 class="mr-4">
+          <font-awesome icon="grin-stars"></font-awesome>
+        </h1>
+        <h6>
+          Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
+        </h6>
+      </div>
+      <div class="story my-5">
+        <h4 class="mb-5">Nossa história</h4>
+        {{ artist.story }}
+      </div>
+      <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
+        <h4 class="mb-5">O que falam sobre nosso show?</h4>
+        <div v-for="(feedback, index) in artist.feedbacks" :key="index" class="horizontal">
+          <div v-if="!$empty(feedback.notes)">
+            <div class="testemonial">
+              <h6 class="mb-2">{{ feedback.from.name }}</h6>
+              <div class="horizontal mb-4">
+                <h6 class="mr-2">{{ feedback.rating }}</h6>
+                <font-awesome icon="star"></font-awesome>
+              </div>
+              <i>{{ feedback.notes }}</i>
             </div>
-            <i>{{ feedback.notes }}</i>
           </div>
         </div>
       </div>
