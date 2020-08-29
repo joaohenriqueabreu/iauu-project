@@ -66,8 +66,10 @@
               <social-networks v-show="socialTab" ref="social" key="social"></social-networks>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-categories v-show="catTab" key="categories" :categories="categories">
-              </artist-categories>
+              <artist-categories v-show="catTab" key="categories" :categories="categories"></artist-categories>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <artist-styles v-show="stylesTab" key="styles" :categories="styles"></artist-styles>
             </fade-transition>
             <fade-transition mode="out-in">
               <search-tags v-show="tagsTab" key="tags"></search-tags>
@@ -93,6 +95,7 @@ import PresentationConfig from '@/components/artist/profile/presentations'
 import ArtistUsers from '@/components/artist/profile/users'
 import SocialNetworks from '@/components/artist/profile/social'
 import ArtistCategories from '@/components/artist/profile/categories'
+import ArtistStyles from '@/components/artist/profile/styles'
 import SearchTags from '@/components/artist/profile/tags'
 export default {
   components: {
@@ -102,6 +105,7 @@ export default {
     ArtistUsers,
     SocialNetworks,
     ArtistCategories,
+    ArtistStyles,
     SearchTags
   },
   async asyncData({ app, store, error, $sentry }) {
@@ -111,6 +115,7 @@ export default {
       const roleIdResponse = await app.$axios.get('/users/exchange')
       return { 
         categories: catResponse.data,
+        styles: catResponse.data,
         shareableId:  roleIdResponse.data
       }
     } catch (e) {
@@ -146,6 +151,9 @@ export default {
     },
     catTab() {
       return this.activeTab === 'categories'
+    },
+    stylesTab() {
+      return this.activeTab === 'styles'
     },
     tagsTab() {
       return this.activeTab === 'tags'

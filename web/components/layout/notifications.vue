@@ -61,7 +61,8 @@ export default {
   },
   methods: {
     notificationLink(notification) {
-      if (notification.type === 'user') { return '/user/profile' }
+      if (notification.type === 'role' && this.$auth.hasScope('artist')) { return '/artist/profile' }
+      if (notification.type === 'product' && this.$auth.hasScope('artist')) { return '/artist/products' }
       if (notification.type === 'proposal') { return `/${this.userRole}/proposals` }
       if (notification.type === 'presentation') { return `/${this.userRole}/presentations` }
       return '/'

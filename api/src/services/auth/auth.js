@@ -141,7 +141,7 @@ module.exports = class AuthService extends BaseService {
   }
 
   async sendRegistrationMail() {
-    const mailSvc = new SendMailService(this.user.email, 'iauu | Verifique sua conta')
+    const mailSvc = new SendMailService(this.user.email, 'iauü | Verifique sua conta')
     await mailSvc.buildBody('register', {user: this.user, url: this.user.generateVerificationUrl() })
     await mailSvc.send()    
     return this

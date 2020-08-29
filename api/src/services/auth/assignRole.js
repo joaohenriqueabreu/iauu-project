@@ -1,6 +1,7 @@
 const axios = require('axios')
 const AuthService = require('./auth')
-const { Artist, Contractor } = require('../../models')
+const { User, Artist, Contractor } = require('../../models')
+const CreateNotificationService = require('../notification/createNotification')
 const BadRequestException = require('../../exception/bad')
 
 module.exports = class AssignRoleService extends AuthService {
@@ -27,6 +28,7 @@ module.exports = class AssignRoleService extends AuthService {
       await this.linkContractor(this.roleInstance.id) 
     }
 
+    this.generateFirstStepsNotifications()
     return this
   }
 
@@ -159,5 +161,28 @@ module.exports = class AssignRoleService extends AuthService {
   async generateShareUrls() {
     if (this.role !== 'artist') { return this }
     
+  }
+
+  async generateFirstStepsNotifications() {
+    if (this.user.role !== 'artist') { return this }
+    
+    const from = await User.findOne({ email: 'admin@iauu.com.br' })
+    await this.generateCompleteProfileNotification(from)
+    await this.generateCreateProductNotification(from)
+    return this
+  }
+
+  async generateCompleteProfileNotification(adminUser) {
+    const completeProfileMsg = 'Bem vindo a iauü! Para começar a receber propostas, complete seu perfil'
+    const createNotificationSvc = new CreateNotificationService(adminUser, this.user, completeProfileMsg, 'role', this.user)
+    await createNotificationSvc.notify()
+    return this
+  }
+
+  async generateCreateProductNotification(adminUser) {
+    const createProductMsg = 'Inclua formatos de apresentação para ser encontrado'
+    const createNotificationSvc = new CreateNotificationService(adminUser, this.user, createProductMsg, 'product', this.user)
+    await createNotificationSvc.notify()
+    return this
   }
 }

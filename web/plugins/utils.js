@@ -22,8 +22,12 @@ const utils = {
       return !variable
     }
 
-    if (Array.isArray(variable) || typeof variable === 'string') {
+    if (Array.isArray(variable)) {
       return variable.length === 0
+    }
+
+    if (typeof variable === 'string') {
+      return variable === ''
     }
 
     if (typeof variable === 'object') {

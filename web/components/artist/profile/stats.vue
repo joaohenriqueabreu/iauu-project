@@ -1,5 +1,8 @@
 <template>
   <div class="vertical middle center">
+    <div v-if="wontShowOnSearchResults" class="no-search-result mb-4">
+      <h6>Seu perfil está incompleto e não será exibido nos resultados das buscas dos organizadores de eventos, por favor, fornece mais informações para ser encontrado</h6>
+    </div>
     <h4>
       Seu perfil está <i>{{ profileStrength }}</i>
     </h4>
@@ -16,7 +19,7 @@
       <div class="col-sm-2"></div>
       <div class="col-sm-3">
         <div>
-          <font-awesome icon="check" class="check"></font-awesome>
+          <font-awesome icon="check" :class="checked(artist.name) ? 'check' : ''"></font-awesome>
           <span>Informações pessoais</span>
         </div>
         <div>
@@ -53,12 +56,23 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
+    ...mapState({ artist: (state) => state.artist.artist }),
+    wontShowOnSearchResults() {
+      return this.$empty(this.artist.name) || 
+        this.$empty(this.artist.photo) ||
+        this.$empty(this.artist.products) ||
+        this.$empty(this.artist.category.name)
+    },
     completeness() {
       return 60
     },
     profileStrength() {
+      if (this.wontShowOnSearchResults) {
+        return 'incompleto'
+      }
       return 'ok'
     },
     strengthMessage() {
@@ -86,6 +100,11 @@ export default {
         // total: 100
       }
     }
+  },
+  methods: {
+    checked(source) {
+      return !this.$empty(source)
+    }
   }
 }
 </script>
@@ -98,6 +117,13 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.no-search-result {
+  background: $error;
+  padding: 2 * $space;
+  border-radius: $edges;
+  box-shadow: $shadow;
+}
+
 .row {
   div {
     div {

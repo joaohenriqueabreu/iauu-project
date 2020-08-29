@@ -2,7 +2,7 @@
   <nav :class="{ filled: scrolled }" class="navbar d-flex justify-content-end">
     <div class="mainmenu vertical">
       <div v-if="$auth.loggedIn" class="horizontal mt-2">
-        <product-setup v-if="$auth.hasScope('artist')" class="mr-3"></product-setup>
+        <notifications></notifications>
         <div class="dropdown" data-test="top-menu">
           <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <overlay :rounded="true">

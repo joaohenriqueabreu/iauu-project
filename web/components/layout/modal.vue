@@ -8,7 +8,7 @@
       @before-open="disableBodyScroll"
       @before-close="enableBodyScroll"
     >
-      <div class="modal-content" :class="height">
+      <div class="modal-content" :class="[height, noPad ? 'no-pad' : '']">
         <header v-show="!hideHeader" :class="headerCustomHeight">
           <div class="close" @click="close">
             <font-awesome icon="times"></font-awesome>
@@ -37,7 +37,8 @@ export default {
   props: {
     height: { type: String, default: 'regular' },
     headerHeight: { type: String, default: null },
-    hideHeader: { type: Boolean, default: false }
+    hideHeader: { type: Boolean, default: false },
+    noPad: { type: Boolean, default: false }
   },
   computed: {
     name: () => v4(),
@@ -53,12 +54,12 @@ export default {
     close() {
       this.$modal.hide(this.name)
     },
-    disableBodyScroll() {
-      document.getElementsByTagName('body')[0].classList.add('disable-scroll')
-    },
-    enableBodyScroll() {
-      document.getElementsByTagName('body')[0].classList.remove('disable-scroll')
-    }
+    // disableBodyScroll() {
+    //   document.getElementsByTagName('body')[0].classList.add('disable-scroll')
+    // },
+    // enableBodyScroll() {
+    //   document.getElementsByTagName('body')[0].classList.remove('disable-scroll')
+    // }
   }
 }
 </script>
@@ -85,6 +86,11 @@ export default {
   z-index: $above;
   background: $layer2;
   position: relative;
+
+  padding: 2 * $space;
+  &.no-pad {
+    padding: 0;
+  }
 
   // &.tiny {
   //   height: 50vh;

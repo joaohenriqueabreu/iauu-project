@@ -91,7 +91,22 @@ export default {
       await this.saveProfile()
       await this.renewAuth()
       this.$toast.success('Foto atualizada!')
-    }
+    },
+    async loginWithFacebook(accessToken) {
+      await this.$auth.loginWith('facebook', {
+        data: {
+          token: accessToken
+        }
+      })
+    },
+    async loginWithGoogle(accessToken) {
+      await this.$auth.loginWith('google', {
+        data: {
+          token: accessToken,
+          provider: 'google'
+        }
+      })
+    },
   }
 }
 </script>
@@ -103,7 +118,8 @@ export default {
     border-radius: $rounded;
     min-width: 250px;
     padding: 2 * $space;
-    margin-bottom: $space;
+    margin-bottom: 2 * $space;
+    box-shadow: $shadow;
     &.facebook {
       background-color: #3b5998 !important;
     }

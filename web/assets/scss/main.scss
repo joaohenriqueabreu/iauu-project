@@ -163,10 +163,6 @@ a {
   cursor: pointer;
 }
 
-.disable-scroll {
-  overflow: hidden !important;
-}
-
 .hide-mobile {
   @include mobile {
     display: none;
