@@ -204,6 +204,14 @@ const counterOffer = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const category = (req, res, next) => {
+  const schema = validateRequest.object({
+    category: validateRequest.string().required()
+  })
+
+  return validate(req.params, req, next, schema)
+}
+
 module.exports = { 
   id,
   query,  
@@ -225,5 +233,6 @@ module.exports = {
   schedule,
   timeslot,
   proposal,
-  counterOffer
+  counterOffer,
+  category
  }

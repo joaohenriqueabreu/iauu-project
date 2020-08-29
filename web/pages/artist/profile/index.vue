@@ -29,6 +29,11 @@
               </a>
             </li>
             <li class="nav-link">
+              <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
+                Estilo
+              </a>
+            </li>
+            <li class="nav-link">
               <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'">
                 Redes Sociais
               </a>
@@ -39,11 +44,6 @@
               </a>
             </li>
             <li class="nav-link">
-              <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
-                Categorias
-              </a>
-            </li>
-            <li class="nav-link">
               <a class="nav-link" :class="{ active: tagsTab }" @click="activeTab = 'tags'">
                 Pesquisa
               </a>
@@ -51,7 +51,7 @@
           </ul>
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
             <fade-transition mode="out-in">
-              <profile-stats v-show="statsTab" key="stats"></profile-stats>
+              <profile-stats v-if="statsTab" key="stats"></profile-stats>
             </fade-transition>
             <fade-transition mode="out-in">
               <presentation-config v-show="presentationsTab" ref="presentations"></presentation-config>
@@ -60,19 +60,16 @@
               <artist-users v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-users>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-info v-show="infoTab" ref="info"></artist-info>
+              <artist-info v-if="infoTab" ref="info"></artist-info>
             </fade-transition>
             <fade-transition mode="out-in">
-              <social-networks v-show="socialTab" ref="social" key="social"></social-networks>
+              <social-networks v-if="socialTab" ref="social" key="social"></social-networks>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-categories v-show="catTab" key="categories" :categories="categories"></artist-categories>
+              <artist-categories v-if="catTab" key="categories" :categories="categories"></artist-categories>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-styles v-show="stylesTab" key="styles" :categories="styles"></artist-styles>
-            </fade-transition>
-            <fade-transition mode="out-in">
-              <search-tags v-show="tagsTab" key="tags"></search-tags>
+              <search-tags v-if="tagsTab" key="tags"></search-tags>
             </fade-transition>
           </div>
         </div>
@@ -95,7 +92,6 @@ import PresentationConfig from '@/components/artist/profile/presentations'
 import ArtistUsers from '@/components/artist/profile/users'
 import SocialNetworks from '@/components/artist/profile/social'
 import ArtistCategories from '@/components/artist/profile/categories'
-import ArtistStyles from '@/components/artist/profile/styles'
 import SearchTags from '@/components/artist/profile/tags'
 export default {
   components: {
@@ -105,7 +101,6 @@ export default {
     ArtistUsers,
     SocialNetworks,
     ArtistCategories,
-    ArtistStyles,
     SearchTags
   },
   async asyncData({ app, store, error, $sentry }) {
@@ -115,7 +110,6 @@ export default {
       const roleIdResponse = await app.$axios.get('/users/exchange')
       return { 
         categories: catResponse.data,
-        styles: catResponse.data,
         shareableId:  roleIdResponse.data
       }
     } catch (e) {
@@ -151,9 +145,6 @@ export default {
     },
     catTab() {
       return this.activeTab === 'categories'
-    },
-    stylesTab() {
-      return this.activeTab === 'styles'
     },
     tagsTab() {
       return this.activeTab === 'tags'

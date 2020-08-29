@@ -29,7 +29,7 @@ export default {
   extends: Input,
   props: {
     allowInput: { type: Boolean, default: true },
-    options: { type: Array, default: () => [] },
+    options: { type: [Array, Object], default: () => [] },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
     autoOpen: { type: Boolean, default: false },

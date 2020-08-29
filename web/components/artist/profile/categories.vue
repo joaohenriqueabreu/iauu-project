@@ -1,16 +1,11 @@
 <template>
   <div>
-    <div class="vertical center middle">
-      <h6 class="mb-4">Qual tipo de apresentação sua empresa realiza?</h6>
+    <div class="vertical center middle mb-4">
+      <h6>Qual tipo de apresentação sua empresa realiza?</h6>
     </div>
     <fade-transition mode="out-in">
-      <div v-show="$utils.empty(artist.category.name)" class="horizontal center middle">
-        <div
-          v-for="(category, index) in categories"
-          :key="index"
-          class="img-box"
-          @click="getSubcategories(category)"
-        >
+      <div v-show="$empty(artist.category.name)" class="horizontal center middle">
+        <div v-for="(category, index) in categories" :key="index" class="img-box" @click="getSubcategories(category)">
           <h6>
             {{ category.name }}
           </h6>
@@ -57,31 +52,35 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
+import { mapFields } from 'vuex-map-fields'
 export default {
   props: {
     categories: { type: Array, default: () => {} }
   },
   data() {
     return {
-      subCategories: { type: Object, default: () => {} }
+      subCategoryOptions: { type: Object, default: () => {} }
     }
   },
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
-    subCategoryOptions() {
-      return this.$collection.map(this.subCategories, (subcategory) => subcategory.name)
-    }
+    ...mapFields('artist', {
+      categoryName: 'artist.category.name',
+      subCategories: 'artist.category.subcategories',
+    })
+  },
+  async mounted() {
+    if (this.$empty(this.artist.category.name)) { return }
+    await this.getSubcategories(this.artist.category.name)
   },
   methods: {
-    ...mapMutations('artist', { updateProfile: 'update_profile' }),
     async getSubcategories(category) {
-      this.updateProfile({ prop: 'category.name', data: category.name })
       const { data } = await this.$axios.get(
         `categories/${encodeURI(this.artist.category.name)}/subcategories`
       )
 
-      this.subCategories = data
+      this.subCategoryOptions = this.$collection.orderBy(data, [], ['asc'])
     },
     categoryImg(item) {
       try {
@@ -94,22 +93,17 @@ export default {
       return name === this.artist.category.name
     },
     changeCategory() {
-      this.updateProfile({ prop: 'category.name', data: null })
-      this.updateProfile({ prop: 'category.subcategories', data: [] })
+      this.categoryName = null
+      this.subCategories = []
     },
     addSubcategory(subcategory) {
-      const subcategories = this.$object.clone(this.artist.category.subcategories)
-
-      if (!this.$collection.includes(subcategories, subcategory)) {
-        subcategories.push(subcategory)
-        this.updateProfile({ prop: 'category.subcategories', data: subcategories })
+      if (!this.$collection.includes(this.subCategories, subcategory)) {
+        this.subCategories.push(subcategory)
       }
     },
     removeSubcategory(subcategory) {
-      const subcategories = this.$object.clone(this.artist.category.subcategories)
-      const index = this.$array.indexOf(subcategories, subcategory)
-      this.$delete(subcategories, index)
-      this.updateProfile({ prop: 'category.subcategories', data: subcategories })
+      const index = this.$array.indexOf(this.subCategories, subcategory)
+      this.$delete(this.getSubcategories, index)
     }
   }
 }

@@ -1,10 +1,12 @@
 <script>
-import { Doughnut } from 'vue-chartjs'
+import { Doughnut, mixins } from 'vue-chartjs'
+const { reactiveProp } = mixins
 
 export default {
   extends: Doughnut,
+  mixins: [reactiveProp],
   props: {
-    data: { type: Object, default: null },
+    // data: { type: Object, default: null },
     options: { type: Object, default: null }
   },
   computed: {
@@ -24,7 +26,7 @@ export default {
     // roundedDoughnutScript.setAttribute('src', require(''))
     // document.head.appendChild(recaptchaScript)
 
-    this.renderChart(this.data, this.chartOptions)
+    this.renderChart(this.chartData, this.chartOptions)
   }
 }
 </script>

@@ -1,13 +1,9 @@
 <template>
   <div>
-    <v-modal
-      :name="name"
-      :adaptive="true"
-      :click-to-close="true"
-      height="auto"
-      @before-open="disableBodyScroll"
-      @before-close="enableBodyScroll"
-    >
+    <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">
+    <!-- TODO This is breaking artist profile page, not showing scrollbar - investigate -->
+    <!-- @before-open="disableBodyScroll"
+    @before-close="enableBodyScroll" -->
       <div class="modal-content" :class="[height, noPad ? 'no-pad' : '']">
         <header v-show="!hideHeader" :class="headerCustomHeight">
           <div class="close" @click="close">
