@@ -10,7 +10,9 @@
       </div>
       <div class="col-sm-12 horizontal middle">
         <form-toggle v-model="displayPrice">
-          Desejo mostrar o valor e duração de nossas apresentações
+          <template v-slot:before>
+            Desejo mostrar o valor e duração de nossas apresentações
+          </template>
         </form-toggle>
       </div>
     </div>
@@ -19,7 +21,7 @@
         <form-money v-model="avgPrice" @input="selectPriceRange" icon="dollar-sign"></form-money>
       </div>
       <div class="col-sm-6">
-        <form-input v-model="avgDuration" icon="clock"></form-input>
+        <form-time v-model="avgDuration" icon="clock"></form-time>
       </div>
     </div>
     <hr/>

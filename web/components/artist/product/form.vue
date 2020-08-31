@@ -22,7 +22,7 @@
             </div>
             <div class="vertical middle center col-sm-6">
               <h6 class="mr-3">Duração da Apresentação</h6>
-              <form-numeric v-model="$v.product.duration.$model" icon="clock" placeholder="4 horas"></form-numeric>
+              <form-time ref="duration" v-model="$v.product.duration.$model" icon="clock" placeholder="4:00"></form-time>
               <form-validation :active="$v.product.duration.$error" class="mb-4">Entre com uma duração válida</form-validation>
             </div>
           </div>
@@ -116,10 +116,15 @@
 </template>
 
 <script>
-import { required, minValue, numeric, minLength } from 'vuelidate/lib/validators'
+import { required, minValue, numeric, minLength, contains, helpers } from 'vuelidate/lib/validators'
 import * as filestack from 'filestack-js'
 import Product from '@/models/product'
 import Media from '@/models/media'
+
+function minTime(value) {
+  return this.$date.convertTimeToNumber(value) >= this.$config.minDurationInMinutes
+}
+
 export default {
   data() {
     return {
@@ -133,7 +138,7 @@ export default {
     product: {
       name: { required },
       price: { required, numeric, minValue: minValue(1) },
-      duration: { required, numeric, minValue: minValue(1) },
+      duration: { required, minTime },
       items: { required, minLength: minLength(1) }
     }
   },

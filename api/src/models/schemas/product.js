@@ -8,7 +8,7 @@ const productSchema = new db.Schema({
     description: { type: String },
     photo: { type: String },
     price: { type: Number },
-    duration: { type: Number },
+    duration: { type: String },
     custom: { type: Boolean, default: false },
     medias: [mediaSchema],
     items: [String]

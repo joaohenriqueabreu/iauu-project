@@ -4,8 +4,8 @@
     <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <v-selectize v-if="allowInput" :name="name" :settings="settings">
-        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
-          >{{ option.display }}
+        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value">
+          {{ option.display }}
         </option>
       </v-selectize>
       <select v-else required :value="value" @change="$emit('input', $event.target.value)">

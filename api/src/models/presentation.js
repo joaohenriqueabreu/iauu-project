@@ -38,7 +38,7 @@ const presentationSchema = new Schema({
   timeslot: timeslotSchema,
   proposal: proposalSchema,
   price: { type: Number },
-  duration: { type: Number }
+  duration: { type: String }
 }, { ...baseSchemaOptions })
 
 class Presentation extends BaseModel {

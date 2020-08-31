@@ -34,6 +34,11 @@
               </a>
             </li>
             <li class="nav-link">
+              <a class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'">
+                Tipos de eventos
+              </a>
+            </li>
+            <li class="nav-link">
               <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'">
                 Redes Sociais
               </a>
@@ -41,11 +46,6 @@
             <li class="nav-link">
               <a class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'">
                 Integrantes
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: tagsTab }" @click="activeTab = 'tags'">
-                Pesquisa
               </a>
             </li>
           </ul>
@@ -69,7 +69,7 @@
               <artist-categories v-if="catTab" key="categories" :categories="categories"></artist-categories>
             </fade-transition>
             <fade-transition mode="out-in">
-              <search-tags v-if="tagsTab" key="tags"></search-tags>
+              <presentation-types v-if="typesTab" :options="presentationTypes" key="types"></presentation-types>
             </fade-transition>
           </div>
         </div>
@@ -88,11 +88,11 @@ import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import ProfileStats from '@/components/artist/profile/stats'
 import ArtistInfo from '@/components/artist/profile/info'
-import PresentationConfig from '@/components/artist/profile/presentations'
+import PresentationConfig from '@/components/artist/profile/presentationsConfig'
 import ArtistUsers from '@/components/artist/profile/users'
 import SocialNetworks from '@/components/artist/profile/social'
 import ArtistCategories from '@/components/artist/profile/categories'
-import SearchTags from '@/components/artist/profile/tags'
+import PresentationTypes from '@/components/artist/profile/presentationTypes'
 export default {
   components: {
     ProfileStats,
@@ -101,15 +101,17 @@ export default {
     ArtistUsers,
     SocialNetworks,
     ArtistCategories,
-    SearchTags
+    PresentationTypes
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
       await store.dispatch('artist/loadArtist')
       const catResponse = await app.$axios.get('categories')
+      const presentationTypesResponse = await app.$axios.get('presentations/types')
       const roleIdResponse = await app.$axios.get('/users/exchange')
       return { 
         categories: catResponse.data,
+        presentationTypes: presentationTypesResponse.data,
         shareableId:  roleIdResponse.data
       }
     } catch (e) {
@@ -146,8 +148,8 @@ export default {
     catTab() {
       return this.activeTab === 'categories'
     },
-    tagsTab() {
-      return this.activeTab === 'tags'
+    typesTab() {
+      return this.activeTab === 'types'
     },
     backgroundImg() {
       return !this.$utils.empty(this.background)

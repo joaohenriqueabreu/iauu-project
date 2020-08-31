@@ -8,17 +8,22 @@
         </div>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <div v-for="(notification, index) in displayNotifications" :key="index" class="dropdown-item vertical">
-          <div @click="readNotification(notification)">
-            <h6>{{ notification.message }}</h6>
-            <div class="d-flex justify-content-end">
-              <small>{{ notification.created_at | timeAgo }}</small>
-            </div>
-            <hr/>
-          </div>
+        <div v-if="notifications.length === 0" class="p-3">
+          <h6 class="no-new-notification">Nenhuma nova notificação</h6>
         </div>
-        <div class="dropdown-item" v-if="notifications.length > $config.maxNotificationsDisplayed">
-          <nuxt-link to="/user/notifications">Ver mais</nuxt-link>
+        <div v-else>
+          <div v-for="(notification, index) in displayNotifications" :key="index" class="dropdown-item vertical">
+            <div @click="readNotification(notification)">
+              <h6>{{ notification.message }}</h6>
+              <div class="d-flex justify-content-end">
+                <small>{{ notification.created_at | timeAgo }}</small>
+              </div>
+              <hr/>
+            </div>
+          </div>
+          <div class="dropdown-item" v-if="notifications.length > $config.maxNotificationsDisplayed">
+            <nuxt-link to="/user/notifications">Ver mais</nuxt-link>
+          </div>
         </div>
       </div>
     </div>
@@ -141,6 +146,9 @@ export default {
 
 h6 {
   color: $brand;
+  &.no-new-notification {
+    color: $layer5;
+  }
 }
 
 small {

@@ -27,7 +27,7 @@
           </span>
           <span>
             <font-awesome icon="clock" class="mr-1"></font-awesome>
-            {{ product.duration }} horas
+            {{ product.duration | longTime }}
           </span>
         </div>
         <div v-if="!proposalView" class="description one-line">

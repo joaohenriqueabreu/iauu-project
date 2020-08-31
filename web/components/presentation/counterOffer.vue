@@ -1,20 +1,17 @@
 <template>
   <div>
     <div v-if="counterOffer.status === 'void'" class="mb-5 half-width">
-      <form-button @action="openModal">Enviar orçamento para o organizador do evento</form-button>
+      <form-button @action="openModal" class="horizontal middle center">Enviar orçamento para o organizador do evento</form-button>
     </div>
     <div v-else class="vertical middle center offer m-4" :class="counterOffer.status">
       <h5 class="mb-3">
-        Orçamento enviado <u>{{ counterOfferStatusText }}</u>
+        <span v-if="!hasAcceptedCounterOffer">Orçamento enviado</span> <u>{{ counterOfferStatusText }}</u>
       </h5>
       <div class="horizontal">
-        <h6 class="mr-2">{{ counterOffer.price | currency }}</h6>
-        para
-        <h6 class="mx-2">{{ counterOffer.duration }} horas</h6>
-        de apresentação
-        <h6 v-if="!hasAcceptedCounterOffer" class="mx-2 clickable" @click="openModal">
+        <h6 class="mr-2">{{ counterOffer.price | currency }} para {{ counterOffer.duration | longTime }} de apresentação </h6>
+        <h5 v-if="!hasAcceptedCounterOffer" class="mx-2 clickable brandHover" @click="openModal">
           <font-awesome icon="edit"></font-awesome>
-        </h6>
+        </h5>
       </div>
     </div>
     <modal ref="modal" height="tiny">
@@ -24,20 +21,13 @@
       <template v-slot:main>
         <div class="vertical middle center">
           <span>Envie o valor e duração de sua apresentação para avaliação pelo contratante</span>
-          <form-money
-            ref="price"
-            v-model="$v.counterOffer.price.$model"
-            label="Valor (R$)"
-            class="mt-4 mb-1"
-          ></form-money>
+          <form-money ref="price" v-model="$v.counterOffer.price.$model" label="Valor (R$)" class="mt-4 mb-1">
+          </form-money>
           <div v-if="$v.counterOffer.price.$error" class="error mb-3">
             Favor entrar com um valor válido
           </div>
-          <form-numeric
-            v-model="$v.counterOffer.duration.$model"
-            icon="clock"
-            label="Duração (horas)"
-          ></form-numeric>
+          <form-time v-model="$v.counterOffer.duration.$model" icon="clock" label="Duração (horas)">
+          </form-time>
           <div v-if="$v.counterOffer.duration.$error" class="error mb-3">
             Favor entrar com um valor válido
           </div>
@@ -47,6 +37,7 @@
         <div class="horizontal center middle">
           <div class="mr-4">
             <form-button v-if="!$v.$invalid" @action="send">Enviar</form-button>
+            <div v-else class="error">Complete a contra proposta para enviá-la ao organizador do evento</div>
           </div>
           <div>
             <h6 class="clickable" @click="cancel">Cancelar</h6>
@@ -59,11 +50,14 @@
 
 <script>
 import { required, minValue, numeric } from 'vuelidate/lib/validators'
+function minTime(value) {
+  return this.$date.convertTimeToNumber(value) >= this.$config.minDurationInMinutes
+}
 export default {
   validations: {
     counterOffer: {
       price: { required, numeric, minValue: minValue(1) },
-      duration: { required, numeric, minValue: minValue(1) }
+      duration: { required, minTime }
     }
   },
   props: {

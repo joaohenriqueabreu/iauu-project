@@ -3,11 +3,7 @@ import Vue from 'vue'
 import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
-  artist: {
-    category: {
-      name: ''
-    }
-  },
+  artist: {},
   products: [],
 })
 

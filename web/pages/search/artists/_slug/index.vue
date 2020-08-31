@@ -26,7 +26,7 @@
         </a>
       </div>
     </div>
-    <div class="stats mb-5">
+    <div class="stats mb-5" v-if="!$empty(artist.stats)">
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
         <div class="horizontal d-flex align-items-end mb-3">
           <h2 v-if="statName === 'score'" class="mr-2 mb-0">{{ stat | number('0.0') }}</h2>
@@ -47,7 +47,10 @@
     </div>
     <div>
       <div class="mt-4 mr-4 d-flex justify-content-end">
-        <share></share>
+        <div class="vertical">
+          <h6 class="mb-2">Compartilhe!</h6>
+          <share></share>
+        </div>
       </div>
       <div v-if="artist.is_premium" class="verified">
         <h1 class="mr-4">
@@ -57,7 +60,7 @@
           Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
         </h6>
       </div>
-      <div class="story my-5">
+      <div class="story my-5" v-if="!$empty(artist.story)">
         <h4 class="mb-5">Nossa história</h4>
         {{ artist.story }}
       </div>
@@ -101,7 +104,7 @@
           <small>
             <span class="hide-mobile">Duração média</span>
           </small>
-          <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ avgDuration }} horas</h4>
+          <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ artist.proposal.avg_duration | longTime }}</h4>
         </div>
         <div class="horizontal middle center">
           <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >
@@ -137,9 +140,6 @@ export default {
     },
     rateMax() {
       return Math.round(this.artist.score * 1.5)
-    },
-    avgDuration() {
-      return Math.round(this.$math.mean(this.$collection.map(this.artist.products, 'duration')))
     }
   }
 }

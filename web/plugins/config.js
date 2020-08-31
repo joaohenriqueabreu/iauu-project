@@ -40,7 +40,10 @@ const config = {
     5: 'R$ 100.000+',
   },
 
-  maxNotificationsDisplayed: 5
+  minDurationInMinutes: 60,
+  maxNotificationsDisplayed: 5,
+  maxAllowedSubcategories: 5,
+  maxAllowedPresentationTypes: 10
 }
 
 export default ({ app }, inject) => {
