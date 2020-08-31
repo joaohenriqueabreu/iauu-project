@@ -5,6 +5,7 @@
         <span>Interaja com seus próximos eventos e responda a propostas de clientes</span>
       </div>
     </div>
+    <presentations-yearly v-if="timeslots.length > 0"></presentations-yearly>
     <div v-if="timeslots">
       <calendar
         ref="calendar"
@@ -52,14 +53,16 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import BusySlot from '@/components/artist/schedule/busy'
+import Busy from '@/components/artist/schedule/busy'
 import Proposal from '@/components/presentation/artist/proposal'
 import Presentation from '@/components/presentation/artist/presentation'
+import PresentationsYearly from '@/components/artist/schedule/yearly'
 export default {
   components: {
-    busy: BusySlot,
-    proposal: Proposal,
-    presentation: Presentation
+    Busy,
+    Proposal,
+    Presentation,
+    PresentationsYearly
   },
   async asyncData({ app, store }) {
     await store.dispatch('schedule/loadMySchedule', { year: new Date().getFullYear() })

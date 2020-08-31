@@ -14,7 +14,8 @@ const contractorSchema = new Schema({
     ref: 'User'
   }],
 
-  public_name: { type: String},
+  name: { type: String},
+  photo: { type: String },
   phone: { type: String }, 
   address: {type: address}
 }, { ...baseSchemaOptions })

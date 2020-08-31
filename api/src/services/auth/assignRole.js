@@ -20,13 +20,8 @@ module.exports = class AssignRoleService extends AuthService {
       .createRole()
     await this.saveRole()
 
-    if (this.role === 'artist') { 
-      await this.linkArtist(this.roleInstance.id) 
-    }
-
-    if (this.role === 'contractor') { 
-      await this.linkContractor(this.roleInstance.id) 
-    }
+    if (this.role === 'artist') { await this.linkArtist(this.roleInstance.id) }
+    if (this.role === 'contractor') { await this.linkContractor(this.roleInstance.id) }
 
     this.generateFirstStepsNotifications()
     return this
@@ -59,6 +54,7 @@ module.exports = class AssignRoleService extends AuthService {
     this.ensureContractorWasFound()
       .assignUserToRole()
       .assignRoleToUser()
+      .defaultRoleProfile()
       .updateUserStatus()
     await this.saveRole()
     await this.saveUser()
@@ -155,6 +151,12 @@ module.exports = class AssignRoleService extends AuthService {
   assignUserToRole() {
     if (this.roleInstance.users === undefined) { this.roleInstance.users = [] }
     this.roleInstance.users.push(this.user.id)
+    return this
+  }
+
+  defaultRoleProfile() {
+    if (this.role === 'artist') { return this } // contractor only
+    this.roleInstance.name = this.user.name
     return this
   }
 

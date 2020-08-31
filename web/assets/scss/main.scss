@@ -132,6 +132,12 @@ a {
   display: flex;
   flex-direction: row;
 
+  &.desktop {
+    @include mobile {
+      display: block;
+    }
+  }
+
   &.center {
     justify-content: center;
   }

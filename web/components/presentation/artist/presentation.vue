@@ -4,11 +4,8 @@
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
           <div v-if="!$empty(presentation.contractor)" class="horizontal middle">
-            <avatar
-              class="mr-4"
-              :src="presentation.contractor.photo"
-              :username="presentation.contractor.name"
-            ></avatar>
+            <avatar class="mr-4" :src="presentation.contractor.photo" :username="presentation.contractor.name">
+            </avatar>
             <h5>{{ presentation.contractor.name }}</h5>
           </div>
           <div class="d-flex align-items-end">

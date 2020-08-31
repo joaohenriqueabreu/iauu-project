@@ -85,6 +85,7 @@ export default {
     { src: '@/plugins/html2canvas', mode: 'client' },
     { src: '@/plugins/cookies', mode: 'client' },
     { src: '@/plugins/facebookPixel', mode: 'client' },
+    { src: '@/plugins/hotjarTracker', mode: 'client' },
     { src: '@/plugins/googleAnalytics', mode: 'client' },
     { src: '@/plugins/socialLogin', mode: 'client' },
   ],
