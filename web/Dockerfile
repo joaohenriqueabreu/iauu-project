@@ -12,7 +12,7 @@ COPY . .
 RUN apk add bash
 RUN apk add python
 RUN npm install
-RUN npm run build
+RUN npm run build --max-old-space-size=800
 
 EXPOSE 3000
 

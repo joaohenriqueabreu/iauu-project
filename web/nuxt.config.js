@@ -163,6 +163,7 @@ export default {
    */
   build: {
     extend(config, ctx) {},
+    terser: false,	
     html: {
       minify: {
         collapseBooleanAttributes: true,
