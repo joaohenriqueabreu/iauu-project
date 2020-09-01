@@ -11,7 +11,7 @@
         <form-password v-model="$v.credentials.password.$model" placeholder="Crie uma senha para acessar a plataforma">
         </form-password>
         <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
-        <small class="px-4">Mínimo 8 caracteres, combinação de números, caracteres e caracteres especiais (@, !, %, ...)</small>
+        <small class="px-4">Mínimo 8 caracteres, combinação de números, letras e caracteres especiais</small>
         <form-password v-model="$v.credentials.passwordConfirmation.$model" placeholder="Confirme sua senha"></form-password>
         <form-validation :active="$v.credentials.passwordConfirmation.$error">Confirmação deve ser igual a senha</form-validation>
         <form-checkbox v-model="credentials.accept_terms" class="my-4">
@@ -24,8 +24,8 @@
         <div class="mb-4"></div>
         <div>
           <form-button class="mb-4" :disabled="$v.credentials.$invalid" @action="signup">Cadastrar</form-button>
-          <facebook-login></facebook-login>
-          <google-login></google-login>
+          <facebook-login @granted="loginWithFacebook"></facebook-login>
+          <google-login @granted="loginWithGoogle"></google-login>
         </div>
       </form>
     </div>
@@ -111,6 +111,13 @@ export default {
         this.$sentry.captureException(error)
         this.error = error
       }
+    },
+    async loginWithFacebook(accessToken) {
+      await this.$auth.loginWith('facebook', {
+        data: {
+          token: accessToken
+        }
+      })
     }
   }
 }

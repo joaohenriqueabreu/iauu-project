@@ -30,8 +30,11 @@ export default {
   async mounted() {
     this.$refs.verify.open()
     try {
-      await this.verify(this.$route.params.token)
-      this.$auth.setUserToken(this.accessToken)
+      await this.$auth.loginWith('verify', { 
+        data: {
+          token: this.$route.params.token
+        }
+      })
 
       setTimeout(this.handleVerified, 3000)
     } catch (error) {
@@ -42,7 +45,7 @@ export default {
   methods: {
     ...mapActions('protected', ['verify', 'resendVerify', 'release']),
     handleVerified() {
-      this.$toast.success('Conta verificada com sucesso! Bem vindo a Iauu')
+      this.$toast.success('Conta verificada com sucesso! Bem vindo a iauü')
     },
     handleFailed() {
       this.$toast.error('Seu token de verification é inválido ou está expirado.')

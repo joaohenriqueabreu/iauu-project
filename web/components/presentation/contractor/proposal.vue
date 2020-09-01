@@ -51,7 +51,7 @@
           v-if="hasCounterOffer && !hasAcceptedCounterOffer && !hasRejectedCounterOffer"
           class="mb-4 mx-4 vertical middle center"
         >
-          <h6 class="mb-4">O artista te enviou um orçamento para sua apresentação</h6>
+          <h6 class="mb-4">O artista enviou o orçamento para sua apresentação</h6>
           <h5 class="mb-4">
             {{ presentation.proposal.counterOffer.price | currency }} para
             {{ presentation.proposal.counterOffer.duration }} horas de apresentação

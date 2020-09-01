@@ -50,6 +50,12 @@ class AuthController extends BaseController {
       .catch((error) => next(error))
   }
 
+  socialLogin(req, res, next) {
+    if (req.data.provider === 'google') {
+      return this.googleLogin(req, res, next)
+    }
+  }
+
   facebookLogin(req, res, next) {
     console.log('Facebook Login...')
     const { token } = req.data

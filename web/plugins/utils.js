@@ -22,8 +22,12 @@ const utils = {
       return !variable
     }
 
-    if (Array.isArray(variable) || typeof variable === 'string') {
+    if (Array.isArray(variable)) {
       return variable.length === 0
+    }
+
+    if (typeof variable === 'string') {
+      return variable === ''
     }
 
     if (typeof variable === 'object') {
@@ -47,6 +51,10 @@ const utils = {
   },
   delay: () => {
     return setTimeout(() => {}, 5000)
+  },
+  genAbsoluteUrl: (relativeUrl) => {
+    const url = window.location
+    return `${url.protocol}//${url.host}${relativeUrl}`
   }
 }
 

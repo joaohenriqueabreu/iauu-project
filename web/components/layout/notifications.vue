@@ -8,14 +8,21 @@
         </div>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <div v-for="(notification, index) in notifications" :key="index" class="dropdown-item vertical">
-          <div>
-            <nuxt-link :to="notificationLink(notification)">
+        <div v-if="notifications.length === 0" class="p-3">
+          <h6 class="no-new-notification">Nenhuma nova notificação</h6>
+        </div>
+        <div v-else>
+          <div v-for="(notification, index) in displayNotifications" :key="index" class="dropdown-item vertical">
+            <div @click="readNotification(notification)">
               <h6>{{ notification.message }}</h6>
-            </nuxt-link>
+              <div class="d-flex justify-content-end">
+                <small>{{ notification.created_at | timeAgo }}</small>
+              </div>
+              <hr/>
+            </div>
           </div>
-          <div class="d-flex justify-content-end">
-            <small>{{ notification.created_at | timeAgo }}</small>
+          <div class="dropdown-item" v-if="notifications.length > $config.maxNotificationsDisplayed">
+            <nuxt-link to="/user/notifications">Ver mais</nuxt-link>
           </div>
         </div>
       </div>
@@ -44,15 +51,30 @@ export default {
     /* Listen for events: */
     self.socket.on('unreadNotifications', (notifications) => { this.notifications = notifications })
     self.socket.on('newNotification', (notification) => { this.notifications.unshift(notification) })
+    self.socket.on('notificationRead', (notifications) => { this.notifications = notifications })
   },
   computed: {
     countUnreadNotifications() {
       return !this.$empty(this.notifications) ? this.notifications.length : 0
+    },
+    displayNotifications() {
+      return this.$array.slice(this.notifications, 0, this.$config.maxNotificationsDisplayed)
+    },
+    userRole() {
+      return this.$auth.hasScope('artist') ? 'artist' : 'contractor'
     }
   },
   methods: {
     notificationLink(notification) {
+      if (notification.type === 'role' && this.$auth.hasScope('artist')) { return '/artist/profile' }
+      if (notification.type === 'product' && this.$auth.hasScope('artist')) { return '/artist/products' }
+      if (notification.type === 'proposal') { return `/${this.userRole}/proposals` }
+      if (notification.type === 'presentation') { return `/${this.userRole}/presentations` }
       return '/'
+    },
+    readNotification(notification) {
+      this.socket.emit('read', this.$auth.user, notification)
+      this.$router.push(this.notificationLink(notification))
     }
   }
 }
@@ -114,16 +136,28 @@ export default {
       transition: $transition;
       background: $brandLayer;
       color: $layer2;
+      hr { 
+        transition: $transition;
+        display: none;
+      }
     }
   }
 }
 
 h6 {
   color: $brand;
+  &.no-new-notification {
+    color: $layer5;
+  }
 }
 
 small {
   color: $layer5;
+}
+
+hr {
+  margin: 0;
+  border-top-color: $layer2;
 }
 </style>
 

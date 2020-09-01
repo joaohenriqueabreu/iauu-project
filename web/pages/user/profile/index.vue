@@ -23,8 +23,14 @@
       <div class="boxed">
         <h6>Conecte suas redes sociais</h6>
         <div class="my-4 vertical half-width">
-          <facebook-login></facebook-login>
-          <google-login></google-login>
+          <facebook-login @granted="loginWithFacebook" v-if="!$empty($auth.user.social) && !$auth.user.social.has_connected_with_facebook"></facebook-login>
+          <div v-else class="social facebook">
+              <h6><font-awesome icon="check" class="mr-2"></font-awesome>Conectado com Facebook</h6>
+          </div>
+          <google-login @granted="loginWithGoogle" v-if="!$empty($auth.user.social) && !$auth.user.social.has_connected_with_google"></google-login>
+          <div v-else class="social google">
+              <h6><font-awesome icon="check" class="mr-2"></font-awesome>Conectado com Google</h6>
+          </div>
         </div>
       </div>
     </main>
@@ -85,9 +91,41 @@ export default {
       await this.saveProfile()
       await this.renewAuth()
       this.$toast.success('Foto atualizada!')
-    }
+    },
+    async loginWithFacebook(accessToken) {
+      await this.$auth.loginWith('facebook', {
+        data: {
+          token: accessToken
+        }
+      })
+    },
+    async loginWithGoogle(accessToken) {
+      await this.$auth.loginWith('google', {
+        data: {
+          token: accessToken,
+          provider: 'google'
+        }
+      })
+    },
   }
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+  .social {
+    color: white;
+    opacity: 0.8;
+    border-radius: $rounded;
+    min-width: 250px;
+    padding: 2 * $space;
+    margin-bottom: 2 * $space;
+    box-shadow: $shadow;
+    &.facebook {
+      background-color: #3b5998 !important;
+    }
+
+    &.google {
+      background-color: #dd4b39 !important;
+    }
+  }
+</style>

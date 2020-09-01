@@ -13,9 +13,7 @@ module.exports = class CreateNotificationService extends BaseService
         [undefined, null].includes(to) ||
         !to instanceof User ||
         [undefined, null].includes(message) ||
-        [undefined, null].includes(type) ||
-        [undefined, null].includes(target) ||
-        !target instanceof BaseModel) {
+        [undefined, null].includes(type)) {
           throw new BadRequestException('Informações insuficientes')
         }
 
@@ -60,7 +58,7 @@ module.exports = class CreateNotificationService extends BaseService
     }
 
     ensureTypeIsValid() {
-      if (!['user', 'presentation', 'proposal'].includes(this.type)) {
+      if (!['role', 'product', 'presentation', 'proposal'].includes(this.type)) {
         throw new BadRequestException('Invalid notification type')
       }
 

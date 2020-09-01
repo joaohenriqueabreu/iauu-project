@@ -93,7 +93,7 @@ export default {
   components: {
     SearchResult
   },
-  async asyncData({ store, app, query }) {
+  async asyncData({ store, app, query, $sentry, error }) {
     const filters = store.state.contractor.searchFilters
     if (!app.$empty(query)) {
       filters.term = query.term
@@ -106,7 +106,12 @@ export default {
       }
     }
 
-    await store.dispatch('contractor/searchArtists', filters)
+    try {
+      await store.dispatch('contractor/searchArtists', filters)
+    } catch (e) {
+      $sentry.captureException(e)
+      error({ statusCode: 404, message: 'Não foi possível realizar a pesquisa.' })
+    }
   },
   data() {
     return {

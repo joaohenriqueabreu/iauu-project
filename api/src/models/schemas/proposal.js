@@ -8,7 +8,7 @@ const counterOfferSchema = require('./counterOffer')
 const proposalSchema = new db.Schema({
     title: { type: String },
     price: { type: Number },
-    duration: { type: Number },
+    duration: { type: String },
     timeslots: [timeslotSchema],
     product: productSchema,
     notes: { type: String },

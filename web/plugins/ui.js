@@ -7,9 +7,9 @@ import VueTheMask from 'vue-the-mask'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import { FadeTransition, SlideYDownTransition } from 'vue2-transitions'
 import VueModal from 'vue-js-modal'
-import { ToggleButton } from 'vue-js-toggle-button'
 import LinkPrevue from 'link-prevue'
 import Chat from 'vue-beautiful-chat'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import moment from 'moment'
 
 // Form components
@@ -19,11 +19,12 @@ import AlertMessage from '@/components/layout/alert'
 import Overlay from '@/components/layout/overlay'
 import Carousel from '@/components/layout/carousel'
 import Loading from '@/components/layout/loading'
-import Notification from '@/components/layout/notification'
+import Notifications from '@/components/layout/notifications'
 import MediaViewer from '@/components/media/viewer'
 import MediaThumbnail from '@/components/media/thumbnail'
 import Rating from '@/components/artist/profile/rating'
 import Feedback from '@/components/admin/feedback'
+import Share from '@/components/layout/share'
 
 import LineChart from '@/components/layout/charts/line'
 import StatsDonut from '@/components/layout/charts/statsDonut'
@@ -60,12 +61,12 @@ Vue.use(Chat)
 
 Vue.component('logo', Logo)
 Vue.component('avatar', Avatar)
-Vue.component('toggle-button', ToggleButton)
 Vue.component('overlay', Overlay)
 Vue.component('loading', Loading)
-Vue.component('notification', Notification)
+Vue.component('notifications', Notifications)
 Vue.component('carousel', Carousel)
 Vue.component('slide', Slide)
+Vue.component('scrollbar', VuePerfectScrollbar)
 
 Vue.component('form-input', FormInput)
 Vue.component('form-numeric', FormNumeric)
@@ -96,6 +97,7 @@ Vue.component('media-thumbnail', MediaThumbnail)
 Vue.component('attachment', Attachment)
 Vue.component('rating', Rating)
 Vue.component('feedback', Feedback)
+Vue.component('share', Share)
 
 Vue.component('stats-donut', StatsDonut)
 Vue.component('line-chart', LineChart)

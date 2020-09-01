@@ -1,4 +1,5 @@
 const AuthService = require('./auth')
+const SaveContractorProfileService = require('../contractor/saveProfile')
 
 module.exports = class SaveUserProfileService extends AuthService
 {
@@ -11,9 +12,10 @@ module.exports = class SaveUserProfileService extends AuthService
     async save() {
       await this.searchUserById(this.id)
       await this.validateUser()
-      await this.sanitizeData()
-      await this.populateModel()
+      this.sanitizeData()
+        .populateModel()
       await this.saveUser()
+      await this.updateRoleProfile()
       return this
     }
 
@@ -35,6 +37,18 @@ module.exports = class SaveUserProfileService extends AuthService
       }      
             
       console.log('User ready to save...')
+      return this
+    }
+
+    async updateRoleProfile() {
+      if (this.user.role !== 'contractor') { return this } // only contractor for now
+      console.log('Updating contractor profile...')
+      const saveContractorProfileSvc = new SaveContractorProfileService(
+        { id: this.user.id, role_id: this.user.contractor.id }, 
+        { profile: { name: this.user.name, photo: this.user.photo }}
+      )
+
+      await saveContractorProfileSvc.save()
       return this
     }
 }

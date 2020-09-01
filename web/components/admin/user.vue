@@ -1,7 +1,7 @@
 <template>
   <modal ref="modal">
     <template v-if="!$empty(user)" v-slot:header>
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between p-2">
         <div class="horizontal middle">
           <avatar :src="user.photo" :username="user.name" class="mr-4"></avatar>
           <div class="vertical middle">
@@ -20,7 +20,7 @@
       </div>
     </template>
     <template v-if="!$empty(user)" v-slot:main>
-      <div>
+      <div class="p-2">
         <h4 class="mb-4">Informações</h4>
         <div>ID</div>
         <h6 class="mb-4">{{ user.id }}</h6>
@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div v-if="!$empty(stats)">
+      <div v-if="!$empty(stats)" class="p-2">
         <hr />
         <h4 class="mb-4">Estatísticas</h4>
         <div class="row">
@@ -89,7 +89,7 @@
         </div>
       </div>
       <hr />
-      <div>
+      <div class="p-2">
         <h4 class="mb-4">Gerenciar</h4>
         <div class="row">
           <div v-if="['active', 'pending'].includes(user.status)" class="col-sm-4 mb-4">

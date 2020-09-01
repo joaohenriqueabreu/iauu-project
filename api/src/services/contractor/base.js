@@ -6,7 +6,7 @@ module.exports = class ContractorService extends BaseService
     constructor({ id, role_id }) {
       super()
       this.id = role_id
-      this.userId = id      
+      this.userId = id
       this.contractor = {}
     }
 

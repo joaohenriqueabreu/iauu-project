@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div v-if="!$empty($v)">
+    <div v-if="validationInitialized">
       <div class="bg"></div>
       <form>
         <h5 class="mb-4">Entre</h5>
@@ -15,8 +15,8 @@
         <div class="mb-5"></div>
         <form-button ref="login" @action="login">Login</form-button>
         <div class="mb-5"></div>
-        <facebook-login></facebook-login>
-        <google-login></google-login>
+        <facebook-login @granted="loginWithFacebook"></facebook-login>
+        <google-login @granted="loginWithGoogle"></google-login>
       </form>
       <modal ref="forgotPassword" height="tiny">
         <template v-slot:header>
@@ -82,6 +82,11 @@ export default {
 
     this.$router.push(`/login/social?code=${this.$route.query.code}`)
   },
+  computed: {
+    validationInitialized() {
+      return !this.$empty(this.$v)
+    }
+  },
   methods: {
     ...mapActions('auth', ['login']),
     ...mapActions('protected', ['forgotPassword']),
@@ -100,6 +105,21 @@ export default {
       } catch (error) {
         this.$refs.login.reset()
       }
+    },
+    async loginWithFacebook(accessToken) {
+      await this.$auth.loginWith('facebook', {
+        data: {
+          token: accessToken
+        }
+      })
+    },
+    async loginWithGoogle(accessToken) {
+      await this.$auth.loginWith('google', {
+        data: {
+          token: accessToken,
+          provider: 'google'
+        }
+      })
     },
     openForgotPasswordModal() {
       this.$refs.forgotPassword.open()

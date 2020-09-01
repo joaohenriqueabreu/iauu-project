@@ -34,6 +34,10 @@ module.exports = class GenerateTokenService {
             admin_token: user.admin_token,
             referral_token: user.referral.token,
             requires_initial_setup: this.needsSetup(user),
+            social: {
+                has_connected_with_facebook: user.social.facebook_id !== undefined,
+                has_connected_with_google: user.social.google_id !== undefined
+            },
             iat:    now,            
             exp:    now + tokenExpiration 
         }

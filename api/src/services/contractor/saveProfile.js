@@ -21,7 +21,6 @@ module.exports = class SaveContractorProfileService extends ContractorService
         .sanitizeData()
         .populateModel()
       await this.saveContractor()
-      await this.updateUser()
       return this
     }
 
@@ -46,22 +45,10 @@ module.exports = class SaveContractorProfileService extends ContractorService
 
     populateModel() {
       for (let prop in this.data) {
-        this.contractor[prop] = this.data[prop]        
-      }      
-
-      console.log('Contractor ready to save...')      
-      return this
-    }
-
-    async updateUser() {
-      // Check if we need to save something
-      console.log('Checking if user needs saving...')
-      if (this.contractor.user.photo === this.userData.photo && this.contractor.user.name === this.userData.name) { 
-        return
+        this.contractor[prop] = this.data[prop]
       }
-      console.log('User needs saving...')
-      const saveUserProfileService = new SaveUserProfileService(this.contractor.user, this.userData)
-      await saveUserProfileService.save()
+
+      console.log('Contractor ready to save...')
       return this
     }
 }

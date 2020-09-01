@@ -2,7 +2,7 @@
   <nav :class="{ filled: scrolled }" class="navbar d-flex justify-content-end">
     <div class="mainmenu vertical">
       <div v-if="$auth.loggedIn" class="horizontal mt-2">
-        <product-setup v-if="$auth.hasScope('artist')" class="mr-3"></product-setup>
+        <notifications></notifications>
         <div class="dropdown" data-test="top-menu">
           <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <overlay :rounded="true">
@@ -25,6 +25,9 @@
             <contractor-menu v-if="$auth.hasScope('contractor')"></contractor-menu>
             <nuxt-link to="/user/profile">
               <h6>Perfil</h6>
+            </nuxt-link>
+            <nuxt-link to="/user/notifications">
+              <h6>Notificações</h6>
             </nuxt-link>
             <nuxt-link to="/logout">
               <h6>Sair</h6>

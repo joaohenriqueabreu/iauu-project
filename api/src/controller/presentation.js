@@ -110,6 +110,10 @@ class PresentationController extends BaseController {
       .then(() => { res.status(200).json(cancelPresentationService.getPresentation()) })
       .catch((error) => next(error))
   }
+
+  getTypes(req, res, next) {  
+    res.status(200).json(['anos 70', 'anos 80', 'anos 90', 'casamento', 'festa infantil', 'festa de 15 anos'])
+  }
 }
 
 module.exports = new PresentationController()

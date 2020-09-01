@@ -1,23 +1,21 @@
 <template>
   <div>
-    <v-modal
-      :name="name"
-      :adaptive="true"
-      :click-to-close="true"
-      height="auto"
-      @before-open="disableBodyScroll"
-      @before-close="enableBodyScroll"
-    >
-      <div class="modal-content" :class="height">
+    <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">
+    <!-- TODO This is breaking artist profile page, not showing scrollbar - investigate -->
+    <!-- @before-open="disableBodyScroll"
+    @before-close="enableBodyScroll" -->
+      <div class="modal-content" :class="[height, noPad ? 'no-pad' : '']">
         <header v-show="!hideHeader" :class="headerCustomHeight">
           <div class="close" @click="close">
             <font-awesome icon="times"></font-awesome>
           </div>
           <slot name="header"></slot>
         </header>
-        <main :class="height">
-          <slot name="main"></slot>
-        </main>
+        <scrollbar>
+          <main :class="height">
+            <slot name="main"></slot>
+          </main>
+        </scrollbar>
         <footer :class="height">
           <slot name="footer"></slot>
         </footer>
@@ -35,7 +33,8 @@ export default {
   props: {
     height: { type: String, default: 'regular' },
     headerHeight: { type: String, default: null },
-    hideHeader: { type: Boolean, default: false }
+    hideHeader: { type: Boolean, default: false },
+    noPad: { type: Boolean, default: false }
   },
   computed: {
     name: () => v4(),
@@ -51,12 +50,12 @@ export default {
     close() {
       this.$modal.hide(this.name)
     },
-    disableBodyScroll() {
-      document.getElementsByTagName('body')[0].classList.add('disable-scroll')
-    },
-    enableBodyScroll() {
-      document.getElementsByTagName('body')[0].classList.remove('disable-scroll')
-    }
+    // disableBodyScroll() {
+    //   document.getElementsByTagName('body')[0].classList.add('disable-scroll')
+    // },
+    // enableBodyScroll() {
+    //   document.getElementsByTagName('body')[0].classList.remove('disable-scroll')
+    // }
   }
 }
 </script>
@@ -82,7 +81,12 @@ export default {
 .modal-content {
   z-index: $above;
   background: $layer2;
+  position: relative;
+
   padding: 2 * $space;
+  &.no-pad {
+    padding: 0;
+  }
 
   // &.tiny {
   //   height: 50vh;
@@ -137,10 +141,19 @@ export default {
     &.regular {
       height: 75vh;
     }
+
+    margin-bottom: 10vh;
   }
 
   footer {
-    position: relative;
+    @extend .vertical, .middle;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: $above;
+    background: $layer2;
+    width: 100%;
+
     &.tiny {
       height: 5vh;
     }

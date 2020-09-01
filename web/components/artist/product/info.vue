@@ -27,7 +27,7 @@
           </span>
           <span>
             <font-awesome icon="clock" class="mr-1"></font-awesome>
-            {{ product.duration }} horas
+            {{ product.duration | longTime }}
           </span>
         </div>
         <div v-if="!proposalView" class="description one-line">
@@ -51,7 +51,7 @@
         </div>
         <div v-if="!proposalView" class="vertical middle center">
           <form-button class="mb-3" @action="editProduct">Modificar</form-button>
-          <h6 class="clickable" @click="openPreviewModal">Preview</h6>
+          <h6 class="clickable" @click="previewProduct">Preview</h6>
         </div>
         <!-- <div v-else class="vertical middle center"> -->
         <!-- <form-button class="mb-3" @action="$emit('selected', product)">Selecionar</form-button> -->
@@ -59,17 +59,12 @@
         <!-- </div> -->
       </div>
     </div>
-    <product-preview v-if="!proposalView" ref="preview"></product-preview>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import ProductPreview from '@/components/artist/product/preview'
 export default {
-  components: {
-    'product-preview': ProductPreview
-  },
   props: {
     product: { type: Object, default: () => {} },
     proposalView: { type: Boolean, default: false },
@@ -87,6 +82,9 @@ export default {
     editProduct() {
       this.$emit('edit', this.product)
     },
+    previewProduct() {
+      this.$emit('preview', this.product)
+    },
     copyProduct() {
       const product = this.$object.clone(this.product)
       product.id = null
@@ -103,9 +101,6 @@ export default {
       const product = this.$object.clone(this.product)
       product.photo = url
       await this.saveProduct(product)
-    },
-    openPreviewModal() {
-      this.$refs.preview.openModal(this.product, this.notItems)
     }
   }
 }

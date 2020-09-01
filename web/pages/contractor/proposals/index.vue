@@ -24,7 +24,7 @@
     </div>
     <div v-if="presentations.length === 0" class="mb-4">
       Nenhuma proposta enviada
-      <nuxt-link to="search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
+      <nuxt-link to="/search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
     </div>
     <!-- Data loaded from state -->
     <proposal-details

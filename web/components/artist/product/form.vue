@@ -18,19 +18,19 @@
             <div class="vertical middle center col-sm-6">
               <h6 class="mr-3">Preço para Contratar</h6>
               <form-money v-model="$v.product.price.$model" class="mr-2" placeholder="100,00"></form-money>
-              <form-validation :active="$v.product.price.$error" class="mb-4">Forneça um preço válido</form-validation>
+              <form-validation :active="$v.product.price.$error" class="mb-4">Entre com um preço válido</form-validation>
             </div>
             <div class="vertical middle center col-sm-6">
               <h6 class="mr-3">Duração da Apresentação</h6>
-              <form-numeric v-model="$v.product.duration.$model" icon="clock" placeholder="4 horas"></form-numeric>
-              <form-validation :active="$v.product.duration.$error" class="mb-4">Forneça um preço válido</form-validation>
+              <form-time ref="duration" v-model="$v.product.duration.$model" icon="clock" placeholder="4:00"></form-time>
+              <form-validation :active="$v.product.duration.$error" class="mb-4">Entre com uma duração válida</form-validation>
             </div>
           </div>
           <div class="vertical middle mb-5">
             <div class="mb-5">
               <h6 class="mb-2">Adicionar items</h6>
               <small>Liste aqui os itens deste formato</small>
-              <form-validation :active="$v.product.items.$invalid" class="mb-4">Forneça pelo menos 1 item</form-validation>
+              <form-validation :active="$v.product.items.$invalid" class="mb-4">Adicione ao menos 1 item</form-validation>
               <div class="horizontal middle justify-content-between mb-2">
                 <form-input v-model="newItem" class="full-width" icon="list-ol" placeholder="Iluminação, Apresentação, Fogos de Artifício, etc..." @enter="addItem"></form-input>
                 <font-awesome icon="plus" class="ml-5 clickable" @click="addItem"></font-awesome>
@@ -116,10 +116,15 @@
 </template>
 
 <script>
-import { required, minValue, numeric, minLength } from 'vuelidate/lib/validators'
+import { required, minValue, numeric, minLength, contains, helpers } from 'vuelidate/lib/validators'
 import * as filestack from 'filestack-js'
 import Product from '@/models/product'
 import Media from '@/models/media'
+
+function minTime(value) {
+  return this.$date.convertTimeToNumber(value) >= this.$config.minDurationInMinutes
+}
+
 export default {
   data() {
     return {
@@ -133,7 +138,7 @@ export default {
     product: {
       name: { required },
       price: { required, numeric, minValue: minValue(1) },
-      duration: { required, numeric, minValue: minValue(1) },
+      duration: { required, minTime },
       items: { required, minLength: minLength(1) }
     }
   },
@@ -172,6 +177,10 @@ export default {
       this.client.picker(options).open()
     },
     documentUploaded({ filesUploaded }) {
+      if (this.$empty(this.product.documents)) {
+        this.product.documents = []
+      }
+
       this.product.documents.push(this.getMediaFromUpload(filesUploaded[0]))
     },
     getMediaFromUpload(file) {
@@ -185,9 +194,7 @@ export default {
       this.$delete(this.product.documents, index)
     },
     uploadMedia() {
-      if (this.$utils.empty(this.newMedia.url)) {
-        return
-      }
+      if (this.$utils.empty(this.newMedia.url)) { return }
 
       this.product.medias.push(this.newMedia)
       this.newMedia = new Media()

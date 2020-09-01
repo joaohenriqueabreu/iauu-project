@@ -108,6 +108,15 @@ const social = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const social2 = (req, res, next) => {
+  const schema = validateRequest.object({
+    token: validateRequest.string().required(),
+    provider: validateRequest.string().required()
+  })
+
+  return validate(req.body, req, next, schema)
+}
+
 const id = (req, res, next) => {
   const schema = validateRequest.object({
     id: validateRequest.string().required()    
@@ -195,6 +204,14 @@ const counterOffer = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const category = (req, res, next) => {
+  const schema = validateRequest.object({
+    category: validateRequest.string().required()
+  })
+
+  return validate(req.params, req, next, schema)
+}
+
 module.exports = { 
   id,
   query,  
@@ -202,6 +219,7 @@ module.exports = {
   slug,
   token,
   social,
+  social2,
   newCrendentials, 
   credentials, 
   adminCredentials,
@@ -215,5 +233,6 @@ module.exports = {
   schedule,
   timeslot,
   proposal,
-  counterOffer
+  counterOffer,
+  category
  }

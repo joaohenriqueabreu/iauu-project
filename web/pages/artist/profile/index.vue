@@ -29,6 +29,16 @@
               </a>
             </li>
             <li class="nav-link">
+              <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
+                Estilo
+              </a>
+            </li>
+            <li class="nav-link">
+              <a class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'">
+                Tipos de eventos
+              </a>
+            </li>
+            <li class="nav-link">
               <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'">
                 Redes Sociais
               </a>
@@ -38,20 +48,10 @@
                 Integrantes
               </a>
             </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
-                Categorias
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: tagsTab }" @click="activeTab = 'tags'">
-                Pesquisa
-              </a>
-            </li>
           </ul>
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
             <fade-transition mode="out-in">
-              <profile-stats v-show="statsTab" key="stats"></profile-stats>
+              <profile-stats v-if="statsTab" key="stats"></profile-stats>
             </fade-transition>
             <fade-transition mode="out-in">
               <presentation-config v-show="presentationsTab" ref="presentations"></presentation-config>
@@ -60,17 +60,16 @@
               <artist-users v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-users>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-info v-show="infoTab" ref="info"></artist-info>
+              <artist-info v-if="infoTab" ref="info"></artist-info>
             </fade-transition>
             <fade-transition mode="out-in">
-              <social-networks v-show="socialTab" ref="social" key="social"></social-networks>
+              <social-networks v-if="socialTab" ref="social" key="social"></social-networks>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-categories v-show="catTab" key="categories" :categories="categories">
-              </artist-categories>
+              <artist-categories v-if="catTab" key="categories" :categories="categories"></artist-categories>
             </fade-transition>
             <fade-transition mode="out-in">
-              <search-tags v-show="tagsTab" key="tags"></search-tags>
+              <presentation-types v-if="typesTab" :options="presentationTypes" key="types"></presentation-types>
             </fade-transition>
           </div>
         </div>
@@ -89,11 +88,11 @@ import { mapFields } from 'vuex-map-fields'
 import { mapActions, mapState, mapMutations } from 'vuex'
 import ProfileStats from '@/components/artist/profile/stats'
 import ArtistInfo from '@/components/artist/profile/info'
-import PresentationConfig from '@/components/artist/profile/presentations'
+import PresentationConfig from '@/components/artist/profile/presentationsConfig'
 import ArtistUsers from '@/components/artist/profile/users'
 import SocialNetworks from '@/components/artist/profile/social'
 import ArtistCategories from '@/components/artist/profile/categories'
-import SearchTags from '@/components/artist/profile/tags'
+import PresentationTypes from '@/components/artist/profile/presentationTypes'
 export default {
   components: {
     ProfileStats,
@@ -102,15 +101,17 @@ export default {
     ArtistUsers,
     SocialNetworks,
     ArtistCategories,
-    SearchTags
+    PresentationTypes
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
       await store.dispatch('artist/loadArtist')
       const catResponse = await app.$axios.get('categories')
+      const presentationTypesResponse = await app.$axios.get('presentations/types')
       const roleIdResponse = await app.$axios.get('/users/exchange')
       return { 
         categories: catResponse.data,
+        presentationTypes: presentationTypesResponse.data,
         shareableId:  roleIdResponse.data
       }
     } catch (e) {
@@ -147,8 +148,8 @@ export default {
     catTab() {
       return this.activeTab === 'categories'
     },
-    tagsTab() {
-      return this.activeTab === 'tags'
+    typesTab() {
+      return this.activeTab === 'types'
     },
     backgroundImg() {
       return !this.$utils.empty(this.background)

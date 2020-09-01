@@ -5,6 +5,7 @@ const presentationController = require('../controller/presentation')
 const authorizationMiddleware = require('../middleware/authorization')
 const validationMiddleware = require('../middleware/validation')
 
+api.get('/types', presentationController.getTypes)
 api.get('/', authorizationMiddleware.authorize, presentationController.searchPresentations)
 api.get('/proposals', authorizationMiddleware.authorize, presentationController.searchProposals)
 

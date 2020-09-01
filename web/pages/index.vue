@@ -2,7 +2,7 @@
   <div>
     <div class="section main"></div>
     <div class="section search">
-      <h1 class="text-center">Aperte o play em seu evento</h1>
+      <h1 class="text-center mb-4">Aperte o play em seu evento</h1>
       <div class="half-width vertical middle center">
         <client-only>
           <search-artist @search="search"></search-artist>
@@ -11,10 +11,10 @@
       </div>
     </div>
     <div class="section even">
-      <h1>Todo mundo faz iauu</h1>
+      <h1>Todo mundo faz iauü</h1>
     </div>
     <div class="section odd">
-      <h1>Por que iauu?</h1>
+      <h1>Por que iauü?</h1>
     </div>
     <div class="section even">
       <h1>Queridinhos da galera</h1>

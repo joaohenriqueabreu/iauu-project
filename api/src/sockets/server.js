@@ -14,25 +14,28 @@ const eventHandler = require('../events/handler')
 io.of('/notifications').on('connection', (socket) => {
   console.log('User connected for notifications...')
 
-  // Fetch existing user notifications
-  socket.on('login', async (user) => {
+  // Fetch existing socketUser notifications
+  socket.on('login', async (socketUser) => {
     console.log('User logged in...')
-    const searchUnreadNotificationsSvc = new SearchUnreadNotificationsService(user)
+    const searchUnreadNotificationsSvc = new SearchUnreadNotificationsService(socketUser)
     searchUnreadNotificationsSvc.search()
       .then(() => socket.emit('unreadNotifications', searchUnreadNotificationsSvc.getNotifications()))
       .catch((error) => socket.emit('error', 'Failed getting unread notifications'))
 
     eventHandler.on('newNotification', (user, notification) => {
+      // Only owners should see their own notifications (this is not very nice TODO search alternative solution)
+      if (socketUser.id !== user.id) { return }
       console.log('received new notification event...')
       notification.message = 'Another notification'
       socket.emit('newNotification', notification)
     })
   })
 
-  socket.on('read', (notification) => {
-    const markNotificationReadSvc = new MarkNotificationReadService(user, notification)
+  socket.on('read', (socketUser, notification) => {
+    console.log('Marking notification read')
+    const markNotificationReadSvc = new MarkNotificationReadService(socketUser, notification)
     markNotificationReadSvc.markRead()
-      .then(() => console.log('Marked notification read...'))
+      .then(() => socket.emit('notificationRead', markNotificationReadSvc.getNotifications()))
       .catch((error) => socket.emit('error', 'Failed marking notification read'))
   })
 
