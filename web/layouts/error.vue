@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     bgImage() {
-      return require('@/assets/imgs/error.jpg')
+      return this.$images('error.jpg')
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <img class="logo" src="@/assets/imgs/logo.png" :style="`height: ${height}px; width: ${width}px`"/>
+  <img class="logo" :src="logoURL" :style="`height: ${height}px; width: ${width}px`"/>
   <!-- <svg
     class="logo"
     :width="width"
@@ -29,6 +29,9 @@ export default {
   props: {
     height: { type: Number, default: 180 },
     width: { type: Number, default: 240 }
+  },
+  computed: {
+    logoURL() { return this.$images('logo.png') }
   }
 }
 </script>

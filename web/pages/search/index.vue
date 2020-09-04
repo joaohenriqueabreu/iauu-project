@@ -1,7 +1,14 @@
 <template>
   <div>
-    <div class="px-4 pb-4">
-      <h4>Artistas encontrados</h4>
+    <div class="px-4 pb-4 row horizontal middle">
+      <div class="col-sm-4 col-md-2">
+        <h4 class="pr-4">Artistas encontrados</h4>
+      </div>
+      <div class="col-sm-6 col-md-8">
+        <form-input v-model="term" class="full-width" placeholder="Aniversário, Casamento, Rock Anos 80, ..." @enter="filter" @blur="filter">
+        </form-input>
+      </div>
+      <div class="col-sm-2"></div>
     </div>
     <div class="search-results" v-if="!$empty(artists)">
       <div v-for="(artist, index) in artists" :key="index" class="px-4 mb-4">
@@ -16,10 +23,10 @@
       <client-only>
         <fade-transition>
           <div v-if="!selectingFilter" class="filters d-flex justify-content-around">
-            <div class="vertical middle center" :class="{ applied: isFilterApplied('term') }" @click="showSearchFilter">
+            <!-- <div class="vertical middle center" :class="{ applied: isFilterApplied('term') }" @click="showSearchFilter">
               <font-awesome icon="search" class="mb-2"></font-awesome>
               <h6>Pesquisa livre</h6>
-            </div>
+            </div> -->
             <div class="vertical middle center" @click="showLocationFilter" :class="{ applied: isFilterApplied('location') }">
               <font-awesome icon="map-marker-alt" class="mb-2"></font-awesome>
               <h6>Filtrar localização</h6>
@@ -34,14 +41,6 @@
             </div>
           </div>
           <div v-else class="horizontal center middle">
-            <form-input
-              v-show="currentFilter === 'term'"
-              v-model="term"
-              class="search-filter"
-              label="Pesquisa livre"
-              placeholder="Aniversário, Casamento, Rock Anos 80, ..."
-              @enter="filter"
-            ></form-input>
             <form-location
               v-show="currentFilter === 'location'"
               v-model="location"
@@ -201,7 +200,7 @@ export default {
   }
 
   .search-filter {
-    width: 40vw;
+    // width: 40vw;
     margin-right: 2 * $space;
   }
 

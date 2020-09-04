@@ -79,6 +79,7 @@ export default {
     { src: '@/plugins/utils' },
     { src: '@/plugins/icons' },
     { src: '@/plugins/data' },
+    { src: '@/plugins/cdn' },
     { src: '@/plugins/dictionary' },
     { src: '@/plugins/ui', mode: 'client' },
     { src: '@/plugins/fullCalendar', mode: 'client' },

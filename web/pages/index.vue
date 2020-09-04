@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="section main"></div>
+    <div class="section main" :style="`background-image: url('${homeBG}');`"></div>
     <div class="section search">
       <h1 class="text-center mb-4">Aperte o play em seu evento</h1>
       <div class="half-width vertical middle center">
@@ -56,6 +56,9 @@ export default {
       this.$router.push('/role/whoareyou')
     }
   },
+  conputed: {
+    homeBG() { return this.$images('home.jpg') }
+  },
   methods: {
     search(term) {
       console.log(term)
@@ -75,7 +78,6 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/imgs/home.jpg');
     height: 110vh;
     width: 100%;
     opacity: 0.2;

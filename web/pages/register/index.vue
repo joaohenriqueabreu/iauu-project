@@ -109,7 +109,7 @@ export default {
         this.$router.push('/register/verify')
       } catch (error) {
         this.$sentry.captureException(error)
-        this.error = error
+        this.$toast.error(error)
       }
     },
     async loginWithFacebook(accessToken) {
@@ -118,7 +118,15 @@ export default {
           token: accessToken
         }
       })
-    }
+    },
+    async loginWithGoogle(accessToken) {
+      await this.$auth.loginWith('google', {
+        data: {
+          token: accessToken,
+          provider: 'google'
+        }
+      })
+    },
   }
 }
 </script>
@@ -155,14 +163,6 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: -10vh;
-
-    &.artist {
-      background-image: url('~assets/imgs/general/artist-signup.jpg');
-    }
-
-    &.contractor {
-      background-image: url('~assets/imgs/general/contractor-signup.jpg');
-    }
   }
 }
 

@@ -55,11 +55,6 @@
 </template>
 
 <script>
-import CloseIcon from '@/assets/imgs/chat/close-icon.png'
-import OpenIcon from '@/assets/imgs/chat/logo-no-bg.svg'
-import FileIcon from '@/assets/imgs/chat/file.svg'
-import CloseIconSvg from '@/assets/imgs/chat/close.svg'
-
 export default {
   props: {
     presentation: { type: Object, default: () => {} }
@@ -70,10 +65,10 @@ export default {
       socket: {},
       messageList: [],
       icons: {
-        open: { img: OpenIcon, name: 'default' },
-        close: { img: CloseIcon, name: 'default' },
-        file: { img: FileIcon, name: 'default' },
-        closeSvg: { img: CloseIconSvg, name: 'default' }
+        open: { img: this.openIcon, name: 'default' },
+        close: { img: this.closeIcon, name: 'default' },
+        file: { img: this.fileIcon, name: 'default' },
+        closeSvg: { img: this.closeIconSvg, name: 'default' }
       },
       titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
       newMessagesCount: 0,
@@ -93,6 +88,10 @@ export default {
     }
   },
   computed: {
+    closeIcon() { return this.$images('chat/close-icon.png')},
+    openIcon() { return this.$images('chat/logo-no-bg.svg')},
+    fileIcon() { return this.$images('chat/file.svg')},
+    closeIconSvg() { return this.$images('chat/close.svg')},
     participants() {
       return [
         {

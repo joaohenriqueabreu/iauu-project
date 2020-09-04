@@ -41,30 +41,30 @@ export default {
     },
     networkIcon() {
       if (this.isSocialMatch(this.url, this.$config.youtubeSubstringMatch)) {
-        return require('@/assets/imgs/social/youtube.png')
+        return this.$images('social/youtube.png')
       }
 
       if (this.isSocialMatch(this.url, this.$config.tiktokSubstringMatch)) {
-        return require('@/assets/imgs/social/tiktok.png')
+        return this.$images('social/tiktok.png')
       }
 
       if (this.isSocialMatch(this.url, this.$config.spotifySubstringMatch)) {
-        return require('@/assets/imgs/social/spotify.png')
+        return this.$images('social/spotify.png')
       }
 
       if (this.isSocialMatch(this.url, this.$config.instagramSubstringMatch)) {
-        return require('@/assets/imgs/social/instagram.png')
+        return this.$images('social/instagram.png')
       }
 
       if (this.isSocialMatch(this.url, this.$config.vimeoSubstringMatch)) {
-        return require('@/assets/imgs/social/vimeo.png')
+        return this.$images('social/vimeo.png')
       }
 
       if (this.isSocialMatch(this.url, this.$config.facebookSubstringMatch)) {
-        return require('@/assets/imgs/social/facebook.png')
+        return this.$images('social/facebook.png')
       }
 
-      return require('@/assets/imgs/music.png')
+      return this.$images('music.png')
     }
   },
   async mounted() {

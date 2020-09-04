@@ -4,15 +4,9 @@
     <modal ref="modal">
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
-          <div
-            v-if="!$empty(presentation.artist)"
-            class="horizontal middle"
-          >
-            <avatar
-              v-if="!$empty(presentation.artist.photo)"
-              :src="presentation.artist.photo"
-              :username="presentation.artist.name"
-            ></avatar>
+          <div v-if="!$empty(presentation.artist)" class="horizontal middle">
+            <avatar v-if="!$empty(presentation.artist.photo)" :src="presentation.artist.photo" :username="presentation.artist.name" class="mr-4">
+            </avatar>
             <div class="vertical middle">
               <h6>Proposta enviada para</h6>
               <h5>{{ presentation.artist.name }}</h5>

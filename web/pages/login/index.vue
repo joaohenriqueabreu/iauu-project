@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div v-if="validationInitialized">
-      <div class="bg"></div>
+      <div class="bg" :style="`background-image: url('${loginBG}');`"></div>
       <form>
         <h5 class="mb-4">Entre</h5>
         <form-email v-model="$v.credentials.email.$model"></form-email>
@@ -83,6 +83,7 @@ export default {
     this.$router.push(`/login/social?code=${this.$route.query.code}`)
   },
   computed: {
+    loginBG() { return this.$images('concert.png') },
     validationInitialized() {
       return !this.$empty(this.$v)
     }
@@ -169,7 +170,6 @@ form {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/imgs/concert.png');
     height: 100%;
     width: 100%;
     opacity: 0.2;

@@ -25,10 +25,10 @@ export default {
   computed: {
     attachmentIcon() {
       if (this.file.type.includes(this.$config.pdfSubstringMatch)) {
-        return require('@/assets/imgs/social/pdf.png')
+        return this.$images('social/pdf.png')
       }
 
-      return require('@/assets/imgs/music.png')
+      return this.$images('music.png')
     },
     fileDisplay() {
       if (!this.$utils.empty(this.file)) {

@@ -130,7 +130,7 @@ export default {
   computed: {
     ...mapState({ artist: (state) => state.contractor.artist }),
     bgImage() {
-      return require('@/assets/imgs/concert.png')
+      return this.$images('concert.png')
     },
     socialMedias() {
       return this.$array.slice(this.artist.social, 0, 4)

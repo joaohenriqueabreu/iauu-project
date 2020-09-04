@@ -83,9 +83,9 @@ export default {
     },
     categoryImg(item) {
       try {
-        return require(`@/assets/imgs/categories/${item}.jpg`)
+        return this.$images(`categories/${item}.jpg`)
       } catch (error) {
-        return require('@/assets/imgs/concert.png')
+        return this.$images('concert.png')
       }
     },
     isCategorySelected(name) {

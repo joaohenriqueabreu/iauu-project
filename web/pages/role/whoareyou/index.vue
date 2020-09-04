@@ -1,16 +1,21 @@
 <template>
   <div class="signup">
-    <div class="user artist" @click="$router.push('/role/artist')">
+    <div class="user artist" @click="$router.push('/role/artist')" :style="`background-image: url('${artistBG}')`">
       <h3>Sou um artista e quero receber contatos para shows</h3>
     </div>
-    <div class="user contractor" @click="$router.push('/role/contractor')">
+    <div class="user" @click="$router.push('/role/contractor')" :style="`background-image: url('${contractorBG}');`">
       <h3>Sou um produtor ou estou organizando um evento e quero contratar artistas</h3>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  computed: {
+    artistBG() { return this.$images('general/artist-signup.jpg') },
+    contractorBG () { return this.$images('general/contractor-signup.jpg') }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -65,15 +70,9 @@ export default {}
   }
 
   .artist {
-    background-image: url('~assets/imgs/general/artist-signup.jpg');
-
     @include mobile {
       margin-top: -10vh;
     }
-  }
-
-  .contractor {
-    background-image: url('~assets/imgs/general/contractor-signup.jpg');
   }
 }
 </style>

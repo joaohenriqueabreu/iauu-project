@@ -57,7 +57,7 @@ export default {
   computed: {
     bgImage() {
       if (!this.$utils.empty(this.artist.background)) { return this.artist.background }
-       return require('@/assets/imgs/concert.png')
+       return this.$images('concert.png')
     },
     rateMin() {
       return Math.round(this.artist.score * 0.5)

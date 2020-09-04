@@ -4,8 +4,8 @@ const config = {
   timeFormat: 'HH:mm',
   alertTimer: 3000,
   closePresentationDeadline: 15,
-  defaultBGImgUrl: require('@/assets/imgs/concert.png'),
-  defaultAvatarImgUrl: require('@/assets/imgs/music.png'),
+  defaultBGImgUrl: `${process.env.CDN_STATIC_ASSETS}/concert.png`,
+  defaultAvatarImgUrl: `${process.env.CDN_STATIC_ASSETS}/music.png`,
 
   // Substrings to match url pattern and identify social media
   facebookSubstringMatch: ['facebook'],
