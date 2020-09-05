@@ -80,6 +80,19 @@ const convertTimeToNumber = (time) => {
   return parts[0] * 60 + parts[1]
 }
 
+const linkPreview = {
+  youtubeData: async (url) => {
+    // url expected format
+    // https://www.youtube.com/watch?v=yHafN0M2kl0&t=45s
+    let videoId = url.split('v=')[1]
+    const ampersandPosition = videoId.indexOf('&')
+    if(ampersandPosition != -1) { videoId = videoId.substring(0, ampersandPosition) }
+
+    const data = await this.$axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}`)
+    console.log(data)
+  }
+}
+
 // Registering custom filters
 Vue.filter('date', dateFilter)
 Vue.filter('longDate', longDateFilter)
@@ -99,4 +112,5 @@ export default ({ app }, inject) => {
   inject('csv', { download: downloadCsv, convert: convertToCsv })
   inject('copyToClipboard', copyToClipboard)
   inject('date', { convertTimeToNumber })
+  inject('linkPreview', { linkPreview })
 }

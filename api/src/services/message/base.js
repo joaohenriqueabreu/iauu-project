@@ -12,6 +12,7 @@ module.exports = class BaseMessageService extends BaseService
       }
 
       this.id = data.id
+      this.user = user
       this.thread = {}
     }
 

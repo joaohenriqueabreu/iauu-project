@@ -71,6 +71,7 @@ export default {
     // Use proxy server to bypass CORS restriction
     try {
       this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.url}`)
+      // this.link = await this.$linkPreview(this.url)
     } catch (error) {
       this.$sentry.captureException(error)
     }
@@ -137,7 +138,16 @@ a {
 }
 
 .preview {
-  @extend .vertical;
+  @include desktop {
+    display: flex;
+    flex-direction: row;
+  }
+
+  @include mobile {
+    display: flex;
+    flex-direction: column;
+  }
+  
   width: 100%;
   height: 100%;
 

@@ -60,11 +60,11 @@ io.of('/chat').on('connection', (socket) => {
       })
   })
 
-  socket.on('send', (message) => {
+  socket.on('send', (user, message) => {
     console.log('New message received...')
 
     // TODO validate users on message
-    const saveMessageService = new SaveMessageService(null, { id: room, message: message })
+    const saveMessageService = new SaveMessageService(user, { id: room, message: message })
     saveMessageService.save()
       .then(() => { io.of('/chat').to(room).emit('received', saveMessageService.getLatestMessage()) })
       .catch((error) => socket.emit('error', 'Failed to save message'))

@@ -15,7 +15,7 @@
     <div v-if="!avatar && loaded" class="simple-container d-flex justify-content-between">
       <div class="horizontal middle">
         <!-- <avatar :size="50" :src="networkIcon" class="mr-4"></avatar> -->
-        <a :href="link" target="_blank">
+        <a :href="media.url" target="_blank">
           <!-- <h6>{{ url }}</h6> -->
           <link-preview :url="url">
             <template slot-scope="props">

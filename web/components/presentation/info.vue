@@ -11,7 +11,7 @@
           <font-awesome icon="clock" class="mr-2"></font-awesome>
           {{ presentationDate | time }}
         </h6>
-        <span class="">
+        <span class="" v-if="!$empty(presentation.address)">
           <font-awesome icon="map-marker-alt" class="mr-2"></font-awesome>
           {{ presentation.address.display }}
         </span>

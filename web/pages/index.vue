@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="section main" :style="`background-image: url('${homeBG}');`"></div>
+    <client-only>
+      <div class="section main" :style="`background-image: url('${homeBG}');`" v-if="!$empty(homeBG)"></div>
+    </client-only>
     <div class="section search">
       <h1 class="text-center mb-4">Aperte o play em seu evento</h1>
       <div class="half-width vertical middle center">

@@ -7,7 +7,8 @@ export default {
     fileStackApiKey: process.env.FILESTACK_API_KEY,
     googleAnalyticsKey: process.env.GOOGLE_ANALYTICS_KEY,
     googleClientId: process.env.GOOGLE_CLIENT_ID,
-    facebookPixelKey: process.env.FACEBOOK_PIXEL_KEY
+    facebookPixelKey: process.env.FACEBOOK_PIXEL_KEY,
+    cdnStaticAssetsDomain: process.env.CDN_STATIC_ASSETS_DOMAIN
   },
   /*
    ** Headers of the page

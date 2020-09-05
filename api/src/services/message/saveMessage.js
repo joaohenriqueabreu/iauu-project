@@ -13,9 +13,11 @@ module.exports = class SaveMessageService extends BaseMessageService
 
   async save() {
     await this.searchThread()
-    await this.createIfFirstMessage()
-    await this.isValidMessage()
-    await this.appendNewMessage()
+    this.createIfFirstMessage()
+      .isValidMessage()
+      .appendNewMessage()
+      .setUser()
+    
     await this.saveMessage()
     return this
   }
@@ -37,6 +39,11 @@ module.exports = class SaveMessageService extends BaseMessageService
   appendNewMessage() {
     console.log('Appending latest message...')
     this.thread.messages.push(this.message)
+    return this
+  }
+
+  setUser() {
+    this.message.author.id = this.user.id
     return this
   }
 

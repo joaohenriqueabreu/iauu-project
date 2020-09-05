@@ -30,14 +30,16 @@
           </avatar>
           <div class="vertical">
             <h6>{{ otherParty.name }}</h6>
-            <span class="horizontal middle"
-              ><span class="mr-2">{{ presentation.proposal.title }}</span
-              ><span v-if="presentation.status === 'proposal'"><u>Proposta</u></span></span
-            >
-            <span class="horizontal middle"
-              ><font-awesome icon="calendar-alt" class="mr-2"></font-awesome
-              >{{ presentationDate | date }}</span
-            >
+            <!-- <span class="horizontal middle"> -->
+            <span class="mr-2">{{ presentation.proposal.title }}</span>
+            <!-- <span v-if="presentation.status === 'proposal'"> -->
+              <!-- <u>Proposta</u> -->
+            <!-- </span> --> 
+            <!-- </span> -->
+            <span class="horizontal middle">
+              <font-awesome icon="calendar-alt" class="mr-2"></font-awesome>
+              {{ presentationDate | date }}
+            </span>
           </div>
         </div>
       </template>
@@ -55,6 +57,12 @@
 </template>
 
 <script>
+// Using icons as computed props is not working for chat, render prior
+const openIcon = `${process.env.cdnStaticAssetsDomain}/chat/logo-no-bg.svg`
+const closeIcon = `${process.env.cdnStaticAssetsDomain}/chat/close-icon.png`
+const fileIcon = `${process.env.cdnStaticAssetsDomain}/chat/file.svg`
+const closeIconSvg = `${process.env.cdnStaticAssetsDomain}/chat/close.svg`
+
 export default {
   props: {
     presentation: { type: Object, default: () => {} }
@@ -65,10 +73,10 @@ export default {
       socket: {},
       messageList: [],
       icons: {
-        open: { img: this.openIcon, name: 'default' },
-        close: { img: this.closeIcon, name: 'default' },
-        file: { img: this.fileIcon, name: 'default' },
-        closeSvg: { img: this.closeIconSvg, name: 'default' }
+        open: { img: openIcon, name: 'default' },
+        close: { img: closeIcon, name: 'default' },
+        file: { img: fileIcon, name: 'default' },
+        closeSvg: { img: closeIconSvg, name: 'default' }
       },
       titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
       newMessagesCount: 0,
@@ -88,10 +96,6 @@ export default {
     }
   },
   computed: {
-    closeIcon() { return this.$images('chat/close-icon.png')},
-    openIcon() { return this.$images('chat/logo-no-bg.svg')},
-    fileIcon() { return this.$images('chat/file.svg')},
-    closeIconSvg() { return this.$images('chat/close.svg')},
     participants() {
       return [
         {
@@ -136,20 +140,19 @@ export default {
       self.authorized = true
       if (!self.$empty(messages)) {
         messages.forEach((message) => {
-          self.messageList.push(self.parseMyMessage(message))
+          self.messageList.push(self.parseMessageAuthor(message))
         })
       }
     })
 
     self.socket.on('received', (message) => {
       console.log(message)
-      self.messageList.push(self.parseMyMessage(message))
+      self.messageList.push(self.parseMessageAuthor(message))
     })
   },
   methods: {
-    parseMyMessage(message) {
-      message.author =
-        !this.$empty(message.author) && message.author.id === this.$auth.role_id
+    parseMessageAuthor(message) {
+      message.author = !this.$empty(message.author) && message.author.id === this.$auth.user.id
           ? 'me'
           : message.author.name
 
@@ -164,11 +167,11 @@ export default {
     onMessageWasSent(message) {
       // Parse author to user id
       message.author = {
-        id: this.$auth.role_id,
+        id: this.$auth.user.id,
         name: this.$auth.user.name
       }
 
-      this.socket.emit('send', message)
+      this.socket.emit('send', this.$auth.user, message)
     },
     openChat() {
       // called when the user clicks on the fab button to open the chat
@@ -211,6 +214,10 @@ export default {
   }
 
   .sc-header--close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
     &:hover {
       box-shadow: none;
       color: $layer3;

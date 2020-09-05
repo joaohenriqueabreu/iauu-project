@@ -1,5 +1,5 @@
 const resolveImage = (relativePath) => {
-  return `${process.env.CDN_STATIC_ASSETS_DOMAIN}/${relativePath}`
+  return `${process.env.cdnStaticAssetsDomain}/${relativePath}`
 }
 
 export default ({ app }, inject) => {
