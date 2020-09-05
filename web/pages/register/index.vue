@@ -109,7 +109,7 @@ export default {
         this.$router.push('/register/verify')
       } catch (error) {
         this.$sentry.captureException(error)
-        this.$toast.error(error)
+        this.$toast.error(error.message)
       }
     },
     async loginWithFacebook(accessToken) {
