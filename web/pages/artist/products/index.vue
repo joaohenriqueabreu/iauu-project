@@ -15,6 +15,8 @@
             </product-info>
           </div>
         </slide>
+        <!-- Always add an additional slide -->
+        <slide></slide>
       </carousel>
     </div>
     <!-- Image Uploader should be for each product, but as per carousel behaviour (transform: translate) its position: fixed gets broken, therefore we need to move it out from the carousel and do some special handling for it -->

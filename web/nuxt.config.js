@@ -185,6 +185,7 @@ export default {
     parallel: true,
     cache: true,
     hardsource: true,
+    terser: false,
     html: {
       minify: {
         collapseBooleanAttributes: true,

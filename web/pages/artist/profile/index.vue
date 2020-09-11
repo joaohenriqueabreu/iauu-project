@@ -248,7 +248,7 @@ form {
   // Overwrite bootstrap styling
   .nav-tabs {
     border-bottom: none;
-    z-index: $above;
+    z-index: $firstLayer;
     .nav-link {
       padding-bottom: 0;
       border: none;

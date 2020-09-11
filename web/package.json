@@ -87,7 +87,6 @@
     "@aceforth/nuxt-optimized-images": "^1.0.1",
     "@nuxtjs/eslint-config": "^2.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
-    "@nuxtjs/ngrok": "^1.2.9",
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
