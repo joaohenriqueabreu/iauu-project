@@ -11,12 +11,14 @@
       <carousel :per-page="2" :navigation-enabled="true">
         <slide v-for="(product, index) in products" :key="index">
           <div class="product mr-4">
-            <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct" @copy="copyProduct" @preview="openPreviewModal">
+            <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct" @copy="copyProduct" @preview="openPreviewModal" @uploadPhoto="openUploadPhotoModal">
             </product-info>
           </div>
         </slide>
       </carousel>
     </div>
+    <!-- Image Uploader should be for each product, but as per carousel behaviour (transform: translate) its position: fixed gets broken, therefore we need to move it out from the carousel and do some special handling for it -->
+    <image-uploader ref="photoUploader" @uploaded="setPhoto"></image-uploader>
     <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
     <product-preview ref="preview"></product-preview>
   </div>
@@ -45,6 +47,11 @@ export default {
     this.products.forEach((product) => items.push(product.items))
     this.productItems = this.$array.uniq(this.$array.flatten(items))
   },
+  data() {
+    return {
+      selectedProduct: {}
+    }
+  },
   methods: {
     ...mapActions('protected', ['renewAuth']),
     ...mapActions('artist', ['loadProducts', 'saveProduct', 'removeProduct']),
@@ -64,8 +71,17 @@ export default {
     openConfirmRemove(productId) {
       this.$refs.removeProductDialog.openModal(productId)
     },
+    openUploadPhotoModal(product) {
+      this.selectedProduct = product
+      this.$refs.photoUploader.openUploadModal()
+    },
     openPreviewModal(product) {
       this.$refs.preview.openModal(product)
+    },
+    async setPhoto(url) {
+      const product = this.$object.clone(this.selectedProduct)
+      product.photo = url
+      await this.saveProduct(product)
     },
     async save(product) {
       await this.saveProduct(product)

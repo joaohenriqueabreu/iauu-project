@@ -2,14 +2,8 @@
 <template>
   <div>
     <div class="info full-height">
-      <image-uploader v-if="!proposalView" ref="photoUploader" @uploaded="setPhoto">
-        <div
-          class="media clickable"
-          :style="{ 'background-image': `url(${$images(productPhoto)})` }"
-          @click="uploadPhoto"
-        ></div>
-      </image-uploader>
-      <div v-else class="media" :style="{ 'background-image': `url(${$images(productPhoto)})` }"></div>
+      <div class="media" :class="!proposalView ? 'clickable' : ''" :style="{ 'background-image': `url(${$images(productPhoto)})` }" @click="uploadPhoto">
+      </div>
       <div class="product">
         <div v-if="!proposalView" class="copy clickable" @click="copyProduct">
           <h4 class="brand-hover"><font-awesome icon="copy"></font-awesome></h4>
@@ -95,12 +89,9 @@ export default {
       this.$emit('remove', this.product.id)
     },
     uploadPhoto() {
-      this.$refs.photoUploader.upload()
-    },
-    async setPhoto({ url }) {
-      const product = this.$object.clone(this.product)
-      product.photo = url
-      await this.saveProduct(product)
+      // Don't allow uploading photo if contractor is viewing product
+      if (this.proposalView) { return }
+      this.$emit('uploadPhoto', this.product)
     }
   }
 }

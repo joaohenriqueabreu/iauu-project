@@ -175,12 +175,12 @@ export default {
     categorySelect(category) {
       alert(category)
     },
-    async setBackground({ url }) {
+    async setBackground(url) {
       this.background = url
       await this.saveProfile()
       this.$toast.success('Background atualizado')
     },
-    async setAvatar({ url }) {
+    async setAvatar(url) {
       this.photo = url
       await this.saveProfile()
       this.$toast.success('Foto atualizada')

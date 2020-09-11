@@ -19,7 +19,7 @@
         </template>
         <template v-slot:main>
           <div class="vertical center middle full-width">
-            <h5 class="mb-2">Envie um arquivo de até {{  }} mb</h5>
+            <h5 class="mb-2">Envie um arquivo de até {{ HUMAN_READABLE_FILESIZE }} mb</h5>
             <h6 class="mb-4">(formatos permitidos .jpg, .jpeg e .png)</h6>
             <input type="file" @change="preview" accept="image/*" class="mb-4">
             <div class="error mb-4" v-if="maxFileSizeError">O arquivo deve possuir no máximo {{ HUMAN_READABLE_FILESIZE }}mb</div>

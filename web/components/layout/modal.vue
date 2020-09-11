@@ -79,9 +79,10 @@ export default {
 
 <style lang="scss" scoped>
 .modal-content {
-  z-index: $above;
+  z-index: $thridLayer;
   background: $layer2;
   position: relative;
+
 
   padding: 2 * $space;
   &.no-pad {

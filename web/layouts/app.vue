@@ -79,7 +79,7 @@ aside {
   background: $layer1;
   position: fixed;
   left: 0;
-  z-index: $moveToTop;
+  z-index: $above;
   @include desktop {
     .mini {
       width: 7vw;
