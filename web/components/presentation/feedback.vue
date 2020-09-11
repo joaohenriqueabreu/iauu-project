@@ -6,7 +6,7 @@
     <template v-slot:main>
       <div class="full-height">
         <div class="mb-4">
-          Conta pra gente como foi sua experiência com <b>{{ otherParty.user.name }}</b>
+          Conta pra gente como foi sua experiência com <b>{{ otherParty.name }}</b>
         </div>
         <div class="mb-4 horizontal middle center">
           <rating :read-only="false" @rated="setRating"></rating>

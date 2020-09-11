@@ -83,6 +83,7 @@ export default {
     },
     categoryImg(item) {
       try {
+        if (this.$empty(item)) { throw 'invalid category' }
         return this.$images(`categories/${item}.jpg`)
       } catch (error) {
         return this.$images('concert.png')

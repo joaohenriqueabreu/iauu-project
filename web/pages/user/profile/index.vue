@@ -73,7 +73,7 @@ export default {
     }),
     avatarImg() {
       return !this.$utils.empty(this.photo)
-        ? this.photo
+        ? this.$images(this.photo)
         : this.$config.defaultAvatarImgUrl
     }
   },
@@ -86,7 +86,7 @@ export default {
       await this.saveProfile()
       this.$toast.success('Perfil salvo com sucesso!')
     },
-    async setAvatar({ url }) {
+    async setAvatar(url) {
       this.photo = url
       await this.saveProfile()
       await this.renewAuth()

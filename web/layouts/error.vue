@@ -1,6 +1,6 @@
 <template>
   <div class="error-content">
-    <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
+    <div class="bg" :style="{ 'background-image': `url(${$images(bgImage)})` }"></div>
     <div class="content">
       <h1 class="mb-5">Vish...</h1>
       <h5 class="mb-3 horizontal middle center">

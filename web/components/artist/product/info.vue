@@ -5,11 +5,11 @@
       <image-uploader v-if="!proposalView" ref="photoUploader" @uploaded="setPhoto">
         <div
           class="media clickable"
-          :style="{ 'background-image': `url(${productPhoto})` }"
+          :style="{ 'background-image': `url(${$images(productPhoto)})` }"
           @click="uploadPhoto"
         ></div>
       </image-uploader>
-      <div v-else class="media" :style="{ 'background-image': `url(${productPhoto})` }"></div>
+      <div v-else class="media" :style="{ 'background-image': `url(${$images(productPhoto)})` }"></div>
       <div class="product">
         <div v-if="!proposalView" class="copy clickable" @click="copyProduct">
           <h4 class="brand-hover"><font-awesome icon="copy"></font-awesome></h4>

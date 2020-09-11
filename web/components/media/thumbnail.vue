@@ -21,7 +21,7 @@
             <template slot-scope="props">
               <div class="row">
                 <div class="col-sm-6">
-                  <img class="card-img-top" :src="props.img" :alt="props.title" />
+                  <img class="card-img-top" :src="$images(props.img)" :alt="props.title" />
                 </div>
                 <div class="col-sm-4">
                   {{ props.title }} 

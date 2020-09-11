@@ -35,7 +35,7 @@
           <h3 class="mb-4">{{ presentation.proposal.title }}</h3>
           <span>{{ presentation.proposal.description }}</span>
         </div>
-        <div class="boxed mb-4">
+        <div class="boxed mb-4" v-if="!$empty(presentation.address)">
           <presentation-address :presentation="presentation"></presentation-address>
         </div>
         <div v-if="isCustomProduct">

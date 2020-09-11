@@ -1,7 +1,7 @@
 <template>
   <div>
     <client-only>
-      <div class="section main" :style="`background-image: url('${homeBG}');`" v-if="!$empty(homeBG)"></div>
+      <div class="section main" :style="`background-image: url('${$images('home.jpg')}');`"></div>
     </client-only>
     <div class="section search">
       <h1 class="text-center mb-4">Aperte o play em seu evento</h1>
@@ -57,9 +57,6 @@ export default {
     ) {
       this.$router.push('/role/whoareyou')
     }
-  },
-  conputed: {
-    homeBG() { return this.$images('home.jpg') }
   },
   methods: {
     search(term) {

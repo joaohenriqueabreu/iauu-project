@@ -6,7 +6,7 @@
           <div class="network-icon">
             <avatar :src="networkIcon" :size="30" class="social"> </avatar>
           </div>
-          <img v-if="!$utils.empty(link.images)" :src="link.images[0]" />
+          <img v-if="!$utils.empty(link.images)" :src="$images(link.images[0])" />
         </div>
         <div class="preview-text">
           <h6>{{ link.title }}</h6>

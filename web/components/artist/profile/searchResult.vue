@@ -1,7 +1,7 @@
 <template>
   <div class="result" @click="$emit('select', artist)">
     <div class="logo">
-      <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
+      <div class="bg" :style="{ 'background-image': `url(${$images(bgImage)})` }"></div>
       <avatar :src="artist.photo" :username="artist.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
@@ -57,7 +57,7 @@ export default {
   computed: {
     bgImage() {
       if (!this.$utils.empty(this.artist.background)) { return this.artist.background }
-       return this.$images('concert.png')
+       return 'concert.png'
     },
     rateMin() {
       return Math.round(this.artist.score * 0.5)

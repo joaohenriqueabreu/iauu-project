@@ -10,6 +10,7 @@ class CategoryController extends BaseController {
         { id: faker.random.number(100), name: 'teatro' },
         { id: faker.random.number(100), name: 'circo' },
         { id: faker.random.number(100), name: 'standup' },
+        { id: faker.random.number(100), name: 'palestra' },
         { id: faker.random.number(100), name: 'outros' }
     ])
   }

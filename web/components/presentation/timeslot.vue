@@ -12,11 +12,11 @@
       >
         <div @click="select(timeslot)">
           <div class="horizontal mb-2">
-            <font-awesome icon="play-circle" class="mr-2"></font-awesome>
+            <font-awesome icon="play-circle" class="start mr-2"></font-awesome>
             <h6>{{ timeslot.start_dt | datetime }}</h6>
           </div>
           <div class="horizontal">
-            <font-awesome icon="stop-circle" class="mr-2"></font-awesome>
+            <font-awesome icon="stop-circle" class="stop mr-2"></font-awesome>
             <h6>{{ timeslot.end_dt | datetime }}</h6>
           </div>
         </div>
@@ -68,6 +68,16 @@ export default {
   &.selected {
     border: 2px solid $brandLayer;
     background: $layer4;
+  }
+}
+
+[data-icon] {
+  &.start {
+    color: $green;
+  }
+
+  &.stop {
+    color: $error;
   }
 }
 </style>

@@ -8,7 +8,9 @@ export default {
     googleAnalyticsKey: process.env.GOOGLE_ANALYTICS_KEY,
     googleClientId: process.env.GOOGLE_CLIENT_ID,
     facebookPixelKey: process.env.FACEBOOK_PIXEL_KEY,
-    cdnStaticAssetsDomain: process.env.CDN_STATIC_ASSETS_DOMAIN
+    cdnStaticAssetsDomain: process.env.CDN_STATIC_ASSETS_DOMAIN,
+    cdnAppAssetsDomain: process.env.CDN_APP_ASSETS_DOMAIN,
+    s3AppAssetsBucketUrl: process.env.S3_APP_ASSETS_BUCKET_URL,
   },
   /*
    ** Headers of the page
@@ -60,7 +62,9 @@ export default {
   css: [
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css',
-    'selectize/dist/css/selectize.bootstrap3.css'
+    'selectize/dist/css/selectize.bootstrap3.css',
+    'filepond/dist/filepond.min.css',
+    'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
   ],
   styleResources: {
     scss: [

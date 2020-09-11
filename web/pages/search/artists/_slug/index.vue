@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :style="{ 'background-image': `url(${bgImage})` }" class="bg"></div>
+    <div :style="{ 'background-image': `url(${$images('concert.png')})` }" class="bg"></div>
     <div class="title">
       <avatar :src="artist.photo" :username="artist.name" :size="200"></avatar>
       <div class="horizontal">
@@ -62,7 +62,7 @@
       </div>
       <div class="story my-5" v-if="!$empty(artist.story)">
         <h4 class="mb-5">Nossa história</h4>
-        {{ artist.story }}
+        <span v-html="$string.nl2br(artist.story)"></span>
       </div>
       <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
         <h4 class="mb-5">O que falam sobre nosso show?</h4>
@@ -129,9 +129,6 @@ export default {
   },
   computed: {
     ...mapState({ artist: (state) => state.contractor.artist }),
-    bgImage() {
-      return this.$images('concert.png')
-    },
     socialMedias() {
       return this.$array.slice(this.artist.social, 0, 4)
     },

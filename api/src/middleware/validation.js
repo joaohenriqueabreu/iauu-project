@@ -136,6 +136,11 @@ const body = (req, res, next) => {
   next()
 }
 
+const files = (req, res, next) => {
+  req.data = req.files
+  next()
+}
+
 const slug = (req, res, next) => {
   const schema = validateRequest.object({
     slug: validateRequest.string().required()    
@@ -234,5 +239,6 @@ module.exports = {
   timeslot,
   proposal,
   counterOffer,
-  category
+  category,
+  files
  }

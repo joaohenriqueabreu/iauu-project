@@ -93,6 +93,15 @@ const linkPreview = {
   }
 }
 
+const nl2br = (str, is_xhtml) => {
+  if (typeof str === 'undefined' || str === null) {
+      return '';
+  }
+  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+  return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
+
+
 // Registering custom filters
 Vue.filter('date', dateFilter)
 Vue.filter('longDate', longDateFilter)
@@ -102,6 +111,7 @@ Vue.filter('oneDecimal', oneDecimal)
 Vue.filter('twoDecimals', twoDecimals)
 Vue.filter('timeAgo', timeAgoFilter)
 Vue.filter('longTime', longTimeFilter)
+Vue.filter('nl2br', nl2br)
 
 export default ({ app }, inject) => {
   inject('array', array)
@@ -113,4 +123,5 @@ export default ({ app }, inject) => {
   inject('copyToClipboard', copyToClipboard)
   inject('date', { convertTimeToNumber })
   inject('linkPreview', { linkPreview })
+  inject('string', { nl2br })
 }

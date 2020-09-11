@@ -6,13 +6,13 @@
         <div class="dropdown" data-test="top-menu">
           <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <overlay :rounded="true">
-              <avatar :src="$auth.user.photo" :username="$auth.user.name"></avatar>
+              <avatar :src="$images($auth.user.photo)" :username="$auth.user.name"></avatar>
             </overlay>
           </a>
           <div class="dropdown-menu dropdown-menu-right submenu" aria-labelledby="dropdownMenuButton">
             <div class="horizontal middle">
               <nuxt-link :to="userRoleDefaultRedirect" class="horizontal middle">
-                <avatar :src="$auth.user.photo" :username="$auth.user.name" class="mr-4"></avatar>
+                <avatar :src="$images($auth.user.photo)" :username="$auth.user.name" class="mr-4"></avatar>
                 <div class="vertical full-height middle">
                   <h5 class="mb-1">{{ $auth.user.name }}</h5>
                   <small>{{ userRoleLabel }}</small>

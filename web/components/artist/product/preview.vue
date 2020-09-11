@@ -1,7 +1,7 @@
 <template>
   <modal ref="modal" hide-header>
     <template v-slot:main>
-      <div class="bg-image" :style="{ 'background-image': `url(${productPhoto})` }"></div>
+      <div class="bg-image" :style="{ 'background-image': `url(${$images(productPhoto)})` }"></div>
       <carousel
         v-if="!$utils.empty(product.medias)"
         :per-page="2"

@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="saveProfile">
       <image-uploader ref="bgUploader" @uploaded="setBackground">
-        <header :style="{ 'background-image': `url(${backgroundImg})` }" @click="uploadBG"></header>
+        <header :style="{ 'background-image': `url(${$images(backgroundImg)})` }" @click="uploadBG"></header>
       </image-uploader>
       <main>
         <div class="logo">

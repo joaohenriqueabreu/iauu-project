@@ -1,9 +1,9 @@
 <template>
   <div class="signup">
-    <div class="user artist" @click="$router.push('/role/artist')" :style="`background-image: url('${artistBG}')`">
+    <div class="user artist" @click="$router.push('/role/artist')" :style="`background-image: url('${$images(artistBG)}')`">
       <h3>Sou um artista e quero receber contatos para shows</h3>
     </div>
-    <div class="user" @click="$router.push('/role/contractor')" :style="`background-image: url('${contractorBG}');`">
+    <div class="user" @click="$router.push('/role/contractor')" :style="`background-image: url('${$images(contractorBG)}');`">
       <h3>Sou um produtor ou estou organizando um evento e quero contratar artistas</h3>
     </div>
   </div>

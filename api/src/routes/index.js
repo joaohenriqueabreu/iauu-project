@@ -9,6 +9,7 @@ const contractor = require('./contractor')
 const schedule = require('./schedule')
 const payment = require('./payment')
 const presentation = require('./presentation')
+const upload = require('./upload')
 
 api.use('/', status)
 api.use('/', auth)
@@ -18,6 +19,7 @@ api.use('/artists', artist)
 api.use('/contractors', contractor)
 api.use('/schedules', schedule)
 api.use('/presentations', presentation)
+api.use('/upload', upload)
 api.use('/', payment)
 
 module.exports = api
