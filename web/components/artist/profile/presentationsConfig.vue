@@ -1,17 +1,10 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-sm-12 mb-4">
-        <form-input v-model="video" placeholder="http://youtube.com/id-do-seu-video" icon="music">
-          Vídeo principal
-          <small>Copie a url de seu video do youtube mais f#(|@ (opcional)</small>
-        </form-input>
-        <media-thumbnail v-if="!$empty(video)" :media="video"></media-thumbnail>
-      </div>
       <div class="col-sm-12 horizontal middle">
         <form-toggle v-model="displayPrice">
           <template v-slot:before>
-            Desejo mostrar o valor e duração de nossas apresentações
+            Mostrar o valor e duração de nossas apresentações
           </template>
         </form-toggle>
       </div>
@@ -24,7 +17,7 @@
         <form-time v-model="avgDuration" icon="clock"></form-time>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div class="row">
       <div class="col-sm-12 vertical">
         <div class="mb-4">
@@ -34,13 +27,68 @@
       </div>
     </div>
     <div v-for="(range, index) in $config.priceRanges" :key="`range_${index}`" :class="{ selected: isPriceRange(index) }" class="mb-2 row price-range clickable brand-hover" @click="updatePriceRange(index)">
-      <div class="col-sm-2 horizontal">
+      <div class="col-3 col-sm-2 horizontal">
         <h6>
           <font-awesome v-for="i in parseInt(index)" :key="i" icon="dollar-sign" class="mr-1"></font-awesome>
         </h6>
       </div>
-      <div class="col-sm-6">
+      <div class="col-9">
         <h6>{{ range }}</h6>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-12">
+        <form-toggle v-model="displayProducts">
+          <template v-slot:before>
+            <h6>Deseja mostrar seus formatos de apresentação para visitantes? (recomendado)</h6>
+            <small>Qualquer visitante do site poderá visualizar seus formatos de apresentação</small>
+          </template>
+        </form-toggle>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-12 mb-4">
+        <form-textarea v-model="presentationDescription" class="mb-4" :rows="5" placeholder="Descreva detalhadamente sua apresentação, repertório, conquiste a atenção do seu cliente">
+          <h6>Detalhes da apresentação</h6>
+        </form-textarea>
+      </div>
+      <div class="col-12 mb-5">
+        <div class="social-connect">
+          <div class="mb-4 horizontal social-connect">
+            <h4><font-awesome :icon="['fab', 'instagram']" class="mr-4"></font-awesome></h4>
+            <div>
+              <h6>
+                Vincule seu instragram na aba "Redes Socias" para exibir seu feed em sua página principal aqui na {{ $config.companyName }}
+              </h6>
+              <small>Lembre-se de deixar com visibilidade pública para podermos exibir as fotos</small>
+            </div>
+          </div>
+          <div class="col-12 horizontal">
+            <h4><font-awesome :icon="['fab', 'spotify']" class="mr-4"></font-awesome></h4>
+            <div>
+              <h6>
+                Adicione a sua playlist do spotify em "Redes Sociais" para que os visitantes possam ouvir suas músicas 
+              </h6>
+              <small>Lembre-se de deixar com visibilidade pública para podermos exibir as fotos</small>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 mb-4">
+        <h6>Adicione videos das suas apresentações</h6>
+        <small>Copie a url de seus videos mais f#(|@$ (opcional)</small>
+        <div class="horizontal middle full-width mb-4">
+          <form-input v-model="newVideo" class="full-width" placeholder="Cole o link de seus videos"></form-input>
+          <font-awesome icon="plus" class="clickable ml-5" @click="appendVideo"></font-awesome>
+        </div>
+        <div class="row">
+          <div v-for="(media, mediaIndex) in presentationVideos" :key="mediaIndex" class="col-sm-4 mb-4">
+            <media-thumbnail class="full-height mb-2" removable :media="media" @remove="removeVideo(mediaIndex)">
+            </media-thumbnail>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -51,14 +99,21 @@ import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
 export default {
+  data() {
+    return {
+      newVideo: ''
+    }
+  },
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
     ...mapFields('artist', {
       displayPrice: 'artist.proposal.display_price',
+      displayProducts: 'artist.proposal.display_products',
       avgPrice: 'artist.proposal.avg_price',
       avgDuration: 'artist.proposal.avg_duration',
       priceRange: 'artist.proposal.price_range',
-      video: 'artist.video'
+      presentationDescription: 'artist.presentation.description',
+      presentationVideos: 'artist.presentation.videos'
     })
   },
   methods: {
@@ -77,6 +132,20 @@ export default {
     },
     isPriceRange(index) {
       return index == this.priceRange
+    },
+    appendVideo() {
+      let videos = this.$object.clone(this.presentationVideos)
+      if (videos.length === 0) { videos = [] }
+      videos.push(this.newVideo)
+
+      this.presentationVideos = videos
+      this.newVideo = ''
+    },
+    removeVideo(index) {
+      let videos = this.$object.clone(this.presentationVideos)
+      this.$delete(videos, index)
+
+      this.presentationVideos = videos
     }
   }
 }
@@ -90,5 +159,11 @@ export default {
     transition: $transition;
     color: $brand;
   }
+}
+
+.social-connect {
+  background: $layer5;
+  border-radius: $edges;
+  padding: 2 * $space;
 }
 </style>

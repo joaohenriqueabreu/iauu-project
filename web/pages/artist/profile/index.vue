@@ -12,43 +12,17 @@
         </div>
         <div class="pt-5"></div>
         <div class="boxed full-width">
-          <ul class="nav nav-tabs mt-4">
-            <li class="nav-link first">
-              <a class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'">
-                Geral
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'">
-                Informações
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: presentationsTab }" @click="activeTab = 'presentations'">
-                Apresentações
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
-                Estilo
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'">
-                Tipos de eventos
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'">
-                Redes Sociais
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'">
-                Integrantes
-              </a>
-            </li>
-          </ul>
+          <div class="">
+            <ul class="horizontal horizontal-scroll mt-4 pl-0">
+              <li class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'"><h6>Geral</h6></li>
+              <li class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'"><h6>Informações</h6></li>
+              <li class="nav-link" :class="{ active: presentationsTab }" @click="activeTab = 'presentations'"><h6>Apresentações</h6></li>
+              <li class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'"><h6>Estilo</h6></li>
+              <li class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'"><h6>Eventos</h6></li>
+              <li class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'"><h6>Redes Sociais</h6></li>
+              <li class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'"><h6>Integrantes</h6></li>
+            </ul>
+          </div>
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
             <fade-transition mode="out-in">
               <profile-stats v-if="statsTab" key="stats"></profile-stats>
@@ -222,6 +196,41 @@ form {
       position: relative;
       z-index: $base;
 
+      ul {
+        // background: $layer4;
+        margin-bottom: 0;
+        padding-left: 0;
+        z-index: $above;
+        border-top-left-radius: $edges;
+        border-top-right-radius: $edges;
+
+        li {
+          padding-top: 2 * $space;
+          padding-bottom: 2 * $space;
+          z-index: $above;
+          min-width: 100px;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          margin-right: 2 * $space;
+
+          transition: $transition;
+          &:hover {
+            transition: $transition;
+            color: $brandLayer;
+          }
+
+          &.active {
+            background: $layer4;
+            border-top-left-radius: $edges;
+            border-top-right-radius: $edges;
+          }
+        }
+        
+      }
+
       .raised {
         transition: $transition;
         background: $layer4;
@@ -230,10 +239,14 @@ form {
         width: 100%;
         border-radius: $edges;
         min-height: 50vh;
-
+        border-radius: $edges;
         &.first {
-          border-radius: 0 $edges $edges $edges;
+          border-radius: 0 $edges $edges $edges; 
         }
+
+        // &.first {
+        //   border-radius: 0 $edges $edges $edges;
+        // }
       }
     }
 

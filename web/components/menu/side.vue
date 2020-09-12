@@ -1,15 +1,12 @@
 <template>
   <div>
-    <header class="horizontal center middle">
-      <nuxt-link v-show="!minimized" to="/">
+    <header>
+      <!-- <nuxt-link v-show="!minimized" to="/"> -->
+      <nuxt-link to="/">
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
       <div class="hide-mobile hide-menu">
-        <font-awesome
-          class="minimize"
-          :icon="minimized ? 'angle-double-right' : 'angle-double-left'"
-          @click="minimize"
-        >
+        <font-awesome class="minimize" :icon="minimized ? 'angle-double-right' : 'angle-double-left'" @click="minimize">
         </font-awesome>
       </div>
     </header>

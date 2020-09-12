@@ -63,6 +63,7 @@ main {
   padding-left: 2vw;
   padding-right: 1vw;
   padding-bottom: 20vh;
+  z-index: $base;
 
   @include desktop {
     &.full {
@@ -79,7 +80,7 @@ aside {
   background: $layer1;
   position: fixed;
   left: 0;
-  z-index: $above;
+  z-index: $secondLayer;
   @include desktop {
     .mini {
       width: 7vw;

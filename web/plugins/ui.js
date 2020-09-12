@@ -22,6 +22,7 @@ import Loading from '@/components/layout/loading'
 import Notifications from '@/components/layout/notifications'
 import MediaViewer from '@/components/media/viewer'
 import MediaThumbnail from '@/components/media/thumbnail'
+import MediaAvatar from '@/components/media/avatar'
 import Rating from '@/components/artist/profile/rating'
 import Feedback from '@/components/admin/feedback'
 import Share from '@/components/layout/share'
@@ -94,6 +95,7 @@ Vue.component('modal', Modal)
 Vue.component('alert', AlertMessage)
 Vue.component('media-viewer', MediaViewer)
 Vue.component('media-thumbnail', MediaThumbnail)
+Vue.component('media-avatar', MediaAvatar)
 Vue.component('attachment', Attachment)
 Vue.component('rating', Rating)
 Vue.component('feedback', Feedback)

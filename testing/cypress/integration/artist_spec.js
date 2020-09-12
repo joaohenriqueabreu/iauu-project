@@ -35,7 +35,7 @@ describe('Artist pages', () => {
       cy.contains('Seu perfil está').should('be.visible')
 
       cy.get('a.nav-link').contains('Informações').click()
-      cy.contains('Nome fantasia').should('be.visible')
+      cy.contains('Nome da Empresa').should('be.visible')
 
       cy.get('a.nav-link').contains('Apresentações').click()
       cy.contains('Selecione a faixa de preços').should('be.visible')

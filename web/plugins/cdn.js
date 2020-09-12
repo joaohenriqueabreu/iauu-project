@@ -6,6 +6,10 @@ const isValidURL = (value) => {
 };
 
 const resolveImage = (imagePath) => {
+  if (imagePath === undefined || imagePath === null) {
+    return `${process.env.cdnStaticAssetsDomain}/music.png`
+  }
+
   // If it's an s3 image, parse and use app assets CDN
   if (imagePath.includes(process.env.s3AppAssetsBucketUrl)) { 
     return imagePath.replace(process.env.s3AppAssetsBucketUrl, process.env.cdnAppAssetsDomain)

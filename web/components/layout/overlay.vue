@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sub-wrapper">
+    <div class="sub-wrapper full-height">
       <slot name="default"></slot>
     </div>
     <div class="overlay" :class="{ rounded, selected }">

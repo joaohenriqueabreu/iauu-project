@@ -1,12 +1,8 @@
 <template>
   <div class="">
-    <form-input
-      v-model="companyName"
-      class="mb-3"
-      icon="signature"
-      label="Nome fantasia"
-      placeholder="Seu nome incrível vem aqui"
-    ></form-input>
+    <form-input v-model="companyName" class="mb-3" icon="signature" placeholder="Seu nome incrível vem aqui">
+      <h6>Nome da Empresa</h6>
+    </form-input>
     <form-textarea
       v-model="story"
       class="mb-3"

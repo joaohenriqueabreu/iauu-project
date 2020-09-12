@@ -46,6 +46,7 @@ const artistSchema = new Schema({
   video: { type: String },
   background: { type: String },
   proposal: {
+    display_products: { type: Boolean, default: false },
     display_price: { type: Boolean, default: false },
     avg_price: { type: Number, default: 0 },
     avg_duration: { type: String, default: '01:00' },
@@ -55,7 +56,7 @@ const artistSchema = new Schema({
   products: [productsSchema],
   schedule: [timeslotSchema],
 
-  social: [socialSchema],
+  social: [String],
   address: addressSchema,
   rating: { type: Number },
   feedbacks: [feedbackSchema]

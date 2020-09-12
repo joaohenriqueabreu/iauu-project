@@ -24,7 +24,6 @@ import { getLinkPreview } from 'link-preview-js'
 export default {
   props: {
     media: { type: [Object, String], default: () => {} },
-    simple: { type: Boolean, default: false },
     avatar: { type: Boolean, default: false },
     removable: { type: Boolean, default: false }
   },
@@ -104,20 +103,24 @@ export default {
 }
 
 .simple-container {
-  @extend .horizontal, .middle, .full-width;
-  border-radius: $edges;
-  padding: $space;
+  // @extend .horizontal, .middle, .full-width;
+  // border-radius: $edges;
+  // padding: $space;
   transition: $transition;
+  box-shadow: $shadow;
+  height: 100%;
+  // max-width: 500px;
 
-  a {
-    max-width: 85%;
-  }
+  // a {
+  //   max-width: 85%;
+  // }
 
   &:hover {
     transition: $transition;
     box-shadow: $shadow;
   }
 }
+
 a {
   background: transparent;
   outline: none;
@@ -137,54 +140,88 @@ a {
   }
 }
 
-.preview {
-  @include desktop {
-    display: flex;
-    flex-direction: row;
-  }
+// .preview {
+//   @include desktop {
+//     display: flex;
+//     flex-direction: row;
+//   }
 
-  @include mobile {
-    display: flex;
-    flex-direction: column;
-  }
+//   @include mobile {
+//     display: flex;
+//     flex-direction: column;
+//   }
   
-  width: 100%;
-  height: 100%;
+//   width: 100%;
+//   height: 100%;
 
-  margin-bottom: 4 * $space;
-  box-shadow: $shadow;
+//   margin-bottom: 4 * $space;
+//   box-shadow: $shadow;
+//   position: relative;
+//   background: $layer4;
+
+//   .preview-img {
+//     position: relative;
+//     // height: 100%;
+//     // max-height: 100px;
+//     .network-icon {
+//       position: absolute;
+//       bottom: 5px;
+//       right: 5px;
+//       height: 30px;
+//       width: 30px;
+//     }
+//     // width: 50%;
+//     img {
+//       width: 100%;
+//       max-height: 100px;
+//     }
+//   }
+
+//   .preview-text {
+//     display: block;
+//     max-width: 100%;
+//     padding: 2 * $space;
+//     text-align: left;
+//     font-size: $small;
+//     margin-bottom: 0;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     word-wrap: break-word;
+//     white-space: nowrap;
+//   }
+// }
+
+.preview-img {
   position: relative;
-  background: $layer4;
+  // height: 100%;
+  // max-height: 100px;
+  .network-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    height: 30px;
+    width: 30px;
+  }
+  // width: 50%;
+  img {
+    width: 100%;
+    max-height: 100px;
+  }
+}
 
-  .preview-img {
-    position: relative;
-    height: 100%;
-    // max-height: 100px;
-    .network-icon {
-      position: absolute;
-      bottom: 5px;
-      right: 5px;
-      height: 30px;
-      width: 30px;
-    }
-    // width: 50%;
-    img {
-      width: 100%;
-      max-height: 100px;
-    }
+.card-img-top {
+  max-width: auto;
+  min-height: 200px;
+}
+
+.thumb-description {
+  transition: $transition;
+  padding: $space;
+
+  &:hover {
+    transition: $transition;
+    color: $brandLayer;
   }
 
-  .preview-text {
-    display: block;
-    max-width: 100%;
-    padding: 2 * $space;
-    text-align: left;
-    font-size: $small;
-    margin-bottom: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    white-space: nowrap;
-  }
 }
 </style>

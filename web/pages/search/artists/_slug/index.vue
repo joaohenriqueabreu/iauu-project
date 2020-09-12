@@ -22,7 +22,7 @@
     <div class="horizontal center middle half-width mb-5">
       <div v-for="(media, mediaIndex) in socialMedias" :key="mediaIndex" class="mx-4">
         <a :href="media.url" target="_blank">
-          <media-thumbnail :media="media" avatar></media-thumbnail>
+          <media-avatar :media="media"></media-avatar>
         </a>
       </div>
     </div>
