@@ -64,12 +64,14 @@ export default {
 /*Overriding modal css*/
 .vm--overlay {
   background: rgba(0, 0, 0, 0.95);
+  z-index: auto;
 }
 
 .vm--modal {
   border-radius: $edges;
   overflow: inherit;
   background: $layer2;
+  z-index: auto;
 }
 
 .vm--container {

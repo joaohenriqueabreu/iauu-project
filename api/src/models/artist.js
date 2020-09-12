@@ -36,7 +36,13 @@ const artistSchema = new Schema({
     name: { type: String },
     subcategories: [String]
   },
-  presentation_types: [String],
+  presentation: {
+    description: { type: String },
+    playlist: { type: String },
+    videos: [String],
+    gallery: { type: String }
+  },
+  event_types: [String],
   video: { type: String },
   background: { type: String },
   proposal: {
@@ -79,8 +85,9 @@ artistSchema.index({ name: 'text',
     story: 'text', 
     'category.name': 'text', 
     'category.subcategory': 'text', 
-    presentation_types: 'text', 
+    event_types: 'text', 
     tags: 'text', 
+    'presentation.description': 'text',
     'product.name': 'text', 
     'product.description': 'text', 
     'product.item': 'text' 

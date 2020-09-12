@@ -219,6 +219,8 @@ form {
       box-shadow: $shadow;
       border-radius: $edges;
       padding: 5 * $space;
+      position: relative;
+      z-index: $base;
 
       .raised {
         transition: $transition;
@@ -248,7 +250,7 @@ form {
   // Overwrite bootstrap styling
   .nav-tabs {
     border-bottom: none;
-    z-index: $firstLayer;
+    z-index: $above;
     .nav-link {
       padding-bottom: 0;
       border: none;

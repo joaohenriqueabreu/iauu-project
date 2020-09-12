@@ -34,7 +34,7 @@ export default {
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
     ...mapFields('artist', {
-      presentationTypes: 'artist.presentation_types',
+      presentationTypes: 'artist.event_types',
     })
   },
   methods: {
