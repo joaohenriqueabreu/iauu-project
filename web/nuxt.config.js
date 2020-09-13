@@ -94,7 +94,7 @@ export default {
     { src: '@/plugins/facebookPixel', mode: 'client' },
     { src: '@/plugins/hotjarTracker', mode: 'client' },
     { src: '@/plugins/googleAnalytics', mode: 'client' },
-    { src: '@/plugins/socialLogin', mode: 'client' },
+    { src: '@/plugins/socialLogin', mode: 'client' }
   ],
 
   /*

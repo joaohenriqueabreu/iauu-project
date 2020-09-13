@@ -64,19 +64,28 @@
         <h4 class="mb-5">Nossa história</h4>
         <span v-html="$string.nl2br(artist.story)"></span>
       </div>
+      <div class="my-5 container">
+        <h4 class="mb-4">Conheça um pouco mais da nossa apresentação</h4>
+        <div class="mb-5" v-if="!$empty(artist.presentation) && !$empty(artist.presentation.videos)">
+          <carousel>
+            <slide v-for="(video, index) in artist.presentation.videos" :key="index" class="full-height mr-4 mb-4">
+              <media-thumbnail :media="video"></media-thumbnail>
+            </slide>
+            <slide></slide>
+          </carousel>
+        </div>
+        <div class="my-5" v-if="hasConnectedInstagram">
+          <instagram-gallery :url="instagramUrl" v-if="$isClientSide"></instagram-gallery>
+        </div>
+        <div class="story my-5" v-if="!$empty(artist.presentation.description)">
+          <h4 class="mb-5">Como é nossa apresentação</h4>
+          <span v-html="$string.nl2br(artist.story)"></span>
+        </div>
+      </div>
       <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
         <h4 class="mb-5">O que falam sobre nosso show?</h4>
         <div v-for="(feedback, index) in artist.feedbacks" :key="index" class="horizontal">
-          <div v-if="!$empty(feedback.notes)">
-            <div class="testemonial">
-              <h6 class="mb-2">{{ feedback.from.name }}</h6>
-              <div class="horizontal mb-4">
-                <h6 class="mr-2">{{ feedback.rating }}</h6>
-                <font-awesome icon="star"></font-awesome>
-              </div>
-              <i>{{ feedback.notes }}</i>
-            </div>
-          </div>
+          <presentation-feedback :feedback="feedback"></presentation-feedback>
         </div>
       </div>
     </div>
@@ -123,9 +132,15 @@
 
 <script>
 import { mapState } from 'vuex'
+import PresentationFeedback from '@/components/artist/profile/feedback'
+import InstagramGallery from '@/components/social/instagramGallery'
 export default {
   async asyncData({ store, route }) {
     await store.dispatch('contractor/loadArtist', route.params.slug)
+  },
+  components: {
+    InstagramGallery,
+    PresentationFeedback
   },
   computed: {
     ...mapState({ artist: (state) => state.contractor.artist }),
@@ -137,6 +152,17 @@ export default {
     },
     rateMax() {
       return Math.round(this.artist.score * 1.5)
+    },
+    hasConnectedInstagram() {
+      return !this.$empty(this.instagramUrl)
+    },
+    instagramUrl() {
+      const instagramUrl = this.$collection.filter(this.artist.social, (social) => social.includes('instagram'))
+      if (!this.$empty(instagramUrl)) {
+        return instagramUrl[0]
+      }
+
+      return null
     }
   }
 }
@@ -222,18 +248,6 @@ div:not(.bg) {
   border-radius: $edges;
   box-shadow: $shadow;
   margin: 5 * $space 4 * $space;
-}
-
-.testemonial {
-  background: $layer3;
-  margin: 2 * $space 0 2 * $space 4 * $space;
-  padding: 3 * $space;
-  box-shadow: $shadow;
-  border-top-right-radius: $rounded;
-  border-bottom-right-radius: $rounded;
-  border-bottom-left-radius: $rounded;
-  max-width: 80vw;
-  min-width: 20vw;
 }
 
 .proposal {
