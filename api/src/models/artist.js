@@ -40,7 +40,7 @@ const artistSchema = new Schema({
     description: { type: String },
     playlist: { type: String },
     videos: [String],
-    gallery: { type: String }
+    gallery: [String]
   },
   event_types: [String],
   video: { type: String },
@@ -55,8 +55,12 @@ const artistSchema = new Schema({
 
   products: [productsSchema],
   schedule: [timeslotSchema],
-
   social: [String],
+  stats: {
+    followers: { type: Number, default: 0 },
+    presentations: { type: Number, default: 0 },
+    score: { type: Number, default: 0 },
+  },
   address: addressSchema,
   rating: { type: Number },
   feedbacks: [feedbackSchema]

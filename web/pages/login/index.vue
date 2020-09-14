@@ -103,7 +103,7 @@ export default {
         })
         this.$router.push('/artist/schedule')
       } catch (error) {
-        this.$refs.login.reset()
+        // this.$refs.login.reset()
       }
     },
     async loginWithFacebook(accessToken) {

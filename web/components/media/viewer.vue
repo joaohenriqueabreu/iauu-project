@@ -69,7 +69,7 @@ export default {
   async mounted() {
     // Use proxy server to bypass CORS restriction
     try {
-      this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.url}`)
+      this.link = await getLinkPreview(`${this.$config.bypassCORSUrl}${this.url}`)
       // this.link = await this.$linkPreview(this.url)
     } catch (error) {
       this.$sentry.captureException(error)

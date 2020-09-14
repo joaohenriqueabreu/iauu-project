@@ -26,6 +26,7 @@ module.exports = class SaveArtistProfileService extends ArtistService
       await this.sanitizeData()
       await this.populateSlug(0)
       await this.populateModel()
+      // await this.fetchSocialData()
       await this.saveArtist()
       return this
     }

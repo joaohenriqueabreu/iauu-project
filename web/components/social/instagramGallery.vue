@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="!$empty(username)">
-      <div id="instagram-gallery" class="container">
+    <div v-if="!$empty(username) && !$empty(feedData)">
+      <div id="instagram-gallery" class="instagram_feed">
         <div class="row">
           <div class="col-4 mb-4" v-for="(media, index) in gallery" :key="index">
             <img :src="media">
@@ -17,20 +17,23 @@
 
 <script>
 // @see https://www.cssscript.com/instagram-photos-feed/
-import InstagramFeed from '@/assets/js/instagramFeed.min.js'
 export default {
   async mounted() {
+    await setTimeout(() => {}, 1000)
     const self = this
-    this.gallery = new InstagramFeed({
-      'username': this.username,
-      'container': "#instagram-gallery",
+    this.gallery = new this.$instagram({
+      // 'username': this.username,
+      // 'container': 'document.getElementById("instagram-gallery")',
+      'container': document.getElementById('instagram-gallery'),
+      'display_profile': false,
+      'display_biography': false,
       'display_gallery': true,
-      'items': 15,
+      'display_igtv': false,
+      'items': 9,
       'items_per_row': 3,
-      'lazy_load': true,
-      'callback': function (data) {
-        self.gallery = self.$collection.map(data.edge_owner_to_timeline_media.edges, (media) => media.node.display_url)
-      },
+      // 'get_data': true,
+      // 'styling': false,
+      // callback: function (data) { self.feedData = data },
       on_error: function(error_description, error_code) {
         console.log(error_description)
       }
@@ -41,7 +44,8 @@ export default {
   },
   data() {
     return {
-      gallery: {}
+      gallery: {},
+      feedData: {}
     }
   },
   computed: {
@@ -52,6 +56,11 @@ export default {
       }
 
       return null
+    }
+  },
+  methods: {
+    limitMedia(gallery) {
+      return this.$array.slice(gallery, 0, 9)
     }
   }
 }

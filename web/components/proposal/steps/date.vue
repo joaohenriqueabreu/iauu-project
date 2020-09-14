@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="horizontal d-flex justify-content-between mb-4">
+    <div class="horizontal desktop-only d-flex justify-content-between mb-4">
       <div class="intro">
         <h6>Escolha a data do seu evento:</h6>
         <small class="mb-2">
@@ -101,7 +101,9 @@ export default {
 
 <style lang="scss" scoped>
 .intro {
-  max-width: 50vw;
+  @include desktop {
+    max-width: 50vw;
+  }
 }
 
 [data-icon] {

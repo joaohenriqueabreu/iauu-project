@@ -513,4 +513,20 @@ td:not(.fc-minor) {
   background: $layer2;
   cursor: default;
 }
+
+.fc-toolbar {
+  @include mobile {
+    flex-direction: column;
+  }
+
+  div {
+    margin-bottom: $space;
+  }
+
+  // .fc-center {
+  //   @include mobile {
+  //     display: none;
+  //   }
+  // }
+}
 </style>

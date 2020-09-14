@@ -45,7 +45,12 @@ const config = {
   minDurationInMinutes: 60,
   maxNotificationsDisplayed: 5,
   maxAllowedSubcategories: 5,
-  maxAllowedPresentationTypes: 10
+  maxAllowedPresentationTypes: 10,
+  // bypassCORSUrl: 'https://cors-anywhere.herokuapp.com/',
+  corsBypassUrl: 'http://localhost:999/',
+  socialConnect: {
+    getInstagramFetchEndpoint: (username) => `https://www.instagram.com/${username}?__a=1`
+  }
 }
 
 export default ({ app }, inject) => {

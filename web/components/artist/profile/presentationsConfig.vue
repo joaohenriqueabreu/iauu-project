@@ -55,26 +55,7 @@
         </form-textarea>
       </div>
       <div class="col-12 mb-5">
-        <div class="social-connect">
-          <div class="mb-4 horizontal social-connect">
-            <h4><font-awesome :icon="['fab', 'instagram']" class="mr-4"></font-awesome></h4>
-            <div>
-              <h6>
-                Vincule seu instragram na aba "Redes Socias" para exibir seu feed em sua página principal aqui na {{ $config.companyName }}
-              </h6>
-              <small>Lembre-se de deixar com visibilidade pública para podermos exibir as fotos</small>
-            </div>
-          </div>
-          <div class="col-12 horizontal">
-            <h4><font-awesome :icon="['fab', 'spotify']" class="mr-4"></font-awesome></h4>
-            <div>
-              <h6>
-                Adicione a sua playlist do spotify em "Redes Sociais" para que os visitantes possam ouvir suas músicas 
-              </h6>
-              <small>Lembre-se de deixar com visibilidade pública para podermos exibir as fotos</small>
-              </div>
-          </div>
-        </div>
+        <social-connect-info></social-connect-info>
       </div>
       <div class="col-sm-12 mb-4">
         <h6>Adicione videos das suas apresentações</h6>
@@ -98,7 +79,12 @@
 import { mapState, mapActions } from 'vuex'
 import { mapFields } from 'vuex-map-fields'
 
+import SocialConnectInfo from '@/components/artist/profile/socialConnectInfo'
+
 export default {
+  components: {
+    SocialConnectInfo
+  },
   data() {
     return {
       newVideo: ''
@@ -159,11 +145,5 @@ export default {
     transition: $transition;
     color: $brand;
   }
-}
-
-.social-connect {
-  background: $layer5;
-  border-radius: $edges;
-  padding: 2 * $space;
 }
 </style>

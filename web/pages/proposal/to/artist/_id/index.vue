@@ -146,7 +146,7 @@ footer {
   height: 10vh;
   width: 100vw;
   margin: 0;
-  z-index: $moveToTop;
+  z-index: $secondLayer;
 
   [data-icon] {
     cursor: pointer;

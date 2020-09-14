@@ -12,7 +12,7 @@
                 :ref="`info_${product.id}`"
                 :product="product"
                 :not-items="notItems(product.items)"
-                proposal-view
+                read-only
                 @selected="chooseProduct(product)"
               ></product-info>
             </div>
@@ -33,6 +33,7 @@
           <h3>Personalize sua apresentação</h3>
         </div>
       </slide>
+      <slide></slide>
     </carousel>
     <product-preview ref="preview" @selected="chooseProduct"></product-preview>
     <custom-product ref="custom" :all-items="allItems" @selected="chooseProduct"></custom-product>
@@ -46,9 +47,9 @@ import ProductPreview from '@/components/artist/product/preview'
 import CustomProduct from '@/components/proposal/steps/customProduct'
 export default {
   components: {
-    'product-info': ProductInfo,
-    'product-preview': ProductPreview,
-    'custom-product': CustomProduct
+    ProductInfo,
+    ProductPreview,
+    CustomProduct
   },
   extends: Step,
   props: {

@@ -1,21 +1,21 @@
 /* eslint-disable */
 <template>
-  <div>
+  <div class="full-height" :class="readOnly ? 'clickable' : ''" @click="readOnlyPreview">
     <div class="info full-height">
-      <div class="media" :class="!proposalView ? 'clickable' : ''" :style="{ 'background-image': `url(${$images(productPhoto)})` }" @click="uploadPhoto">
+      <div class="media" :class="!readOnly ? 'clickable' : ''" :style="{ 'background-image': `url(${$images(productPhoto)})` }" @click="uploadPhoto">
       </div>
       <div class="product">
-        <div v-if="!proposalView" class="copy clickable" @click="copyProduct">
+        <div v-if="!readOnly" class="copy clickable" @click="copyProduct">
           <h4 class="brand-hover"><font-awesome icon="copy"></font-awesome></h4>
         </div>
-        <div v-if="!proposalView" class="title" @click="editProduct">
+        <div v-if="!readOnly" class="title" @click="editProduct">
           <h2 class="cap mb-2">{{ product.name }}</h2>
           <font-awesome icon="edit" class="ml-4"></font-awesome>
         </div>
         <div v-else>
           <h2 class="cap mb-2">{{ product.name }}</h2>
         </div>
-        <div class="horizontal middle mb-3">
+        <div class="horizontal middle mb-3" v-if="!hidePrice">
           <span class="mr-4">
             <b>{{ product.price | currency }}</b>
           </span>
@@ -24,7 +24,7 @@
             {{ product.duration | longTime }}
           </span>
         </div>
-        <div v-if="!proposalView" class="description one-line">
+        <div v-if="!readOnly" class="description one-line">
           {{ product.description }}
         </div>
         <div class="items mb-5">
@@ -43,7 +43,7 @@
             </span>
           </div>
         </div>
-        <div v-if="!proposalView" class="vertical middle center">
+        <div v-if="!readOnly" class="vertical middle center">
           <form-button class="mb-3" @action="editProduct">Modificar</form-button>
           <h6 class="clickable" @click="previewProduct">Preview</h6>
         </div>
@@ -61,7 +61,8 @@ import { mapActions } from 'vuex'
 export default {
   props: {
     product: { type: Object, default: () => {} },
-    proposalView: { type: Boolean, default: false },
+    readOnly: { type: Boolean, default: false },
+    hidePrice: { type: Boolean, default: false },
     notItems: { type: Array, default: () => {} }
   },
   computed: {
@@ -79,6 +80,10 @@ export default {
     previewProduct() {
       this.$emit('preview', this.product)
     },
+    readOnlyPreview() {
+      if (!this.readOnly) { return }
+      this.$emit('preview', this.product)
+    },
     copyProduct() {
       const product = this.$object.clone(this.product)
       product.id = null
@@ -90,7 +95,7 @@ export default {
     },
     uploadPhoto() {
       // Don't allow uploading photo if contractor is viewing product
-      if (this.proposalView) { return }
+      if (this.readOnly) { return }
       this.$emit('uploadPhoto', this.product)
     }
   }

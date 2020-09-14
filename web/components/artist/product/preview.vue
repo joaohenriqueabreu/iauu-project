@@ -47,7 +47,7 @@
       </div>
       <div class="mb-5">&nbsp;</div>
     </template>
-    <template v-slot:footer>
+    <template v-slot:footer v-if="!readOnly">
       <div class="horizontal middle center my-4 d-flex justify-content-between">
         <div>
           <h4>{{ product.price | currency }}</h4>
@@ -68,6 +68,9 @@
 
 <script>
 export default {
+  props: {
+    readOnly: { type: Boolean, default: false }
+  },
   data() {
     return {
       product: {},

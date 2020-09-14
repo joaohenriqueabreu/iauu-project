@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="px-4 pb-4 row horizontal middle">
-      <div class="col-sm-4 col-md-2">
+      <div class="col-sm-4 col-md-2 order-1 order-sm-0">
         <h4 class="pr-4">Artistas encontrados</h4>
       </div>
-      <div class="col-sm-6 col-md-8">
+      <div class="col-sm-6 col-md-8 order-0 order-sm-1">
         <form-input v-model="term" class="full-width" placeholder="Aniversário, Casamento, Rock Anos 80, ..." @enter="filter" @blur="filter">
         </form-input>
       </div>

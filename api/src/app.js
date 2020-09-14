@@ -14,7 +14,7 @@ const cors = require('cors')
 
 // init db and connect
 const db = require('./data/db')
-const corsOptiosn = require('./data/cors')
+const corsOptions = require('./data/cors')
 const initDb = async () => {
   try {
     await db.connect()
@@ -54,14 +54,27 @@ app.use(errorMiddleware)
 process.title = 'iauu.api'
 let expressPort = process.env.PORT || 4444
 
-app.listen(expressPort, function () {
-  console.log(`Express server listening on port ${expressPort}`)
+app.listen(expressPort, () => {
+  console.log(`Express server listening on port: ${expressPort}`)
 })
 
 const socketServer = require('./sockets/server')
-const webSocketPort = process.env.SOCKET_PORT || 500
+const webSocketPort = process.env.SOCKET_PORT || 555
 
 // Wire up the server to listen to our port 500
 socketServer.listen(webSocketPort, () => {
   console.log(`Socket server listening on port: ${webSocketPort}`)
+})
+
+// CORS bypass server config
+const corsHost = process.env.HOST || '0.0.0.0';
+const corsPort = process.env.CORS_PORT || 999
+const cors_proxy = require('cors-anywhere')
+
+cors_proxy.createServer({
+  originWhitelist: [], // Allow all origins
+  requireHeader: ['origin', 'x-requested-with'],
+  removeHeaders: ['cookie', 'cookie2']
+}).listen(corsPort, corsHost, () => {
+  console.log(`CORS bypass server listening on port: ${corsPort}`)
 })

@@ -36,7 +36,7 @@ module.exports = class Artist extends Model {
         
         this.stats      = {
             presentations: faker.random.number(4000),
-            fans: faker.random.number(3000000) ,
+            followers: faker.random.number(3000000) ,
             score: this.rating.score           
         }
 

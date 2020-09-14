@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="full-height">
     <div class="sub-wrapper full-height">
       <slot name="default"></slot>
     </div>
@@ -29,6 +29,7 @@ div {
   }
 
   .overlay {
+    height: 100%;
     &.selected {
       background: $brandLayer;
       opacity: 0.6;

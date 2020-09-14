@@ -1,7 +1,7 @@
 <template>
   <div class="result" @click="$emit('select', artist)">
     <div class="logo">
-      <div class="bg" :style="{ 'background-image': `url(${$images(bgImage)})` }"></div>
+      <div class="bg hide-mobile" :style="{ 'background-image': `url(${$images(bgImage)})` }"></div>
       <avatar :src="artist.photo" :username="artist.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
@@ -11,10 +11,7 @@
         </div>
         <div class="horizontal">
           <h6 class="cat-badge mr-4">{{ artist.category.name }}</h6>
-          <div class="horizontal">
-            <font-awesome v-for="index in artist.proposal.price_range" :key="`active_${index}`" icon="dollar-sign" class="price-range active mr-1"></font-awesome>
-            <font-awesome v-for="index in 5 - artist.proposal.price_range" :key="`inactive_${index} `" icon="dollar-sign" class="price-range inactive mr-1"></font-awesome>
-          </div>
+          <price-range short :range="artist.proposal.price_range"></price-range>
         </div>
         <div v-if="!$utils.empty(artist.address)" class="mb-4">
           <small>{{ artist.city_location }}</small>
@@ -77,11 +74,23 @@ export default {
 
 <style lang="scss" scoped>
 .result {
-  @extend .horizontal;
+  @include desktop {
+    display: flex;
+    flex-direction: row;
+    border-top-right-radius: $edges;
+    border-bottom-right-radius: $edges;
+  }
+
+  @include mobile {
+    border-radius: $edges;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   background: $layer3;
   box-shadow: $shadow;
-  border-top-right-radius: $edges;
-  border-bottom-right-radius: $edges;
   transition: $transition;
   cursor: pointer;
 
@@ -92,6 +101,11 @@ export default {
 
   .logo {
     @extend .horizontal, .middle, .center;
+    @include mobile {
+      background: $layer4;
+      width: 100%;
+    }
+
     width: 30%;
     min-height: 20vh;
     position: relative;
@@ -127,6 +141,11 @@ export default {
     padding: $space 2 * $space;
     color: $brand;
     margin-right: 2 * $space;
+    width: 150px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .stats-badge {
@@ -137,13 +156,6 @@ export default {
     background: $layer5;
     margin: 2 * $space;
     box-shadow: $shadow;
-  }
-}
-
-.price-range {
-  color: $brand;
-  &.inactive {
-    color: $layer5;
   }
 }
 </style>

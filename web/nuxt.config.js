@@ -87,6 +87,7 @@ export default {
     { src: '@/plugins/data' },
     { src: '@/plugins/cdn' },
     { src: '@/plugins/dictionary' },
+    { src: '@/plugins/ssr', mode: 'client' },
     { src: '@/plugins/ui', mode: 'client' },
     { src: '@/plugins/fullCalendar', mode: 'client' },
     { src: '@/plugins/html2canvas', mode: 'client' },

@@ -26,6 +26,7 @@ import MediaAvatar from '@/components/media/avatar'
 import Rating from '@/components/artist/profile/rating'
 import Feedback from '@/components/admin/feedback'
 import Share from '@/components/layout/share'
+import PriceRange from '@/components/artist/profile/priceRange'
 
 import LineChart from '@/components/layout/charts/line'
 import StatsDonut from '@/components/layout/charts/statsDonut'
@@ -98,6 +99,7 @@ Vue.component('media-thumbnail', MediaThumbnail)
 Vue.component('media-avatar', MediaAvatar)
 Vue.component('attachment', Attachment)
 Vue.component('rating', Rating)
+Vue.component('price-range', PriceRange)
 Vue.component('feedback', Feedback)
 Vue.component('share', Share)
 

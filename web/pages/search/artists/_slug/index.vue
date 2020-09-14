@@ -28,24 +28,24 @@
     </div>
     <div class="stats mb-5" v-if="!$empty(artist.stats)">
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
-        <div class="horizontal d-flex align-items-end mb-3">
-          <h2 v-if="statName === 'score'" class="mr-2 mb-0">{{ stat | number('0.0') }}</h2>
-          <h2 v-if="statName === 'fans' && stat >= 100000" class="mr-2 mb-0">
+        <div class="horizontal desktop-only d-flex align-items-end mb-3">
+          <h2 v-if="statName === 'score'" class="mr-2 mb-0 order-1">{{ stat | number('0.0') }}</h2>
+          <h2 v-if="statName === 'followers' && stat >= 100000" class="mr-2 mb-0 order-1">
             {{ stat | number('0a') }}
           </h2>
-          <h2 v-if="statName === 'fans' && stat < 100000" class="mr-2 mb-0">
+          <h2 v-if="statName === 'followers' && stat < 100000" class="mr-2 mb-0 order-1">
             {{ stat | number('0,0') }}
           </h2>
-          <h2 v-if="statName === 'presentations'" class="mr-2 mb-0">{{ stat | number('0,0') }}</h2>
-          <h6><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
+          <h2 v-if="statName === 'presentations'" class="mr-2 mb-0 order-1">{{ stat | number('0,0') }}</h2>
+          <h6 class="hide-desktop order-0"><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
         </div>
         <div class="horizontal">
           <h5 v-if="statName === 'score'" class="mr-1">{{ artist.rating.amount }}</h5>
-          <h5>{{ $dictionary.artist.stats.label[statName] }}</h5>
+          <h5 class="hide-mobile">{{ $dictionary.artist.stats.label[statName] }}</h5>
         </div>
       </div>
     </div>
-    <div>
+    <div class="container">
       <div class="mt-4 mr-4 d-flex justify-content-end">
         <div class="vertical">
           <h6 class="mb-2">Compartilhe!</h6>
@@ -64,7 +64,7 @@
         <h4 class="mb-5">Nossa história</h4>
         <span v-html="$string.nl2br(artist.story)"></span>
       </div>
-      <div class="my-5 container">
+      <div class="my-5">
         <h4 class="mb-4">Conheça um pouco mais da nossa apresentação</h4>
         <div class="mb-5" v-if="!$empty(artist.presentation) && !$empty(artist.presentation.videos)">
           <carousel>
@@ -74,16 +74,25 @@
             <slide></slide>
           </carousel>
         </div>
-        <div class="my-5" v-if="hasConnectedInstagram">
-          <instagram-gallery :url="instagramUrl" v-if="$isClientSide"></instagram-gallery>
-        </div>
         <div class="story my-5" v-if="!$empty(artist.presentation.description)">
           <h4 class="mb-5">Como é nossa apresentação</h4>
           <span v-html="$string.nl2br(artist.story)"></span>
         </div>
       </div>
+      <div class="my-5" v-if="artist.proposal.display_products">
+        <h4 class="mb-4">Conheça nossos formatos de apresentação</h4>
+        <carousel :per-page="3" :navigation-enabled="true" class="row d-flex align-items-stretch">
+          <slide v-for="(product, index) in artist.products" :key="index" class="col-4">
+            <div class="full-height mr-4">
+              <product-info hide-price read-only @preview="openPreviewModal(product)" :product="product" class="full-height"></product-info>
+            </div>
+          </slide>
+          <slide></slide>
+        </carousel>
+        <product-preview read-only ref="preview"></product-preview>
+      </div>
       <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
-        <h4 class="mb-5">O que falam sobre nosso show?</h4>
+        <h4 class="mb-4">O que falam sobre nosso show?</h4>
         <div v-for="(feedback, index) in artist.feedbacks" :key="index" class="horizontal">
           <presentation-feedback :feedback="feedback"></presentation-feedback>
         </div>
@@ -102,11 +111,11 @@
       <div v-else class="horizontal middle full-height d-flex justify-content-around">
         <div class="vertical">
           <small class="hide-mobile">
-            <span v-if="$auth.loggedIn">Valor da apresentação</span>
-            <span v-else>Valor aproximado da apresentação</span>
+            <span>Valor da apresentação</span>
           </small>
-          <h4 v-if="$auth.loggedIn">{{ artist.score | currency }}</h4>
-          <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4>
+          <price-range :range="artist.proposal.price_range"></price-range>
+          <!-- <h4 v-if="$auth.loggedIn">{{ artist.score | currency }}</h4>
+          <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4> -->
           <div class="mb-4 hide-desktop"></div>
         </div>
         <div class="vertical">
@@ -132,15 +141,17 @@
 
 <script>
 import { mapState } from 'vuex'
+import ProductInfo from '@/components/artist/product/info'
+import ProductPreview from '@/components/artist/product/preview'
 import PresentationFeedback from '@/components/artist/profile/feedback'
-import InstagramGallery from '@/components/social/instagramGallery'
 export default {
   async asyncData({ store, route }) {
     await store.dispatch('contractor/loadArtist', route.params.slug)
   },
   components: {
-    InstagramGallery,
-    PresentationFeedback
+    ProductInfo,
+    ProductPreview,
+    PresentationFeedback,
   },
   computed: {
     ...mapState({ artist: (state) => state.contractor.artist }),
@@ -154,7 +165,7 @@ export default {
       return Math.round(this.artist.score * 1.5)
     },
     hasConnectedInstagram() {
-      return !this.$empty(this.instagramUrl)
+      return this.$isClientSide && !this.$empty(this.instagramUrl)
     },
     instagramUrl() {
       const instagramUrl = this.$collection.filter(this.artist.social, (social) => social.includes('instagram'))
@@ -163,6 +174,11 @@ export default {
       }
 
       return null
+    }
+  },
+  methods: {
+    openPreviewModal(product) {
+      this.$refs.preview.openModal(product)
     }
   }
 }
@@ -199,38 +215,27 @@ div:not(.bg) {
   margin: 0 2 * $space;
 }
 
-@include desktop {
-  .stats {
-    display: flex;
-    flex-direction: row;
-    .stat {
-      margin: 0 4 * $space;
-    }
-  }
-}
-
-@include mobile {
-  .stats {
-    display: flex;
-    flex-direction: column;
-
-    .stat {
-      margin-bottom: 4 * $space;
-    }
-  }
-}
-
 .stats {
+  @extend .horizontal;
   justify-content: center;
   align-items: center;
   .stat {
     @extend .vertical, .middle, .center;
-    width: 150px;
-    height: 150px;
+    @include desktop {
+      margin: 0 4 * $space;
+      width: 150px;
+      height: 150px;
+    }
+
+    @include mobile {
+      margin: 3 * $space;
+      width: 75px;
+      height: 75px;
+    }
+    
     border-radius: $rounded;
     background: $layer3;
     box-shadow: $shadow;
-    border: 5px solid $brand;
   }
 }
 
@@ -248,6 +253,7 @@ div:not(.bg) {
   border-radius: $edges;
   box-shadow: $shadow;
   margin: 5 * $space 4 * $space;
+  background: $layer3;
 }
 
 .proposal {

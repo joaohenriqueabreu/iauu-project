@@ -21,7 +21,7 @@
         <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone"></form-masked>
       </div>
       <div class="boxed">
-        <h6>Conecte suas redes sociais</h6>
+        <h6>Faça login via redes sociais</h6>
         <div class="my-4 vertical half-width">
           <facebook-login @granted="loginWithFacebook" v-if="!$empty($auth.user.social) && !$auth.user.social.has_connected_with_facebook"></facebook-login>
           <div v-else class="social facebook">
