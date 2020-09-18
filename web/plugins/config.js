@@ -46,8 +46,7 @@ const config = {
   maxNotificationsDisplayed: 5,
   maxAllowedSubcategories: 5,
   maxAllowedPresentationTypes: 10,
-  // bypassCORSUrl: 'https://cors-anywhere.herokuapp.com/',
-  corsBypassUrl: 'http://localhost:999/',
+  corsBypassUrl: process.env.corsProxyUrl,
   socialConnect: {
     getInstagramFetchEndpoint: (username) => `https://www.instagram.com/${username}?__a=1`
   }

@@ -11,7 +11,8 @@ export default {
     cdnStaticAssetsDomain: process.env.CDN_STATIC_ASSETS_DOMAIN,
     cdnAppAssetsDomain: process.env.CDN_APP_ASSETS_DOMAIN,
     s3AppAssetsBucketUrl: process.env.S3_APP_ASSETS_BUCKET_URL,
-    companyName: process.env.COMPANY_NAME
+    companyName: process.env.COMPANY_NAME,
+    corsProxyUrl: process.env.CORS_PROXY_URL
   },
   /*
    ** Headers of the page
@@ -114,11 +115,10 @@ export default {
     '@nuxtjs/toast',
   ],
   axios: {
-    // baseURL: process.env.API_URL,
     baseURL: '/api/v1/'
   },
   proxy: {
-    '/api/v1': `${process.env.API_URL}:${process.env.HTTP_PORT}`
+    '/api/v1': `${process.env.API_URL}`
   },
   auth: {
     plugins: [{ src: '@/plugins/auth.js', ssr: false }],
@@ -168,7 +168,7 @@ export default {
     }
   },
   io: {
-    sockets: [{ url: `${process.env.API_BASE_URL}:${process.env.SOCKET_PORT}` }]
+    sockets: [{ url: `${process.env.SOCKET_URL}` }]
   },
   sentry: {
     dsn: process.env.SENTRY_DSN,

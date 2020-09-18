@@ -8,7 +8,7 @@ const proxy = httpProxy.createProxyServer()
 
 export default function(req, res, next) {
   proxy.web(req, res, {
-    target: `${process.env.API_URL}:${process.env.HTTP_PORT}`,
+    target: `${process.env.API_URL}`,
     changeOrigin: true
   })
 }
