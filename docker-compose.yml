@@ -35,8 +35,8 @@ services:
                         - "80:80"
                         - "443:443"
                 volumes:
-                        - ./ssl/certbot/conf:/etc/letsencrypt
-                        - ./ssl/certbot/www:/var/www/certbot
+                        - ./data/certbot/conf:/etc/letsencrypt
+                        - ./data/certbot/www:/var/www/certbot
                 networks:
                         iauu_net:
                 depends_on: 
@@ -46,8 +46,8 @@ services:
                 image: certbot/certbot
                 container_name: ssl
                 volumes:
-                        - ./ssl/certbot/conf:/etc/letsencrypt
-                        - ./ssl/certbot/www:/var/www/certbot
+                        - ./data/certbot/conf:/etc/letsencrypt
+                        - ./data/certbot/www:/var/www/certbot
                 depends_on:
                         - server
                 entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
