@@ -28,21 +28,25 @@
     </div>
     <div class="stats mb-5" v-if="!$empty(artist.stats)">
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
-        <div class="horizontal desktop-only d-flex align-items-end mb-3">
-          <h2 v-if="statName === 'score'" class="mr-2 mb-0 order-1">{{ stat | number('0.0') }}</h2>
+        <div class="vertical center mb-3">
+          <h2 class="mr-2 mb-0 order-1">{{ stat | number('0a') }}</h2>
+          <h6 class="hide-desktop order-0"><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
+          <h5 class="hide-mobile">{{ $utils.pluralize($dictionary.artist.stats.label[statName], stat) }}</h5>
+
+          <!-- <h2 v-if="statName === 'score'" class="mr-2 mb-0 order-1">{{ stat | number('0') }}</h2>
           <h2 v-if="statName === 'followers' && stat >= 100000" class="mr-2 mb-0 order-1">
             {{ stat | number('0a') }}
           </h2>
           <h2 v-if="statName === 'followers' && stat < 100000" class="mr-2 mb-0 order-1">
             {{ stat | number('0,0') }}
           </h2>
-          <h2 v-if="statName === 'presentations'" class="mr-2 mb-0 order-1">{{ stat | number('0,0') }}</h2>
-          <h6 class="hide-desktop order-0"><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
+          <h2 v-if="statName === 'presentations'" class="mr-2 mb-0 order-1">{{ stat | number('0') }}</h2>
+          <h6 class="hide-desktop order-0"><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6> -->
         </div>
-        <div class="horizontal">
+        <!-- <div class="horizontal">
           <h5 v-if="statName === 'score'" class="mr-1">{{ artist.rating.amount }}</h5>
-          <h5 class="hide-mobile">{{ $dictionary.artist.stats.label[statName] }}</h5>
-        </div>
+          <h5 class="hide-mobile">{{ $utils.pluralize($dictionary.artist.stats.label[statName], artist.rating.amount) }}</h5>
+        </div> -->
       </div>
     </div>
     <div class="container">
@@ -66,6 +70,13 @@
       </div>
       <div class="my-5">
         <h4 class="mb-4">Conheça um pouco mais da nossa apresentação</h4>
+        <div class="mb-4" v-if="hasConnectedSpotify">
+          <hr>
+          <div class="horizontal center middle">
+            <spotify-player :url="spotifyUrl"></spotify-player>
+          </div>
+          <hr>
+        </div>
         <div class="mb-5" v-if="!$empty(artist.presentation) && !$empty(artist.presentation.videos)">
           <carousel>
             <slide v-for="(video, index) in artist.presentation.videos" :key="index" class="full-height mr-4 mb-4">
@@ -73,6 +84,10 @@
             </slide>
             <slide></slide>
           </carousel>
+          <hr>
+        </div>
+        <div class="mb-4" v-if="hasConnectedInstagram">
+          <instagram-gallery :url="instagramUrl"></instagram-gallery>
         </div>
         <div class="story my-5" v-if="!$empty(artist.presentation.description)">
           <h4 class="mb-5">Como é nossa apresentação</h4>
@@ -82,7 +97,7 @@
       <div class="my-5" v-if="artist.proposal.display_products">
         <h4 class="mb-4">Conheça nossos formatos de apresentação</h4>
         <carousel :per-page="3" :navigation-enabled="true" class="row d-flex align-items-stretch">
-          <slide v-for="(product, index) in artist.products" :key="index" class="col-4">
+          <slide v-for="(product, index) in artist.products" :key="index" class="col-12 col-sm-4">
             <div class="full-height mr-4">
               <product-info hide-price read-only @preview="openPreviewModal(product)" :product="product" class="full-height"></product-info>
             </div>
@@ -144,6 +159,8 @@ import { mapState } from 'vuex'
 import ProductInfo from '@/components/artist/product/info'
 import ProductPreview from '@/components/artist/product/preview'
 import PresentationFeedback from '@/components/artist/profile/feedback'
+import InstagramGallery from '@/components/social/instagramGallery'
+import SpotifyPlayer from '@/components/social/spotifyPlayer'
 export default {
   async asyncData({ store, route }) {
     await store.dispatch('contractor/loadArtist', route.params.slug)
@@ -152,6 +169,8 @@ export default {
     ProductInfo,
     ProductPreview,
     PresentationFeedback,
+    InstagramGallery,
+    SpotifyPlayer
   },
   computed: {
     ...mapState({ artist: (state) => state.contractor.artist }),
@@ -174,7 +193,18 @@ export default {
       }
 
       return null
-    }
+    },
+    hasConnectedSpotify() {
+      return this.$isClientSide && !this.$empty(this.spotifyUrl)
+    },
+    spotifyUrl() {
+      const spotifyUrl = this.$collection.filter(this.artist.social, (social) => social.includes('spotify'))
+      if (!this.$empty(spotifyUrl)) {
+        return spotifyUrl[0]
+      }
+
+      return null
+    },
   },
   methods: {
     openPreviewModal(product) {

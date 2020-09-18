@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="!$empty(username) && !$empty(feedData)">
+    <div v-if="!$empty(gallery)">
       <div id="instagram-gallery" class="instagram_feed">
         <div class="row">
-          <div class="col-4 mb-4" v-for="(media, index) in gallery" :key="index">
+          <div class="col-4 mb-4" v-for="(media, index) in limitMedia(gallery)" :key="index">
             <img :src="media">
           </div>
         </div>
@@ -16,28 +16,9 @@
 </template>
 
 <script>
-// @see https://www.cssscript.com/instagram-photos-feed/
 export default {
   async mounted() {
-    await setTimeout(() => {}, 1000)
-    const self = this
-    this.gallery = new this.$instagram({
-      // 'username': this.username,
-      // 'container': 'document.getElementById("instagram-gallery")',
-      'container': document.getElementById('instagram-gallery'),
-      'display_profile': false,
-      'display_biography': false,
-      'display_gallery': true,
-      'display_igtv': false,
-      'items': 9,
-      'items_per_row': 3,
-      // 'get_data': true,
-      // 'styling': false,
-      // callback: function (data) { self.feedData = data },
-      on_error: function(error_description, error_code) {
-        console.log(error_description)
-      }
-    })
+    await this.getPublicGallery()
   },
   props: {
     url: { type: String, default: '' }
@@ -61,6 +42,17 @@ export default {
   methods: {
     limitMedia(gallery) {
       return this.$array.slice(gallery, 0, 9)
+    },
+    async getPublicGallery() {
+      try {
+        // TODO This process is unsecure and instagram might block multiple attempts - eventually migrate to Graph API
+        const instagramFetchUrl = this.$config.socialConnect.getInstagramFetchEndpoint(this.username)
+        const { data } = await this.$axios.get(`${this.$config.corsBypassUrl}${instagramFetchUrl}`)
+
+        this.gallery = this.$collection.map(data.graphql.user.edge_owner_to_timeline_media.edges, (media) => media.node.display_url)
+      } catch (error) {
+        this.$sentry.captureException(error)
+      }
     }
   }
 }

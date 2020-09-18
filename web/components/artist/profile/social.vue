@@ -31,12 +31,16 @@
     </div>
     <div v-if="hasConnectedInstagram">
       <div class="mb-4">
-        <h6>Agora que conectou seu insta, clique aqui para que possamos buscar o número de seguidores da sua págin</h6>
-        <small >Lembre-se de deixar seu perfil como público (caso contrário não conseguiremos buscar os dados)</small>
+        <h6 class="mb-2">Agora que conectou seu insta, clique aqui para que possamos buscar o número de seguidores da sua págin</h6>
+        <div class="vertical">
+          <small>Lembre-se de deixar seu perfil como público (caso contrário não conseguiremos buscar os dados)</small>
+          <small><small class="beta">(beta)</small> Por favor atualize esporadicamente - estamos trabalhando para implantar uma atualização automática dos seguidores</small>
+        </div>
+        
       </div>
       <div class="horizontal desktop-only middle center">
-        <form-button @action="getPublicPageFanCount" class="mr-4 mb-4">Buscar seguidores</form-button>
-        <h6 class="mr-2 mb-2">Número de seguidores: </h6>
+        <form-button @action="getPublicPageFanCount" class="mr-4 mb-4 mb-sm-0">Buscar seguidores</form-button>
+        <h6 class="mr-2 mb-2 mb-sm-0">Número de seguidores: </h6>
         <span v-if="!$empty(artist.stats.followers)">{{ artist.stats.followers }}</span>
         <span v-else class="error">Clique no botão para buscar</span>
       </div>
@@ -157,5 +161,9 @@ export default {
     margin-right: 2 * $space;
     margin-left: $space;
   }
+}
+
+.beta {
+  background: $layer1;
 }
 </style>

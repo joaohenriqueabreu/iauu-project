@@ -52,6 +52,7 @@
     "nuxt": "^2.12.2",
     "nuxt-socket-io": "^1.1.5",
     "pluralize": "^8.0.0",
+    "pluralize-ptbr": "^1.0.3",
     "qrcode": "^1.4.4",
     "qrcodejs": "^1.0.0",
     "query-string": "^6.13.1",

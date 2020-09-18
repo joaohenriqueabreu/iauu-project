@@ -1,29 +1,26 @@
 version: '3.7'
 services:
         # db:
-        #         build: ./db
-        #         container_name: db
-        #         ports:
-        #                 - "27017:27017"
-        #         volumes:
-        #                 - db:/data/db
-        #         networks:
-        #                  iauu_net:
+        #          build: ./db
+        #          container_name: db
+        #          ports:
+        #                  - "27017:27017"
+        #          volumes:
+        #                  - db:/data/db
+        #          networks:
+        #                   iauu_net:
         api:
                 build: ./api
                 container_name: api
-                # volumes:
-                #         - /usr/app/node_modules
                 ports:
                         - "4444:4444"
                         - "555:555"
+                        - "999:999"
                 networks:
                         iauu_net:
         web:
                build: ./web
                container_name: web
-        #        volumes:
-        #                - /usr/app/node_modules
                ports:
                        - "3000:3000"
                networks:
@@ -36,10 +33,25 @@ services:
                 restart: always
                 ports:
                         - "80:80"
+                        - "443:443"
+                volumes:
+                        - ./ssl/certbot/conf:/etc/letsencrypt
+                        - ./ssl/certbot/www:/var/www/certbot
                 networks:
                         iauu_net:
                 depends_on: 
+                        - web
                         - api
+        ssl:
+                image: certbot/certbot
+                container_name: ssl
+                volumes:
+                        - ./ssl/certbot/conf:/etc/letsencrypt
+                        - ./ssl/certbot/www:/var/www/certbot
+                depends_on:
+                        - server
+                entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
 networks:
         iauu_net:
 volumes:

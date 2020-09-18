@@ -1,8 +1,14 @@
-import pluralize from 'pluralize'
+import plural from 'pluralize-ptbr'
 import Model from '../models/model'
 
 const utils = {
-  pluralize: (value, count) => pluralize(value, count),
+  pluralize: (value, count) => {
+    console.log(value)
+    console.log(count)
+    console.log(plural(value, count))
+
+    return plural(value, count)
+  },
   genCalendarEventId: (timeslot) => `${timeslot.type}_${timeslot.id}`,
 
   empty: (variable) => {
