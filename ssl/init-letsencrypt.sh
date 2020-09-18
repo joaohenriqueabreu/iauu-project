@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(app.test.iauu.com.br)
+domains=(test.iauu.com.br app.test.iauu.com.br)
 rsa_key_size=4096
 data_path="../ssl/certbot"
 email="joaohenriqueabreu@gmail.com" # Adding a valid address is strongly recommended
