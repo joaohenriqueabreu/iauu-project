@@ -1,11 +1,9 @@
 import _ from 'lodash'
 import moment from 'moment'
 import { getField, updateField } from 'vuex-map-fields'
-import Presentation from '@/models/presentation'
-import Proposal from '@/models/proposal'
 
 export const state = () => ({
-  proposal: new Proposal(),
+  proposal: {},
   presentation: {},
   presentations: []
 })
@@ -13,10 +11,10 @@ export const state = () => ({
 export const mutations = {
   updateField,
   set_proposal(state, data) {
-    state.proposal = new Proposal(data)
+    state.proposal = data
   },
   set_presentation(state, data) {
-    state.presentation = new Presentation(data)
+    state.presentation = data
   },
   set_presentations(state, data) {
     state.presentations = data

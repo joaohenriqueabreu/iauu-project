@@ -115,8 +115,7 @@ export default {
     async getPublicPageFanCount() {
       try {
         // TODO This process is unsecure and instagram might block multiple attempts - eventually migrate to Graph API
-        const instagramFetchUrl = this.$config.socialConnect.getInstagramFetchEndpoint(this.instagramUsername)
-        const { data } = await this.$axios.get(`${this.$config.corsBypassUrl}${instagramFetchUrl}`)
+        const data = await this.$cors.fetch(this.$config.socialConnect.getInstagramFetchEndpoint(this.instagramUsername))
         const stats = this.$object.clone(this.stats)
         stats.followers = data.graphql.user.edge_followed_by.count
         

@@ -48,7 +48,6 @@ module.exports = class SearchArtistProfileService extends BaseService
         presentations: presentationsCount 
       }
 
-      console.log(this.artist.stats)
       return this
     }
 

@@ -144,8 +144,7 @@
             Enviar proposta
           </nuxt-link>
           <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">
-            <h6 class="hide-mobile">Cadastre-se para contratar este artista</h6>
-            <h6 class="hide-desktop">Cadastre-se</h6>
+            <h6>Ver agenda <span class="hide-mobile">do artista</span></h6>
           </nuxt-link>
         </div>
       </div>

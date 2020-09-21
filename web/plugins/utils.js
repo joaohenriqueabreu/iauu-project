@@ -3,10 +3,6 @@ import Model from '../models/model'
 
 const utils = {
   pluralize: (value, count) => {
-    console.log(value)
-    console.log(count)
-    console.log(plural(value, count))
-
     return plural(value, count)
   },
   genCalendarEventId: (timeslot) => `${timeslot.type}_${timeslot.id}`,
