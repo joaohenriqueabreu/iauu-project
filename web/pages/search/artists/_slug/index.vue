@@ -143,7 +143,7 @@
           <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >
             Enviar proposta
           </nuxt-link>
-          <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">
+          <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" :to="`/search/artists/${artist.slug}/schedule`">
             <h6>Ver agenda <span class="hide-mobile">do artista</span></h6>
           </nuxt-link>
         </div>

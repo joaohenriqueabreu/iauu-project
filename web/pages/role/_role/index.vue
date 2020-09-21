@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     afterAssign() {
-      this.$toast.success('Tudo pronto! Bem vindo a iauü')
+      this.$toast.success(`Tudo pronto! Bem vindo a ${this.$config.companyName}`)
 
       if (this.$auth.hasScope('artist')) {
         this.$router.push('/artist/schedule')

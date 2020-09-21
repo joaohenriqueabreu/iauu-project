@@ -9,7 +9,7 @@
     </div>
     <div class="vertical center middle full-height">
       <h4 class="mb-2">Indique e ganhe!</h4>
-      <h6 class="mb-5">Como funciona a renda passiva iauü?</h6>
+      <h6 class="mb-5">Como funciona a renda passiva {{ $config.companyName }}?</h6>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus quam pellentesque nec nam aliquam. In metus vulputate eu scelerisque felis imperdiet. Sagittis purus sit amet volutpat. A diam sollicitudin tempor id eu nisl nunc. Lectus mauris ultrices eros in cursus. Tristique senectus et netus et malesuada fames ac turpis. Odio morbi quis commodo odio aenean sed. Tempus iaculis urna id volutpat. Leo vel orci porta non pulvinar neque laoreet suspendisse interdum.
       </p>

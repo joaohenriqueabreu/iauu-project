@@ -14,7 +14,7 @@
       </div>
       <div class="mb-4 vertical middle center">
         <h4 class="no-cap mb-2">Faça o download do QRCode para suas redes sociais ou mostre em suas lives!</h4>
-        <small>Links para página da banda na plataforma da iauü</small>
+        <small>Links para página da banda na plataforma da {{ $config.companyName }}</small>
       </div>
       <div class="mb-4 horizontal middle">
         <h6 class="mr-2">Posicionar na</h6>
@@ -37,7 +37,7 @@
           <div class="powered-by">
             <nuxt-link to="/">
               <h6 class="mr-2 no-caps">
-                Powered by iauü
+                Powered by {{ $config.companyName }}
               </h6>
               <logo :height="20" :width="20"></logo>
             </nuxt-link>
@@ -55,7 +55,7 @@
           </div>
           <div class="powered-by">
             <nuxt-link to="/">
-              <h6 class="mr-2">Powered by iauü</h6>
+              <h6 class="mr-2">Powered by {{ $config.companyName }}</h6>
               <logo :height="20" :width="20"></logo>
             </nuxt-link>
           </div>

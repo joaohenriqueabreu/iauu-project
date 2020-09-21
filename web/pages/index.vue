@@ -13,10 +13,10 @@
       </div>
     </div>
     <div class="section even">
-      <h1>Todo mundo faz iauü</h1>
+      <h1>Todo mundo faz {{ $config.companyName }}</h1>
     </div>
     <div class="section odd">
-      <h1>Por que iauü?</h1>
+      <h1>Por que {{ $config.companyName }}?</h1>
     </div>
     <div class="section even">
       <h1>Queridinhos da galera</h1>
