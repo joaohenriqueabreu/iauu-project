@@ -154,15 +154,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import ProductInfo from '@/components/artist/product/info'
-import ProductPreview from '@/components/artist/product/preview'
-import PresentationFeedback from '@/components/artist/profile/feedback'
-import InstagramGallery from '@/components/social/instagramGallery'
-import SpotifyPlayer from '@/components/social/spotifyPlayer'
+import { mapState, mapActions } from 'vuex';
+import ProductInfo from '@/components/artist/product/info';
+import ProductPreview from '@/components/artist/product/preview';
+import PresentationFeedback from '@/components/artist/profile/feedback';
+import InstagramGallery from '@/components/social/instagramGallery';
+import SpotifyPlayer from '@/components/social/spotifyPlayer';
 export default {
   async asyncData({ store, route }) {
-    await store.dispatch('contractor/loadArtist', route.params.slug)
+    await store.dispatch('contractor/loadArtist', route.params.slug);
   },
   components: {
     ProductInfo,
@@ -171,43 +171,47 @@ export default {
     InstagramGallery,
     SpotifyPlayer
   },
+  async mounted() {
+    await this.emitVisitEvent(this.$router.currentRoute);
+  },
   computed: {
     ...mapState({ artist: (state) => state.contractor.artist }),
     socialMedias() {
-      return this.$array.slice(this.artist.social, 0, 4)
+      return this.$array.slice(this.artist.social, 0, 4);
     },
     rateMin() {
-      return Math.round(this.artist.score * 0.5)
+      return Math.round(this.artist.score * 0.5);
     },
     rateMax() {
-      return Math.round(this.artist.score * 1.5)
+      return Math.round(this.artist.score * 1.5);
     },
     hasConnectedInstagram() {
-      return this.$isClientSide && !this.$empty(this.instagramUrl)
+      return this.$isClientSide && !this.$empty(this.instagramUrl);
     },
     instagramUrl() {
-      const instagramUrl = this.$collection.filter(this.artist.social, (social) => social.includes('instagram'))
+      const instagramUrl = this.$collection.filter(this.artist.social, (social) => social.includes('instagram'));
       if (!this.$empty(instagramUrl)) {
-        return instagramUrl[0]
+        return instagramUrl[0];
       }
 
-      return null
+      return null;
     },
     hasConnectedSpotify() {
-      return this.$isClientSide && !this.$empty(this.spotifyUrl)
+      return this.$isClientSide && !this.$empty(this.spotifyUrl);
     },
     spotifyUrl() {
-      const spotifyUrl = this.$collection.filter(this.artist.social, (social) => social.includes('spotify'))
+      const spotifyUrl = this.$collection.filter(this.artist.social, (social) => social.includes('spotify'));
       if (!this.$empty(spotifyUrl)) {
-        return spotifyUrl[0]
+        return spotifyUrl[0];
       }
 
-      return null
+      return null;
     },
   },
   methods: {
+    ...mapActions('statistic', ['emitVisitEvent']),
     openPreviewModal(product) {
-      this.$refs.preview.openModal(product)
+      this.$refs.preview.openModal(product);
     }
   }
 }

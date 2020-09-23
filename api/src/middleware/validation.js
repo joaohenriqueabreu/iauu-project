@@ -217,9 +217,17 @@ const category = (req, res, next) => {
   return validate(req.params, req, next, schema)
 }
 
+const filters = (req, res, next) => {
+  const schema = validateRequest.object({
+    date: validateRequest.string().optional().allow('')
+  })
+
+  return validate(req.query, req, next, schema)
+}
+
 module.exports = { 
   id,
-  query,  
+  query,
   body,
   slug,
   token,
@@ -240,5 +248,6 @@ module.exports = {
   proposal,
   counterOffer,
   category,
-  files
+  files,
+  filters
  }

@@ -17,6 +17,10 @@
         <font-awesome icon="guitar"></font-awesome>
         <span v-show="!minimized">Banda</span>
       </nuxt-link>
+      <nuxt-link to="/artist/reports" :class="{ routed: routed('reports') }">
+        <font-awesome icon="chart-line"></font-awesome>
+        <span v-show="!minimized">Relatórios</span>
+      </nuxt-link>
     </div>
   </div>
 </template>

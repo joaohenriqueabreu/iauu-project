@@ -16,6 +16,9 @@
       <nuxt-link to="/artist/profile">
         <h6>Gerenciar banda</h6>
       </nuxt-link>
+      <nuxt-link to="/artist/reports">
+        <h6>Relatórios</h6>
+      </nuxt-link>
     </div>
   </div>
 </template>

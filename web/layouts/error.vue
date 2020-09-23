@@ -16,7 +16,7 @@
       <h5 class="mb-2">
         Atualize a página e tente novamente ou entre em contato com a nossa equipe
       </h5>
-      <h3 class="mb-4"><code>{{ process.env.supportMail }}</code></h3>
+      <h3 class="mb-4"><code>{{ $config.supportMail }}</code></h3>
       <nuxt-link to="/">Voltar para a Home</nuxt-link>
     </div>
   </div>

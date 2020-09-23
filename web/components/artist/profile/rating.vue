@@ -1,13 +1,7 @@
 <template>
   <div>
     <div v-if="!readOnly">
-      <font-awesome
-        v-for="star in MAX_RATE"
-        :key="star"
-        :icon="selectedStar(star)"
-        class="clickable"
-        @click="rate(star)"
-      >
+      <font-awesome v-for="star in MAX_RATE" :key="star" :icon="selectedStar(star)" class="clickable" @click="rate(star)">
       </font-awesome>
     </div>
     <div v-else>

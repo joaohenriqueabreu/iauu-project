@@ -48,9 +48,11 @@ class Presentation extends BaseModel {
 
   get current_price() {
     if (this.status === 'proposal') {
-      if (this.proposal.custom) {
-        if (this.proposal.counterOffer !== undefined) {}
+      if (this.proposal.counterOffer !== undefined) {
+        return this.proposal.counterOffer.price
       }
+
+      return this.proposal.product.price
     }
 
     return this.price

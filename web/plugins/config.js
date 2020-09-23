@@ -1,5 +1,6 @@
 const config = {
   companyName: process.env.companyName,
+  supportMail: process.env.supportMail,
   dateFormat: 'DD/MM/YYYY',
   dateTimeFormat: 'DD/MM/YYYY HH:mm',
   timeFormat: 'HH:mm',

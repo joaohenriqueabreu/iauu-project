@@ -73,8 +73,8 @@
 <script>
 export default {
   computed: {
-    webUrl() { return process.env.webUrl },
-    companyName() { return process.env.companyName },
+    webUrl() { return this.$config.webUrl },
+    companyName() { return this.$config.companyName },
   }
 }
 </script>
