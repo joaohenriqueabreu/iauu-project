@@ -1,5 +1,6 @@
 /* eslint-disable */
 import Vue from 'vue';
+import moment from 'moment';
 import { getField, updateField } from 'vuex-map-fields';
 
 export const state = () => ({
@@ -71,10 +72,12 @@ export const actions = {
     const { id } = data;
     await this.$axios.put(`artists/${id}/feedback`, data);
   },
-  async calculateStatistics({ commit }) {
-    const { data } = await this.$axios.get('artists/statistics');
-    console.log('we are here...')
-    console.log(data);
+  async calculateStatistics({ commit }, filters) {
+    if (filters === undefined) {
+      filters = { start: moment().startOf('year').format('DD/MM/YYYY'), end: moment().format('DD/MM/YYYY') }
+    }
+
+    const { data } = await this.$axios.get('artists/statistics', { params: { start: filters.start, end: filters.end }});
     commit('set_statistics', data);
   }
 }

@@ -22,10 +22,6 @@ export default {
     }
   },
   mounted() {
-    // let roundedDoughnutScript = document.createElement('script')
-    // roundedDoughnutScript.setAttribute('src', require(''))
-    // document.head.appendChild(recaptchaScript)
-
     this.renderChart(this.chartData, this.chartOptions)
   }
 }

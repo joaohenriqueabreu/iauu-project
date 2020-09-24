@@ -1,17 +1,31 @@
 <script>
-import { Line } from 'vue-chartjs'
+import { Line } from 'vue-chartjs';
+import _ from 'lodash';
 
 export default {
   extends: Line,
   props: {
-    data: { type: Object, default: null },
+    name: { type: String, default: '' },
+    data: { type: Array, default: null },
+    labels: { type: Array, default: null },
     options: { type: Object, default: null }
   },
   computed: {
+    chartData() {
+      return {
+        labels: _.map(this.data, 'label'),
+        datasets: [{
+          label: this.name,
+          borderColor: this.$config.colors.brandLayer,
+          data: _.map(this.data, 'count')
+        }]
+      }
+    },
     chartOptions() {
       return {
         ...this.options,
         responsive: true,
+        maintainAspectRatio: false, // fit chart to wrapper
         tooltips: {
           enabled: false
         }
@@ -19,7 +33,7 @@ export default {
     }
   },
   mounted() {
-    this.renderChart(this.data, this.chartOptions)
+    this.renderChart(this.chartData, this.chartOptions);
   }
 }
 </script>

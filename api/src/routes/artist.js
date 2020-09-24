@@ -24,6 +24,6 @@ api.put('/:id/feedback',
   artistController.sendFeedback
 )
 
-api.get('/statistics', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.filters, artistController.calculateStatistics)
+api.get('/statistics', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.query, artistController.calculateStatistics)
 
 module.exports = api

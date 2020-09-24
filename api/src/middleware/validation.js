@@ -219,7 +219,7 @@ const category = (req, res, next) => {
 
 const filters = (req, res, next) => {
   const schema = validateRequest.object({
-    date: validateRequest.string().optional().allow('')
+    filters: validateRequest.object().optional()
   })
 
   return validate(req.query, req, next, schema)
