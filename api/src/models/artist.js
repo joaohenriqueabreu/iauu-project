@@ -1,18 +1,18 @@
-require('dotenv').config()
-// const db = require('../data/db')
-const db = require('mongoose')
-const _ = require('lodash')
-const BaseModel = require('./base')
-const baseSchemaOptions = require('./schemas/options')
+require('dotenv').config();
+
+const db = require('mongoose');
+const _ = require('lodash');
+const BaseModel = require('./base');
+const baseSchemaOptions = require('./schemas/options');
 const { v4: uid } = require('uuid');
 
-const addressSchema = require('./schemas/address')
-const socialSchema = require('./schemas/media')
-const productsSchema = require('./schemas/product')
-const timeslotSchema = require('./schemas/timeslot')
-const feedbackSchema = require('./schemas/feedback')
+const addressSchema = require('./schemas/address');
+const socialSchema = require('./schemas/media');
+const productsSchema = require('./schemas/product');
+const timeslotSchema = require('./schemas/timeslot');
+const feedbackSchema = require('./schemas/feedback');
 
-const { Schema } = db
+const { Schema } = db;
 
 const artistSchema = new Schema({
   users : [{
@@ -68,28 +68,28 @@ const artistSchema = new Schema({
   address: addressSchema,
   rating: { type: Number },
   feedbacks: [feedbackSchema]
-}, { ...baseSchemaOptions })
+}, { ...baseSchemaOptions });
 
 class Artist extends BaseModel {
   constructor() {
-    super()
+    super();
   }
 
   get feedback_count() {
     if (this.feedbacks === undefined) {
-      return 0
+      return 0;
     }
 
-    return this.feedbacks.length
+    return this.feedbacks.length;
   }
 
   get city_location() {
     if (this.address === undefined) { return '' }
-    return `${this.address.city}, ${this.address.state}`
+    return `${this.address.city}, ${this.address.state}`;
   }
 }
 
-artistSchema.loadClass(Artist)
+artistSchema.loadClass(Artist);
 artistSchema.index({ name: 'text', 
     story: 'text', 
     'category.name': 'text', 
@@ -102,5 +102,6 @@ artistSchema.index({ name: 'text',
     'product.item': 'text' 
   },
   { name: 'artist-full-text-search' }
-)
-module.exports = db.model('Artist', artistSchema)
+);
+
+module.exports = db.model('Artist', artistSchema);

@@ -1,14 +1,13 @@
-require('dotenv').config();
+const { Presentation } = require('../models');
+const _ = require('lodash');
 const db = require('../data/db');
-
-const RegisterAdminUserService = require('../services/auth/registerAdminUser');
 /**
  * Make any changes you need to make to the database here
  */
 async function up () {
-  await db.connect();
-  const registerAdminUserSvc = new RegisterAdminUserService('admin', process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD);
-  await registerAdminUserSvc.register();
+  await db.connect()
+
+  // Unsetting, deleting, undefined did not work for removing counterOffer field
 }
 
 /**

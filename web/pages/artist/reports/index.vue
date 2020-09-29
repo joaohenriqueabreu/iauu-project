@@ -13,7 +13,7 @@
     </div>
     <hr class="mb-4">
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-md-4 col-sm-6">
         <div class="stat-box">
           <h6 class="mb-4">Visitas</h6>
           <div class="d-flex justify-content-end align-items-end">
@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-md-4 col-sm-6">
         <div class="stat-box">
           <h6 class="mb-4">Propostas Recebidas</h6>
           <div class="d-flex justify-content-end align-items-end">
@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-md-4 col-sm-6">
         <div class="stat-box">
           <h6 class="mb-4">Apresentações Fechadas</h6>
           <div class="d-flex justify-content-end align-items-end">
@@ -49,35 +49,69 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-md-4 col-sm-6">
         <div class="stat-box">
-          <h6 class="mb-2">Previsão de faturamento</h6>
-          <small class="mb-4">Contabilizando propostas recebidas</small>
+          <h6 class="mb-2">Possibilidade de faturamento</h6>
+          <small class="mb-4">Total de Propostas</small>
           <div class="d-flex justify-content-end align-items-end">
-            <h4 class="mr-4">{{ statistics.income.prevision.value | currency }}</h4>
-            <h6 :class="statistics.income.prevision.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.income.prevision.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
-              {{ statistics.income.prevision.diff }}%
+            <h4 class="mr-4">{{ statistics.income.proposal.value | currency }}</h4>
+            <h6 :class="statistics.income.proposal.diff > 0 ? 'positive' : 'negative'">
+              <font-awesome :icon="statistics.income.proposal.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              {{ statistics.income.proposal.diff }}%
             </h6>
           </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-md-4 col-sm-6">
+        <div class="stat-box">
+          <h6 class="mb-2">Faturamento Esperado</h6>
+          <small class="mb-4">Apresentações marcadas</small>
+          <div class="d-flex justify-content-end align-items-end">
+            <h4 class="mr-4">{{ statistics.income.presentation.value | currency }}</h4>
+            <h6 :class="statistics.income.presentation.diff > 0 ? 'positive' : 'negative'">
+              <font-awesome :icon="statistics.income.presentation.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              {{ statistics.income.presentation.diff }}%
+            </h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6">
         <div class="stat-box">
           <h6 class="mb-2">Faturamento real</h6>
-          <small class="mb-4">Contabilizando somente propostas fechadas</small>
+          <small class="mb-4">Apresentações Realizadas</small>
           <div class="d-flex justify-content-end align-items-end">
-            <h4 class="mr-4">{{ statistics.income.actual.value | currency }}</h4>
-            <h6 :class="statistics.income.actual.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.income.actual.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
-              {{ statistics.income.actual.diff }}%
+            <h4 class="mr-4">{{ statistics.income.completed.value | currency }}</h4>
+            <h6 :class="statistics.income.completed.diff > 0 ? 'positive' : 'negative'">
+              <font-awesome :icon="statistics.income.completed.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              {{ statistics.income.completed.diff }}%
             </h6>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <line-chart :data="statistics.visits.data" name="Número de visitas" class="chart-wrapper"></line-chart>
+    <div class="row">
+      <div class="col-md-6 col-12 mb-4 vertical center">
+        <h4 class="mb-4">Número de visitas</h4>
+        <line-chart :data="statistics.visits.data" name="Número de visitas" class="chart-wrapper"></line-chart>
+      </div>
+      <div class="col-md-6 col-12 mb-4 vertical center">
+        <h4 class="mb-4">Propostas por região</h4>
+        <geo-chart class="chart-wrapper" :data="statistics.location.data.count"></geo-chart>
+      </div>
+      <div class="col-md-6 col-12 mb-4 vertical center">
+        <h4 class="mb-2">Propostas</h4>
+        <small class="mb-4">Número de Propostas x Total (R$)</small>
+        <line-and-bar-chart :data-line="statistics.proposals.data.count" :data-bar="statistics.proposals.data.sum" name="Propostas" class="chart-wrapper"></line-and-bar-chart>
+      </div>
+      <div class="col-md-6 col-12 mb-4 vertical center">
+        <h4 class="mb-2">Conversão</h4>
+        <small class="mb-4">Propostas (R$) x Fechadas (R$)</small>
+        <line-and-bar-chart :data-line="statistics.proposals.data.sum" :data-bar="statistics.presentations.data.sum" use-same-axis name="Propostas" class="chart-wrapper"></line-and-bar-chart>
+      </div>
+      <div class="col-md-6 col-12 mb-4 vertical center">
+        <h4 class="mb-4">Média de Avaliações</h4>
+        <line-chart :data="statistics.feedbacks.data.avg" class="chart-wrapper"></line-chart>
+      </div>
     </div>
   </div>
 </template>
@@ -96,7 +130,8 @@ export default {
     }
   },
   async mounted() {
-    await this.refreshStatistics();
+    this.calculateStatistics();
+
     // Format for display
     this.start = this.moment().startOf('year').format(this.inputFormat);
     this.end = this.moment().format(this.inputFormat);
@@ -133,7 +168,8 @@ export default {
 }
 
 .chart-wrapper {
-  height: 300px;
-  width: 50%;
+  height: 400px;
+  width: 100%;
+  box-shadow: $shadow;
 }
 </style>

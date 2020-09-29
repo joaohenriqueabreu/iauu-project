@@ -74,7 +74,7 @@ export const actions = {
   },
   async calculateStatistics({ commit }, filters) {
     if (filters === undefined) {
-      filters = { start: moment().startOf('year').format('DD/MM/YYYY'), end: moment().format('DD/MM/YYYY') }
+      filters = { start: moment().startOf('year').toISOString(), end: moment().toISOString() };
     }
 
     const { data } = await this.$axios.get('artists/statistics', { params: { start: filters.start, end: filters.end }});

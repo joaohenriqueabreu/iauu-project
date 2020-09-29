@@ -7,6 +7,7 @@ export default {
     fileStackApiKey: process.env.FILESTACK_API_KEY,
     googleAnalyticsKey: process.env.GOOGLE_ANALYTICS_KEY,
     googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     facebookPixelKey: process.env.FACEBOOK_PIXEL_KEY,
     cdnStaticAssetsDomain: process.env.CDN_STATIC_ASSETS_DOMAIN,
     cdnAppAssetsDomain: process.env.CDN_APP_ASSETS_DOMAIN,
@@ -53,7 +54,10 @@ export default {
         src: 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js',
         integrity: 'sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI',
         crossorigin: 'anonymous'
-      }
+      },
+      // {
+      //   src: 'https://www.gstatic.com/charts/loader.js'
+      // }
     ]
   },
   /*

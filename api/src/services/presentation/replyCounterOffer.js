@@ -11,7 +11,7 @@ module.exports = class SendCounterOfferService extends PresentationService
       super(user, data)
       
       this.id = data.id
-      this.counterOffer = data.counterOffer
+      this.counterOffer = data.counter_offer
     }
 
     async reply() {
@@ -37,7 +37,7 @@ module.exports = class SendCounterOfferService extends PresentationService
     }
 
     ensureCounterOfferExists() {
-      if (this.presentation.proposal.counterOffer === undefined || this.presentation.proposal.counterOffer === null) {
+      if (this.presentation.proposal.counter_offer === undefined || this.presentation.proposal.counter_offer === null) {
         throw new BadRequestException('Counter offer does not exists')
       }
 
@@ -45,7 +45,7 @@ module.exports = class SendCounterOfferService extends PresentationService
     }
 
     ensureCounterOfferIsNotAccepted() {
-      if (this.presentation.proposal.counterOffer !== undefined && this.presentation.proposal.counterOffer.status === 'accepted') {
+      if (this.presentation.proposal.counter_offer !== undefined && this.presentation.proposal.counter_offer.status === 'accepted') {
         throw new BadRequestException('Counter offer already accepted')
       }
 

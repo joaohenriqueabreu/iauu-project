@@ -92,14 +92,14 @@ export default {
   computed: {
     hasCounterOffer() {
       return (
-        !this.$empty(this.presentation.proposal.counterOffer) &&
-        this.presentation.proposal.counterOffer.status !== 'void'
+        !this.$empty(this.presentation.proposal.counter_offer) &&
+        this.presentation.proposal.counter_offer.status !== 'void'
       )
     },
     hasAcceptedCounterOffer() {
       return (
-        !this.$empty(this.presentation.proposal.counterOffer) &&
-        this.presentation.proposal.counterOffer.status === 'accepted'
+        !this.$empty(this.presentation.proposal.counter_offer) &&
+        this.presentation.proposal.counter_offer.status === 'accepted'
       )
     },
     hasSelectedTimeslot() {

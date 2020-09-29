@@ -17,10 +17,10 @@ module.exports = class RejectProposalService extends ReplyProposalService
     this.presentation.status = 'accepted'
 
     // Presentation price and duration copy from counter offer or product
-    if (this.presentation.proposal.counterOffer !== undefined && this.presentation.proposal.counterOffer.status === 'accepted') {
+    if (this.presentation.proposal.counter_offer !== undefined && this.presentation.proposal.counter_offer.status === 'accepted') {
       console.log('Has counter offer...')
-      this.presentation.price = this.presentation.proposal.counterOffer.price
-      this.presentation.duration = this.presentation.proposal.counterOffer.duration
+      this.presentation.price = this.presentation.proposal.counter_offer.price
+      this.presentation.duration = this.presentation.proposal.counter_offer.duration
       return this
     }
 

@@ -54,7 +54,7 @@ export default {
       await store.dispatch('admin/status')
       const end = moment()
       pingTime = end.diff(start)
-      if (pingTime > 100) { status = 'warning' }
+      if (pingTime > 1000) { status = 'warning' }
     } catch (error) {
       console.log(error)
       status = 'error'

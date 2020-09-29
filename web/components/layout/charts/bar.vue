@@ -1,9 +1,9 @@
 <script>
-import { Line } from 'vue-chartjs';
+import { Bar } from 'vue-chartjs';
 import _ from 'lodash';
 
 export default {
-  extends: Line,
+  extends: Bar,
   props: {
     name: { type: String, default: '' },
     data: { type: Array, default: null },

@@ -43,6 +43,7 @@
         "mongoose": "^5.9.27",
         "mongoose-extend-schema": "^1.0.0",
         "mustache": "^4.0.1",
+        "node-cache": "^5.1.2",
         "nodemailer": "^6.4.11",
         "socket.io": "^2.3.0",
         "socketio-jwt": "^4.6.2",

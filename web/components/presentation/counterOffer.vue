@@ -93,8 +93,8 @@ export default {
     }
   },
   created() {
-    if (!this.$empty(this.presentation.proposal.counterOffer)) {
-      this.counterOffer = this.$object.clone(this.presentation.proposal.counterOffer)
+    if (!this.$empty(this.presentation.proposal.counter_offer)) {
+      this.counterOffer = this.$object.clone(this.presentation.proposal.counter_offer)
     }
   },
   methods: {

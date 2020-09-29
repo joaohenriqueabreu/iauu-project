@@ -8,7 +8,7 @@ async function up () {
   // const result = await Presentation.updateMany({ status: 'proposal' }, { counterOffer: { price: 0, duration: 0 }}, { upsert:true }, (err, doc) => { console.log(doc) })
   const presentations = await Presentation.find()
   presentations.forEach((presentation) => {
-    presentation.proposal.counterOffer = {
+    presentation.proposal.counter_offer = {
       price: 0, duration: 0, status: 'void'
     }
 

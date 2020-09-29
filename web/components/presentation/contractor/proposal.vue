@@ -47,8 +47,8 @@
         >
           <h6 class="mb-4">O artista enviou o orçamento para sua apresentação</h6>
           <h5 class="mb-4">
-            {{ presentation.proposal.counterOffer.price | currency }} para
-            {{ presentation.proposal.counterOffer.duration }} horas de apresentação
+            {{ presentation.proposal.counter_offer.price | currency }} para
+            {{ presentation.proposal.counter_offer.duration }} horas de apresentação
           </h5>
           <div class="horizontal middle center">
             <form-button class="mr-4" @action="replyCounterOffer(true)">Aceitar</form-button>
@@ -58,15 +58,15 @@
         <div v-if="hasRejectedCounterOffer" class="mb-4 mx-4 vertical middle center">
           <h6 class="mb-2">Orçamento enviado <u>reprovado</u></h6>
           <h5 class="mb-4">
-            {{ presentation.proposal.counterOffer.price | currency }} para
-            {{ presentation.proposal.counterOffer.duration }} horas de apresentação
+            {{ presentation.proposal.counter_offer.price | currency }} para
+            {{ presentation.proposal.counter_offer.duration }} horas de apresentação
           </h5>
         </div>
         <div v-if="hasAcceptedCounterOffer" class="mb-4 mx-4 accepted-counter-offer">
           <h6>Orçamento aprovado</h6>
           <h5 class="mb-4">
-            {{ presentation.proposal.counterOffer.price | currency }} para
-            {{ presentation.proposal.counterOffer.duration }} horas de apresentação
+            {{ presentation.proposal.counter_offer.price | currency }} para
+            {{ presentation.proposal.counter_offer.duration }} horas de apresentação
           </h5>
         </div>
         <div class="boxed">
@@ -106,20 +106,20 @@ export default {
   computed: {
     hasCounterOffer() {
       return (
-        !this.$empty(this.presentation.proposal.counterOffer) &&
-        this.presentation.proposal.counterOffer.status !== 'void'
+        !this.$empty(this.presentation.proposal.counter_offer) &&
+        this.presentation.proposal.counter_offer.status !== 'void'
       )
     },
     hasAcceptedCounterOffer() {
       return (
-        !this.$empty(this.presentation.proposal.counterOffer) &&
-        this.presentation.proposal.counterOffer.status === 'accepted'
+        !this.$empty(this.presentation.proposal.counter_offer) &&
+        this.presentation.proposal.counter_offer.status === 'accepted'
       )
     },
     hasRejectedCounterOffer() {
       return (
-        !this.$empty(this.presentation.proposal.counterOffer) &&
-        this.presentation.proposal.counterOffer.status === 'rejected'
+        !this.$empty(this.presentation.proposal.counter_offer) &&
+        this.presentation.proposal.counter_offer.status === 'rejected'
       )
     }
   },
