@@ -6,46 +6,31 @@
       <h4 class="mr-4">Ping:</h4>
       <h4>{{ pingTime }}ms</h4>
     </div>
-    <div v-if="!$empty(usersStats)" class="row mb-4">
-      <div class="col-sm-4">
-        <div class="stat-box">
-          <h6 class="mb-4">Usuários</h6>
-          <div class="d-flex justify-content-end">
-            <h4>{{ allUsersCount }}</h4>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="stat-box">
-          <h6 class="mb-4">Artistas</h6>
-          <div class="d-flex justify-content-end">
-            <h4>{{ artistsCount }}</h4>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="stat-box">
-          <h6 class="mb-4">Organizadores de eventos</h6>
-          <div class="d-flex justify-content-end">
-            <h4>{{ contractorsCount }}</h4>
-          </div>
+    <div class="mb-2 d-flex flex-row flex-wrap justify-content-between">
+      <h4 class="mb-4">Relatórios</h4>
+      <div class="horizontal middle desktop-only">
+        <h6 class="mr-4 hide-mobile">Período:</h6>
+        <div class="horizontal middle desktop-only">
+          <form-date v-model="start" class="mr-3"></form-date>
+          <form-date v-model="end" class="mr-4"></form-date>
+          <form-button @action="refreshStatistics">Buscar</form-button>
         </div>
       </div>
     </div>
-    <div class="mb-4">
-      <line-chart :chart-data="dailySignups" class="chart-wrapper"></line-chart>
+    <hr class="mb-4">
+    <div class="row">
+    </div>
+    <div class="row">
     </div>
   </div>
 </template>
 
 <script>
-import _ from 'lodash'
-import { mapGetters } from 'vuex'
-import moment from 'moment'
+import { mapState, mapActions } from 'vuex';
 export default {
   async asyncData({ store }) {
-    await store.dispatch('admin/loadUsersStats')
-    await store.dispatch('admin/loadPresentationsStats')
+    // await store.dispatch('admin/calculateUsersStatistics');
+    // await store.dispatch('admin/calculatePresentationsStatistics');
 
     let status = 'good'
     let pingTime = 0
@@ -65,49 +50,57 @@ export default {
       pingTime
     }
   },
-  mounted() {
-    // new Chart
+  data() {
+    return {
+      start: '',
+      end: '',
+      inputFormat: 'YYYY-MM-DD'
+    }
+  },
+  async mounted() {
+    await this.calculateUsersStatistics();
+    await this.calculatePresentationsStatistics();
+
+    // Format for display
+    this.start = this.moment().startOf('year').format(this.inputFormat);
+    this.end = this.moment().format(this.inputFormat);
   },
   computed: {
-    ...mapGetters('admin', ['usersStats']),
-    allUsersCount() {
-      return this.usersStats.all[0].count
-    },
-    contractorsCount() {
-      const contractors = _.filter(this.usersStats.roles, (role) => role._id === 'contractor')
-      return contractors.length > 0 ? contractors[0].count : 0
-    },
-    artistsCount() {
-      const artists = _.filter(this.usersStats.roles, (role) => role._id === 'artist')
-      return artists.length > 0 ? artists[0].count : 0
-    },
-    dailySignups() {
-      return []
+    ...mapState({ statistics: (state) => state.admin.statistics }),
+    reportDateRange() {
+      return { start: this.moment(this.start).toISOString(), end: this.moment(this.end).toISOString() };
+    }
+  },
+  methods: {
+    ...mapActions('admin', ['calculateUsersStatistics', 'calculatePresentationsStatistics']),
+    async refreshStatistics() {
+      await this.calculateUsersStatistics(this.reportDateRange);
+      await this.calculatePresentationsStatistics(this.reportDateRange);
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.stat-status {
-  &.good { background: $green; }
-  &.warning { background: $warning; }
-  &.error { background: $error; }
-
-  width: 20px;
-  height: 20px;
-  border-radius: $rounded;
-  box-shadow: $shadow;
-}
-
 .stat-box {
   background: $layer4;
   box-shadow: $shadow;
   padding: 2 * $space;
+  margin-bottom: 4 * $space;
+}
+
+.positive {
+  color: $green;
+}
+
+.negative {
+  color: $error;
 }
 
 .chart-wrapper {
-  max-height: 20vh;
-  max-width: 80vw;
+  height: 400px;
+  width: 100%;
+  box-shadow: $shadow;
+  overflow: hidden;
 }
 </style>

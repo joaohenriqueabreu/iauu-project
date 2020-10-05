@@ -1,12 +1,13 @@
-require('dotenv').config()
-// const db = require('../data/db')
-const db = require('mongoose')
-const BaseModel = require('./base')
-const personalInfo = require('./schemas/personalInfo')
-const notification = require("./schemas/notification")
-const baseSchemaOptions = require('./schemas/options')
+require('dotenv').config();
 
-const { Schema } = db
+const db = require('mongoose');
+const BaseModel = require('./base');
+const personalInfo = require('./schemas/personalInfo');
+const address = require('./schemas/address');
+const notification = require("./schemas/notification");
+const baseSchemaOptions = require('./schemas/options');
+
+const { Schema } = db;
 
 const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
@@ -35,7 +36,9 @@ const userSchema = new Schema({
       ref: 'User' 
     }
   },
-  info: { type: personalInfo },
+  phone: { type: String },
+  address: { type: address },
+  document: { type: String },
   social: {
     facebook_id: { type: String},
     google_id: { type: String },
@@ -50,61 +53,61 @@ const userSchema = new Schema({
   },
   notifications: [notification],
   last_logged_in: { type: Date },
-}, { ...baseSchemaOptions })
+}, { ...baseSchemaOptions });
 
 class User extends BaseModel {
   constructor() {
-    super()    
+    super();
   }
 
   static findFromCredentials({ email, password }) {
-    return this.findOne({ email, password })
+    return this.findOne({ email, password });
   }
 
   static fetchdById(id) {
     return this.findById(id)
       .populate('artist')
-      .populate('contractor')
+      .populate('contractor');
   }
 
   static fetchWithSensitiveDataById(id) {
     return this.findById(id)
       .select('+password +access_token +verification +verification.token')
       .populate('artist')
-      .populate('contractor')
+      .populate('contractor');
   }
 
   static fetchWithSensitiveData(conditions) {
     return this.findOne(conditions)
       .select('+password +access_token +verification')
       .populate('artist')
-      .populate('contractor')
+      .populate('contractor');
   }
 
   generateVerificationUrl() {
-    return `${process.env.WEB_URL}/register/verify/${this.verification.token}`
+    return `${process.env.WEB_URL}/register/verify/${this.verification.token}`;
   }
 
   generateResetPasswordUrl() {
-    return `${process.env.WEB_URL}/reset/password/${this.verification.token}`
+    return `${process.env.WEB_URL}/reset/password/${this.verification.token}`;
   }
 
   getRoleId() {
-    console.log('Getting role id...')
+    console.log('Getting role id...');
     if (this.role === 'artist' && this.artist !== undefined) {
-      return this.artist.id
+      return this.artist.id;
     }
 
     if (this.role === 'contractor' && this.contractor !== undefined) {
-      return this.contractor.id
+      return this.contractor.id;
     }
 
-    return null
+    return null;
   }
 }
 
-userSchema.index({ email: 'text', name: 'text' })
+userSchema.index({ email: 'text', name: 'text' });
 
 // https://mongoosejs.com/docs/api.html#schema_Schema-loadClass
-userSchema.loadClass(User)
-module.exports = db.model('User', userSchema)
+userSchema.loadClass(User);
+module.exports = db.model('User', userSchema);

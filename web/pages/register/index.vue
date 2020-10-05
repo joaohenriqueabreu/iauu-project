@@ -8,9 +8,17 @@
         <form-validation :active="$v.credentials.name.$error">O nome não pode estar vazio</form-validation>
         <form-email v-model="$v.credentials.email.$model" placeholder="Entre com seu email"></form-email>
         <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
-        <form-password v-model="$v.credentials.password.$model" placeholder="Crie uma senha para acessar a plataforma">
-        </form-password>
-        <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
+        <form-password v-model="$v.credentials.password.$model" placeholder="Crie uma senha para acessar a plataforma"></form-password>
+        <form-validation :active="$v.credentials.password.$error">
+          Senha deve ser composta de: 
+          <ul>
+            <li>Pelo menos 8 caracteres;</li>
+            <li>Letras maiúsculas;</li>
+            <li>Letras minúsculas;</li>
+            <li>Números;</li>
+            <li>Caractéres especiais</li>
+          </ul>
+        </form-validation>
         <small class="px-4">Mínimo 8 caracteres, combinação de números, letras e caracteres especiais</small>
         <form-password v-model="$v.credentials.passwordConfirmation.$model" placeholder="Confirme sua senha"></form-password>
         <form-validation :active="$v.credentials.passwordConfirmation.$error">Confirmação deve ser igual a senha</form-validation>
@@ -34,7 +42,7 @@
 
 <script>
 import Vuelidate from 'vuelidate'
-import { required, email, sameAs } from 'vuelidate/lib/validators'
+import { required, email, sameAs, helpers } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 import FacebookLogin from '@/components/auth/facebook'
 import GoogleLogin from '@/components/auth/google'
@@ -60,7 +68,14 @@ export default {
     credentials: {
       name: { required },
       email: { required, email },
-      password: { required },
+      password: { required, strongPassword(passwordValue) {
+        return (
+          /[a-z]/.test(passwordValue) && // checks for a-z
+          /[0-9]/.test(passwordValue) && // checks for 0-9
+          /\W|_/.test(passwordValue) && // checks for special char
+          passwordValue.length >= 8
+        );
+      }},
       passwordConfirmation: {
         sameAsPassword: sameAs('password')
       }

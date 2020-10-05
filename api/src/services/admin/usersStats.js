@@ -5,9 +5,9 @@ const { User } = require('../../models')
 
 module.exports = class UserStatsService extends BaseService
 {
-    constructor(year) {
+    constructor() {
       super()
-      this.stats = {}
+      this.statistics = {}
     }
 
     async retrieve() {
@@ -17,7 +17,7 @@ module.exports = class UserStatsService extends BaseService
 
     async calculateStats() {
       const startOfYear = new Date(moment().startOf('year').toISOString())
-      this.stats = await User.aggregate([{ $match: { created_at: { $gte: startOfYear }} }]).facet({
+      this.statistics = await User.aggregate([{ $match: { created_at: { $gte: startOfYear }} }]).facet({
         all: [{ $group: { _id: "", count: { $sum: 1 } }}],
         status: [{ $group: { _id: "$status", count: { $sum: 1 } }}],
         roles: [{ $group: { _id: "$role", count: { $sum: 1 } }}],
@@ -28,6 +28,6 @@ module.exports = class UserStatsService extends BaseService
     }
 
     getStats() {
-      return this.stats
+      return this.statistics
     }
 }

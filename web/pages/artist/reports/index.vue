@@ -120,7 +120,7 @@
 import { mapState, mapActions } from 'vuex';
 export default {
   async asyncData({ store }) {
-    await store.dispatch('artist/calculateStatistics');
+    // await store.dispatch('artist/calculateStatistics');
   },
   data() {
     return {
@@ -130,7 +130,7 @@ export default {
     }
   },
   async mounted() {
-    this.calculateStatistics();
+    await this.calculateStatistics();
 
     // Format for display
     this.start = this.moment().startOf('year').format(this.inputFormat);
@@ -171,5 +171,6 @@ export default {
   height: 400px;
   width: 100%;
   box-shadow: $shadow;
+  overflow: hidden;
 }
 </style>

@@ -10,7 +10,7 @@ const DeleteProductService = require('../services/artist/deleteProduct');
 const LookupProductsService = require('../services/artist/lookupProducts');
 const SearchArtistUsersService = require('../services/artist/searchUsers');
 const SendFeedbackService = require('../services/artist/sendFeedback');
-const CalculateStatisticsService = require('../services/artist/calculateStatistics');
+const CalculateArtistStatisticsService = require('../services/statistics/calculateArtistStatistics');
 
 class ArtistController extends BaseController {
   publicInfo(req, res, next) {
@@ -80,7 +80,7 @@ class ArtistController extends BaseController {
 
   calculateStatistics(req, res, next) {
     console.log('Calculating artist statistics...');
-    const calculateStatisticSvc = new CalculateStatisticsService(req.user, req.data);
+    const calculateStatisticSvc = new CalculateArtistStatisticsService(req.user, req.data);
     calculateStatisticSvc.calculate()
       .then(() => { res.status(200).json(calculateStatisticSvc.getStatistics()); })
       .catch((error) => next(error));

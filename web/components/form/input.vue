@@ -9,9 +9,9 @@
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
-        @input="$emit('input', $event.target.value)"
-        @blur="$emit('blur', value)"
-        @keyup.enter.prevent="$emit('enter', value)"
+        @input="afterInput"
+        @blur="afterBlur"
+        @keyup.enter.prevent="afterEnter"
       />
       <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
     </div>
@@ -49,6 +49,17 @@ export default {
     },
     iconHelper() {
       return !this.$utils.empty(this.icon) ? this.icon : 'search'
+    }
+  },
+  methods: {
+    afterInput(event) {
+      this.$emit('input', event.target.value);
+    },
+    afterBlur(value) {
+      this.$emit('blur', value)
+    },
+    afterEnter(value) {
+      this.$emit('enter', value);
     }
   }
 }

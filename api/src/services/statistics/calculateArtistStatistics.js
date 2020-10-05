@@ -2,37 +2,18 @@ const _ = require('lodash');
 const moment = require('moment');
 const mongoose = require('mongoose');
 
-const ArtistService = require('./base');
+const CalculateStatisticService = require('./base');
 const CacheManagerService = require('../utils/cacheManager');
+const StatisticsHelper = require('../utils/statisticsHelper');
 const { Artist, Presentation, Statistic } = require('../../models');
 
-module.exports = class CalculateStatisticsService extends ArtistService
+module.exports = class CalculateStatisticsService extends CalculateStatisticService
 {
     constructor(user, data) {
       super(user, data);
 
-      this.statistics = {};
-      this.presentations = [];
-
-      this.filters = data;
-      if (typeof this.filters !== 'object') { this.filters = {}; }
-      if (typeof this.filters.start !== 'string') { this.filters.start = moment().subtract(12, 'months'); }
-      if (typeof this.filters.end !== 'string') { this.filters.end = moment(); }
-
-      this.filters.start = moment(this.filters.start).toISOString();
-      this.filters.end = moment(this.filters.end).toISOString();
-
-      // LMG - Last month growth
-      this.filters.diffPeriods = { 
-        lastMon: { 
-          start: moment().subtract(1, 'month').startOf('month').toISOString(),
-          end: moment().subtract(1, 'month').endOf('month').toISOString(),
-        }, 
-        prevMon:  {
-          start: moment().subtract(2, 'month').startOf('month').toISOString(),
-          end: moment().subtract(2, 'month').endOf('month').toISOString(),
-        }
-      };
+      this.id = user.role_id;
+      this.artist = {};
 
       this.cacheSvc = new CacheManagerService(this.artist, 'statistics');
     }
@@ -68,17 +49,19 @@ module.exports = class CalculateStatisticsService extends ArtistService
       return this;
     }
 
-    hasExistingCacheRecord() {
-      return this.cacheSvc.hasCacheRecord();
+    async lookupArtist() {
+      console.log('Searching for artist...')
+      this.artist = await Artist.findById(this.id)
+      return this
     }
 
-    retrieveStatisticsFromCache() {
-      return this.cacheSvc.retrieve();
-    }
-
-    cacheStatistics() {
-      this.cacheSvc.store(this.statistics);
-      return this;
+    ensureArtistWasFound() {
+      if (Artist.notFound(this.artist) || !this.artist instanceof Artist) {
+        throw new Error('Artist not found...')
+      }
+  
+      console.log('Artist found...')
+      return this
     }
 
     async calculateVisits() {
@@ -96,7 +79,11 @@ module.exports = class CalculateStatisticsService extends ArtistService
       ]);
 
       const diff = this.calculateDiff(lastMon, prevMon);
-      this.statistics.visits = { count, diff, data: this.formatQueryDataset(data, 'value') };
+      this.statistics.visits = { 
+        count: count, 
+        diff: diff, 
+        data: StatisticsHelper.formatQueryDataset(data, 'value') 
+      };
       return this;
     }
 
@@ -193,7 +180,7 @@ module.exports = class CalculateStatisticsService extends ArtistService
 
       this.statistics.feedbacks = {
         data: {
-          avg: this.formatQueryDataset(data, 'avg')
+          avg: StatisticsHelper.formatQueryDataset(data, 'avg')
         }
       }
 
@@ -229,8 +216,8 @@ module.exports = class CalculateStatisticsService extends ArtistService
       ]);
 
       this.statistics.proposals.data = {
-        count: this.formatQueryDataset(data, 'count'),
-        sum: this.formatQueryDataset(data, 'sum'),
+        count: StatisticsHelper.formatQueryDataset(data, 'count'),
+        sum: StatisticsHelper.formatQueryDataset(data, 'sum'),
       }
     }
 
@@ -246,40 +233,9 @@ module.exports = class CalculateStatisticsService extends ArtistService
       ]);
 
       this.statistics.presentations.data = {
-        count: this.formatQueryDataset(data, 'count'),
-        sum: this.formatQueryDataset(data, 'sum'),
+        count: StatisticsHelper.formatQueryDataset(data, 'count'),
+        sum: StatisticsHelper.formatQueryDataset(data, 'sum'),
       }
-    }
-
-
-    formatQueryDataset(data, fieldName) {
-      // Format dataset (last 12 months, including current mon)
-      const dataset = [];
-      for (let m = 12; m >= 0; m--) {
-        const date = moment().subtract(m, 'months');
-        const index = date.format('YYYY-MM');
-        // const dataIdx = _.findIndex(data, (item) => { return item._id.index === index; });
-        const dataIdx = _.findIndex(data, (item) => { return item._id.index === index; });
-        let value = 0;
-
-        if (dataIdx !== -1)  { value = data[dataIdx][fieldName]; }
-        dataset.push({ 
-          year: date.year(), 
-          month: date.month(), 
-          index: index, 
-          label: `${date.format('MMM')} ${date.format('YY')}`, 
-          value: value
-        })
-      }
-
-      return dataset;
-    }
-
-    calculateDiff(current, last) {
-      if (current === 0 && last === 0) { return 0; }
-      if (last === 0) { return 100; }
-
-      return ((current - last)/last).toFixed(2) * 100;
     }
 
     getStatistics() {

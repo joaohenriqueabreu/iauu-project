@@ -14,10 +14,10 @@
       </div>
       <div class="boxed mb-4">
         <h6>Atualize suas informações pessoais</h6>
-        <small
-          >Não se preocupe, somente com sua autorização, suas informações serão
-          compartilhadas</small
-        >
+        <small>
+          Não se preocupe, somente com sua autorização, suas informações serão compartilhadas 
+          <nuxt-link to="terms"><small><u>Em caso de dúvidas, Leia nossa política de privacidade</u></small></nuxt-link>
+        </small>
         <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone"></form-masked>
       </div>
       <div class="boxed">

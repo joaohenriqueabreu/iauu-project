@@ -4,7 +4,7 @@
       <div class="section main" :style="`background-image: url('${$images('home.jpg')}');`"></div>
     </client-only>
     <div class="section search">
-      <h1 class="text-center mb-4">Aperte o play em seu evento</h1>
+      <h1 class="text-center mb-4">Aperte o play de seu evento</h1>
       <div class="half-width vertical middle center">
         <client-only>
           <search-artist @search="search"></search-artist>
