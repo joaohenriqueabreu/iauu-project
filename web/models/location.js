@@ -1,4 +1,4 @@
-import Model from './model'
+import Model from './model';
 
 const PLACES_MAPPING = {
   street_number: 'number',
@@ -10,56 +10,50 @@ const PLACES_MAPPING = {
   postal_code: 'zipcode'
 }
 
-const DONT_SHOW_PROPS = ['id', '_id', 'zipcode', 'address_complemet', 'coordinates', 'formatted']
+const DONT_SHOW_PROPS = ['id', '_id', 'zipcode', 'address_complemet', 'coordinates', 'formatted'];
 
 export default class Location extends Model {
   constructor(locationData) {
-    super()
-    delete this.id
-    this.street = ''
-    this.street_complement = ''
-    this.number = ''
-    this.neighboorhood = ''
-    this.city = ''
-    this.state = ''
-    this.country = ''
-    this.zipcode = ''
-    this.display = ''
-    this.coordinates = {
-      latitude: 0,
-      longitude: 0
-    }
+    super();
+    delete this.id;
+    this.street = '';
+    this.street_complement = '';
+    this.number = '';
+    this.neighboorhood = '';
+    this.city = '';
+    this.state = '';
+    this.country = '';
+    this.zipcode = '';
+    this.display = '';
+    this.location = { latitude: 0, longitude: 0 };
 
-    this.display = ''
+    this.display = '';
 
-    if (
-      locationData !== undefined &&
-      Object.prototype.hasOwnProperty.call(locationData, 'address_components')
-    ) {
-      this.assignFromGooglePlaces(locationData)
+    if (locationData !== undefined && Object.prototype.hasOwnProperty.call(locationData, 'address_components')) {
+      this.assignFromGooglePlaces(locationData);
     } else {
-      this.assign(locationData)
+      this.assign(locationData);
     }
   }
 
   assignFromGooglePlaces(locationData) {
-    const self = this
+    const self = this;
     locationData.address_components.forEach((component) => {
       component.types.forEach((type) => {
         if (Object.prototype.hasOwnProperty.call(PLACES_MAPPING, type)) {
-          self[PLACES_MAPPING[type]] = component.long_name
+          self[PLACES_MAPPING[type]] = component.long_name;
         }
       })
     })
 
-    this.display = locationData.formatted_address
-    self.coordinates.latitude = locationData.geometry.location.lat()
-    self.coordinates.longitude = locationData.geometry.location.lng()
+    this.display = locationData.formatted_address;
+    self.location.longitude = locationData.geometry.location.lng();
+    self.location.latitude = locationData.geometry.location.lat();
   }
 
   toString() {
     if (this.display.length > 0) {
-      return this.display
+      return this.display;
     }
 
     const addressDisplay = []

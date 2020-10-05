@@ -32,21 +32,7 @@
           <h2 class="mr-2 mb-0 order-1">{{ stat | number('0a') }}</h2>
           <h6 class="hide-desktop order-0"><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
           <h5 class="hide-mobile">{{ $utils.pluralize($dictionary.artist.stats.label[statName], stat) }}</h5>
-
-          <!-- <h2 v-if="statName === 'score'" class="mr-2 mb-0 order-1">{{ stat | number('0') }}</h2>
-          <h2 v-if="statName === 'followers' && stat >= 100000" class="mr-2 mb-0 order-1">
-            {{ stat | number('0a') }}
-          </h2>
-          <h2 v-if="statName === 'followers' && stat < 100000" class="mr-2 mb-0 order-1">
-            {{ stat | number('0,0') }}
-          </h2>
-          <h2 v-if="statName === 'presentations'" class="mr-2 mb-0 order-1">{{ stat | number('0') }}</h2>
-          <h6 class="hide-desktop order-0"><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6> -->
         </div>
-        <!-- <div class="horizontal">
-          <h5 v-if="statName === 'score'" class="mr-1">{{ artist.rating.amount }}</h5>
-          <h5 class="hide-mobile">{{ $utils.pluralize($dictionary.artist.stats.label[statName], artist.rating.amount) }}</h5>
-        </div> -->
       </div>
     </div>
     <div class="container">
@@ -129,8 +115,6 @@
             <span>Valor da apresentação</span>
           </small>
           <price-range :range="artist.proposal.price_range"></price-range>
-          <!-- <h4 v-if="$auth.loggedIn">{{ artist.score | currency }}</h4>
-          <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4> -->
           <div class="mb-4 hide-desktop"></div>
         </div>
         <div class="vertical">

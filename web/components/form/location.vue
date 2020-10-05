@@ -1,17 +1,11 @@
 <template>
   <div>
-    <label :for="name">{{ label }}</label>
+    <label v-if="!$empty(label)" :for="name" :class="labelClass">{{ label }}</label>
+    <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
-      <input
-        ref="placesElement"
-        :placeholder="placeholder"
-        type="text"
-        :value="selectedPlace.toString()"
-        @input="locationInput"
-      />
+      <input ref="placesElement" :placeholder="placeholder" type="text" :value="selectedPlace.toString()" @input="locationInput"/>
       <font-awesome icon="map-marker-alt"></font-awesome>
     </div>
-
     <input ref="formElement" name="location" type="hidden" />
   </div>
 </template>
@@ -93,6 +87,7 @@ export default {
   border-top: none;
   padding: $space;
   font-family: Gotham;
+  top: -50px;
   .pac-item {
     // background: $layer2;
     cursor: pointer;

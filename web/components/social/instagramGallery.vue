@@ -61,7 +61,9 @@ export default {
 <style lang="scss" scoped>
 img {
   width: 100%;
-  height: auto;
+  max-width: 350px;
+  height: 400px;
+  // height: auto;
 }
 
 .instagram{ width:100px; height:100px;

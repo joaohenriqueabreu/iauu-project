@@ -1,13 +1,9 @@
 // const db = require('../../data/db')
 const db = require('mongoose')
 
-module.exports = new db.Schema({
-    type: {
-      type: String,
-      enum: ['Point'],      
-    },
-    coordinates: {
-      type: [Number],      
-    }
-  });
-  
+const coordinatesSchema = new db.Schema({
+  type: { type: String },
+  coordinates: { type: [Number] }
+});
+
+module.exports = coordinatesSchema;

@@ -5,7 +5,9 @@
         <font-awesome v-for="index in range" :key="`active_${index}`" icon="dollar-sign" class="price-range active mr-1"></font-awesome>
         <font-awesome v-for="index in 5 - range" :key="`inactive_${index} `" icon="dollar-sign" class="price-range inactive mr-1"></font-awesome>
       </div>
-      <div v-if="!short">{{ $config.priceRanges[range] }}</div>
+      <div v-if="!short">
+        <h5>{{ $config.priceRanges[range] }}</h5>
+      </div>
     </div>
   </div>
 </template>
@@ -25,5 +27,9 @@ export default {
   &.inactive {
     color: $layer5;
   }
+}
+
+[data-icon] {
+  font-size: 14px;
 }
 </style>

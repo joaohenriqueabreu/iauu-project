@@ -6,9 +6,9 @@
     </div>
     <div v-else>
       <div v-if="short">
-        <div v-if="score > 0">
+        <div v-if="score > 0" class="horizontal middle">
+          <h5 class="bold mr-2">{{ score | oneDecimal }}</h5>
           <font-awesome class="icon mr-1" icon="star"></font-awesome>
-          <small class="bold">{{ score | oneDecimal }}</small>
         </div>
       </div>
       <div v-else class="horizontal center middle">
@@ -89,4 +89,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+[data-icon] {
+  font-size: 16px;
+}
+</style>

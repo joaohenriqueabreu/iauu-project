@@ -25,19 +25,7 @@
       <div class="col-sm-6 d-flex justify-content-end">
         <div class="vertical">
           <div v-if="!$utils.empty(artist.rating)" class="mb-3">
-            <rating :score="artist.rating" :amount="artist.feedback_count"></rating>
-          </div>
-          <div class="d-flex full-height">
-            <div class="vertical">
-              <div v-if="!$utils.empty(artist.stats)" class="horizontal justify-content-end">
-                <h5 :title="`${artist.stats.presentations} Apresentações realizadas`">
-                  <font-awesome icon="music" class="mr-2"></font-awesome>
-                  {{ artist.stats.presentations }}
-                </h5>
-              </div>
-              <div class="d-flex align-items-end full-height">
-              </div>
-            </div>
+            <rating :score="artist.rating" :amount="artist.feedback_count" short></rating>
           </div>
         </div>
       </div>

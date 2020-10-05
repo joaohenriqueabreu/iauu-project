@@ -1,6 +1,6 @@
 <template>
   <div>
-    <label v-if="!$empty(label)" :for="name">{{ label }}</label>
+    <label v-if="!$empty(label)" :for="name" :class="labelClass">{{ label }}</label>
     <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <input
@@ -37,6 +37,7 @@ export default {
     prop: { type: String, default: '' },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
+    labelClass: { type: String, default: '' },
     placeholder: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
     icon: { type: String, default: null },
