@@ -11,6 +11,7 @@ const socialSchema = require('./schemas/media');
 const productsSchema = require('./schemas/product');
 const timeslotSchema = require('./schemas/timeslot');
 const feedbackSchema = require('./schemas/feedback');
+const bankAccountSchema = require('./schemas/bankAccount');
 
 const { Schema } = db;
 
@@ -66,6 +67,7 @@ const artistSchema = new Schema({
     }
   },
   address: addressSchema,
+  bank_account: bankAccountSchema,
   rating: { type: Number },
   feedbacks: [feedbackSchema]
 }, { ...baseSchemaOptions });

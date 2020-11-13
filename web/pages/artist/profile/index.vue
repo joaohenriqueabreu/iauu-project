@@ -1,7 +1,7 @@
 <template>
   <div>
     <form @submit.prevent="saveProfile">
-      <image-uploader ref="bgUploader" @uploaded="setBackground">
+      <image-uploader ref="bgUploader" @uploaded="setBackground" resolution="background">
         <header :style="{ 'background-image': `url(${$images(backgroundImg)})` }" @click="uploadBG"></header>
       </image-uploader>
       <main>
@@ -21,6 +21,7 @@
               <li class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'"><h6>Eventos</h6></li>
               <li class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'"><h6>Redes Sociais</h6></li>
               <li class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'"><h6>Integrantes</h6></li>
+              <li class="nav-link" :class="{ active: bankAccountTab }" @click="activeTab = 'bankAccount'"><h6>Dados bancários</h6></li>
             </ul>
           </div>
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
@@ -45,6 +46,9 @@
             <fade-transition mode="out-in">
               <presentation-types v-if="typesTab" :options="presentationTypes" key="types"></presentation-types>
             </fade-transition>
+            <fade-transition mode="out-in">
+              <bank-account v-if="bankAccountTab" key="bankAccount"></bank-account>
+            </fade-transition>
           </div>
         </div>
       </main>
@@ -67,6 +71,7 @@ import ArtistUsers from '@/components/artist/profile/users'
 import SocialNetworks from '@/components/artist/profile/social'
 import ArtistCategories from '@/components/artist/profile/categories'
 import PresentationTypes from '@/components/artist/profile/presentationTypes'
+import BankAccount from '@/components/artist/profile/bankAccount'
 export default {
   components: {
     ProfileStats,
@@ -75,7 +80,8 @@ export default {
     ArtistUsers,
     SocialNetworks,
     ArtistCategories,
-    PresentationTypes
+    PresentationTypes,
+    BankAccount,
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
@@ -124,6 +130,9 @@ export default {
     },
     typesTab() {
       return this.activeTab === 'types'
+    },
+    bankAccountTab() {
+      return this.activeTab === 'bankAccount'
     },
     backgroundImg() {
       return !this.$utils.empty(this.background)

@@ -91,19 +91,20 @@ export default {
     ...mapActions('auth', ['login']),
     ...mapActions('protected', ['forgotPassword']),
     async login() {
-      this.$v.$touch()
+      this.$v.$touch();
       if (this.$v.credentials.$invalid) { 
-        this.$toast.error('Formulário inválido')
-        return
+        this.$toast.error('Formulário inválido');
+        return;
       }
 
       try {
         await this.$auth.loginWith('user', {
           data: this.credentials
-        })
+        });
+
         this.$router.push('/artist/schedule')
       } catch (error) {
-        // this.$refs.login.reset()
+        console.log(error);
       }
     },
     async loginWithFacebook(accessToken) {

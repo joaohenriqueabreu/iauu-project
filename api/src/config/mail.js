@@ -1,36 +1,55 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
+const aws = require('aws-sdk');
 
-let transporter = {}
+const smtpEndpoint = 'email-smtp.us-east-1.amazonaws.com';
+const port = 587;
+const smtpUsername = process.env.SMTP_ACCESS_KEY;
+const smtpPassword = process.env.SMTP_SECRET;
+
+let transporter = {};
 
 async function start() {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
-    // let testAccount = await nodemailer.createTestAccount();
-  
+    // let testAccount = await nodemailer.createTestAccount(); 
+
     // create reusable transporter object using the default SMTP transport
     transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
+        host: smtpEndpoint,
+        port: port,
+        secure: false, // true for 465, false for other ports
         auth: {
-            user: 'lauren.farrell69@ethereal.email',
-            pass: 'rfkSczMZx9fx4syD4D'
+          user: smtpUsername,
+          pass: smtpPassword
         },
         tls: {
             rejectUnauthorized: false
-        }    
+        }  
     });
-    
+
+    //     host: process.env.SMTP_HOST,
+    //     port: process.env.SMTP_PORT,
+    //     auth: {
+    //         user: process.env.SMTP_USER,
+    //         pass: process.env.SMTP_PWD
+    //     },
+    //     tls: {
+    //         rejectUnauthorized: false
+    //     }    
+    // });
 }
 
 async function send(to, from, subject, message) {
-    console.log('Trying to send email...')
+    from = 'mail@iauu.com.br';
+    console.log('Trying to send email...');
     try {
-        const result = await transporter.sendMail({to, from, subject, html: message})    
-        console.log('Mail sent...')
+        const result = await transporter.sendMail({ to, from, subject, html: message });
+        console.log('Mail sent...');
         return result
     } catch (error) {
         console.log('Failed sending mail...')
-        console.log(error)          
+        console.log(error);
     }        
 }
 

@@ -18,13 +18,14 @@
           <h5>Enviar arquivo</h5>
         </template>
         <template v-slot:main>
-          <div class="vertical center middle full-width">
+          <div class="vertical center middle full-width mb-5">
             <h5 class="mb-2">Envie um arquivo de até {{ HUMAN_READABLE_FILESIZE }} mb</h5>
-            <h6 class="mb-4">(formatos permitidos .jpg, .jpeg e .png)</h6>
             <input type="file" @change="preview" accept="image/*" class="mb-4">
             <div class="error mb-4" v-if="maxFileSizeError">O arquivo deve possuir no máximo {{ HUMAN_READABLE_FILESIZE }}mb</div>
             <div class="error mb-4" v-if="invalidFileTypeError">O formato do arquivo não é permitido</div>
-            <img v-if="!$empty(previewUrl)" :src="previewUrl">
+            <img class="mb-4" v-if="!$empty(previewUrl)" :src="previewUrl">
+            <h6 class="mb-2">Formatos permitidos .jpg, .jpeg e .png</h6>
+            <h6 class="mb-2">Resolução sugerida: {{ imageResolution }} </h6>
           </div>
         </template>
         <template v-slot:footer>
@@ -43,7 +44,8 @@ const HUMAN_READABLE_FILESIZE = 1
 const MAX_ALLOWED_FILESIZE = 1048576
 export default {
   props: {
-    rounded: { type: Boolean, default: false }
+    rounded: { type: Boolean, default: false },
+    resolution: { type: String, default: 'avatar' }
   },
   data() {
     return {
@@ -52,6 +54,14 @@ export default {
       previewUrl: '',
       maxFileSizeError: false,
       invalidFileTypeError: false
+    }
+  },
+  computed: {
+    imageResolution() {
+      if (this.resolution === 'avatar') { return '1080 x 1080 - quadrada'; }
+      if (this.resolution === 'background') { return '1920 x 1080'; }
+
+      return '';
     }
   },
   methods: {

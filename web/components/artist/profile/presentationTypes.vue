@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { mapFields } from 'vuex-map-fields'
-import TagCollection from './tagCollection'
+import { mapState, mapActions } from 'vuex';
+import { mapFields } from 'vuex-map-fields';
+import TagCollection from './tagCollection';
 export default {
   extends: TagCollection,
   props: {
@@ -41,25 +41,25 @@ export default {
     ...mapActions('artist', ['saveProfile']),
     addPresentationType(presentationType) {
       if (this.presentationTypes.length >= this.$config.maxAllowedPresentationTypes) {
-        this.$toast.error(`Máximo de ${this.$config.maxAllowedPresentationTypes} tipos permitidos`)
-        return
+        this.$toast.error(`Máximo de ${this.$config.maxAllowedPresentationTypes} tipos permitidos`);
+        return;
       }
 
       if (!this.$collection.includes(this.presentationTypes, presentationType)) {
         // Seems that vuex-map-fields does not support push operation, therefore we need to copy the array, transform and assign it as whole to the state
-        let presentationTypes = this.$object.clone(this.presentationTypes)
-        presentationTypes.push(presentationType)
-        this.presentationTypes = presentationTypes
+        let presentationTypes = this.$object.clone(this.presentationTypes);
+        presentationTypes.push(presentationType);
+        this.presentationTypes = presentationTypes;
       }
 
-      this.saveProfile()
+      this.saveProfile();
     },
     removePresentationType(presentationType) {
-      let presentationTypes = this.$object.clone(this.presentationTypes)
-      const index = this.$array.indexOf(presentationTypes, presentationType)      
-      this.$delete(presentationTypes, index)
-      this.presentationTypes = presentationTypes
-      this.saveProfile()
+      let presentationTypes = this.$object.clone(this.presentationTypes);
+      const index = this.$array.indexOf(presentationTypes, presentationType)      ;
+      this.$delete(presentationTypes, index);
+      this.presentationTypes = presentationTypes;
+      this.saveProfile();
     }
   }
 }
