@@ -4,8 +4,9 @@ const aws = require('aws-sdk');
 
 const smtpEndpoint = process.env.SMTP_HOST;
 const port = process.env.SMTP_PORT;
-const smtpUsername = process.env.SMTP_ACCESS_KEY;
-const smtpPassword = process.env.SMTP_SECRET;
+
+const smtpUsername = process.env.SMTP_USER;
+const smtpPassword = process.env.SMTP_PWD;
 
 let transporter = {};
 
