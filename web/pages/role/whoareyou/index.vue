@@ -43,6 +43,7 @@ export default {
 
   .user {
     @extend .vertical, .center, .middle;
+    z-index: 0;
     @include desktop {
       width: 50%;
       height: 110vh;
@@ -62,7 +63,6 @@ export default {
 
     text-align: center;
     transition: $transition;
-    z-index: $moveToTop;
     cursor: pointer;
     background-position: center;
     background-repeat: no-repeat;

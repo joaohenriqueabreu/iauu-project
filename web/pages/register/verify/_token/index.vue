@@ -1,20 +1,22 @@
 <template>
-  <client-only>
-    <div class="full-height">
-      <div class="full-height vertical middle center">
-        <h6 class="mb-2">Reenviar o link de verificação para seu email</h6>
-        <small class="mb-4">Lembre-se que o link é válido por 24 horas</small>
-        <form-button @action="resend">Enviar</form-button>
-      </div>
-      <modal ref="verify" height="tiny">
-        <template v-slot:main>
-          <div class="vertical center middle full-height">
-            <h6>Verificando sua conta, aguarde por favor...</h6>
+  <div>
+    <client-only>
+        <div class="full-height">
+          <div class="full-height vertical middle center">
+            <h6 class="mb-2">Reenviar o link de verificação para seu email</h6>
+            <small class="mb-4">Lembre-se que o link é válido por 24 horas</small>
+            <form-button @action="resend">Enviar</form-button>
           </div>
-        </template>
-      </modal>
-    </div>
-  </client-only>
+          <modal ref="verify" height="tiny">
+            <template v-slot:main>
+              <div class="vertical center middle full-height">
+                <h6>Verificando sua conta, aguarde por favor...</h6>
+              </div>
+            </template>
+          </modal>
+        </div>
+      </client-only>
+  </div>
 </template>
 
 <script>
@@ -29,19 +31,24 @@ export default {
   computed: {
     ...mapState({ accessToken: (state) => state.protected.token })
   },
-  async mounted() {
-    this.$refs.verify.open()
+  async asyncData({ app, route }) {
     try {
-      await this.$auth.loginWith('verify', { 
-        data: {
-          token: this.$route.params.token
-        }
-      })
+      await app.$auth.loginWith('verify', {
+        data: { token: route.params.token }
+      });
 
-      setTimeout(this.handleVerified, 3000)
+      app.verified = true;
     } catch (error) {
-      this.error = error
-      setTimeout(this.handleFailed, 3000)
+      app.verified = false;
+    }
+  },
+  mounted() {
+    debugger;
+    this.$refs.verify.open();
+    if (this.verified) {
+      setTimeout(this.handleVerified, 3000);  
+    } else {
+      setTimeout(this.handleFailed, 3000);
     }
   },
   methods: {

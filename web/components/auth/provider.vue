@@ -18,14 +18,14 @@ export default {
     network: { type: String, default: null }
   },
   async mounted() {
-    this.$refs.loading.open()
-    const { access_token: accessToken } = QueryString.parse(window.location.hash)
-    const { data } = await this.$axios.post(`login/${this.network}`, { token: accessToken })
+    this.$refs.loading.open();
+    const { access_token: accessToken } = QueryString.parse(window.location.hash);
+    const { data } = await this.$axios.post(`login/${this.network}`, { token: accessToken });
     this.$toast.success('Login verificado com sucesso!')
 
-    this.$auth.setToken('local', `Bearer ${data}`)
-    await this.$auth.setStrategy('local')
-    await this.$auth.fetchUser()
+    this.$auth.setToken('local', `Bearer ${data}`);
+    await this.$auth.setStrategy('local');
+    await this.$auth.fetchUser();
   }
 }
 </script>

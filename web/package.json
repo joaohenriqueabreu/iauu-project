@@ -29,7 +29,6 @@
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/proxy": "^2.0.0",
-    "@nuxtjs/pwa": "^3.3.0",
     "@nuxtjs/sentry": "^4.5.0",
     "@nuxtjs/style-resources": "^1.0.0",
     "@nuxtjs/toast": "^3.3.0",
