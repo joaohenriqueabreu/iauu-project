@@ -1,21 +1,17 @@
 <template>
   <div>
     <client-only>
-        <div class="full-height">
-          <div class="full-height vertical middle center">
-            <h6 class="mb-2">Reenviar o link de verificação para seu email</h6>
-            <small class="mb-4">Lembre-se que o link é válido por 24 horas</small>
-            <form-button @action="resend">Enviar</form-button>
-          </div>
-          <modal ref="verify" height="tiny">
-            <template v-slot:main>
-              <div class="vertical center middle full-height">
-                <h6>Verificando sua conta, aguarde por favor...</h6>
-              </div>
-            </template>
-          </modal>
+      <div class="full-height" v-if="!verified">
+        <div class="full-height vertical middle center">
+          <h6 class="mb-2">Reenviar o link de verificação para seu email</h6>
+          <small class="mb-4">Lembre-se que o link é válido por 24 horas</small>
+          <form-button @action="resend">Enviar</form-button>
         </div>
-      </client-only>
+      </div>
+      <div v-else>
+        <h6>Verificando sua conta...</h6>
+      </div>
+    </client-only>
   </div>
 </template>
 
@@ -24,7 +20,6 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      verified: false,
       error: null
     }
   },
@@ -37,16 +32,15 @@ export default {
         data: { token: route.params.token }
       });
 
-      app.verified = true;
+      return { verified: true }
     } catch (error) {
-      app.verified = false;
+      return { verified: false }
     }
   },
-  mounted() {
-    // this.$refs.verify.open();
+  async mounted() {
     if (this.verified) {
-      // setTimeout(this.handleVerified, 3000);
-      this.$router.push('/login');
+      await setTimeout(this.handleVerified, 3000);
+      this.$router.push('/');
     } else {
       setTimeout(this.handleFailed, 3000);
     }
@@ -58,15 +52,14 @@ export default {
     },
     handleFailed() {
       this.$toast.error('Seu token de verification é inválido ou está expirado.');
-      this.$refs.verify.close();
     },
     handleResend() {
       this.$router.push('/')
     },
     async resend() {
-      await this.resendVerify(this.$route.params.token)
-      this.$toast.info('Link enviado para seu email')
-      setTimeout(this.handleResend, 3000)
+      await this.resendVerify(this.$route.params.token);
+      this.$toast.info('Link enviado para seu email');
+      setTimeout(this.handleResend, 3000);
     }
   }
 }
