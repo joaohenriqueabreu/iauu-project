@@ -2,8 +2,8 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const aws = require('aws-sdk');
 
-const smtpEndpoint = 'email-smtp.us-east-1.amazonaws.com';
-const port = 587;
+const smtpEndpoint = process.env.SMTP_HOST;
+const port = process.env.SMTP_PORT;
 const smtpUsername = process.env.SMTP_ACCESS_KEY;
 const smtpPassword = process.env.SMTP_SECRET;
 
@@ -27,17 +27,6 @@ async function start() {
             rejectUnauthorized: false
         }  
     });
-
-    //     host: process.env.SMTP_HOST,
-    //     port: process.env.SMTP_PORT,
-    //     auth: {
-    //         user: process.env.SMTP_USER,
-    //         pass: process.env.SMTP_PWD
-    //     },
-    //     tls: {
-    //         rejectUnauthorized: false
-    //     }    
-    // });
 }
 
 async function send(to, from, subject, message) {
