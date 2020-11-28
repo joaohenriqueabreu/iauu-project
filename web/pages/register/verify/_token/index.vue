@@ -43,10 +43,10 @@ export default {
     }
   },
   mounted() {
-    debugger;
-    this.$refs.verify.open();
+    // this.$refs.verify.open();
     if (this.verified) {
-      setTimeout(this.handleVerified, 3000);  
+      // setTimeout(this.handleVerified, 3000);
+      this.$router.push('/login');
     } else {
       setTimeout(this.handleFailed, 3000);
     }
@@ -54,11 +54,11 @@ export default {
   methods: {
     ...mapActions('protected', ['verify', 'resendVerify', 'release']),
     handleVerified() {
-      this.$toast.success(`Conta verificada com sucesso! Bem vindo a ${this.$config.companyName}`)
+      this.$toast.success(`Conta verificada com sucesso! Bem vindo a ${this.$config.companyName}`);
     },
     handleFailed() {
-      this.$toast.error('Seu token de verification é inválido ou está expirado.')
-      this.$refs.verify.close()
+      this.$toast.error('Seu token de verification é inválido ou está expirado.');
+      this.$refs.verify.close();
     },
     handleResend() {
       this.$router.push('/')
