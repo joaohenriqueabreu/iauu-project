@@ -2,7 +2,6 @@
 import Vue from 'vue';
 import { Slide } from 'vue-carousel';
 import Avatar from 'vue-avatar';
-import Vuelidate from 'vuelidate';
 import VueTheMask from 'vue-the-mask';
 import VueSmoothScroll from 'vue2-smooth-scroll';
 import { FadeTransition, SlideYDownTransition } from 'vue2-transitions';
@@ -59,7 +58,6 @@ import Attachment from '@/components/form/attachment';
 moment.locale('pt-br');
 
 Vue.use(Modal);
-Vue.use(Vuelidate);
 Vue.use(VueSmoothScroll);
 Vue.use(VueModal, { componentName: 'v-modal' });
 Vue.use(VueTheMask);

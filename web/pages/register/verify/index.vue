@@ -1,9 +1,11 @@
 <template>
-  <div class="vertical middle center">
-    <h3 class="no-cap">
-      Enviamos um link para seu email com as instruções de login
-    </h3>
-  </div>
+  <client-only>
+    <div class="vertical middle center">
+      <h3 class="no-cap">
+        Enviamos um link para seu email com as instruções de login
+      </h3>
+    </div>
+  </client-only>
 </template>
 
 <script>

@@ -1,18 +1,20 @@
 <template>
-  <div class="full-height">
-    <div class="full-height vertical middle center">
-      <h6 class="mb-2">Reenviar o link de verificação para seu email</h6>
-      <small class="mb-4">Lembre-se que o link é válido por 24 horas</small>
-      <form-button @action="resend">Enviar</form-button>
+  <client-only>
+    <div class="full-height">
+      <div class="full-height vertical middle center">
+        <h6 class="mb-2">Reenviar o link de verificação para seu email</h6>
+        <small class="mb-4">Lembre-se que o link é válido por 24 horas</small>
+        <form-button @action="resend">Enviar</form-button>
+      </div>
+      <modal ref="verify" height="tiny">
+        <template v-slot:main>
+          <div class="vertical center middle full-height">
+            <h6>Verificando sua conta, aguarde por favor...</h6>
+          </div>
+        </template>
+      </modal>
     </div>
-    <modal ref="verify" height="tiny">
-      <template v-slot:main>
-        <div class="vertical center middle full-height">
-          <h6>Verificando sua conta, aguarde por favor...</h6>
-        </div>
-      </template>
-    </modal>
-  </div>
+  </client-only>
 </template>
 
 <script>

@@ -1,46 +1,48 @@
 <template>
-  <div class="login">
-    <div v-if="validationInitialized">
-      <div class="bg" :style="`background-image: url('${$images('concert.png')}');`"></div>
-      <form>
-        <h5 class="mb-4">Entre</h5>
-        <form-email v-model="$v.credentials.email.$model"></form-email>
-        <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
-        <form-password v-model="$v.credentials.password.$model"></form-password>
-        <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
-        <div class="mb-2"></div>
-        <div class="forgot-password" @click="openForgotPasswordModal">
-          <span>Esqueceu sua senha?</span>
-        </div>
-        <div class="mb-5"></div>
-        <form-button ref="login" @action="login">Login</form-button>
-        <div class="mb-5"></div>
-        <facebook-login @granted="loginWithFacebook"></facebook-login>
-        <google-login @granted="loginWithGoogle"></google-login>
-      </form>
-      <modal ref="forgotPassword" height="tiny">
-        <template v-slot:header>
-          <div class="vertical middle center">
-            <h4>Esqueceu sua senha?</h4>
+  <client-only>
+    <div class="login">
+      <div v-if="validationInitialized">
+        <div class="bg" :style="`background-image: url('${$images('concert.png')}');`"></div>
+        <form>
+          <h5 class="mb-4">Entre</h5>
+          <form-email v-model="$v.credentials.email.$model"></form-email>
+          <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
+          <form-password v-model="$v.credentials.password.$model"></form-password>
+          <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
+          <div class="mb-2"></div>
+          <div class="forgot-password" @click="openForgotPasswordModal">
+            <span>Esqueceu sua senha?</span>
           </div>
-        </template>
-        <template v-slot:main>
-          <div class="vertical middle center">
-            <span>Entre com o seu email para solicitar uma nova senha</span>
-            <form-email v-model="forgotPasswordForEmail" class="full-width px-5"></form-email>
-            <form-validation :active="$utils.empty(forgotPasswordForEmail)">
-              Entre com um email válido
-            </form-validation>
-          </div>
-        </template>
-        <template v-slot:footer>
-          <div class="half-width">
-            <form-button :disabled="$utils.empty(forgotPasswordForEmail)" @action="sendForgotPassword">Enviar</form-button>
-          </div>
-        </template>
-      </modal>
+          <div class="mb-5"></div>
+          <form-button ref="login" @action="login">Login</form-button>
+          <div class="mb-5"></div>
+          <facebook-login @granted="loginWithFacebook"></facebook-login>
+          <google-login @granted="loginWithGoogle"></google-login>
+        </form>
+        <modal ref="forgotPassword" height="tiny">
+          <template v-slot:header>
+            <div class="vertical middle center">
+              <h4>Esqueceu sua senha?</h4>
+            </div>
+          </template>
+          <template v-slot:main>
+            <div class="vertical middle center">
+              <span>Entre com o seu email para solicitar uma nova senha</span>
+              <form-email v-model="forgotPasswordForEmail" class="full-width px-5"></form-email>
+              <form-validation :active="$utils.empty(forgotPasswordForEmail)">
+                Entre com um email válido
+              </form-validation>
+            </div>
+          </template>
+          <template v-slot:footer>
+            <div class="half-width">
+              <form-button :disabled="$utils.empty(forgotPasswordForEmail)" @action="sendForgotPassword">Enviar</form-button>
+            </div>
+          </template>
+        </modal>
+      </div>
     </div>
-  </div>
+  </client-only>
 </template>
 
 <script>

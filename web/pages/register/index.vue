@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <client-only>
     <div class="login">
       <div class="bg"></div>
       <form v-if="!$empty($v)">
@@ -37,32 +37,20 @@
         </div>
       </form>
     </div>
-  </div>
+  </client-only>
 </template>
 
 <script>
-import Vuelidate from 'vuelidate'
-import { required, email, sameAs, helpers } from 'vuelidate/lib/validators'
-import { mapActions } from 'vuex'
-import FacebookLogin from '@/components/auth/facebook'
-import GoogleLogin from '@/components/auth/google'
-import QueryString from 'query-string'
+import { required, email, sameAs, helpers } from 'vuelidate/lib/validators';
+import { mapActions } from 'vuex';
+import FacebookLogin from '@/components/auth/facebook';
+import GoogleLogin from '@/components/auth/google';
+import QueryString from 'query-string';
+
 export default {
   components: {
     'facebook-login': FacebookLogin,
     'google-login': GoogleLogin
-  },
-  data() {
-    return {
-      credentials: {
-        email: '',
-        password: '',
-        passwordConfirmation: '',
-        name: '',
-        accept_terms: false
-      },
-      error: null,
-    }
   },
   validations: {
     credentials: {
@@ -81,50 +69,62 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      credentials: {
+        email: '',
+        password: '',
+        passwordConfirmation: '',
+        name: '',
+        accept_terms: false
+      },
+      error: null,
+    }
+  },
   computed: {
     termsAccepted() {
-      return this.credentials.accept_terms
+      return this.credentials.accept_terms;
     },
     referralToken() {
       if (window === undefined) { return }
-      const query = QueryString.parse(window.location.search)
+      const query = QueryString.parse(window.location.search);
       if (query.from !== undefined) {
-        return { referral_token: query.from }
+        return { referral_token: query.from };
       }
 
       return {}
     },
     artistToken() {
-      if (window === undefined) { return }
-      const query = QueryString.parse(window.location.search)
+      if (window === undefined) { return };
+      const query = QueryString.parse(window.location.search);
       if (query.artist !== undefined) {
-        return { artist_token: query.artist }
+        return { artist_token: query.artist };
       }
 
-      return {}
+      return {};
     }
   },
   methods: {
     ...mapActions('protected', ['register']),
     async signup() {
-      this.$v.$touch()
+      this.$v.$touch();
       if (this.$v.credentials.$invalid) { 
-        this.$toast.error('Formulário inválido ou faltando informação')
-        return
+        this.$toast.error('Formulário inválido ou faltando informação');
+        return;
       }
 
       if (!this.credentials.accept_terms) {
-        this.$toast.error('Você precisa aceitar nossos termos de uso para se cadastrar')
-        return
+        this.$toast.error('Você precisa aceitar nossos termos de uso para se cadastrar');
+        return;
       }
 
-      this.$auth.setToken('local', null)
+      this.$auth.setToken('local', null);
       try {
-        await this.register({ ...this.credentials, ...this.referralToken, ...this.artistToken })
-        this.$router.push('/register/verify')
+        await this.register({ ...this.credentials, ...this.referralToken, ...this.artistToken });
+        this.$router.push('/register/verify');
       } catch (error) {
-        this.$sentry.captureException(error)
-        this.$toast.error(error.message)
+        this.$sentry.captureException(error);
+        this.$toast.error(error.message);
       }
     },
     async loginWithFacebook(accessToken) {
