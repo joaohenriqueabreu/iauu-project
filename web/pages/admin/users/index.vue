@@ -79,19 +79,19 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import UserManagement from '@/components/admin/user'
+import { mapState, mapActions, mapGetters } from 'vuex';
+import UserManagement from '@/components/admin/user';
 export default {
   components: {
     UserManagement
   },
   async asyncData({ store }) {
-    await store.dispatch('admin/loadUsers')
+    await store.dispatch('admin/loadUsers');
   },
   computed: {
     ...mapState({ allUsers: (state) => state.admin.users }),
     ...mapState({ selectedUser: (state) => state.admin.user }),
-    ...mapState({ userStats: (state) => state.admin.stats.users }),
+    ...mapState({ userStats: (state) => state.admin.statistics.users }),
     ...mapGetters('admin', [
       'adminUsers',
       'artistUsers',

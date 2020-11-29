@@ -35,14 +35,14 @@ export default {
     let status = 'good'
     let pingTime = 0
     try {
-      const start = moment()
-      await store.dispatch('admin/status')
-      const end = moment()
-      pingTime = end.diff(start)
-      if (pingTime > 1000) { status = 'warning' }
+      const start = this.moment();
+      await store.dispatch('admin/status');
+      const end = this.moment();
+      pingTime = end.diff(start);
+      if (pingTime > 1000) { status = 'warning'; }
     } catch (error) {
-      console.log(error)
-      status = 'error'
+      console.log(error);
+      status = 'error';
     }
 
     return {
