@@ -87,13 +87,13 @@ import {
   faTable,
   faCopy,
   faFlask,
-  faBell
+  faBell,
+  faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
   faStar as farStar,
   faComment,
-  faQuestionCircle,
   faFrown as farFrown
 } from '@fortawesome/free-regular-svg-icons'
 import {

@@ -43,8 +43,8 @@
     </div>
     <table class="full-width">
       <thead>
-        <th></th>
-        <th></th>
+        <th>Tipo</th>
+        <th>Status</th>
         <th>Nome</th>
         <th>Email</th>
         <th>Admissão</th>
@@ -69,12 +69,7 @@
         </tr>
       </tbody>
     </table>
-    <user-management
-      ref="user"
-      :user="selectedUser"
-      :stats="userStats"
-      @updated="loadUsers"
-    ></user-management>
+    <user-management ref="user" @updated="loadUsers"></user-management>
   </div>
 </template>
 
@@ -101,14 +96,17 @@ export default {
       'blockedUsers'
     ]),
     usersData() {
-      if (this.users === undefined) { return [] }
-      let data = []
-      const self = this
+      if (this.users === undefined) { return []; }
+      let data = [];
+      const self = this;
       this.users.forEach((user) => {
         data.push([user.id, user.email, user.name, self.roleLabel(user.role)])
-      })
+      });
 
-      return data
+      return data;
+    },
+    userLoaded() {
+      return !this.$empty(this.selectedUser) && !this.$empty(this.userStats);
     }
   },
   data() {
@@ -120,109 +118,80 @@ export default {
   },
   watch: {
     allUsers(value) {
-      this.users = value
+      this.users = value;
     }
   },
   mounted() {
-    this.users = this.allUsers
+    this.users = this.allUsers;
   },
   methods: {
     ...mapActions('admin', ['loadUsers', 'loadUserStats', 'searchUsers']),
     async handleSearchUsers() {
       if (this.$empty(this.searchTerm)) {
-        await this.loadUsers()
-        return
+        await this.loadUsers();
+        return;
       }
 
-      await this.searchUsers(this.searchTerm)
+      await this.searchUsers(this.searchTerm);
     },
     filterByRole(role) {
       if (this.filter === role) {
-        this.users = this.allUsers
-        this.filter = null
-        return
+        this.users = this.allUsers;
+        this.filter = null;
+        return;
       }
 
-      this.filter = role
+      this.filter = role;
 
-      if (role === 'artist') {
-        this.users = this.artistUsers
-      }
-      if (role === 'contractor') {
-        this.users = this.contractorUsers
-      }
+      if (role === 'artist') { this.users = this.artistUsers; }
+      if (role === 'contractor') { this.users = this.contractorUsers; }
     },
     filterByStatus(status) {
       if (this.filter === status) {
-        this.users = this.allUsers
-        this.filter = null
-        return
+        this.users = this.allUsers;
+        this.filter = null;
+        return;
       }
 
-      this.filter = status
+      this.filter = status;
 
-      if (status === 'pending') {
-        this.users = this.pendingUsers
-      }
-      if (status === 'active') {
-        this.users = this.activeUsers
-      }
-      if (status === 'blocked') {
-        this.users = this.blockedUsers
-      }
+      if (status === 'pending') { this.users = this.pendingUsers; }
+      if (status === 'active') { this.users = this.activeUsers; }
+      if (status === 'blocked') { this.users = this.blockedUsers; }
     },
     statusLabel(status) {
-      if (status === 'pending') {
-        return 'Aguardando verificação'
-      }
-      if (status === 'active') {
-        return 'Ativo'
-      }
-      if (status === 'blocked') {
-        return 'Bloqueado'
-      }
-      return ''
+      if (status === 'pending') { return 'Aguardando verificação' }
+      if (status === 'active') { return 'Ativo' }
+      if (status === 'blocked') { return 'Bloqueado'; }
+      return '';
     },
     statusIcon(status) {
-      if (status === 'pending') {
-        return 'ellipsis-h'
-      }
-      if (status === 'active') {
-        return 'check'
-      }
-      if (status === 'blocked') {
-        return 'lock'
-      }
-      return ''
+      if (status === 'pending') { return 'ellipsis-h'; }
+      if (status === 'active') { return 'check'; }
+      if (status === 'blocked') { return 'lock'; }
+      if (status === 'unassigned') { return 'question-circle'; }
+      return '';
     },
     roleLabel(role) {
-      if (role === 'artist') {
-        return 'Artista'
-      }
-      if (role === 'contractor') {
-        return 'Contratante'
-      }
-
-      return ''
+      if (role === 'artist') { return 'Artista'; }
+      if (role === 'contractor') { return 'Contratante'; }
+      return '';
     },
     roleIcon(role) {
-      if (role === 'artist') {
-        return 'music'
-      }
-      if (role === 'contractor') {
-        return 'dollar-sign'
-      }
-      return ''
+      if (role === 'artist') { return 'music'; }
+      if (role === 'contractor') { return 'dollar-sign'; }
+      if (role === 'none') { return 'user'; }
+      return '';
     },
     verificationLabel(verified) {
-      return verified ? 'Verificado' : 'Aguardando verificação'
+      return verified ? 'Verificado' : 'Aguardando verificação';
     },
     async openUserManagementModal(user) {
-      await this.loadUserStats(user.id)
-      this.$refs.user.openModal()
+      await this.loadUserStats(user.id);
+      this.$refs.user.openModal();
     },
     exportCsv() {
-      this.$csv.download(this.$csv.convert(JSON.stringify(this.usersData)))
+      this.$csv.download(this.$csv.convert(JSON.stringify(this.usersData)));
     }
   }
 }

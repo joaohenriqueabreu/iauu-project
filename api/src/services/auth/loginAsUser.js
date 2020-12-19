@@ -6,32 +6,34 @@ const UnauthorizedException = require('../../exception/unauthorized')
 module.exports = class LoginAsUserService extends LoginUserService
 {
     constructor(data) {
-      super()
-      this.id = data.id
-      this.token = data.token
-      this.admin = {}
+      super();
+      this.id = data.id;
+      this.token = data.token;
+      this.admin = {};
     }
 
     async login() {
-      await this.authorizeAdmin()
-      await this.searchUser()
-      await this.validateNonPasswordLogin()
-      await this.generateAccessToken()
-      await this.saveUser()
-      await this.renewAdminToken()
-      return this
+      await this.authorizeAdmin();
+      await this.searchUser();
+      await this.validateNonPasswordLogin();
+      await this.generateAccessToken();
+      await this.saveUser();
+      await this.renewAdminToken();
+      return this;
     }
 
     // TODO this would be better done with a middleware and authorizing a bearer admin user
     async authorizeAdmin() {
-      console.log('Authorizing admin...')
-      this.admin = await User.findOne({ admin_token: this.token, role: 'admin' })
+      console.log('Authorizing admin...');
+      console.log(this.token);
+      this.admin = await User.findOne({ admin_token: this.token, role: 'admin' });
       
+      console.log(this.admin);
       if (User.notFound(this.admin) && !this.admin instanceof User) {
-        throw new UnauthorizedException('Invalid token')
+        throw new UnauthorizedException('Invalid token');
       }
 
-      return this
+      return this;
     }
 
     async renewAdminToken() {

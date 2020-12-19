@@ -1,5 +1,5 @@
 const parseLocation = (location) => {
-  if (typeof location !== 'object' || !location.hasOwnProperty('latitude') || !location.hasOwnProperty('longitude')) {
+  if (typeof location !== 'object' || location === null || location === undefined || !location.hasOwnProperty('latitude') || !location.hasOwnProperty('longitude')) {
     return null;
   }
 

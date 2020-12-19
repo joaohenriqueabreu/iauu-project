@@ -50,37 +50,37 @@
         <hr />
         <h4 class="mb-4">Estatísticas</h4>
         <div class="row">
-          <div v-if="!$empty(stats[0].presentations)" class="col-sm-3 mb-4">
+          <div v-if="!$empty(stats.presentations)" class="col-sm-3 mb-4">
             <div class="boxed">
-              <h5>{{ stats[0].presentations[0].count }}</h5>
+              <h5>{{ stats.presentations[0].count }}</h5>
               <h6>Apresentações</h6>
             </div>
           </div>
-          <div v-if="!$empty(stats[0].proposals)" class="col-sm-3 mb-4">
+          <div v-if="!$empty(stats.proposals)" class="col-sm-3 mb-4">
             <div class="boxed">
-              <h5>{{ stats[0].proposals[0].count }}</h5>
+              <h5>{{ stats[0].proposals.count }}</h5>
               <h6>Propostas</h6>
             </div>
           </div>
-          <div v-if="!$empty(stats[0].rejected)" class="col-sm-3 mb-4">
+          <div v-if="!$empty(stats.rejected)" class="col-sm-3 mb-4">
             <div class="boxed">
               <h5>{{ stats[0].rejected[0].count }}</h5>
               <h6>Rejeitadas</h6>
             </div>
           </div>
-          <div v-if="!$empty(stats[0].accepted)" class="col-sm-3 mb-4">
+          <div v-if="!$empty(stats.accepted)" class="col-sm-3 mb-4">
             <div class="boxed">
               <h5>{{ stats[0].accepted[0].count }}</h5>
               <h6>Contratads</h6>
             </div>
           </div>
-          <div v-if="!$empty(stats[0].completed)" class="col-sm-3 mb-4">
+          <div v-if="!$empty(stats.completed)" class="col-sm-3 mb-4">
             <div class="boxed">
               <h5>{{ stats[0].completed[0].count }}</h5>
               <h6>Realizadas</h6>
             </div>
           </div>
-          <div v-if="!$empty(stats[0].cancelled)" class="col-sm-3 mb-4">
+          <div v-if="!$empty(stats.cancelled)" class="col-sm-3 mb-4">
             <div class="boxed">
               <h5>{{ stats[0].cancelled[0].count }}</h5>
               <h6>Canceladas</h6>
@@ -116,11 +116,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex';
 export default {
   props: {
-    user: { type: Object, default: () => {} },
-    stats: { type: Array, default: () => {} }
+    // user: { type: Object, default: () => {} },
+    // stats: { type: Array, default: () => {} }
   },
   data() {
     return {
@@ -128,69 +128,71 @@ export default {
     }
   },
   computed: {
+    ...mapState({ user: (state) => state.admin.user }),
+    ...mapState({ stats: (state) => state.admin.statistics.users }),
     isVerified() {
-      return !this.$empty(this.user.verification) && this.user.verification.is_verified
+      return !this.$empty(this.user.verification) && this.user.verification.is_verified;
     },
     verifyTokenExpiry() {
       return this.moment(this.user.verification.issued_at)
         .add('1', 'days')
-        .toString()
+        .toString();
     }
   },
   mounted() {
-    this.name = this.user.name
+    this.name = this.user.name;
   },
   methods: {
     ...mapActions('admin', ['blockUser', 'activateUser', 'resendVerification', 'verifyUser']),
     openModal() {
-      this.$refs.modal.open()
+      this.$refs.modal.open();
     },
     statusLabel(status) {
       if (status === 'pending') {
-        return 'Aguardando verificação'
+        return 'Aguardando verificação';
       }
       if (status === 'active') {
-        return 'Ativo'
+        return 'Ativo';
       }
       if (status === 'blocked') {
-        return 'Bloqueado'
+        return 'Bloqueado';
       }
-      return ''
+      return '';
     },
     roleLabel(role) {
       if (role === 'artist') {
-        return 'Artista'
+        return 'Artista';
       }
       if (role === 'contractor') {
-        return 'Contratante'
+        return 'Contratante';
       }
-      return ''
+      return '';
     },
     verificationLabel(verified) {
-      return verified ? 'Verificado' : 'Aguardando verificação'
+      return verified ? 'Verificado' : 'Aguardando verificação';
     },
     async handleBlockUser() {
-      await this.blockUser(this.user)
-      this.$toast.success('Usuário bloqueado com sucesso')
-      this.$emit('updated')
+      await this.blockUser(this.user);
+      this.$toast.success('Usuário bloqueado com sucesso');
+      this.$emit('updated');
     },
     async handleActivateUser() {
-      await this.activateUser(this.user)
-      this.$toast.success('Usuário ativado com sucesso')
-      this.$emit('updated')
+      await this.activateUser(this.user);
+      this.$toast.success('Usuário ativado com sucesso');
+      this.$emit('updated');
     },
     async handleResendVerification() {
-      await this.resendVerification(this.user)
-      this.$toast.success('Email de verificação reenviado com sucesso')
+      await this.resendVerification(this.user);
+      this.$toast.success('Email de verificação reenviado com sucesso');
     },
     async handleVerification() {
-      await this.verifyUser(this.user)
-      this.$toast.success('Usuário verificado com sucesso')
-      this.$emit('updated')
+      await this.verifyUser(this.user);
+      this.$toast.success('Usuário verificado com sucesso');
+      this.$emit('updated');
     },
     async handleChangePassword() {
-      await this.blockUser(this.user)
-      this.$toast.success('Link para troca de senha reenviado com sucesso')
+      await this.blockUser(this.user);
+      this.$toast.success('Link para troca de senha reenviado com sucesso');
     },
     async handleLoginAs(id) {
       await this.$auth.loginWith('admin', {
@@ -198,7 +200,7 @@ export default {
           token: this.$auth.user.admin_token,
           id
         }
-      })
+      });
     }
   }
 }
