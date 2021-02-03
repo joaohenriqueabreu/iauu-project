@@ -5,7 +5,7 @@
     </div>
     <fade-transition mode="out-in">
       <div v-show="$empty(artist.category.name)" class="horizontal center middle">
-        <div v-for="(category, index) in categories" :key="index" class="img-box" @click="getSubcategories(category)">
+        <div v-for="(category, index) in categories" :key="index" class="img-box" @click="getSubcategories(category.name)">
           <h6>
             {{ category.name }}
           </h6>
@@ -23,7 +23,7 @@
         <div class="mb-2"></div>
         <div class="horizontal center middle">
           <h6 class="mr-2">{{ categoryName }}</h6>
-          <small @click="changeCategory">Trocar</small>
+          <small @click="resetCategory">Trocar</small>
         </div>
       </div>
     </fade-transition>
@@ -48,9 +48,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { mapFields } from 'vuex-map-fields'
-import TagCollection from './tagCollection'
+import { mapState, mapActions } from 'vuex';
+import { mapFields } from 'vuex-map-fields';
+import TagCollection from './tagCollection';
 export default {
   extends: TagCollection,
   props: {
@@ -69,52 +69,54 @@ export default {
     })
   },
   async mounted() {
-    if (this.$empty(this.categoryName)) { return }
-    await this.getSubcategories(this.categoryName)
+    if (! this.$empty(this.categoryName)) {
+      await this.getSubcategories(this.categoryName);
+    }
   },
   methods: {
     ...mapActions('artist', ['saveProfile']),
-    async getSubcategories(category) {
+    async getSubcategories(categoryName) {
       const { data } = await this.$axios.get(
-        `categories/${encodeURI(this.categoryName)}/subcategories`
-      )
+        `categories/${encodeURI(categoryName)}/subcategories`
+      );
 
-      this.subCategoryOptions = this.$collection.orderBy(data, [], ['asc'])
+      this.categoryName = categoryName;
+      this.subCategoryOptions = this.$collection.orderBy(data, [], ['asc']);
     },
     categoryImg(item) {
       try {
-        if (this.$empty(item)) { throw 'invalid category' }
-        return this.$images(`categories/${item}.jpg`)
+        if (this.$empty(item)) { throw 'invalid category'; }
+        return this.$images(`categories/${item}.jpg`);
       } catch (error) {
-        return this.$images('concert.png')
+        return this.$images('concert.png');
       }
     },
     isCategorySelected(name) {
-      return name === this.artist.category.name
+      return name === this.artist.category.name;
     },
-    changeCategory() {
-      this.categoryName = null
-      this.subCategories = []
+    resetCategory() {
+      this.categoryName = null;
+      this.subCategories = [];
     },
     addSubcategory(subcategory) {
       if (this.subCategories.length >= this.$config.maxAllowedSubcategories) {
-        this.$toast.error(`Máximo de ${this.$config.maxAllowedSubcategories} etilos permitidos`)
-        return
+        this.$toast.error(`Máximo de ${this.$config.maxAllowedSubcategories} etilos permitidos`);
+        return;
       }
 
       if (!this.$collection.includes(this.subCategories, subcategory)) {
         // Seems that vuex-map-fields does not support push operation, therefore we need to copy the array, transform and assign it as whole to the state
-        let subcategories = this.$object.clone(this.subCategories)
-        subcategories.push(subcategory)
-        this.subCategories = subcategories
+        let subcategories = this.$object.clone(this.subCategories);
+        subcategories.push(subcategory);
+        this.subCategories = subcategories;
       }
 
-      this.saveProfile()
+      this.saveProfile();
     },
     removeSubcategory(subcategory) {
-      const index = this.$array.indexOf(this.subCategories, subcategory)
-      this.$delete(this.subCategories, index)
-      this.saveProfile()
+      const index = this.$array.indexOf(this.subCategories, subcategory);
+      this.$delete(this.subCategories, index);
+      this.saveProfile();
     }
   }
 }
