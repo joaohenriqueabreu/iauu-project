@@ -14,7 +14,8 @@ export default {
     companyName: process.env.COMPANY_NAME,
     webUrl: process.env.WEB_URL,
     supportMail: process.env.SUPPORT_MAIL,
-    corsProxyUrl: process.env.CORS_PROXY_URL
+    corsProxyUrl: process.env.CORS_PROXY_URL,
+    paymentsEnabled: process.env.PAYMENTS_ENABLED
   },
   /*
    ** Headers of the page

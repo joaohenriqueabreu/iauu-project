@@ -20,8 +20,8 @@
               <li class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'"><h6>Estilo</h6></li>
               <li class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'"><h6>Eventos</h6></li>
               <li class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'"><h6>Redes Sociais</h6></li>
-              <li class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'"><h6>Integrantes</h6></li>
-              <li class="nav-link" :class="{ active: bankAccountTab }" @click="activeTab = 'bankAccount'"><h6>Dados bancários</h6></li>
+              <li class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'"><h6>Integrantes</h6></li>              
+              <li v-if="arePaymentsEnabled" class="nav-link" :class="{ active: bankAccountTab }" @click="activeTab = 'bankAccount'"><h6>Dados bancários</h6></li>
             </ul>
           </div>
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
@@ -62,16 +62,16 @@
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields'
-import { mapActions, mapState, mapMutations } from 'vuex'
-import ProfileStats from '@/components/artist/profile/stats'
-import ArtistInfo from '@/components/artist/profile/info'
-import PresentationConfig from '@/components/artist/profile/presentationsConfig'
-import ArtistUsers from '@/components/artist/profile/users'
-import SocialNetworks from '@/components/artist/profile/social'
-import ArtistCategories from '@/components/artist/profile/categories'
-import PresentationTypes from '@/components/artist/profile/presentationTypes'
-import BankAccount from '@/components/artist/profile/bankAccount'
+import { mapFields } from 'vuex-map-fields';
+import { mapActions, mapState, mapMutations } from 'vuex';
+import ProfileStats from '@/components/artist/profile/stats';
+import ArtistInfo from '@/components/artist/profile/info';
+import PresentationConfig from '@/components/artist/profile/presentationsConfig';
+import ArtistUsers from '@/components/artist/profile/users';
+import SocialNetworks from '@/components/artist/profile/social';
+import ArtistCategories from '@/components/artist/profile/categories';
+import PresentationTypes from '@/components/artist/profile/presentationTypes';
+import BankAccount from '@/components/artist/profile/bankAccount';
 export default {
   components: {
     ProfileStats,
@@ -85,10 +85,10 @@ export default {
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
-      await store.dispatch('artist/loadArtist')
-      const catResponse = await app.$axios.get('categories')
-      const presentationTypesResponse = await app.$axios.get('presentations/types')
-      const roleIdResponse = await app.$axios.get('/users/exchange')
+      await store.dispatch('artist/loadArtist');
+      const catResponse = await app.$axios.get('categories');
+      const presentationTypesResponse = await app.$axios.get('presentations/types');
+      const roleIdResponse = await app.$axios.get('/users/exchange');
       return { 
         categories: catResponse.data,
         presentationTypes: presentationTypesResponse.data,
@@ -96,7 +96,7 @@ export default {
       }
     } catch (e) {
       $sentry.captureException(e)
-      error({ statusCode: 404, message: 'Perfil não encontrado' })
+      error({ statusCode: 404, message: 'Perfil não encontrado' });
     }
   },
   data() {
@@ -111,62 +111,66 @@ export default {
       background: 'artist.background'
     }),
     statsTab() {
-      return this.activeTab === 'stats'
+      return this.activeTab === 'stats';
     },
     presentationsTab() {
-      return this.activeTab === 'presentations'
+      return this.activeTab === 'presentations';
     },
     infoTab() {
-      return this.activeTab === 'info'
+      return this.activeTab === 'info';
     },
     usersTab() {
-      return this.activeTab === 'users'
+      return this.activeTab === 'users';
     },
     socialTab() {
-      return this.activeTab === 'social'
+      return this.activeTab === 'social';
     },
     catTab() {
-      return this.activeTab === 'categories'
+      return this.activeTab === 'categories';
     },
     typesTab() {
-      return this.activeTab === 'types'
+      return this.activeTab === 'types';
     },
     bankAccountTab() {
-      return this.activeTab === 'bankAccount'
+      return this.activeTab === 'bankAccount';
     },
     backgroundImg() {
       return !this.$utils.empty(this.background)
         ? this.background
-        : this.$config.defaultBGImgUrl
+        : this.$config.defaultBGImgUrl;
     },
     avatarImg() {
       return !this.$utils.empty(this.photo) ? this.photo : this.$config.defaultAvatarImgUrl
+    },
+    arePaymentsEnabled() {
+      return process.env.paymentsEnabled === 'true';
     }
   },
   created() {
-    this.profile = this.$object.clone(this.artist)
-    this.activeTab = 'stats'
+    this.profile = this.$object.clone(this.artist);
+    this.activeTab = 'stats';
+    console.log(process.env.paymentsEnabled);
   },
   methods: {
     ...mapActions('artist', ['saveProfile']),
     uploadBG() {
-      this.$refs.bgUploader.upload()
+      this.$refs.bgUploader.upload();
     },
     uploadAvatar() {
-      this.$refs.avatarUploader.upload()
+      this.$refs.avatarUploader.upload();
     },
     categorySelect(category) {
-      alert(category)
+      alert(category);
     },
     async setBackground(url) {
-      this.background = url
-      await this.saveProfile()
-      this.$toast.success('Background atualizado')
+      this.background = url;
+      await this.saveProfile();
+      this.$toast.success('Background atualizado');
     },
     async setAvatar(url) {
-      this.photo = url
-      await this.saveProfile()
-      this.$toast.success('Foto atualizada')
+      this.photo = url;
+      await this.saveProfile();
+      this.$toast.success('Foto atualizada');
     }
   }
 }
