@@ -4,8 +4,8 @@ const SaveUserProfileService = require('../auth/saveProfile');
 const BadRequestException = require('../../exception/bad');
 const LocationUtils = require('../utils/location');
 
-const slugfy = (value) => {
-  return value.toLowerCase().replace(' ', '-');
+const slugify = (value) => {
+  return value.replace(/[^a-zA-Z ]/g, "").toLowerCase().replace(' ', '-');
 }
 
 module.exports = class SaveArtistProfileService extends ArtistService
@@ -68,7 +68,7 @@ module.exports = class SaveArtistProfileService extends ArtistService
         return this;
       }
 
-      let slug = slugfy(this.data['name']);
+      let slug = slugify(this.data['name']);
 
       // Assign suffix if any
       if (suffix > 0) {
