@@ -8,7 +8,7 @@ export default {
     width: { type: Number, default: 240 }
   },
   computed: {
-    logoURL() { return this.$images('logo.png') }
+    logoURL() { return this.$images('logo-icon-1.png') }
   }
 }
 </script>

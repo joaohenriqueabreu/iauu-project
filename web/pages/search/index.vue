@@ -153,10 +153,14 @@ export default {
       this.showFilterModal();
     },
     showFilterModal() {
-      this.$refs.filters.open();
+      if (! this.$empty(this.$refs.filters)) {
+        this.$refs.filters.open();
+      }
     },
     closeFilterModal() {
-      this.$refs.filters.close();
+      if (! this.$empty(this.$refs.filters)) {
+        this.$refs.filters.close();
+      }
     },
     isFilterApplied(filterName) {
       return !this.$empty(this.searchFilters[filterName]);

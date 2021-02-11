@@ -57,24 +57,29 @@
         <chat v-if="!$empty(presentation)" :presentation="presentation"></chat>
       </template>
       <template v-slot:footer>
-        <div v-if="isCustomProduct && !hasCounterOffer" class="error mb-2">
-          {{ presentation.contractor.name }} solicitou um produto personalizado. Envie um
-          orçamento para depois confirmar a apresentação.
-        </div>
-        <div v-if="hasCounterOffer && !hasAcceptedCounterOffer" class="error mb-2">
-          O contratante deve aceitar o orçamento para poder confirmar a apresentação
-        </div>
-        <div v-if="!hasSelectedTimeslot" class="error mb-2">
-          Selecione uma opção de data para o evento
+        <div class="error mb-2">
+          <div v-if="isCustomProduct && !hasCounterOffer">
+            {{ presentation.contractor.name }} solicitou um produto personalizado. Envie um
+            orçamento para depois confirmar a apresentação.
+          </div>
+          <div v-if="hasCounterOffer && !hasAcceptedCounterOffer">
+            O contratante deve aceitar o orçamento para poder confirmar a apresentação
+          </div>
+          <div v-if="!hasSelectedTimeslot">
+            Selecione uma opção de data para o evento
+          </div>
+          <div v-if="hasSelectedTimeslot && isPresentationPast">
+            Data da apresentação expirada. Não é possível aceitar a proposta neste momento.
+          </div>
         </div>
         <div class="horizontal center middle full-height">
           <div
-            v-if="(!isCustomProduct || hasAcceptedCounterOffer) && hasSelectedTimeslot"
+            v-if="(!isCustomProduct || hasAcceptedCounterOffer) && hasSelectedTimeslot && ! isPresentationPast"
             class="mr-5"
           >
             <form-button @action="accept">Aceitar</form-button>
           </div>
-          <div>
+          <div v-if="!isPresentationPast">
             <h5 @click="reject">Recusar</h5>
           </div>
         </div>
@@ -104,6 +109,10 @@ export default {
     },
     hasSelectedTimeslot() {
       return !this.$empty(this.presentation.timeslot)
+    },
+    isPresentationPast() {
+      // Do not allow accepting presentations in the past
+      return this.hasSelectedTimeslot && this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment())
     },
     isCustomProduct() {
       return (

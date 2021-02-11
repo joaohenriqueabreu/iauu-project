@@ -1,16 +1,16 @@
-require('dotenv').config()
-// const db = require('../data/db')
-const db = require('mongoose')
-const BaseModel = require('./base')
-const baseSchemaOptions = require('./schemas/options')
+require('dotenv').config();
 
-const proposalSchema = require('./schemas/proposal')
-const addressSchema = require('./schemas/address')
-const timeslotSchema = require('./schemas/timeslot')
+const db = require('mongoose');
+const BaseModel = require('./base');
+const baseSchemaOptions = require('./schemas/options');
 
-const { Schema } = db
+const proposalSchema = require('./schemas/proposal');
+const addressSchema = require('./schemas/address');
+const timeslotSchema = require('./schemas/timeslot');
 
-const defaultFee = process.env.PLATAFORM_FEE || 0.12
+const { Schema } = db;
+
+const defaultFee = process.env.PLATAFORM_FEE || 0.12;
 
 const presentationSchema = new Schema({  
   contractor: {
@@ -42,20 +42,20 @@ const presentationSchema = new Schema({
 }, { ...baseSchemaOptions })
 
 class Presentation extends BaseModel {
-  constructor() {
-    super()
+  constructor(data) {
+    super();
   }
 
   get current_price() {
     if (this.status === 'proposal') {
       if (this.proposal.counter_offer !== undefined) {
-        return this.proposal.counter_offer.price
+        return this.proposal.counter_offer.price;
       }
 
-      return this.proposal.product.price
+      return this.proposal.product.price;
     }
 
-    return this.price
+    return this.price;
   }
 
   get current_duration() {
@@ -63,9 +63,9 @@ class Presentation extends BaseModel {
 
     }
 
-    return this.price
+    return this.price;
   }
 }
 
-presentationSchema.loadClass(Presentation)
-module.exports = db.model('Presentation', presentationSchema)
+presentationSchema.loadClass(Presentation);
+module.exports = db.model('Presentation', presentationSchema);

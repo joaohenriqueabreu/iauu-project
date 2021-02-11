@@ -13,7 +13,7 @@ api.post('/proposal',
   authorizationMiddleware.authorize,
   authorizationMiddleware.contractor,
   validationMiddleware.proposal,
-  presentationController.saveProposal
+  presentationController.sendProposal
 )
 
 api.get('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.search)

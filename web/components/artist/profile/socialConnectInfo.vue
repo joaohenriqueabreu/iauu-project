@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="social-connect">
-      <div class="mb-4 horizontal">
+    <div class="social-connect" v-if="!hasConnectedInstagram || !hasConnectedSpotify">
+      <div class="mb-4 horizontal" v-if="!hasConnectedInstagram">
         <h4><font-awesome :icon="['fab', 'instagram']" class="mr-4"></font-awesome></h4>
         <div>
           <h6>
@@ -10,7 +10,7 @@
           <small>Lembre-se de deixar com visibilidade pública para podermos exibir as fotos</small>
         </div>
       </div>
-      <div class="horizontal">
+      <div class="horizontal" v-if="!hasConnectedSpotify">
         <h4><font-awesome :icon="['fab', 'spotify']" class="mr-4"></font-awesome></h4>
         <div>
           <h6>
@@ -26,7 +26,9 @@
 <script>
 export default {
   props: {
-    socialTab: { type: Boolean, default: false }
+    socialTab: { type: Boolean, default: false },
+    hasConnectedInstagram: { type: Boolean, default: false },
+    hasConnectedSpotify: { type: Boolean, default: false },
   }
 }
 </script>

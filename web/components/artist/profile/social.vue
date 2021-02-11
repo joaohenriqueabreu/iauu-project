@@ -27,11 +27,11 @@
       </div>
     </div>
     <div class="mb-4">
-      <social-connect-info social-tab></social-connect-info>
+      <social-connect-info social-tab :has-connected-instagram="hasConnectedInstagram" :has-connected-spotify="hasConnectedSpotify"></social-connect-info>
     </div>
     <div v-if="hasConnectedInstagram">
       <div class="mb-4">
-        <h6 class="mb-2">Agora que conectou seu insta, clique aqui para que possamos buscar o número de seguidores da sua págin</h6>
+        <h6 class="mb-2">Agora que conectou seu insta (<u>{{ this.instagramUrl }}</u>), clique aqui para que possamos buscar o número de seguidores da sua página</h6>
         <div class="vertical">
           <small>Lembre-se de deixar seu perfil como público (caso contrário não conseguiremos buscar os dados)</small>
           <small><small class="beta">(beta)</small> Por favor atualize esporadicamente - estamos trabalhando para implantar uma atualização automática dos seguidores</small>
@@ -68,61 +68,61 @@ export default {
       stats: 'artist.stats'
     }),
     hasConnectedInstagram() {
-      return !this.$empty(this.instagramUrl)
+      return !this.$empty(this.instagramUrl);
+    },
+    hasConnectedSpotify() {
+      return this.$collection.filter(this.social, (network) => network.includes('spotify')).length > 0;
     },
     instagramUrl() {
-      const instagramUrl = this.$collection.filter(this.social, (network) => network.includes('instagram'))
+      const instagramUrl = this.$collection.filter(this.social, (network) => network.includes('instagram'));
       if (!this.$empty(instagramUrl)) {
-        return instagramUrl[0]
+        return instagramUrl[0];
       }
 
-      return null
+      return null;
     },
     instagramUsername() {
-      const usernameMatches = this.instagramUrl.match(/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im)
+      const usernameMatches = this.instagramUrl.match(/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/([A-Za-z0-9-_\.]+)/im);
       if (!this.$empty(usernameMatches) && usernameMatches.length === 2) {
-        return usernameMatches[1]
+        return usernameMatches[1];
       }
 
-      return null
+      return null;
     }
   },
   methods: {
-    // ...mapMutations('artist', { updateProfile: 'update_profile' }),
     async link() {
       if (this.$utils.empty(this.newNetwork)) {
-        return
+        return;
       }
 
-      const networks = this.getArtistSocialNetworks()
-      networks.push(this.newNetwork)
-      // await this.updateProfile({ prop: 'social', data: networks })
-      this.social = networks
-      this.newNetwork = ''
+      const networks = this.getArtistSocialNetworks();
+      networks.push(this.newNetwork);
+      this.social = networks;
+      this.newNetwork = '';
     },
     unlink(index) {
-      const networks = this.getArtistSocialNetworks()
-      this.$delete(networks, index)
-      // this.updateProfile({ prop: 'social', data: networks })
-      this.social = networks
+      const networks = this.getArtistSocialNetworks();
+      this.$delete(networks, index);
+      this.social = networks;
     },
     getArtistSocialNetworks() {
-      return this.$object.clone(this.artist.social)
+      return this.$object.clone(this.artist.social);
     },
     openInfoModal() {
-      this.$refs.info.open()
+      this.$refs.info.open();
     },
     async getPublicPageFanCount() {
       try {
         // TODO This process is unsecure and instagram might block multiple attempts - eventually migrate to Graph API
-        const data = await this.$cors.fetch(this.$config.socialConnect.getInstagramFetchEndpoint(this.instagramUsername))
-        const stats = this.$object.clone(this.stats)
-        stats.followers = data.graphql.user.edge_followed_by.count
+        const data = await this.$cors.fetch(this.$config.socialConnect.getInstagramFetchEndpoint(this.instagramUsername));
+        const stats = this.$object.clone(this.stats);
+        stats.followers = data.graphql.user.edge_followed_by.count;
         
-        this.stats = stats
+        this.stats = stats;
       } catch (error) {
-        this.$sentry.captureException(error)
-        this.$toast.error('Não conseguimos acessar sua página. Por favor verifique o link fornecido e se é um perfil público')
+        this.$sentry.captureException(error);
+        this.$toast.error('Não conseguimos acessar sua página. Por favor verifique o link fornecido e se é um perfil público');
       }
     }
   }

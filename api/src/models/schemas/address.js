@@ -1,6 +1,6 @@
 const db = require('mongoose');
 const BaseModel = require('../base');
-const coordinates = require('./coordinates');
+const Coordinates = require('./coordinates');
 const baseSchemaOptions = require('../schemas/options');
 
 const addressSchema = new db.Schema({
@@ -11,7 +11,7 @@ const addressSchema = new db.Schema({
     state: {type: String},
     country: {type: String},
     zipcode: {type: String},
-    location: { type: coordinates }, 
+    location: { type: Coordinates }, 
 }, baseSchemaOptions);
 
 const SHOW_PROPS = ['street', 'number', 'neighboorhood', 'city', 'state', 'country']

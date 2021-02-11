@@ -9,6 +9,7 @@
         "server": "node src/app",
         "start": "node src/app",
         "dev": "nodemon -L src/app.js",
+        "debug": "node --inspect  src/app.js",
         "stop": "pkill --signal SIGINT reforma.ai.server",
         "migrate": "./node_modules/.bin/migrate -c src",
         "test": "mocha --timeout 50000",
@@ -17,7 +18,7 @@
     "dependencies": {
         "@hapi/joi": "^17.1.1",
         "aws-sdk": "^2.750.0",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
@@ -48,6 +49,7 @@
         "nodemailer-ses-transport": "^1.5.1",
         "socket.io": "^2.3.0",
         "socketio-jwt": "^4.6.2",
+        "sucrase": "^3.17.1",
         "uid": "^1.0.0",
         "uuid": "^8.3.0"
     },
@@ -56,9 +58,9 @@
         "eslint": "^7.6.0",
         "eslint-config-strongloop": "^2.1.0",
         "mocha": "^8.1.1",
-        "nodemon": "^1.14.12",
-        "sinon": "^9.0.2",
-        "npm-watch": "^0.6.0"
+        "nodemon": "^2.0.7",
+        "npm-watch": "^0.7.0",
+        "sinon": "^9.0.2"
     },
     "jest": {
         "testEnvironment": "node"

@@ -3,9 +3,10 @@ const BadRequestException = require('../../exception/bad');
 const PresentationService = require('./base');
 const SendMailService = require('../mail/sendMail');
 const CreateNotificationService = require('../notification/createNotification');
-const Presentation = require('../../models/presentation');
+const { Presentation } = require('../../models');
+const LocationUtil = require('../../utils/location');
 
-module.exports = class SaveProposalService extends PresentationService
+module.exports = class SendProposalService extends PresentationService
 {
     constructor(user, data) {
       super(user, data);
@@ -31,14 +32,14 @@ module.exports = class SaveProposalService extends PresentationService
     createPresentation() {
       this.presentation = new Presentation();
       this.presentation.status = 'proposal';
-      console.log(this.user);
       this.contractorId = this.user.role_id;
       return this;
     }
 
     populateModel() {
       this.presentation.artist = this.proposal.artist.id;
-      this.presentation.address = this.proposal.location;
+
+      this.presentation.address = LocationUtil.formatAddressData(this.proposal.location);
       this.presentation.contractor = this.contractorId;
 
       // delete from incoming data so it's not copied inside model
@@ -47,15 +48,7 @@ module.exports = class SaveProposalService extends PresentationService
       this.presentation.proposal = this.proposal;
 
       // Calculate proposal price (either 0 at this point for custom product or product's price)
-      this.presentation.proposal.price = this.presentation.current_price;
-
-      // Broadcast proposal name
-      // const proposalTitle = this.proposal.name
-      // this.presentation.proposal.timeslots = _.map(this.presentation.proposal.timeslots, (timeslot) => {
-      //   timeslot.title = proposalTitle
-      //   return timeslot
-      // })
-      
+      this.presentation.proposal.price = this.presentation.current_price;      
       return this;
     }
 

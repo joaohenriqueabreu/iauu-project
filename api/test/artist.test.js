@@ -1,26 +1,26 @@
-const moment = require('moment')
-const sinon = require('sinon')
-const should = require('chai').should()
-const expect = require('chai').expect
-const faker = require('faker')
+const moment = require('moment');
+const sinon = require('sinon');
+const should = require('chai').should();
+const expect = require('chai').expect;
+const faker = require('faker');
 
 // Set env test
-process.env.NODE_ENV = 'test'
+process.env.NODE_ENV = 'test';
 
-const dbConnection = require('../src/data/db')
-const db = require('mongoose')
+const dbConnection = require('../src/data/db');
+const db = require('mongoose');
 
 // Exceptions
-const BadRequestException = require('../src/exception/bad')
-const UnauthorizedException = require('../src/exception/unauthorized')
+const BadRequestException = require('../src/exception/bad');
+const UnauthorizedException = require('../src/exception/unauthorized');
 
 // Models
-const { User, Artist, Contractor } = require('../src/models')
+const { User, Artist, Contractor } = require('../src/models');
 
 // Services for seeding
-const RegisterUserService = require('../src/services/auth/registerUser')
-const VerifyUserService = require('../src/services/auth/verifyUser')
-const AssignRoleService = require('../src/services/auth/assignRole')
+const RegisterUserService = require('../src/services/auth/registerUser');
+const VerifyUserService = require('../src/services/auth/verifyUser');
+const AssignRoleService = require('../src/services/auth/assignRole');
 
 // Services
 const PublicArtistProfileService = require('../src/services/artist/publicSearch')
