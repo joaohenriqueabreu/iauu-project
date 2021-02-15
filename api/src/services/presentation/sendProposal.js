@@ -4,7 +4,7 @@ const PresentationService = require('./base');
 const SendMailService = require('../mail/sendMail');
 const CreateNotificationService = require('../notification/createNotification');
 const { Presentation } = require('../../models');
-const LocationUtil = require('../../utils/location');
+const Location = require('../../models/structures/location');
 
 module.exports = class SendProposalService extends PresentationService
 {
@@ -39,7 +39,7 @@ module.exports = class SendProposalService extends PresentationService
     populateModel() {
       this.presentation.artist = this.proposal.artist.id;
 
-      this.presentation.address = LocationUtil.formatAddressData(this.proposal.location);
+      this.presentation.address = new Location(this.proposal.location);
       this.presentation.contractor = this.contractorId;
 
       // delete from incoming data so it's not copied inside model

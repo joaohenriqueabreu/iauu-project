@@ -65,6 +65,10 @@ class Presentation extends BaseModel {
 
     return this.price;
   }
+
+  get isCompleted() {
+    return this.status === 'completed';
+  }
 }
 
 presentationSchema.loadClass(Presentation);

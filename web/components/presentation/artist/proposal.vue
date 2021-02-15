@@ -80,7 +80,7 @@
             <form-button @action="accept">Aceitar</form-button>
           </div>
           <div v-if="!isPresentationPast">
-            <h5 @click="reject">Recusar</h5>
+            <h5 class="clickable" @click="reject">Recusar</h5>
           </div>
         </div>
       </template>

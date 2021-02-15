@@ -51,10 +51,7 @@
         </div>
         <div class="horizontal center middle mb-3">
           <div class="mr-5">
-            <form-button
-              v-if="hasPresentationStarted && !hasConfirmedPresentation"
-              @action="confirm"
-            >
+            <form-button v-if="hasPresentationStarted && !hasConfirmedPresentation" @action="confirm">
               Confirmar Realização
             </form-button>
           </div>
@@ -64,8 +61,8 @@
         </div>
         <div v-if="hasPresentationStarted && !hasConfirmedPresentation">
           <small
-            >Apresentação realizada em {{ presentation.timeslot.start_dt | date }}, caso houve algum
-            problema com a apresentação entrar em contato conosco imediatamente.</small
+            >Apresentação realizada em {{ presentation.timeslot.start_dt | date }}, em caso de qualquer
+            problema com a realização da apresentação entrar em contato com nossa equipe imediatamente.</small
           >
         </div>
       </template>

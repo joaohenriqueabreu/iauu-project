@@ -36,7 +36,6 @@ module.exports = class PresentationService extends BaseService
     }
 
     async savePresentation() {
-      console.log(this.presentation);
       await this.presentation.save();
       return this;
     }

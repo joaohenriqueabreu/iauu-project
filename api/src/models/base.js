@@ -58,11 +58,4 @@ module.exports = class BaseModel {
 
     return model instanceof db.Types.ObjectId
   }
-
-  assign(data) {
-    if (data === undefined) { return; }
-    for (const prop in data) {
-      this[prop] = data[prop];
-    }
-  }
 }
