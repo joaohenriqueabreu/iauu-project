@@ -4,10 +4,6 @@ const VerifyUserService = require('../auth/verifyUser')
 
 module.exports = class BlockUserService extends UserService
 {
-    constructor(data) {
-      super(data)
-    }
-
     async activate() {
       await this.searchUser()
       this.ensureUserWasFound()

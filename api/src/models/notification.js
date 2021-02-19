@@ -1,7 +1,7 @@
 require('dotenv').config()
 // const db = require('../data/db')
 const db = require('mongoose')
-const BaseModel = require('./base')
+const BaseRepository = require('./repositories/base')
 const baseSchemaOptions = require('./schemas/options')
 
 const proposalSchema = require('./schemas/proposal')
@@ -19,7 +19,7 @@ const notificationSchema = new Schema({
   link: { type: String, required: true }
 }, { ...baseSchemaOptions })
 
-class Notification extends BaseModel {
+class Notification extends BaseRepository {
   constructor() {
     super()
   }

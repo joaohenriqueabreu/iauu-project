@@ -1,6 +1,6 @@
 require('dotenv').config();
 const db = require('mongoose');
-const BaseModel = require('./base');
+const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 
 const { Schema } = db;
@@ -12,7 +12,7 @@ const statisticSchema = new Schema({
   metadata: {type: Object },
 }, { ...baseSchemaOptions });
 
-class Statistic extends BaseModel {
+class Statistic extends BaseRepository {
   constructor() {
     super();
   }

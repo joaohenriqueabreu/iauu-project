@@ -1,7 +1,7 @@
 require('dotenv').config()
 // const db = require('../data/db')
 const db = require('mongoose')
-const BaseModel = require('./base')
+const BaseRepository = require('./repositories/base')
 const baseSchemaOptions = require('./schemas/options')
 
 const messageSchema = require('./schemas/message')
@@ -18,7 +18,7 @@ const threadSchema = new Schema({
 
 }, { ...baseSchemaOptions })
 
-class MessageThread extends BaseModel {
+class MessageThread extends BaseRepository {
   constructor() {
     super()
   }

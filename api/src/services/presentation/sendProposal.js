@@ -4,7 +4,7 @@ const PresentationService = require('./base');
 const SendMailService = require('../mail/sendMail');
 const CreateNotificationService = require('../notification/createNotification');
 const { Presentation } = require('../../models');
-const Location = require('../../models/structures/location');
+const Location = require('../../models/helpers/location');
 
 module.exports = class SendProposalService extends PresentationService
 {
@@ -15,9 +15,10 @@ module.exports = class SendProposalService extends PresentationService
     }
 
     async save() {
-      await this.ensureProposedTimeslotsDontOverlap();
-      await this.createPresentation();
-      await this.populateModel();
+      this.ensureProposedTimeslotsDontOverlap()
+        .createPresentation()
+        .populateModel();
+
       await this.savePresentation();
 
       this.sendMail();

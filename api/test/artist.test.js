@@ -4,6 +4,8 @@ const should = require('chai').should();
 const expect = require('chai').expect;
 const faker = require('faker');
 
+const { cleanup, setup } = require('./setup');
+
 // Set env test
 process.env.NODE_ENV = 'test';
 
@@ -42,48 +44,35 @@ const generalMock = () => { console.log('you have been mocked') }
 let sandbox = sinon.createSandbox()
 
 const seed = async (numOfUsers) => {
-  console.log('Seeding some users...')
-  for (let i = 0; i < numOfUsers; i++) {
-    const name = faker.name.findName()
-    const email = faker.internet.email()
-    const registerUserSvc = new RegisterUserService(name, email, 'iauu')
-    await registerUserSvc.register()
-
-    const artistUser = registerUserSvc.getUser()
-    const verifyUserSvc = new VerifyUserService(artistUser.verification.token)
-    await verifyUserSvc.verify()
-
-    const assignRoleSvc = new AssignRoleService(artistUser, 'artist')
-    await assignRoleSvc.assign()
-  }
+  
 }
 
 describe('Artist testing', function () {
-  before(async function () {
+  before(async () => {
+    await setup(async () => {
+      console.log('Seeding some users...');
+      for (let i = 0; i < 10; i++) {
+        const name = faker.name.findName();
+        const email = faker.internet.email();
+        const registerUserSvc = new RegisterUserService(name, email, 'iauu');
+        await registerUserSvc.register();
 
-    // Log level
-    if (!shouldLog) { sandbox.stub(console, 'log') }
+        const artistUser = registerUserSvc.getUser();
+        const verifyUserSvc = new VerifyUserService(artistUser.verification.token);
+        await verifyUserSvc.verify();
 
-    // Stubs
-    sandbox.stub(RegisterUserService.prototype, 'sendRegistrationMail').callsFake(generalMock)
-    sandbox.stub(VerifyUserService.prototype, 'sendWelcomeMail').callsFake(generalMock)
-
-    // Connect to db
-    await dbConnection.connect()
-
-    // Seed some artists
-    await seed(10)
+        const assignRoleSvc = new AssignRoleService(artistUser, 'artist');
+        await assignRoleSvc.assign();
+      }
+    }, () => {
+      // Stubs
+      sandbox.stub(RegisterUserService.prototype, 'sendRegistrationMail').callsFake(generalMock);
+      sandbox.stub(VerifyUserService.prototype, 'sendWelcomeMail').callsFake(generalMock);
+    });
   })
 
   after(async () => {
-    // Remove stubs
-    sandbox.restore()
-
-    console.log('Exiting and cleanup...')
-    await User.deleteMany({})
-    await Artist.deleteMany({})
-    await Contractor.deleteMany({})
-    db.disconnect()
+    await cleanup();
   })
 
   describe('Asserting seed', function () {

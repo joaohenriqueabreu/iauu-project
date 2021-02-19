@@ -1,4 +1,4 @@
-const BaseStructure = require('./base');
+const BaseStructure = require('./repositories/base');
 
 class Location extends BaseStructure {
   constructor(data) {

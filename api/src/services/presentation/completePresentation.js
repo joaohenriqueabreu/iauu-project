@@ -18,6 +18,7 @@ module.exports = class CompletePresentationService extends PresentationService
         .populatePresentation();
 
       await this.savePresentation();
+      this.sendMarkedAsCompleteMail();
       return this;
     }
 
@@ -38,7 +39,7 @@ module.exports = class CompletePresentationService extends PresentationService
         throw new BadRequestException(`Already confirmed by ${this.user.role}`);
       }
 
-      this.presentation.confirm_status.push(this.user.role[0]);
+      this.presentation.confirm_status.push(this.user.role);
 
       // When both parties confirm, we can complete the presentation
       if (this.presentation.confirm_status.includes('artist') && this.presentation.confirm_status.includes('contractor')) {
@@ -59,6 +60,19 @@ module.exports = class CompletePresentationService extends PresentationService
         // TODO handle payment error
       }
 
+      return this;
+    }
+
+    // TODO implement send mail fns
+    // sendArtistMakedCompleteMail() {
+    //   return this;
+    // }
+
+    // sendContractorMarkedCompleteMail() {
+    //   return this;
+    // }
+
+    sendMarkedAsCompleteMail() {
       return this;
     }
 }

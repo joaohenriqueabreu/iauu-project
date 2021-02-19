@@ -1,12 +1,13 @@
 require('dotenv').config();
 
 const db = require('mongoose');
-const BaseModel = require('./base');
+const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 
 const proposalSchema = require('./schemas/proposal');
 const addressSchema = require('./schemas/address');
 const timeslotSchema = require('./schemas/timeslot');
+const invoiceSchema = require('./schemas/invoice').schema;
 
 const { Schema } = db;
 
@@ -33,19 +34,16 @@ const presentationSchema = new Schema({
    * Disputed   - Presentation disputed
    */
 
-  status: { type: String, enum: ['proposal', 'accepted', 'completed', 'rejected', 'cancelled', 'disputed'], required: true },
+  status: { type: String, enum: ['proposal', 'accepted', 'completed', 'rejected', 'cancelled', 'disputed'], required: true, default: 'proposal' },
   confirm_status: [String],
   timeslot: timeslotSchema,
   proposal: proposalSchema,
+  invoice: invoiceSchema,
   price: { type: Number },
   duration: { type: String }
 }, { ...baseSchemaOptions })
 
-class Presentation extends BaseModel {
-  constructor(data) {
-    super();
-  }
-
+class Presentation extends BaseRepository {
   get current_price() {
     if (this.status === 'proposal') {
       if (this.proposal.counter_offer !== undefined) {
@@ -66,7 +64,7 @@ class Presentation extends BaseModel {
     return this.price;
   }
 
-  get isCompleted() {
+  isCompleted() {
     return this.status === 'completed';
   }
 }

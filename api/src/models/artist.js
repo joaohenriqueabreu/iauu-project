@@ -1,19 +1,17 @@
-require('dotenv').config();
-
 const db = require('mongoose');
-const _ = require('lodash');
-const BaseModel = require('./base');
+const { Schema } = require('mongoose');
+
+const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 const { v4: uid } = require('uuid');
 
 const addressSchema = require('./schemas/address');
-const socialSchema = require('./schemas/media');
+// const socialSchema = require('./schemas/media');
 const productsSchema = require('./schemas/product');
 const timeslotSchema = require('./schemas/timeslot');
 const feedbackSchema = require('./schemas/feedback');
 const bankAccountSchema = require('./schemas/bankAccount');
-
-const { Schema } = db;
+const gatewayAccountSchema = require('./schemas/account');
 
 const artistSchema = new Schema({
   users : [{
@@ -68,25 +66,21 @@ const artistSchema = new Schema({
   },
   address: addressSchema,
   bank_account: bankAccountSchema,
+  gateway_account: gatewayAccountSchema,
   rating: { type: Number },
   feedbacks: [feedbackSchema]
 }, { ...baseSchemaOptions });
 
-class Artist extends BaseModel {
-  constructor() {
-    super();
-  }
+class Artist extends BaseRepository {
+  constructor(data) { super(data); }
 
   get feedback_count() {
-    if (this.feedbacks === undefined) {
-      return 0;
-    }
-
+    if (this.feedbacks === undefined) { return 0; }
     return this.feedbacks.length;
   }
 
   get city_location() {
-    if (this.address === undefined) { return '' }
+    if (this.address === undefined) { return ''; }
     return `${this.address.city}, ${this.address.state}`;
   }
 }

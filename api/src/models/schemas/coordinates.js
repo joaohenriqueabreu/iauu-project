@@ -1,12 +1,12 @@
 const db = require('mongoose');
-const BaseModel = require('../base');
+const BaseRepository = require('../repositories/base');
 
 const coordinatesSchema = new db.Schema({
   type: { type: String },
   coordinates: { type: [Number] }
 });
 
-class Coordinates extends BaseModel {
+class Coordinates extends BaseRepository {
   constructor(latitude, longitude) {
     super();
 

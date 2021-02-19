@@ -1,30 +1,34 @@
 const _ = require('lodash');
-const BaseService = require('../base');
+const PresentationService = require('../presentation/base');
 const GatewayPaymentService = require('./gatewayPayment');
-const { Payment } = require('../../models');
+const { Invoice, Payment } = require('../../models/schemas');
 
-module.exports = class InitiatePaymentService extends BaseService
+class InitiatePaymentService extends PresentationService
 {
-    constructor(presentation) {
-      super();
+    constructor(user, data) {
+      super(user, data);
 
-      this.presentation = presentation;
+      this.id = data.id;
+      this.fee = data.fee;
 
-      this.artistPayment = {};
-      this.ourPayment = {};
-      this.referralPayments = [];
-
-      this.payments = [this.artistPayment, this.ourPayment, this.referralPayments];
+      this.invoice = {};
+      this.payments = [];
     }
 
     async initiate() {
-      this.ensurePresentationIsPayable()
-        .createAndCalculatePaymentFees()
-        .createAndCalculateReferralPaymentFees()
+      await this.searchPresentation();
+      this.ensurePresentationWasFound()
+        .ensurePresentationIsPayable()
+        .createInvoice()
+        .createPayments()
+        .calculatePaymentAmounts()
+        .calculateReferralAmounts()
         .queuePayments();
 
       await this.execGatewayPayments();
-      await this.savePayments();
+      this.updateTransactionData()
+        .linkPresentationInvoiceAndPayments();
+      await this.savePresentation();
         
       this.sendPaymentSuccessMails();
       return this;
@@ -35,19 +39,38 @@ module.exports = class InitiatePaymentService extends BaseService
         throw new Error('Presentation is not in payable state'); 
       }
 
-      return this;
-    }
-
-    createAndCalculatePaymentFees() {
-      this.artistPayment = new Payment();
-      this.ourPayment = new Payment();
-
-      // Start payment with pending state
+      if (typeof this.presentation.invoice === 'object') {
+        throw new Error('Presentation already has an initiated payment processing'); 
+      }
 
       return this;
     }
 
-    createAndCalculateReferralPaymentFees() {
+    createInvoice() {
+      this.invoice = new Invoice({
+        total_amount: this.presentation.price,
+        fee: this.fee ? this.fee : this.presentation.fee,
+        status: 'pending'
+      });      
+
+      return this;
+    }
+
+    createPayments() {
+      // Artist payment
+      this.artistPayment = new Payment({});
+      this.ourPayment = new Payment({});
+      this.referralPayments = new Payment({});
+
+      this.payments.push([this.artistPayment, this.ourPayment, this.referralPayments]);
+      return this;
+    }
+
+    calculatePaymentAmounts() {
+      return this;
+    }
+
+    calculateReferralAmounts() {
       return this;
     }
 
@@ -61,7 +84,13 @@ module.exports = class InitiatePaymentService extends BaseService
       return this;
     }
 
-    async savePayments() {
+    updateTransactionData() {
+      return this;
+    }
+
+    linkPresentationInvoiceAndPayments() {
+      this.invoice.payments = this.payments;
+      this.presentation.invoice = this.invoice;
       return this;
     }
 
@@ -73,3 +102,5 @@ module.exports = class InitiatePaymentService extends BaseService
       return this;
     }
 }
+
+module.exports = InitiatePaymentService;

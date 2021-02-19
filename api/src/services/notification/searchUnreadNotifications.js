@@ -1,37 +1,37 @@
-const _ = require('lodash')
-const BadRequestException = require('../../exception/bad')
-const BaseService = require('../base')
-const { User, BaseModel } = require('../../models')
+const _ = require('lodash');
+const BadRequestException = require('../../exception/bad');
+const BaseService = require('../base');
+const { User } = require('../../models');
 
 module.exports = class SearchUnreadNotificationsService extends BaseService
 {
     constructor(user) {
-      super()
+      super();
 
-      this.id = user.id
-      this.notifications = []
+      this.id = user.id;
+      this.notifications = [];
     }
 
     async search() {
-      console.log('Searching unread notifications...')
-      await this.searchFromUserById(this.id)
+      console.log('Searching unread notifications...');
+      await this.searchFromUserById(this.id);
       this.ensureUserWasFound()
-        .filterUnreadNotifications()
+        .filterUnreadNotifications();
 
-      return this
+      return this;
     }
 
     async searchFromUserById(id) {
-      this.user = await User.findById(id).populate('notifications')
-      return this
+      this.user = await User.findById(id).populate('notifications');
+      return this;
     }
 
     ensureUserWasFound() {
       if (!this.from instanceof User) {
-        throw new BadRequestException('From user not found')
+        throw new BadRequestException('From user not found');
       }
 
-      return this
+      return this;
     }
 
     filterUnreadNotifications() {
@@ -39,11 +39,12 @@ module.exports = class SearchUnreadNotificationsService extends BaseService
         _.filter(this.user.notifications, (notification) => !notification.read),
         ['created_at'],
         ['desc']
-      ) 
-      return this
+      );
+ 
+      return this;
     }
 
     getNotifications() {
-      return this.notifications
+      return this.notifications;
     }
 }

@@ -1,17 +1,16 @@
 'use strict'
-const faker = require('faker')
-const BaseController = require('./base')
+const BaseController = require('./base');
 
 class CategoryController extends BaseController {
   categories(req, res, next) {
     res.status(200).json([
-        { id: faker.random.number(100), name: 'banda' },
-        { id: faker.random.number(100), name: 'DJ' },
-        { id: faker.random.number(100), name: 'teatro' },
-        { id: faker.random.number(100), name: 'circo' },
-        { id: faker.random.number(100), name: 'standup' },
-        { id: faker.random.number(100), name: 'palestra' },
-        { id: faker.random.number(100), name: 'outros' }
+        { id: 120, name: 'banda' },
+        { id: 121, name: 'DJ' },
+        { id: 122, name: 'teatro' },
+        { id: 123, name: 'circo' },
+        { id: 124, name: 'standup' },
+        { id: 125, name: 'palestra' },
+        { id: 126, name: 'outros' }
     ])
   }
   

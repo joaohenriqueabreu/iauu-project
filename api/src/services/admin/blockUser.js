@@ -2,10 +2,6 @@ const UserService = require('./user')
 
 module.exports = class BlockUserService extends UserService
 {
-    constructor(data) {
-      super(data)
-    }
-
     async block() {
       await this.searchUser()
       this.ensureUserWasFound()

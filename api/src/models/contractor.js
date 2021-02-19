@@ -1,10 +1,10 @@
-require('dotenv').config()
-// const db = require('../data/db')
-const db = require('mongoose')
-const BaseModel = require('./base')
+require('dotenv').config();
+const db = require('mongoose');
+const BaseRepository = require('./repositories/base');
 
-const address = require('./schemas/address')
-const baseSchemaOptions = require('./schemas/options')
+const address = require('./schemas/address');
+const baseSchemaOptions = require('./schemas/options');
+const gatewayAccountSchema = require('./schemas/account');
 
 const { Schema } = db
 
@@ -17,10 +17,11 @@ const contractorSchema = new Schema({
   name: { type: String},
   photo: { type: String },
   phone: { type: String }, 
-  address: {type: address}
+  address: {type: address},
+  gateway_account: gatewayAccountSchema,
 }, { ...baseSchemaOptions })
 
-class Contractor extends BaseModel {
+class Contractor extends BaseRepository {
   constructor() {
     super()
   }

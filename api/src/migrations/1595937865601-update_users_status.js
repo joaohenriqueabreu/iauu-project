@@ -1,17 +1,17 @@
-const _ = require('lodash')
-const { User } = require('../models')
+const _ = require('lodash');
+const { User } = require('../models');
 /**
  * Make any changes you need to make to the database here
  */
 async function up () {
-  const users = await User.find()
+  const users = await User.find();
   _.forEach(users, (user) => {
     if ((user.verification !== undefined && 
       user.verification !== null && user.verification.is_verified) ||
       user.is_verified) {
-      console.log(`Activating user ${user.name}`)
-      user.status = 'active'
-      user.save()
+      console.log(`Activating user ${user.name}`);
+      user.status = 'active';
+      user.save();
     }
   })
 }

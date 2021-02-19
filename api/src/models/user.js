@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const db = require('mongoose');
-const BaseModel = require('./base');
+const BaseRepository = require('./repositories/base');
 const personalInfo = require('./schemas/personalInfo');
 const address = require('./schemas/address');
 const notification = require("./schemas/notification");
@@ -55,7 +55,7 @@ const userSchema = new Schema({
   last_logged_in: { type: Date },
 }, { ...baseSchemaOptions });
 
-class User extends BaseModel {
+class User extends BaseRepository {
   constructor() {
     super();
   }

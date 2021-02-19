@@ -1,5 +1,5 @@
 const db = require('mongoose');
-const BaseModel = require('../base');
+const BaseRepository = require('../repositories/base');
 const Coordinates = require('./coordinates');
 const baseSchemaOptions = require('../schemas/options');
 
@@ -15,7 +15,7 @@ const addressSchema = new db.Schema({
 }, baseSchemaOptions);
 
 const SHOW_PROPS = ['street', 'number', 'neighboorhood', 'city', 'state', 'country']
-class Address extends BaseModel {
+class Address extends BaseRepository {
   constructor() {
     super();
   }
