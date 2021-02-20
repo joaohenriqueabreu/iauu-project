@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const db = require('mongoose');
 const BaseRepository = require('./repositories/base');
-const personalInfo = require('./schemas/personalInfo');
 const address = require('./schemas/address');
 const notification = require("./schemas/notification");
 const baseSchemaOptions = require('./schemas/options');

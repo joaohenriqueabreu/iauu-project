@@ -2,10 +2,6 @@ const faker = require('faker');
 const BaseFactory = require('./base');
 
 module.exports = class TimeslotFactory extends BaseFactory {
-  constructor(numOfSeeds) {
-    super(numOfSeeds);
-  }
-
   manufacture() {
     return {
       name: faker.lorem.sentence(),

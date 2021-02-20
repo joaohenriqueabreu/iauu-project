@@ -5,10 +5,6 @@ const TimeslotFactory = require('./timeslot');
 const ProductFactory = require('./product');
 
 module.exports = class ProposalFactory extends BaseFactory {
-  constructor(numOfSeeds) {
-    super(numOfSeeds);
-  }
-
   manufacture() {
     return {
       titla: faker.lorem.sentence(),

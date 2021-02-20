@@ -4,10 +4,6 @@ const AddressFactory = require('./address');
 const { User } = require('../../src/models');
 
 module.exports = class UserFactory extends BaseFactory {
-  constructor(numOfSeeds) {
-    super(numOfSeeds);
-  }
-
   manufacture() {
     return new User({
       email: faker.internet.email(),

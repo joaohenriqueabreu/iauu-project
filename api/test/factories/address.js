@@ -4,10 +4,6 @@ const BaseFactory = require('./base');
 const { Address } = require('../../src/models/schemas');
 
 module.exports = class AddressFactory extends BaseFactory {
-  constructor(numOfSeeds) {
-    super(numOfSeeds);
-  }
-
   manufacture() {
     return {
       titla: faker.lorem.sentence(),

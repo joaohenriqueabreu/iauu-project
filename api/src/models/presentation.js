@@ -22,7 +22,7 @@ const presentationSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Artist'
   },
-  fee: { type: Number, required: true, default: defaultFee },
+  fee: { type: Number, required: true, default: defaultFee, max: 1 },
   address: addressSchema,
 
   /**

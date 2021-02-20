@@ -9,4 +9,4 @@ const bankAccountSchema = new db.Schema({
     document: { type: String },
 }, baseSchemaOptions)
 
-module.exports = bankAccountSchema
+module.exports = db.model('BankAccount', bankAccountSchema);

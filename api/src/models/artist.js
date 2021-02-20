@@ -10,8 +10,8 @@ const addressSchema = require('./schemas/address');
 const productsSchema = require('./schemas/product');
 const timeslotSchema = require('./schemas/timeslot');
 const feedbackSchema = require('./schemas/feedback');
-const bankAccountSchema = require('./schemas/bankAccount');
-const gatewayAccountSchema = require('./schemas/account');
+const bankAccountSchema = require('./schemas/bankAccount').schema;
+const gatewayAccountSchema = require('./schemas/gatewayAccount').schema;
 
 const artistSchema = new Schema({
   users : [{
@@ -65,8 +65,10 @@ const artistSchema = new Schema({
     }
   },
   address: addressSchema,
-  bank_account: bankAccountSchema,
-  gateway_account: gatewayAccountSchema,
+  account: {
+    bank: bankAccountSchema,
+    gateway: gatewayAccountSchema
+  },  
   rating: { type: Number },
   feedbacks: [feedbackSchema]
 }, { ...baseSchemaOptions });

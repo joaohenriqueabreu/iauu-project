@@ -8,19 +8,17 @@ const ContractorFactory = require('./contractor');
 const { Presentation } = require('../../src/models');
 
 module.exports = class PresentationFactory extends BaseFactory {
-  constructor(numOfSeeds) {
-    super(numOfSeeds);
-  }
 
   manufacture() {
     const proposal = (new ProposalFactory()).getSeed();
 
     return new Presentation({
-      fee: faker.random.float(0.5),
+      fee: 0.12,
       address: (new AddressFactory).getSeed(),
       category: {
         name: faker.music.genre()
       },
+      price: faker.random.number(1000000),
       proposal: proposal,
       artist: (new ArtistFactory()).getSeed(),
       contractor: (new ContractorFactory()).getSeed()

@@ -4,9 +4,10 @@ const BaseRepository = require('./repositories/base');
 
 const address = require('./schemas/address');
 const baseSchemaOptions = require('./schemas/options');
-const gatewayAccountSchema = require('./schemas/account');
+const bankAccountSchema = require('./schemas/bankAccount').schema;
+const gatewayAccountSchema = require('./schemas/gatewayAccount').schema;
 
-const { Schema } = db
+const { Schema } = db;
 
 const contractorSchema = new Schema({
   users: [{
@@ -18,14 +19,15 @@ const contractorSchema = new Schema({
   photo: { type: String },
   phone: { type: String }, 
   address: {type: address},
-  gateway_account: gatewayAccountSchema,
-}, { ...baseSchemaOptions })
+  account: {
+    bank: bankAccountSchema,
+    gateway: gatewayAccountSchema
+  }
+}, { ...baseSchemaOptions });
 
 class Contractor extends BaseRepository {
-  constructor() {
-    super()
-  }
+  constructor(data) { super(data); }
 }
 
-contractorSchema.loadClass(Contractor)
-module.exports = db.model('Contractor', contractorSchema)
+contractorSchema.loadClass(Contractor);
+module.exports = db.model('Contractor', contractorSchema);

@@ -3,7 +3,7 @@ require('dotenv').config();
 const db = require('mongoose');
 const BaseRepository = require('../repositories/base');
 const baseSchemaOptions = require('./options');
-const accountSchema = require('./account');
+const accountSchema = require('./gatewayAccount').schema;
 
 const { Schema } = db;
 

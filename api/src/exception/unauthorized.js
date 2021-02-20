@@ -1,8 +1,8 @@
-const Exception = require('./exception')
+const Exception = require('./exception');
 
 module.exports = class UnauthorizedException extends Exception { 
     constructor(message) {
-        super(message)
-        this.code = 401
+        super(message);
+        this.code = 401;
     }
 }

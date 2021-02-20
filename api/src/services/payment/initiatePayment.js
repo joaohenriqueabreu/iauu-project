@@ -20,10 +20,14 @@ class InitiatePaymentService extends PresentationService
       this.ensurePresentationWasFound()
         .ensurePresentationIsPayable()
         .createInvoice()
+        .ensureAmountIsValid()
         .createPayments()
-        .calculatePaymentAmounts()
-        .calculateReferralAmounts()
-        .queuePayments();
+        .assignPaymentParties()
+        .calculatePaymentAmounts();
+
+        // TODO will hold off referrals for now
+        // .calculateReferralAmounts()
+        // .queuePayments();
 
       await this.execGatewayPayments();
       this.updateTransactionData()
@@ -36,12 +40,17 @@ class InitiatePaymentService extends PresentationService
 
     ensurePresentationIsPayable() {
       if (! this.presentation.isCompleted()) { 
-        throw new Error('Presentation is not in payable state'); 
+        throw new Error('Presentation is not in payable state.'); 
       }
 
       if (typeof this.presentation.invoice === 'object') {
         throw new Error('Presentation already has an initiated payment processing'); 
       }
+
+      if (typeof this.presentation.artist.account.gateway !== 'object' 
+        && typeof this.presentation.contractor.account.gateway !== 'object') {
+          throw new Error('Parties dont have gateway accounts setup please proceed with manual payment.');
+        }
 
       return this;
     }
@@ -56,29 +65,45 @@ class InitiatePaymentService extends PresentationService
       return this;
     }
 
+    ensureAmountIsValid() {
+      if (this.invoice.total_amount <= 0) {
+        throw new Error('Invoiced amount cannot be zero');
+      }
+
+      return this;
+    }
+
     createPayments() {
       // Artist payment
       this.artistPayment = new Payment({});
       this.ourPayment = new Payment({});
-      this.referralPayments = new Payment({});
 
-      this.payments.push([this.artistPayment, this.ourPayment, this.referralPayments]);
+      // TODO Will hold off referrals for now - implement
+      // this.referralPayments = new Payment({});
+
+      this.payments.push([this.artistPayment, this.ourPayment]);
       return this;
+    }
+
+    assignPaymentParties() {
+
     }
 
     calculatePaymentAmounts() {
+      this.ourPayment.amount = this.invoice.total_amount * this.invoice.fee;
+      this.artistPayment.amount = this.invoice.total_amount - this.ourPayment;
       return this;
     }
 
-    calculateReferralAmounts() {
-      return this;
-    }
+    // calculateReferralAmounts() {
+    //   return this;
+    // }
 
-    queuePayments() {
-      // Flatten payments (as referrals could be an array)
-      this.payments = _.flatten(this.payments);
-      return this;
-    }
+    // queuePayments() {
+    //   // Flatten payments (as referrals could be an array)
+    //   this.payments = _.flatten(this.payments);
+    //   return this;
+    // }
 
     async execGatewayPayments() {
       return this;

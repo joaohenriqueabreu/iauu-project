@@ -1,5 +1,7 @@
 const AddressFactory = require('./address');
 const TimeslotFactory = require('./timeslot');
+const BankAccountFactory = require('./bankAccount');
+const GatewayAccountFactory = require('./gatewayAccount');
 const ProductFactory = require('./product');
 const UserFactory = require('./user');
 const ArtistFactory = require('./artist');
@@ -10,6 +12,8 @@ const PresentationFactory = require('./presentation');
 module.exports = {
   AddressFactory,
   TimeslotFactory,
+  BankAccountFactory,
+  GatewayAccountFactory,
   ProductFactory,
   UserFactory,
   ArtistFactory,
