@@ -1,21 +1,29 @@
 const _ = require('lodash');
 const PresentationService = require('../presentation/base');
-const GatewayPaymentService = require('./gatewayPayment');
+const GatewayServiceBuilder = require('../builders/gatewayServiceBuilder');
 const { Invoice, Payment } = require('../../models/schemas');
+const { PaymentData } = require('../../config/data');
+const { BadRequestException, ManualPaymentRequiredException } = require('../../exception');
 
-class InitiatePaymentService extends PresentationService
+class PayPresentationService extends PresentationService
 {
+    /** @param { VendorGatewayInterface } vendorGatewayService */
     constructor(user, data) {
       super(user, data);
 
+      if (data.id === undefined) { throw new BadRequestException('Missing presentation info'); }
+      if (data.paymentMethod === undefined) { throw new BadRequestException('Payment method missing'); }
+
       this.id = data.id;
-      this.fee = data.fee;
+      this.fee = data.fee; // optional
+
+      this.vendorGatewayService = (new GatewayServiceBuilder(data.paymentMethod)).getService();
 
       this.invoice = {};
       this.payments = [];
     }
 
-    async initiate() {
+    async pay() {
       await this.searchPresentation();
       this.ensurePresentationWasFound()
         .ensurePresentationIsPayable()
@@ -29,7 +37,7 @@ class InitiatePaymentService extends PresentationService
         // .calculateReferralAmounts()
         // .queuePayments();
 
-      await this.execGatewayPayments();
+      await this.chargeGatewayPayments();
       this.updateTransactionData()
         .linkPresentationInvoiceAndPayments();
       await this.savePresentation();
@@ -47,9 +55,8 @@ class InitiatePaymentService extends PresentationService
         throw new Error('Presentation already has an initiated payment processing'); 
       }
 
-      if (typeof this.presentation.artist.account.gateway !== 'object' 
-        && typeof this.presentation.contractor.account.gateway !== 'object') {
-          throw new Error('Parties dont have gateway accounts setup please proceed with manual payment.');
+      if (typeof this.presentation.contractor.account.gateway !== 'object') {
+          throw new ManualPaymentRequiredException('Contractor dont have receiving account setup, please proceed with manual payment.');
         }
 
       return this;
@@ -60,7 +67,7 @@ class InitiatePaymentService extends PresentationService
         total_amount: this.presentation.price,
         fee: this.fee ? this.fee : this.presentation.fee,
         status: 'pending'
-      });      
+      });
 
       return this;
     }
@@ -86,7 +93,12 @@ class InitiatePaymentService extends PresentationService
     }
 
     assignPaymentParties() {
+      this.ourPayment.to = PaymentData.OUR_COMPANY_ARTIST_RECORD;
+      this.ourPayment.from = this.presentation.contractor;
 
+      this.artistPayment.to = this.presentation.artist;
+      this.artistPayment.from = this.presentation.contractor;
+      return this;
     }
 
     calculatePaymentAmounts() {
@@ -95,6 +107,7 @@ class InitiatePaymentService extends PresentationService
       return this;
     }
 
+    // TODO Will hold off referrals for now - implement
     // calculateReferralAmounts() {
     //   return this;
     // }
@@ -105,7 +118,12 @@ class InitiatePaymentService extends PresentationService
     //   return this;
     // }
 
-    async execGatewayPayments() {
+    async chargeGatewayPayments() {
+      for (let i=0; i < this.payments.length; i++) {
+        const paymentToPay = this.payments[i];
+        paymentToPay.transaction = await this.vendorGatewayService.charge(paymentToPay);
+      }
+
       return this;
     }
 
@@ -128,4 +146,4 @@ class InitiatePaymentService extends PresentationService
     }
 }
 
-module.exports = InitiatePaymentService;
+module.exports = PayPresentationService;

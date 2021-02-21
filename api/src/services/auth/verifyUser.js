@@ -79,7 +79,7 @@ module.exports = class VerifyUserService extends AuthService {
     const mailSvc = new SendMailService(this.user.email, 'Bem vindo a iauü')
     await mailSvc.buildBody('welcome', {
       user: this.user,
-      url: this.user.generateVerificationUrl(),
+      url: this.generateVerificationUrl(),
     })
     await mailSvc.send()
     return this

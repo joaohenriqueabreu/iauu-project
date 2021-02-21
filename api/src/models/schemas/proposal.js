@@ -1,9 +1,9 @@
-// const db = require('../../data/db')
 const db = require('mongoose')
+
 const baseSchemaOptions = require('../schemas/options')
-const timeslotSchema = require('./timeslot')
-const productSchema = require('./product')
-const counterOfferSchema = require('./counterOffer')
+const timeslotSchema = require('./timeslot').schema;
+const productSchema = require('./product').schema;
+const counterOfferSchema = require('./counterOffer').schema;
 
 const proposalSchema = new db.Schema({
     title: { type: String },
@@ -15,4 +15,4 @@ const proposalSchema = new db.Schema({
     counter_offer: counterOfferSchema
 }, baseSchemaOptions)
 
-module.exports = proposalSchema
+module.exports = db.model('Proposal', proposalSchema);

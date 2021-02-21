@@ -14,4 +14,4 @@ const productSchema = new db.Schema({
     items: [String]
 }, baseSchemaOptions)
 
-module.exports = productSchema
+module.exports = db.model('Product', productSchema);

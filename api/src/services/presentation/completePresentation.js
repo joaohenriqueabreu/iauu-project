@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const PresentationService = require('./base');
-const InitiatePaymentService = require('../payment/initiatePayment');
 const BadRequestException = require('../../exception/bad');
 
 module.exports = class CompletePresentationService extends PresentationService
@@ -44,20 +43,6 @@ module.exports = class CompletePresentationService extends PresentationService
       // When both parties confirm, we can complete the presentation
       if (this.presentation.confirm_status.includes('artist') && this.presentation.confirm_status.includes('contractor')) {
         this.presentation.status = 'completed';
-        
-        // Trigger payment flow
-        this.createPayment();
-      }
-
-      return this;
-    }
-
-    async createPayment() {
-      const initiatePaymentSvc = new InitiatePaymentService(this.presentation);
-      try {
-        await initiatePaymentSvc.initiate();
-      } catch (error) {
-        // TODO handle payment error
       }
 
       return this;

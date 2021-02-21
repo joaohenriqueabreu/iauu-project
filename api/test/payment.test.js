@@ -1,9 +1,14 @@
 const { sandbox, setup, cleanup, generalMock } = require('./setup');
-const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory } = require('./factories');
+const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory, PaymentMethodFactory } = require('./factories');
 
 // Services
 const CompletePresentationService = require('../src/services/presentation/completePresentation');
-const InitiatePaymentService = require('../src/services/payment/initiatePayment');
+const InitiatePaymentService = require('../src/services/payment/payPresentation');
+
+// TODO - would be nice to abstract this test to VendorPaymentGatewayInterface
+const PagarmePaymentService = require('../src/services/gateways/pagarmePayment');
+const VendorGatewayInterface = require('../src/services/interfaces/vendorGateway');
+const { Exception } = require('../src/exception');
 
 // Test-wide objects
 let user = {};
@@ -47,7 +52,7 @@ describe('Payment testing', () => {
       sandbox.stub(CompletePresentationService.prototype, 'sendMarkedAsCompleteMail').callsFake(generalMock);
 
       // We will mock creating payment from complete presentation service, so that we can call InitiatePaymentService manually
-      sandbox.stub(CompletePresentationService.prototype, 'createPayment').callsFake(generalMock);
+      sandbox.spy(VendorGatewayInterface.prototype, 'charge');
     });
   });
 
@@ -79,9 +84,6 @@ describe('Payment testing', () => {
       completedPresentation.confirm_status[0].should.equal('artist');
       completedPresentation.confirm_status[1].should.equal('contractor');
 
-      // At least confirm that createPayment was called
-      CompletePresentationService.prototype.createPayment.should.have.been.calledOnce;
-
       // Refresh global presentation object
       presentation = completedPresentation;
     });
@@ -93,8 +95,30 @@ describe('Payment testing', () => {
 
   describe('Initiate Payment', () => {
     it('should save invoice', async () => {
-      const initPaymentSvc = new InitiatePaymentService(user, { id: presentation.id });
-      await initPaymentSvc.initiate();
+      const initPaymentSvc = new InitiatePaymentService(user, { 
+        id: presentation.id, 
+        paymentMethod: (new PaymentMethodFactory()).getSeed() 
+      });
+
+      await initPaymentSvc.pay();
+
+      VendorGatewayInterface.prototype.charge.should.have.been.calledOnce;
+    });
+
+    it('should fail without presentation', () => {
+      try {
+        const initPaymentSvc = new InitiatePaymentService(user, {});
+      } catch (error) {
+        error.should.be.instanceof(Exception);
+      }
+    });
+
+    it('should fail without payment method', () => {
+      try {
+        const initPaymentSvc = new InitiatePaymentService(user, { id: presentation.id });
+      } catch (error) {
+        error.should.be.instanceof(Exception);
+      }
     });
   });
 });

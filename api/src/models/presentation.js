@@ -4,16 +4,16 @@ const db = require('mongoose');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 
-const proposalSchema = require('./schemas/proposal');
-const addressSchema = require('./schemas/address');
-const timeslotSchema = require('./schemas/timeslot');
+const proposalSchema = require('./schemas/proposal').schema;
+const addressSchema = require('./schemas/address').schema;
+const timeslotSchema = require('./schemas/timeslot').schema;
 const invoiceSchema = require('./schemas/invoice').schema;
 
 const { Schema } = db;
 
 const defaultFee = process.env.PLATAFORM_FEE || 0.12;
 
-const presentationSchema = new Schema({  
+const presentationSchema = new Schema({
   contractor: {
     type: Schema.Types.ObjectId,
     ref: 'Contractor'

@@ -15,4 +15,4 @@ const feedbackSchema = new db.Schema({
     presentation: { type: ObjectId, ref: 'Presentation' }
 }, baseSchemaOptions)
 
-module.exports = feedbackSchema
+module.exports = db.model('Feedback', feedbackSchema);

@@ -2,8 +2,8 @@ require('dotenv').config();
 const db = require('mongoose');
 const BaseRepository = require('./repositories/base');
 
-const address = require('./schemas/address');
 const baseSchemaOptions = require('./schemas/options');
+const addressSchema = require('./schemas/address').schema;
 const bankAccountSchema = require('./schemas/bankAccount').schema;
 const gatewayAccountSchema = require('./schemas/gatewayAccount').schema;
 
@@ -18,7 +18,7 @@ const contractorSchema = new Schema({
   name: { type: String},
   photo: { type: String },
   phone: { type: String }, 
-  address: {type: address},
+  address: {type: addressSchema},
   account: {
     bank: bankAccountSchema,
     gateway: gatewayAccountSchema

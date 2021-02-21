@@ -39,4 +39,4 @@ class Timeslot extends BaseRepository {
 }
 
 timeslotSchema.loadClass(Timeslot);
-module.exports = timeslotSchema;
+module.exports = db.model('Timeslot', timeslotSchema);

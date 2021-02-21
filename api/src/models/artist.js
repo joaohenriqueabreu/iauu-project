@@ -5,11 +5,10 @@ const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 const { v4: uid } = require('uuid');
 
-const addressSchema = require('./schemas/address');
-// const socialSchema = require('./schemas/media');
-const productsSchema = require('./schemas/product');
-const timeslotSchema = require('./schemas/timeslot');
-const feedbackSchema = require('./schemas/feedback');
+const addressSchema = require('./schemas/address').schema;
+const productsSchema = require('./schemas/product').schema;
+const timeslotSchema = require('./schemas/timeslot').schema;
+const feedbackSchema = require('./schemas/feedback').schema;
 const bankAccountSchema = require('./schemas/bankAccount').schema;
 const gatewayAccountSchema = require('./schemas/gatewayAccount').schema;
 
@@ -20,6 +19,7 @@ const artistSchema = new Schema({
   }],
   name: { type: String },
   photo: { type: String },
+  public: { type: Boolean, default: false },
   slug: { 
     type: String,
     default: uid()

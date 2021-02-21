@@ -10,4 +10,4 @@ const notificationSchema = new db.Schema({
   read: { type: Boolean, default: false }
 }, baseSchemaOptions)
 
-module.exports = notificationSchema
+module.exports = db.model('Notification', notificationSchema);

@@ -2,8 +2,9 @@ require('dotenv').config();
 
 const db = require('mongoose');
 const BaseRepository = require('./repositories/base');
-const address = require('./schemas/address');
-const notification = require("./schemas/notification");
+
+const address = require('./schemas/address').schema;
+const notification = require("./schemas/notification").schema;
 const baseSchemaOptions = require('./schemas/options');
 
 const { Schema } = db;
@@ -81,10 +82,6 @@ class User extends BaseRepository {
       .select('+password +access_token +verification')
       .populate('artist')
       .populate('contractor');
-  }
-
-  generateVerificationUrl() {
-    return `${process.env.WEB_URL}/register/verify/${this.verification.token}`;
   }
 
   generateResetPasswordUrl() {

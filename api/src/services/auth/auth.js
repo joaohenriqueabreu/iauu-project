@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const bcrypt = require('bcryptjs');
 const BaseService = require('../base');
 const { User, Artist, Contractor } = require('../../models');
@@ -50,6 +52,10 @@ module.exports = class AuthService extends BaseService {
   generateVerificationToken() {
     this.user.verification.token = GenerateTokenService.generateSimple();
     return this;
+  }
+
+  generateVerificationUrl() {
+    return `${process.env.WEB_URL}/register/verify/${this.user.verification.token}`;
   }
 
   generateReferralToken() {
@@ -142,7 +148,7 @@ module.exports = class AuthService extends BaseService {
 
   async sendRegistrationMail() {
     const mailSvc = new SendMailService(this.user.email, 'iauü | Verifique sua conta');
-    await mailSvc.buildBody('register', {user: this.user, url: this.user.generateVerificationUrl() });
+    await mailSvc.buildBody('register', {user: this.user, url: this.generateVerificationUrl() });
     await mailSvc.send();
     return this;
   }

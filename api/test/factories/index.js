@@ -8,6 +8,7 @@ const ArtistFactory = require('./artist');
 const ContractorFactory = require('./contractor');
 const ProposalFactory = require('./proposal');
 const PresentationFactory = require('./presentation');
+const PaymentMethodFactory = require('./paymentMethod');
 
 module.exports = {
   AddressFactory,
@@ -19,5 +20,6 @@ module.exports = {
   ArtistFactory,
   ContractorFactory,
   ProposalFactory,
-  PresentationFactory
+  PresentationFactory,
+  PaymentMethodFactory
 };

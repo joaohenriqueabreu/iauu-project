@@ -1,4 +1,4 @@
-require("dotenv").config({ path: process.env.NODE_ENV === 'test' ? '.env.testing' : '.env'});
+require('../config/env');
 
 const db = require('mongoose');
 const connectionOptions = { 
