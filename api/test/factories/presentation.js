@@ -9,7 +9,7 @@ const { Presentation } = require('../../src/models');
 
 module.exports = class PresentationFactory extends BaseFactory {
 
-  manufacture() {
+  make() {
     const proposal = (new ProposalFactory()).getSeed();
 
     return new Presentation({

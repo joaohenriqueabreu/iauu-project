@@ -5,7 +5,7 @@ const GatewayAccountFactory = require('./gatewayAccount');
 
 module.exports = class ArtistFactory extends BaseFactory {
   // TODO complete seeder
-  manufacture() {
+  make() {
     return new Artist({
       name: faker.name.findName(),
       photo: faker.image.avatar(),

@@ -5,9 +5,9 @@ const TimeslotFactory = require('./timeslot');
 const ProductFactory = require('./product');
 
 module.exports = class ProposalFactory extends BaseFactory {
-  manufacture() {
+  make() {
     return {
-      titla: faker.lorem.sentence(),
+      title: faker.lorem.sentence(),
       price: faker.random.number(1000000),
       duration: faker.random.number(1000),
       notes: faker.lorem.sentences(5),

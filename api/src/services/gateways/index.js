@@ -1,5 +1,5 @@
-const PagarmePaymentService = require('./pagarmePayment');
+const PagarmeSplitPaymentService = require('./pagarmeSplitPayment');
 
 module.exports = {
-  PagarmePaymentService
+  PagarmeSplitPaymentService
 };

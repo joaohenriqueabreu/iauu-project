@@ -1,5 +1,7 @@
 module.exports = class VendorGatewayInterface {
-  constructor() { }
+  constructor() { 
+    
+  }
 
   charge() { throw new Error('Must implement charge interface'); }
   ensurePaymentMethodIsValid() { throw new Error('Must implement ensurePaymentMethodIsValid interface'); }

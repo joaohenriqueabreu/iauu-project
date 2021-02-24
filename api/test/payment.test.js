@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { sandbox, setup, cleanup, generalMock } = require('./setup');
 const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory, PaymentMethodFactory } = require('./factories');
 
@@ -5,10 +6,9 @@ const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory, Paym
 const CompletePresentationService = require('../src/services/presentation/completePresentation');
 const InitiatePaymentService = require('../src/services/payment/payPresentation');
 
-// TODO - would be nice to abstract this test to VendorPaymentGatewayInterface
-const PagarmePaymentService = require('../src/services/gateways/pagarmePayment');
-const VendorGatewayInterface = require('../src/services/interfaces/vendorGateway');
 const { Exception } = require('../src/exception');
+const { PagarmeSplitPaymentService } = require('../src/services/gateways');
+const { Invoice, Payment } = require('../src/models/schemas');
 
 // Test-wide objects
 let user = {};
@@ -52,7 +52,7 @@ describe('Payment testing', () => {
       sandbox.stub(CompletePresentationService.prototype, 'sendMarkedAsCompleteMail').callsFake(generalMock);
 
       // We will mock creating payment from complete presentation service, so that we can call InitiatePaymentService manually
-      sandbox.spy(VendorGatewayInterface.prototype, 'charge');
+      sandbox.spy(PagarmeSplitPaymentService.prototype, 'charge');
     });
   });
 
@@ -97,17 +97,33 @@ describe('Payment testing', () => {
     it('should save invoice', async () => {
       const initPaymentSvc = new InitiatePaymentService(user, { 
         id: presentation.id, 
-        paymentMethod: (new PaymentMethodFactory()).getSeed() 
+        paymentMethod: (new PaymentMethodFactory()).getSeed()
       });
 
       await initPaymentSvc.pay();
+      const paidPresentation = initPaymentSvc.getPresentation();
 
-      VendorGatewayInterface.prototype.charge.should.have.been.calledOnce;
+      
+      paidPresentation.invoice.status.should.equal('pending');
+      paidPresentation.invoice.total_amount.should.equal(presentation.price);
+
+      _.forEach(paidPresentation.invoice.payments, (payment) => {
+        // TODO should have a cleaner way to assert this
+        payment.from._id.toString().should.equal(contractor.id);
+        payment.to._id.toString().should.equal(artist.id);
+        
+        payment.status.should.equal('pending');
+        payment.amount.should.equal(presentation.price);
+        payment.fee.should.equal(presentation.fee);
+        payment.net_amount.should.equal(presentation.price * (1 - presentation.fee));
+        payment.should.have.property('transaction');
+        payment.should.have.property('method');
+      });
     });
 
     it('should fail without presentation', () => {
       try {
-        const initPaymentSvc = new InitiatePaymentService(user, {});
+        new InitiatePaymentService(user, {});
       } catch (error) {
         error.should.be.instanceof(Exception);
       }
@@ -115,7 +131,7 @@ describe('Payment testing', () => {
 
     it('should fail without payment method', () => {
       try {
-        const initPaymentSvc = new InitiatePaymentService(user, { id: presentation.id });
+        new InitiatePaymentService(user, { id: presentation.id });
       } catch (error) {
         error.should.be.instanceof(Exception);
       }

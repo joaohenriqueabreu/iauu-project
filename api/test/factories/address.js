@@ -4,7 +4,7 @@ const BaseFactory = require('./base');
 const { Address } = require('../../src/models/schemas');
 
 module.exports = class AddressFactory extends BaseFactory {
-  manufacture() {
+  make() {
     return {
       titla: faker.lorem.sentence(),
       price: faker.random.number(1000000),

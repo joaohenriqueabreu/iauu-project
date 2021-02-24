@@ -1,12 +1,12 @@
 require('../../config/env');
 
 const BaseServiceBuilder = require('./base');
-const { PagarmePaymentService } = require('../gateways');
+const { PagarmeSplitPaymentService } = require('../gateways');
 
 module.exports = class GatewayServiceBuilder extends BaseServiceBuilder {
   build(data) {
     if (process.env.PAYMENT_GATEWAY === 'pagarme') { 
-      this.service = new PagarmePaymentService(data); 
+      this.service = new PagarmeSplitPaymentService(data); 
       return this;
     }
 

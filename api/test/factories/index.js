@@ -8,6 +8,7 @@ const ArtistFactory = require('./artist');
 const ContractorFactory = require('./contractor');
 const ProposalFactory = require('./proposal');
 const PresentationFactory = require('./presentation');
+const PaymentFactory = require('./payment');
 const PaymentMethodFactory = require('./paymentMethod');
 
 module.exports = {
@@ -21,5 +22,6 @@ module.exports = {
   ContractorFactory,
   ProposalFactory,
   PresentationFactory,
+  PaymentFactory,
   PaymentMethodFactory
 };

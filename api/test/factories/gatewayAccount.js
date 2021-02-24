@@ -3,7 +3,7 @@ const BaseFactory = require('./base');
 const GatewayAccount = require('../../src/models/schemas/gatewayAccount');
 
 module.exports = class GatewayAccountFactory extends BaseFactory {
-  manufacture() {
+  make() {
     return new GatewayAccount({
       name: faker.name.findName(),
       email: faker.internet.email(),

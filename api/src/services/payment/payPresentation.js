@@ -16,11 +16,11 @@ class PayPresentationService extends PresentationService
 
       this.id = data.id;
       this.fee = data.fee; // optional
+      this.paymentMethod = data.paymentMethod;
 
-      this.vendorGatewayService = (new GatewayServiceBuilder(data.paymentMethod)).getService();
+      this.vendorGatewayService = (new GatewayServiceBuilder(this.paymentMethod)).getService();
 
       this.invoice = {};
-      this.payments = [];
     }
 
     async pay() {
@@ -28,8 +28,9 @@ class PayPresentationService extends PresentationService
       this.ensurePresentationWasFound()
         .ensurePresentationIsPayable()
         .createInvoice()
+        .calculateTransactionFee()
         .ensureAmountIsValid()
-        .createPayments()
+        .createPayment() // TODO we might come up with a way of making multiple payments
         .assignPaymentParties()
         .calculatePaymentAmounts();
 
@@ -37,9 +38,8 @@ class PayPresentationService extends PresentationService
         // .calculateReferralAmounts()
         // .queuePayments();
 
-      await this.chargeGatewayPayments();
-      this.updateTransactionData()
-        .linkPresentationInvoiceAndPayments();
+      await this.chargeGatewayPayment();
+      this.linkPresentationInvoiceAndPayments();
       await this.savePresentation();
         
       this.sendPaymentSuccessMails();
@@ -56,8 +56,12 @@ class PayPresentationService extends PresentationService
       }
 
       if (typeof this.presentation.contractor.account.gateway !== 'object') {
-          throw new ManualPaymentRequiredException('Contractor dont have receiving account setup, please proceed with manual payment.');
-        }
+        throw new ManualPaymentRequiredException('Contractor dont have receiving account setup, please proceed with manual payment.');
+      }
+
+      if (this.presentation.fee === undefined) {
+        throw new ManualPaymentRequiredException('Presentation has an invalid transaction fee, please proceed with manual payment.');
+      }
 
       return this;
     }
@@ -65,7 +69,6 @@ class PayPresentationService extends PresentationService
     createInvoice() {
       this.invoice = new Invoice({
         total_amount: this.presentation.price,
-        fee: this.fee ? this.fee : this.presentation.fee,
         status: 'pending'
       });
 
@@ -80,30 +83,33 @@ class PayPresentationService extends PresentationService
       return this;
     }
 
-    createPayments() {
+    calculateTransactionFee() {
+      this.invoice.fee = this.fee !== undefined ? this.fee : this.presentation.fee;
+      return this;
+    }
+
+    createPayment() {
       // Artist payment
-      this.artistPayment = new Payment({});
-      this.ourPayment = new Payment({});
+      this.artistPayment = new Payment({ });
+      this.artistPayment.method = this.paymentMethod;
 
       // TODO Will hold off referrals for now - implement
       // this.referralPayments = new Payment({});
 
-      this.payments.push([this.artistPayment, this.ourPayment]);
       return this;
     }
 
     assignPaymentParties() {
-      this.ourPayment.to = PaymentData.OUR_COMPANY_ARTIST_RECORD;
-      this.ourPayment.from = this.presentation.contractor;
-
-      this.artistPayment.to = this.presentation.artist;
-      this.artistPayment.from = this.presentation.contractor;
+      this.artistPayment.to = this.presentation.artist.id;
+      this.artistPayment.from = this.presentation.contractor.id;
       return this;
     }
 
     calculatePaymentAmounts() {
-      this.ourPayment.amount = this.invoice.total_amount * this.invoice.fee;
-      this.artistPayment.amount = this.invoice.total_amount - this.ourPayment;
+      this.artistPayment.fee = this.invoice.fee;
+      this.artistPayment.amount = this.invoice.total_amount;
+      this.artistPayment.net_amount = this.invoice.total_amount * (1 - this.invoice.fee);
+      
       return this;
     }
 
@@ -118,21 +124,13 @@ class PayPresentationService extends PresentationService
     //   return this;
     // }
 
-    async chargeGatewayPayments() {
-      for (let i=0; i < this.payments.length; i++) {
-        const paymentToPay = this.payments[i];
-        paymentToPay.transaction = await this.vendorGatewayService.charge(paymentToPay);
-      }
-
-      return this;
-    }
-
-    updateTransactionData() {
+    async chargeGatewayPayment() {
+      this.artistPayment.transaction = await this.vendorGatewayService.charge(this.artistPayment);
       return this;
     }
 
     linkPresentationInvoiceAndPayments() {
-      this.invoice.payments = this.payments;
+      this.invoice.payments.push(this.artistPayment);
       this.presentation.invoice = this.invoice;
       return this;
     }

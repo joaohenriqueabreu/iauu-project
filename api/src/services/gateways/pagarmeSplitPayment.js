@@ -1,7 +1,7 @@
 const { Exception } = require("../../exception");
 const VendorGatewayInterface = require("../interfaces/vendorGateway");
 
-module.exports = class PagarmePaymentService extends VendorGatewayInterface {
+module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface {
   constructor(paymentMethod) {
     super();
 
@@ -25,6 +25,6 @@ module.exports = class PagarmePaymentService extends VendorGatewayInterface {
     this.ensurePaymentMethodIsValid();
 
     console.log('we should be calling pagarme API here');
-    return this;
+    return 'this is a transaction id';
   }
 }

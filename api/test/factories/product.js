@@ -2,7 +2,7 @@ const faker = require('faker');
 const BaseFactory = require('./base');
 
 module.exports = class TimeslotFactory extends BaseFactory {
-  manufacture() {
+  make() {
     return {
       name: faker.lorem.sentence(),
       description: faker.lorem.sentences(),

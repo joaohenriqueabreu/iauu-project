@@ -19,6 +19,8 @@ const paymentSchema = new Schema({
   },
 
   amount: { type: Number, required: true },
+  net_amount: { type: Number, required: true },
+  fee: { type: Number, required: true },
   status: { type: String, enum: ['pending', 'completed', 'failed'], required: true, default: 'pending' },
   notes: { type: String },
   method: { any: Schema.Types.Mixed }, // Store provided frontend payment method information (can be any format - depends on the vendor gateway)

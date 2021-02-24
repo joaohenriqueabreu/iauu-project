@@ -4,7 +4,7 @@ const AddressFactory = require('./address');
 const { User } = require('../../src/models');
 
 module.exports = class UserFactory extends BaseFactory {
-  manufacture() {
+  make() {
     return new User({
       email: faker.internet.email(),
       password: faker.internet.password(),
