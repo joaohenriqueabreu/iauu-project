@@ -4,7 +4,7 @@ const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory, Paym
 
 // Services
 const CompletePresentationService = require('../src/services/presentation/completePresentation');
-const InitiatePaymentService = require('../src/services/payment/payPresentation');
+const PayPresentationService = require('../src/services/payment/payPresentation');
 
 const { Exception } = require('../src/exception');
 const { PagarmeSplitPaymentService } = require('../src/services/gateways');
@@ -95,7 +95,7 @@ describe('Payment testing', () => {
 
   describe('Initiate Payment', () => {
     it('should save invoice', async () => {
-      const initPaymentSvc = new InitiatePaymentService(user, { 
+      const initPaymentSvc = new PayPresentationService(user, { 
         id: presentation.id, 
         paymentMethod: (new PaymentMethodFactory()).getSeed()
       });
@@ -103,7 +103,6 @@ describe('Payment testing', () => {
       await initPaymentSvc.pay();
       const paidPresentation = initPaymentSvc.getPresentation();
 
-      
       paidPresentation.invoice.status.should.equal('pending');
       paidPresentation.invoice.total_amount.should.equal(presentation.price);
 
@@ -116,14 +115,14 @@ describe('Payment testing', () => {
         payment.amount.should.equal(presentation.price);
         payment.fee.should.equal(presentation.fee);
         payment.net_amount.should.equal(presentation.price * (1 - presentation.fee));
-        payment.should.have.property('transaction');
+        payment.transaction.should.not.be.null;
         payment.should.have.property('method');
       });
     });
 
     it('should fail without presentation', () => {
       try {
-        new InitiatePaymentService(user, {});
+        new PayPresentationService(user, {});
       } catch (error) {
         error.should.be.instanceof(Exception);
       }
@@ -131,7 +130,7 @@ describe('Payment testing', () => {
 
     it('should fail without payment method', () => {
       try {
-        new InitiatePaymentService(user, { id: presentation.id });
+        new PayPresentationService(user, { id: presentation.id });
       } catch (error) {
         error.should.be.instanceof(Exception);
       }

@@ -1,7 +1,9 @@
 const faker = require('faker');
 
 const BaseFactory = require('./base');
-const { ContractorFactory, ArtistFactory, PaymentMethodFactory } = require('.');
+const ContractorFactory = require('./contractor');
+const ArtistFactory = require('./artist');
+const PaymentMethodFactory = require('./paymentMethod');
 
 module.exports = class PaymentFactory extends BaseFactory {
   make() {

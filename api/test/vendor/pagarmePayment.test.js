@@ -1,15 +1,20 @@
 const _ = require('lodash');
 const { sandbox, setup, cleanup, generalMock } = require('../setup');
 const { PaymentFactory } = require('../factories');
+const PagarmeCreditCardPaymentMethodFactory = require('../factories/vendor/pagarmeCCPaymentMethod');
+const PagarmeBoletoPaymentMethodFactory = require('../factories/vendor/pagarmeBoletoPaymentMethod');
 
 // Services
 const { PagarmeSplitPaymentService } = require('../../src/services/gateways');
 
 const { Exception } = require('../../src/exception');
 const { Payment } = require('../../src/models/schemas');
+const PagarmeCardHashExchangePaymentService = require('../../src/services/gateways/pagarmeCardHashExchange');
 
 // Test-wide objects
-let payment = { };
+let cardHash = null;
+let payment = {};
+let paymentMethod = {};
 
 describe('Payment testing', () => {
   before(async () => { await setup(); });
@@ -18,22 +23,38 @@ describe('Payment testing', () => {
   beforeEach(() => {
     payment = (new PaymentFactory()).getSeed();
   });
+  
+  describe('Pagar.me API', () => {
+    it('should get card hash', async () => {
+      const creditCard = (new PagarmeCreditCardPaymentMethodFactory()).getSeed();
 
-  describe('Service stubs', () => {
-    it('should stub methods', () => {
-      // sandbox.stub(CompletePresentationService.prototype, 'sendMarkedAsCompleteMail').callsFake(generalMock);
+      const pagarmeCardHashExchangeSvc = new PagarmeCardHashExchangePaymentService(creditCard);
+      await pagarmeCardHashExchangeSvc.exchange();
 
-      // We will mock creating payment from complete presentation service, so that we can call InitiatePaymentService manually
-      // sandbox.spy(PagarmeSplitPaymentService.prototype, 'charge');
+      cardHash = pagarmeCardHashExchangeSvc.getHash();
+      cardHash.should.not.be.null;
     });
-  });
 
-  describe('Send pagar.me payment ', () => {
-    it('should call API and create transaction', async () => {
-      const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService(payment.method);
-      const transactionId = await pagarmeSplitPaymentSvc.charge(payment);
+    it('should call API and create CC transaction', async () => {
+      const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: 'cc', hash: cardHash});
+      const transaction = await pagarmeSplitPaymentSvc.charge(payment);
+      
+      transaction.should.not.be.null;
+      transaction.id.should.not.be.null;
+      transaction.status.should.equal('processing');
+    });
 
-      transactionId.should.not.be.null;
+    it('should call API and create Boleto transaction', async () => {
+      // const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: 'boleto', hash: cardHash});
+      // const transaction = await pagarmeSplitPaymentSvc.charge(payment);
+      
+      // transaction.should.not.be.null;
+      // transaction.id.should.not.be.null;
+      // transaction.status.should.equal('processing');
+    });
+
+    it('should fail with invalid payment method', () => {
+      // const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({});
     });
   });
 });
