@@ -1,6 +1,8 @@
 require('../../config/env');
 
 const pagarme = require('pagarme');
+const PagarmeData = require('../../config/data/vendor/pagarme');
+
 const { Exception, InvalidPaymentMethodProvidedException, FailedAPIConnectionException, FailedChargingPaymentMethodException } = require('../../exception');
 const VendorGatewayInterface = require("../interfaces/vendorGateway");
 
@@ -8,14 +10,14 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
   constructor(paymentMethod) {
     super();
 
-    if (paymentMethod === undefined || paymentMethod.type === undefined) { 
+    if (paymentMethod === undefined || paymentMethod.type === undefined) {
       throw new Exception('Must provide payment method'); 
     }
-    
+
     this.paymentMethod = paymentMethod;
   }
 
-  async charge(payment) {    
+  async charge(payment) {
     this.payment = payment;
 
     this.ensurePaymentMethodIsValid()
@@ -63,11 +65,11 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
       amount: this.getConvertedAmountToPagarmeFormat(),
       card_hash: this.paymentMethod.hash,
       installments: 1,
-      // postback_url: 'http://localhost',d
+      postback_url: process.env.API_URL + `/payments/${this.payment.id}/status/update`,
       customer: this.getPaymentCustomerInfo(),
       billing: this.getPaymentBillingInfo(),
-      // shipping: this.getPaymentShippingInfo(),
-      items: this.getPaymentItemsInfo()
+      items: this.getPaymentItemsInfo(),
+      metadata: this.getPaymentMetadataInfo()
     }
 
     return this;
@@ -79,33 +81,31 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
 
   getPaymentCustomerInfo() {
     return {
-      external_id: "#3311",
-      name: "Morpheus Fishburne",
-      type: "individual",
-      country: "br",
-      email: "mopheus@nabucodonozor.com",
-      documents: [
-        {
-          "type": "cpf",
-          "number": "55555555555"
-        }
-      ],
-      phone_numbers: ["+5511999998888", "+5511888889999"],
-      birthday: "1965-01-01"
+      external_id: this.payment.to.id,
+      name: this.payment.to.name,
+      type: 'individual',
+      country: 'br',
+      email: this.payment.to.email,
+      documents: [{
+        type: 'cpf',
+        number: this.payment.to.document
+      }],
+      phone_numbers: [this.payment.to.phone],
+      birthday: this.payment.to.birthday
     }
   }
 
   getPaymentBillingInfo() {
     return {
-      'name': 'Nome do pagador',
-      'address': {
-        country: 'br',
-        street: 'Avenida Brigadeiro Faria Lima',
-        street_number: '1811',
-        state: 'sp',
-        city: 'Sao Paulo',
-        neighborhood: 'Jardim Paulistano',
-        zipcode: '01451001'
+      name: this.payment.from.name,
+      address: {
+        country: this.payment.from.address.country,
+        street: this.payment.from.address.street,
+        street_number: this.payment.from.address.number,
+        state: this.payment.from.address.state,
+        city: this.payment.from.address.city,
+        neighborhood: this.payment.from.address.neighborhood,
+        zipcode: this.payment.from.address.zipcode
       }
     }
   }
@@ -122,6 +122,13 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
         quantity: 1,
         tangible: false
       }];
+  }
+
+  // Used by postback
+  getPaymentMetadataInfo() {
+    return {
+      payment_id: this.payment.id
+    };
   }
 
   async connectAPI() {
@@ -147,6 +154,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     try {
       this.transaction = await this.apiClient.transactions.create(this.pagarmePaymentMethod);
     } catch (error) {
+      console.log(error.response.errors);
       throw new FailedChargingPaymentMethodException(error.response.errors);
     }
     
@@ -154,8 +162,8 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
   }
 
   validateResponse() {
-    if (this.transaction.object !== 'transaction' ||
-        this.transaction.status !== 'processing' || 
+    if (this.transaction.object !== PagarmeData.PAGARME_RESPONSE_TYPE_TRANSACTION ||
+        this.transaction.status !== PagarmeData.PAGARME_TRANSACTION_STATUS_PROCESSING || 
         this.transaction.refuse_reason !== null ) {
         throw new FailedChargingPaymentMethodException();
       }

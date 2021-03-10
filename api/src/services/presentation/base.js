@@ -27,7 +27,7 @@ module.exports = class PresentationService extends BaseService
     }
 
     ensurePresentationWasFound() {
-      if (Presentation.notFound(this.presentation) || !this.presentation instanceof Presentation) {
+      if (Presentation.notFound(this.presentation) || ! this.presentation instanceof Presentation) {
         throw new Error('Presentation not found...');
       }
   

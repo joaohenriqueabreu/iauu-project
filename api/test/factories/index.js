@@ -1,3 +1,4 @@
+const BaseFactory = require('./base');
 const AddressFactory = require('./address');
 const TimeslotFactory = require('./timeslot');
 const BankAccountFactory = require('./bankAccount');
@@ -12,6 +13,7 @@ const PaymentFactory = require('./payment');
 const PaymentMethodFactory = require('./paymentMethod');
 
 module.exports = {
+  BaseFactory,
   AddressFactory,
   TimeslotFactory,
   BankAccountFactory,

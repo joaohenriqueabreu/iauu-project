@@ -1,7 +1,8 @@
 const faker = require('faker');
-const BaseFactory = require('./base');
 const { Contractor } = require('../../src/models');
+const BaseFactory = require('./base');
 const GatewayAccountFactory = require('./gatewayAccount');
+const AddressFactory = require('./address');
 
 module.exports = class ContractorFactory extends BaseFactory {
   // TODO complete seeder
@@ -14,7 +15,8 @@ module.exports = class ContractorFactory extends BaseFactory {
       },
       account: {
         gateway: (new GatewayAccountFactory()).getSeed()
-      }
+      },
+      address: (new AddressFactory()).getSeed(),
     });
   }
 }

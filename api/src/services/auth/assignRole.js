@@ -151,6 +151,9 @@ module.exports = class AssignRoleService extends AuthService {
   assignUserToRole() {
     if (this.roleInstance.users === undefined) { this.roleInstance.users = []; }
     this.roleInstance.users.push(this.user.id);
+
+    // If there is no email assigned, make user's mail as role's main mail
+    if (this.roleInstance.email === undefined) { this.roleInstance.email = this.user.email; }
     return this;
   }
 

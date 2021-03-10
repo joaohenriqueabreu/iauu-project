@@ -3,6 +3,7 @@ require('dotenv').config();
 const db = require('mongoose');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
+const { PresentationData } = require('../config/data');
 
 const proposalSchema = require('./schemas/proposal').schema;
 const addressSchema = require('./schemas/address').schema;
@@ -34,7 +35,7 @@ const presentationSchema = new Schema({
    * Disputed   - Presentation disputed
    */
 
-  status: { type: String, enum: ['proposal', 'accepted', 'completed', 'rejected', 'cancelled', 'disputed'], required: true, default: 'proposal' },
+  status: { type: String, enum: PresentationData.PRESENTATION_STATUS, required: true, default: PresentationData.PRESENTATION_STATUS_PROPOSAL },
   confirm_status: [String],
   timeslot: timeslotSchema,
   proposal: proposalSchema,
@@ -45,7 +46,7 @@ const presentationSchema = new Schema({
 
 class Presentation extends BaseRepository {
   get current_price() {
-    if (this.status === 'proposal') {
+    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
       if (this.proposal.counter_offer !== undefined) {
         return this.proposal.counter_offer.price;
       }
@@ -57,7 +58,7 @@ class Presentation extends BaseRepository {
   }
 
   get current_duration() {
-    if (this.status === 'proposal') {
+    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
 
     }
 
@@ -65,7 +66,7 @@ class Presentation extends BaseRepository {
   }
 
   isCompleted() {
-    return this.status === 'completed';
+    return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED;
   }
 }
 

@@ -1,6 +1,6 @@
 module.exports = class BaseFactory {
   constructor(numOfSeeds) {
-    if(! this.make) {
+    if (! this.make) {
       throw new Error('Must implement make interface');
     }
 

@@ -18,6 +18,7 @@ const artistSchema = new Schema({
     ref: 'User'
   }],
   name: { type: String },
+  email: { type: String },
   photo: { type: String },
   public: { type: Boolean, default: false },
   slug: { 
