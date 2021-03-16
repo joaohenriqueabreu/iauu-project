@@ -10,7 +10,6 @@ const productsSchema = require('./schemas/product').schema;
 const timeslotSchema = require('./schemas/timeslot').schema;
 const feedbackSchema = require('./schemas/feedback').schema;
 const bankAccountSchema = require('./schemas/bankAccount').schema;
-const gatewayAccountSchema = require('./schemas/gatewayAccount').schema;
 
 const artistSchema = new Schema({
   users : [{
@@ -85,6 +84,10 @@ class Artist extends BaseRepository {
   get city_location() {
     if (this.address === undefined) { return ''; }
     return `${this.address.city}, ${this.address.state}`;
+  }
+
+  get manager() {
+    return this.users[0];
   }
 }
 

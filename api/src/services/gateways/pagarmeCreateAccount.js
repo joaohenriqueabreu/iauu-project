@@ -67,7 +67,7 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSp
     try {
       this.pagarmeAccount = await this.apiClient.bankAccounts.create(this.pagarmeAccountData);
     } catch (error) {
-      throw new ManualPaymentRequiredException('Failed creating user bank account');
+      throw new ManualPaymentRequiredException('Failed creating user bank account', error.response.errors);
     }
     
     return this;

@@ -115,12 +115,13 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     this.pagarmeTransactionRequestData = {
       payment_method: this.pagarmePaymentMethod.type,
       async: this.shouldRunApiInAsyncMode,
-      amount: this.getConvertedAmountToPagarmeFormat(),
+      amount: PagarmeSplitPaymentService.convertAmountToPagarmeFormat(this.payment.amount),
       installments: 1,
       postback_url: process.env.API_URL + `/payments/${this.payment.id}/status/update`,
       customer: this.getPaymentCustomerInfo(),
       billing: this.getPaymentBillingInfo(),
       items: this.getPaymentItemsInfo(),
+      split_rules: this.getPaymentSplitRules(),
       metadata: this.getPaymentMetadataInfo()
     }
 
@@ -133,15 +134,35 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     return this;
   }
 
-  getConvertedAmountToPagarmeFormat() {
-    return this.payment.amount; // R$ 10,00 => 1000
+  static convertAmountToPagarmeFormat(amount) {
+    return Math.round(amount * 100); // R$ 10,00 => 1000
+  }
+
+  getPaymentSplitRules() {
+    const artistFee = PagarmeSplitPaymentService.convertAmountToPagarmeFormat((1 - this.payment.fee) * this.payment.amount);
+    const ourFee = PagarmeSplitPaymentService.convertAmountToPagarmeFormat(this.payment.fee * this.payment.amount);
+
+    return [
+      { // Artist
+        recipient_id: this.payment.to.account.gateway.id,
+        amount: artistFee,
+        liable: true, 
+        charge_processing_fee: true, // Processing fee should be charged to the artist
+      },
+      { // Our Fee
+        recipient_id: process.env.PAGARME_OUR_RECIPIENT_ID,
+        amount: ourFee,
+        liable: true, 
+        charge_processing_fee: false,
+      }
+    ]
   }
 
   getPaymentCustomerInfo() {
     return {
       external_id: this.payment.to.id,
       name: this.payment.to.name,
-      type: 'individual',
+      type: PagarmeData.PAGARME_RECIPIENT_TYPE_INDIVIDUAL,
       country: 'br',
       email: this.payment.to.email,
       documents: [{
@@ -194,8 +215,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     try {
       this.transaction = await this.apiClient.transactions.create(this.pagarmeTransactionRequestData);
     } catch (error) {
-      console.log(error.response.errors);
-      throw new FailedChargingPaymentMethodException(error.response.errors);
+      throw new FailedChargingPaymentMethodException('Failed creating transaction', error.response.errors);
     }
     
     return this;

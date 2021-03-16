@@ -3,7 +3,7 @@ const BaseFactory = require('./base');
 const { BankAccount } = require('../../src/models/schemas');
 
 module.exports = class BankAccountFactory extends BaseFactory {
-  make() {
+  make(document) {
     return new BankAccount({
       // Using pagar.me sample data
       institution: '341',

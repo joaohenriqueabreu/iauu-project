@@ -5,6 +5,7 @@ const BaseFactory = require('./base');
 const GatewayAccountFactory = require('./gatewayAccount');
 const AddressFactory = require('./address');
 const BankAccountFactory = require('./bankAccount');
+const UserFactory = require('./user');
 
 module.exports = class ArtistFactory extends BaseFactory {
   // TODO complete seeder
@@ -15,7 +16,7 @@ module.exports = class ArtistFactory extends BaseFactory {
       email: faker.internet.email(),
       phone: faker.phone.phoneNumber('+55##9########'),
       photo: faker.image.avatar(),
-      document: faker.random.alphaNumeric(11),
+      document: '26268738888',
       category: {
         name: faker.lorem.word()
       },
@@ -24,6 +25,7 @@ module.exports = class ArtistFactory extends BaseFactory {
         bank: (new BankAccountFactory()).getSeed(),
       },
       address: (new AddressFactory()).getSeed(),
+      users: (new UserFactory()).getSeeds(1),
     });
   }
 }

@@ -4,16 +4,15 @@ const { Exception } = require("../../exception");
 const VendorGatewayCreateSplitAccountInterface = require('../interfaces/vendorGatewayCreateSplitAccount');
 const PagarmeConnectService = require('./pagarmeConnect');
 const PagarmeData = require('../../config/data/vendor/pagarme');
-const { Artist } = require('../../models');
-const { DocumentHelper } = require('../../utils');
+const { User, Artist } = require('../../models');
+const { DocumentsHelper } = require('../utils');
 const { ManualPaymentRequiredException } = require('../../exception');
 
-module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSplitAccountInterface {
-  constructor(pagarmeBankAccountId, recipientData) {
+module.exports = class PagarmeCreateRecipientService extends VendorGatewayCreateSplitAccountInterface {
+  constructor(pagarmeBankAccountId) {
     super();
-    if (pagarmeBankAccountId === undefined || recipientData === undefined) { throw new Exception('Must provide existing bank account information.'); }
+    if (pagarmeBankAccountId === undefined) { throw new Exception('Must provide existing bank account information.'); }
     
-    this.recipient = recipientData;
     this.pagarmeBankAccountId = pagarmeBankAccountId;
     this.pagarmeRecipientRequestData = {};
     this.pagarmeRecipient = {};
@@ -21,7 +20,9 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSp
     this.pagarmeConnectSvc = new PagarmeConnectService();
   }
 
-  async create() {
+  async create(recipientData) {
+    this.recipient = recipientData;
+
     this.ensureRecipientIsValid();
     await this.connectAPI();
     this.populateRequestData();
@@ -33,6 +34,10 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSp
   ensureRecipientIsValid() {
     if (! this.recipient instanceof Artist) {
       throw new Exception('Invalid recipient provided');
+    }
+
+    if (! this.recipient.manager instanceof User) {
+      throw new Exception('Recipient must have a manager');
     }
 
     return this;
@@ -54,28 +59,42 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSp
   }
 
   getRecipientPersonalData() {
-    switch (DocumentHelper.getDocumentType(this.recipient.document)) {      
-      case 'CPF': return getIndividualData();
-      case 'CNPJ': return getCompanyData();
-      default: return { };
+    switch (DocumentsHelper.getDocumentType(this.recipient.document)) {
+      case 'CPF': return this.getIndividualData();
+      case 'CNPJ': return this.getCompanyData();
+      default: return {};
     }
   }
 
   getIndividualData() {
-    return {}
+    return {
+      type: PagarmeData.PAGARME_RECIPIENT_TYPE_INDIVIDUAL,
+      document_number: this.recipient.document,
+      name: this.recipient.name,
+      email: this.recipient.email,
+    }
   }
 
   getCompanyData() {
-    return {}
+    return {
+      type: PagarmeData.PAGARME_RECIPIENT_TYPE_CORPORATION,
+      document_number: this.recipient.document,
+      company_name: this.recipient.name,
+      email: this.recipient.email,
+      managing_partners: [{
+        type: PagarmeData.PAGARME_RECIPIENT_TYPE_INDIVIDUAL,
+        document_number: this.recipient.manager.document,
+        name: this.recipient.manager.name,
+        email: this.recipient.manager.email,
+      }]
+    }
   }
 
   async createPagarmeRecipient() {
     try {
       this.pagarmeRecipient = await this.apiClient.recipients.create(this.pagarmeRecipientRequestData);
-      console.log(this.pagarmeRecipient);
     } catch (error) {
-      console.log(error.response.errors);
-      throw new ManualPaymentRequiredException('Failed creating recipient');
+      throw new ManualPaymentRequiredException('Failed creating recipient', error.response.errors);
     }
     
     return this;

@@ -23,8 +23,7 @@ module.exports = class UserFactory extends BaseFactory {
       },      
       phone: faker.phone.phoneNumber(),
       address: (new AddressFactory()).getSeed(),
-      document: faker.random.alphaNumeric(15),      
-      // artist / contractor HAVE to be assigned
+      document: '26268738888', // Fixing CPF so that it gets consistent along Artist and Bank Account
     });
   }
 }
