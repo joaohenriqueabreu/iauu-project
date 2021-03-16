@@ -1,16 +1,17 @@
 const faker = require('faker');
 const BaseFactory = require('./base');
-const { Contractor } = require('../../src/models');
+const { BankAccount } = require('../../src/models/schemas');
 
-module.exports = class ContractorFactory extends BaseFactory {
-  // TODO complete seeder
+module.exports = class BankAccountFactory extends BaseFactory {
   make() {
-    return new Contractor({
-      name: faker.name.findName(),
-      photo: faker.image.avatar(),
-      category: {
-        name: faker.lorem.word()
-      }
+    return new BankAccount({
+      // Using pagar.me sample data
+      institution: '341',
+      agency: '0932',
+      number: '58054',
+      number_digit: '1',
+      document: '26268738888',
+      legal_name: 'API BANK ACCOUNT'
     });
   }
 }

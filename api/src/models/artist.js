@@ -68,7 +68,7 @@ const artistSchema = new Schema({
   address: addressSchema,
   account: {
     bank: bankAccountSchema,
-    gateway: gatewayAccountSchema
+    gateway: { type: Object } // This information is returned and formatted by vendor gateway API
   },  
   rating: { type: Number },
   feedbacks: [feedbackSchema]

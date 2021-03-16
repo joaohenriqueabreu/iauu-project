@@ -1,10 +1,17 @@
 require('../../config/env');
 
-const pagarme = require('pagarme');
+const moment = require('moment');
+const { PaymentData } = require('../../config/data');
 const PagarmeData = require('../../config/data/vendor/pagarme');
 
-const { Exception, InvalidPaymentMethodProvidedException, FailedAPIConnectionException, FailedChargingPaymentMethodException } = require('../../exception');
+const PagarmeConnectService = require('./pagarmeConnect');
+const { Exception, InvalidPaymentMethodProvidedException, FailedChargingPaymentMethodException } = require('../../exception');
 const VendorGatewayInterface = require("../interfaces/vendorGateway");
+
+let PAGARME_PAYMENT_METHOD_MAP = [];
+PAGARME_PAYMENT_METHOD_MAP[PaymentData.PAYMENT_METHOD_TYPE_CREDIT_CARD] = PagarmeData.PAYMENT_METHOD_TYPE_CREDIT_CARD;
+PAGARME_PAYMENT_METHOD_MAP[PaymentData.PAYMENT_METHOD_TYPE_BOLETO] = PagarmeData.PAYMENT_METHOD_TYPE_BOLETO;
+PAGARME_PAYMENT_METHOD_MAP[PaymentData.PAYMENT_METHOD_TYPE_PIX] = PagarmeData.PAYMENT_METHOD_TYPE_PIX;
 
 module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface {
   constructor(paymentMethod) {
@@ -15,22 +22,34 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     }
 
     this.paymentMethod = paymentMethod;
+    this.pagarmeTransactionRequestData = '';
+    this.pagarmePaymentMethod = {
+      type: '',
+      params: {}
+    }
+    
+    this.pagarmeConnectSvc = new PagarmeConnectService();
   }
 
   async charge(payment) {
     this.payment = payment;
 
+    await this.connectApi();
     this.ensurePaymentMethodIsValid()
       .ensurePaymentIsValid()
+      .translatePaymentMethod()
       .buildTransactionObject();
 
-    await this.connectAPI();
-    this.ensureAPIClientIsValid();
     await this.createTransaction()
     this.validateResponse()
       .cleanupTransaction();
 
     return this.transaction;
+  }
+
+  async connectApi() {
+    this.apiClient = await this.pagarmeConnectSvc.connect();
+    return this;
   }
 
   ensurePaymentMethodIsValid() {
@@ -39,7 +58,8 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     // Boleto - https://docs.pagar.me/docs/realizando-uma-transacao-de-boleto-bancario
     // PIX - ?
     
-    if (this.paymentMethod.type === 'cc' && this.paymentMethod.hash === undefined) {
+    if (this.paymentMethod.type === undefined || 
+      (this.paymentMethod.type === PaymentData.PAYMENT_METHOD_TYPE_CREDIT_CARD && this.paymentMethod.hash === undefined)) {
       throw new InvalidPaymentMethodProvidedException();
     }
 
@@ -58,18 +78,56 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     return this;
   }
 
+  translatePaymentMethod() {
+    this.pagarmePaymentMethod.type = PAGARME_PAYMENT_METHOD_MAP[this.paymentMethod.type];
+
+    if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_CREDIT_CARD) {
+      this.pagarmePaymentMethod.extraParams = {
+        async: true, // Required for anti-fraud analysis
+        card_hash: this.paymentMethod.hash
+      }
+    }
+
+    if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_BOLETO) {
+      this.pagarmePaymentMethod.extraParams = {
+        async: false,
+        capture: true,
+      }
+    }
+
+    if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_PIX) {
+      this.pagarmePaymentMethod.extraParams = {
+        async: false,
+        capture: true,
+        pix_expiration_date: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
+        // TODO Check how this value is displayed for user
+        pix_additional_fields: [{
+          name: "Quantidade",
+          value: "2"
+        }]
+      }
+    }
+
+    return this;
+  }
+
   buildTransactionObject() {
-    this.pagarmePaymentMethod = {
-      payment_method: 'credit_card',
-      async: true, // Required for antifraud analysis
+    this.pagarmeTransactionRequestData = {
+      payment_method: this.pagarmePaymentMethod.type,
+      async: this.shouldRunApiInAsyncMode,
       amount: this.getConvertedAmountToPagarmeFormat(),
-      card_hash: this.paymentMethod.hash,
       installments: 1,
       postback_url: process.env.API_URL + `/payments/${this.payment.id}/status/update`,
       customer: this.getPaymentCustomerInfo(),
       billing: this.getPaymentBillingInfo(),
       items: this.getPaymentItemsInfo(),
       metadata: this.getPaymentMetadataInfo()
+    }
+
+    // Add additional params (like card_hash or pix data)
+    this.pagarmeTransactionRequestData = {
+      ...this.pagarmeTransactionRequestData,
+      ...this.pagarmePaymentMethod.extraParams
     }
 
     return this;
@@ -111,6 +169,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
   }
 
   getPaymentShippingInfo() {
+    // No shipping information
     return {}
   }
 
@@ -129,30 +188,11 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     return {
       payment_id: this.payment.id
     };
-  }
-
-  async connectAPI() {
-    try {
-      this.apiClient = await pagarme.client.connect({ api_key: process.env.PAGARME_API_KEY });
-    } catch (error) {
-      console.log(error);
-      throw new FailedAPIConnectionException();
-    }
-
-    return this;
-  }
-
-  ensureAPIClientIsValid() {
-    if (this.apiClient === undefined) {
-      throw new FailedAPIConnectionException();
-    }
-
-    return this;
-  }
+  }  
 
   async createTransaction() {
     try {
-      this.transaction = await this.apiClient.transactions.create(this.pagarmePaymentMethod);
+      this.transaction = await this.apiClient.transactions.create(this.pagarmeTransactionRequestData);
     } catch (error) {
       console.log(error.response.errors);
       throw new FailedChargingPaymentMethodException(error.response.errors);
@@ -163,8 +203,8 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
 
   validateResponse() {
     if (this.transaction.object !== PagarmeData.PAGARME_RESPONSE_TYPE_TRANSACTION ||
-        this.transaction.status !== PagarmeData.PAGARME_TRANSACTION_STATUS_PROCESSING || 
-        this.transaction.refuse_reason !== null ) {
+        (this.transaction.payment_method === PagarmeData.PAYMENT_METHOD_TYPE_CREDIT_CARD && this.transaction.status !== PagarmeData.PAGARME_TRANSACTION_STATUS_PROCESSING) || 
+        this.transaction.refuse_reason !== null) {
         throw new FailedChargingPaymentMethodException();
       }
 

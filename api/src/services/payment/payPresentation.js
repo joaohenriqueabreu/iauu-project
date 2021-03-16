@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const PresentationService = require('../presentation/base');
-const GatewayServiceBuilder = require('../builders/gatewayServiceBuilder');
+const GatewaySplitPaymentServiceBuilder = require('../builders/gatewaySplitPaymentServiceBuilder');
 const { Invoice, Payment } = require('../../models/schemas');
 const { PaymentData } = require('../../config/data');
 const { BadRequestException, ManualPaymentRequiredException } = require('../../exception');
@@ -18,7 +18,7 @@ class PayPresentationService extends PresentationService
       this.fee = data.fee; // optional
       this.paymentMethod = data.paymentMethod;
 
-      this.vendorGatewayService = (new GatewayServiceBuilder(this.paymentMethod)).getService();
+      this.vendorGatewayService = (new GatewaySplitPaymentServiceBuilder(this.paymentMethod)).getService();
 
       this.invoice = {};
     }

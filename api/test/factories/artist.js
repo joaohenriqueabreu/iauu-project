@@ -4,6 +4,7 @@ const { Artist } = require('../../src/models');
 const BaseFactory = require('./base');
 const GatewayAccountFactory = require('./gatewayAccount');
 const AddressFactory = require('./address');
+const BankAccountFactory = require('./bankAccount');
 
 module.exports = class ArtistFactory extends BaseFactory {
   // TODO complete seeder
@@ -19,7 +20,8 @@ module.exports = class ArtistFactory extends BaseFactory {
         name: faker.lorem.word()
       },
       account: {
-        gateway: (new GatewayAccountFactory()).getSeed()
+        gateway: {},
+        bank: (new BankAccountFactory()).getSeed(),
       },
       address: (new AddressFactory()).getSeed(),
     });

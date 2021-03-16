@@ -3,15 +3,14 @@ const _ = require('lodash');
 const PagarmeData = require('../../src/config/data/vendor/pagarme');
 const { PaymentData } = require('../../src/config/data');
 
-const testConfig = require('../config/data');
+const TestData = require('../config/data');
 
 const { sandbox, setup, cleanup, generalMock } = require('../setup');
-const { PaymentFactory } = require('../factories');
+const { PaymentFactory, ArtistFactory } = require('../factories');
 const PagarmeCreditCardPaymentMethodFactory = require('../factories/vendor/pagarmeCCPaymentMethod');
-const PagarmeBoletoPaymentMethodFactory = require('../factories/vendor/pagarmeBoletoPaymentMethod');
 
 // Services
-const { PagarmeSplitPaymentService, PagarmeUpdatePaymentStatusService } = require('../../src/services/gateways');
+const { PagarmeSplitPaymentService, PagarmeUpdatePaymentStatusService, PagarmeCreateAccountService, PagarmeCreateRecipientService } = require('../../src/services/gateways');
 
 const { Exception } = require('../../src/exception');
 const { Payment } = require('../../src/models/schemas');
@@ -21,6 +20,8 @@ const PagarmeTransactionFactory = require('../factories/vendor/pagarmeTransactio
 // Test-wide objects
 let cardHash = null;
 let payment = {};
+let artist = {};
+let account = {};
 let transaction = {};
 let callbackTransaction = {};
 let paymentMethod = {};
@@ -30,13 +31,52 @@ describe('Pagar.me API testing', () => {
   // after(async () => { await cleanup(); });
 
   beforeEach(() => {
-    payment = (new PaymentFactory()).getSeed();
+    payment = (new PaymentFactory()).getSeed();    
 
     // change customer (artist) information to allow passing anti-fraud risk check
-    payment.to.document = testConfig.pagarme.antifraud.document.verylow;
+    payment.to.document = TestData.pagarme.antifraud.risk.verylow;
   });
   
   describe('Pagar.me API', () => {
+    describe('Creating Recipient', () => {
+      beforeEach(() => {
+        artist = (new ArtistFactory()).getSeed();
+      });
+
+      it('should create bank account', async () => {
+        artist.account.bank.should.not.be.null;
+  
+        const pagarmeCreateAccountSvc = new PagarmeCreateAccountService(artist.account.bank);
+        account = await pagarmeCreateAccountSvc.create();
+  
+        account.object.should.equal(PagarmeData.PAGARME_RESPONSE_TYPE_BANK_ACCOUNT);      
+        account.id.should.not.be.null;
+  
+        account.bank_code.should.equal(artist.account.bank.institution);
+        account.agencia.should.equal(artist.account.bank.agency);
+        account.conta.should.equal(artist.account.bank.number);
+        account.conta_dv.should.equal(artist.account.bank.number_digit);
+        account.document_number.should.equal(artist.account.bank.document);
+        account.legal_name.should.equal(artist.account.bank.legal_name);
+        account.type.should.equal(PagarmeData.PAGARME_BANK_ACCOUNT_TYPE_CONTA_CORRENTE);
+      });
+  
+      it('should create recipient', async () => {
+        // Assign gateway info to artist so it can be used in the next test
+        artist.account.gateway = account;
+
+        // Make sure artist gateway is valid
+        artist.account.gateway.should.not.be.empty;
+        artist.account.gateway.id.should.not.be.null;
+  
+        const pagarmeCreateRecipientSvc = new PagarmeCreateRecipientService(artist.account.gateway.id);
+        const recipient = await pagarmeCreateRecipientSvc.create();
+  
+        recipient.object.should.equal(PagarmeData.PAGARME_RESPONSE_TYPE_RECIPIENT);
+        recipient.id.should.not.be.null;
+      });
+    });    
+
     it('should get card hash', async () => {
       const creditCard = (new PagarmeCreditCardPaymentMethodFactory()).getSeed();
 
@@ -72,10 +112,9 @@ describe('Pagar.me API testing', () => {
         updatedPayment.status.should.equal(PaymentData.PAYMENT_STATUS_PENDING);
       });
 
-      it('should update payment status to completed', async () => {        
+      it('should update payment status to completed', async () => {
         callbackTransaction.paid_amount = payment.amount;
         callbackTransaction.status = PagarmeData.PAGARME_TRANSACTION_STATUS_PAID;
-        console.log(callbackTransaction);
 
         const pagarmeUpdateStatusPaymentSvc = new PagarmeUpdatePaymentStatusService(payment);
         const updatedPayment = await pagarmeUpdateStatusPaymentSvc.update(callbackTransaction);
@@ -96,16 +135,30 @@ describe('Pagar.me API testing', () => {
     
 
     it('should call API and create Boleto transaction', async () => {
-      // const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: 'boleto', hash: cardHash});
-      // const transaction = await pagarmeSplitPaymentSvc.charge(payment);
+      const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: PaymentData.PAYMENT_METHOD_TYPE_BOLETO });
+      const transaction = await pagarmeSplitPaymentSvc.charge(payment);
       
-      // transaction.should.not.be.null;
-      // transaction.id.should.not.be.null;
-      // transaction.status.should.equal('processing');
+      transaction.should.not.be.null;
+      transaction.id.should.not.be.null;
+      transaction.status.should.equal(PagarmeData.PAGARME_TRANSACTION_STATUS_WAITING_PAYMENT);
+      transaction.boleto_expiration_date.should.not.be.null;
+      transaction.boleto_url.should.equal(TestData.pagarme.boleto.url);
+      transaction.boleto_barcode.should.equal(TestData.pagarme.boleto.barcode);
     });
 
-    it('should fail with invalid payment method', () => {
-      // const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({});
-    });
+    // TODO uncomment when pagar.me has authorized Pix for us - currently receiving `action_forbidden`
+    // it('should call API and create Pix transaction', async () => {
+    //   const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: PaymentData.PAYMENT_METHOD_TYPE_PIX });
+    //   const transaction = await pagarmeSplitPaymentSvc.charge(payment);
+      
+    //   transaction.should.not.be.null;
+    //   transaction.id.should.not.be.null;
+    //   transaction.status.should.equal(PagarmeData.PAGARME_TRANSACTION_STATUS_PROCESSING);
+    //   transaction.pix_qr_code.should.not.be.null;
+    // });
+
+    // it('should fail with invalid payment method', () => {
+    //   // const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({});
+    // });
   });
 });

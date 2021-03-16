@@ -36,7 +36,8 @@ module.exports = class PagarmeUpdatePaymentStatusService extends VendorGatewayCa
 
     this.validateTransaction()
       .translateTransactionStatus()
-      .updatePaidAmount();
+      .updatePaidAmount()
+      .updatePaymentTransaction();
 
     return this.payment;
   }
@@ -61,6 +62,11 @@ module.exports = class PagarmeUpdatePaymentStatusService extends VendorGatewayCa
 
   updatePaidAmount() {
     this.payment.paid_amount += this.transaction.paid_amount;
+    return this;
+  }
+
+  updatePaymentTransaction() {
+    this.payment.transaction = this.transaction;
     return this;
   }
 }
