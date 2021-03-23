@@ -1,7 +1,6 @@
 // UI componentes
 import Vue from 'vue';
 import { Slide } from 'vue-carousel';
-import Avatar from 'vue-avatar';
 import VueTheMask from 'vue-the-mask';
 import VueSmoothScroll from 'vue2-smooth-scroll';
 import { FadeTransition, SlideYDownTransition } from 'vue2-transitions';
@@ -13,6 +12,7 @@ import moment from 'moment';
 
 // Form components
 import Logo from '@/components/layout/logo';
+import Avatar from '@/components/layout/avatar';
 import Modal from '@/components/layout/modal';
 import AlertMessage from '@/components/layout/alert';
 import Overlay from '@/components/layout/overlay';
@@ -26,6 +26,7 @@ import Rating from '@/components/artist/profile/rating';
 import Feedback from '@/components/admin/feedback';
 import Share from '@/components/layout/share';
 import PriceRange from '@/components/artist/profile/priceRange';
+import Tabs from '@/components/layout/tabs';
 
 import LineChart from '@/components/layout/charts/line';
 import BarChart from '@/components/layout/charts/bar';
@@ -71,6 +72,7 @@ Vue.component('notifications', Notifications);
 Vue.component('carousel', Carousel);
 Vue.component('slide', Slide);
 Vue.component('scrollbar', VuePerfectScrollbar);
+Vue.component('tabs', Tabs);
 
 Vue.component('form-input', FormInput);
 Vue.component('form-numeric', FormNumeric);

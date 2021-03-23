@@ -1,5 +1,11 @@
 module.exports = {
   pagarme: {
+    document: {
+      valid: {
+        formatted: '062.293.236-56',
+        unformatted: '06229323656'
+      }
+    },
     antifraud: {
       risk: {
         verylow: '55555555555',

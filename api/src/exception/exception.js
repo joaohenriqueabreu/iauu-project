@@ -9,7 +9,7 @@ module.exports = class Exception extends Error {
 
         // TODO Grab original error and send to sentry.io (in production or log in testing)
         if (process.env.NODE_ENV !== 'production') {
-            console.log(`Exception: ${util.inspect(error)}`);
+            console.log(error !== undefined ? `Exception: ${util.inspect(error)}` : `Exception: ${message}`);
         }
     }
 }

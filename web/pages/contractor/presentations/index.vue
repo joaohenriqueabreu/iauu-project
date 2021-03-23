@@ -1,12 +1,24 @@
 <template>
   <div>
+    <div v-if="!$empty(unpaidPresentations)" class="vertical mb-4">
+      <h6 class="mb-4">Pagamentos pendentes</h6>
+      <overlay v-for="(presentation, index) in openPresentations" :key="index">
+        <template v-slot:default>
+          <nuxt-link :to="`presentations/${presentation.id}`" target="_blank">
+            <presentation-info :presentation="presentation"></presentation-info>
+          </nuxt-link>
+        </template>
+        <template v-slot:hover>
+          <nuxt-link :to="`presentations/${presentation.id}`" target="_blank">
+            <div class="full-width" @click="pay(presentation.id)"><h1>Pagar</h1></div>
+          </nuxt-link>
+        </template>
+      </overlay>
+      <hr />
+    </div>
     <div v-if="!$empty(openPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Próximas apresentações contratadas</h6>
-      <div
-        v-for="(presentation, index) in openPresentations"
-        :key="index"
-        @click="open(presentation.id)"
-      >
+      <div v-for="(presentation, index) in openPresentations" :key="index" @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
       <hr />
@@ -68,11 +80,12 @@ export default {
     PresentationInfo
   },
   async asyncData({ store, app }) {
-    store.dispatch('presentation/resetPresentation')
-    await store.dispatch('presentation/loadPresentations')
+    store.dispatch('presentation/resetPresentation');
+    await store.dispatch('presentation/loadPresentations');
   },
   computed: {
     ...mapGetters('presentation', [
+      'unpaidPresentations',
       'openPresentations',
       'pendingConfirmPresentations',
       'completedPresentations',
@@ -84,12 +97,12 @@ export default {
   methods: {
     ...mapActions('presentation', ['loadPresentation', 'loadPresentations']),
     async open(id) {
-      await this.loadPresentation(id)
-      this.$refs.presentation.openModal()
+      await this.loadPresentation(id);
+      this.$refs.presentation.openModal();
     },
     async handleConfirmedPresentaion() {
-      await this.loadPresentations()
-    }
+      await this.loadPresentations();
+    },
   }
 }
 </script>

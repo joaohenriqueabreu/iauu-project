@@ -19,7 +19,7 @@ const artistSchema = new Schema({
   name: { type: String },
   email: { type: String },
   photo: { type: String },
-  public: { type: Boolean, default: false },
+  public: { type: Boolean, default: true },
   slug: { 
     type: String,
     default: uid()
@@ -70,7 +70,8 @@ const artistSchema = new Schema({
     gateway: { type: Object } // This information is returned and formatted by vendor gateway API
   },  
   rating: { type: Number },
-  feedbacks: [feedbackSchema]
+  feedbacks: [feedbackSchema],
+  has_closed_first_presentation: { type: Boolean, default: false }
 }, { ...baseSchemaOptions });
 
 class Artist extends BaseRepository {

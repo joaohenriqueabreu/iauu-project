@@ -157,6 +157,14 @@ const profile = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const bankAccount = (req, res, next) => {
+  const schema = validateRequest.object({
+    bankAccount: validateRequest.object().required()
+  });
+
+  return validate(req.body, req, next, schema);
+}
+
 const product = (req, res, next) => {
   const schema = validateRequest.object({
     product: validateRequest.object().required()
@@ -239,7 +247,8 @@ module.exports = {
   verify, 
   forgotPassword, 
   resetPassword, 
-  profile, 
+  profile,
+  bankAccount,
   role, 
   product,
   search,

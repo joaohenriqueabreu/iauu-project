@@ -14,7 +14,7 @@
       <div v-if="submitted && !disabled" key="submitted" class="button">
         <loading :active="true"></loading>
       </div>
-      <div v-if="disabled" key="submitted">
+      <div v-if="disabled" key="submitted" class="text-center">
         <h6><u>Complete o formulário para salvar</u></h6>
       </div>
     </fade-transition>

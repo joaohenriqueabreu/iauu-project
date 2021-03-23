@@ -19,16 +19,16 @@
 </template>
 
 <script>
-import VueFilters from 'vue2-filters'
+import VueFilters from 'vue2-filters';
 
 export default {
   filters: {
     getFilter(value, type) {
       if (type === 'numeric') {
-        return VueFilters.Number(value)
+        return VueFilters.Number(value);
       }
 
-      return value
+      return value;
     }
   },
   props: {
@@ -46,10 +46,10 @@ export default {
   },
   computed: {
     type() {
-      return 'text'
+      return 'text';
     },
     iconHelper() {
-      return !this.$utils.empty(this.icon) ? this.icon : 'search'
+      return !this.$utils.empty(this.icon) ? this.icon : 'search';
     }
   },
   methods: {
@@ -57,7 +57,7 @@ export default {
       this.$emit('input', event.target.value);
     },
     afterBlur(value) {
-      this.$emit('blur', value)
+      this.$emit('blur', value);
     },
     afterEnter(value) {
       this.$emit('enter', value);

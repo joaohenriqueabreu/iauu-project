@@ -89,6 +89,8 @@ import {
   faFlask,
   faBell,
   faQuestionCircle,
+  faUniversity,
+  faUserCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faEnvelope as farEnvelope,
@@ -227,7 +229,9 @@ library.add(
   faTable,
   faCopy,
   faFlask,
-  faBell
+  faBell,
+  faUniversity,
+  faUserCircle,
 )
 
 Vue.component('font-awesome', FontAwesomeIcon)

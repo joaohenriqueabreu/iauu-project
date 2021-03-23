@@ -10,9 +10,9 @@ const { PaymentFactory, ArtistFactory } = require('../factories');
 const PagarmeCreditCardPaymentMethodFactory = require('../factories/vendor/pagarmeCCPaymentMethod');
 
 // Services
-const { PagarmeSplitPaymentService, PagarmeUpdatePaymentStatusService, PagarmeCreateAccountService, PagarmeCreateRecipientService } = require('../../src/services/gateways');
+const { PagarmeSplitPaymentService, PagarmeUpdatePaymentStatusService, PagarmeCreateBankAccountService, PagarmeCreateRecipientService } = require('../../src/services/gateways');
 
-const { Exception } = require('../../src/exception');
+const { Exception, ManualPaymentRequiredException } = require('../../src/exception');
 const { Payment } = require('../../src/models/schemas');
 const PagarmeCardHashExchangePaymentService = require('../../src/services/gateways/pagarmeCardHashExchange');
 const PagarmeTransactionFactory = require('../factories/vendor/pagarmeTransaction');
@@ -29,7 +29,8 @@ describe('Pagar.me API testing', () => {
     payment = (new PaymentFactory()).getSeed();    
 
     // change customer (artist) information to allow passing anti-fraud risk check
-    payment.to.document = TestData.pagarme.antifraud.risk.verylow;
+    // payment.to.document = TestData.pagarme.antifraud.risk.verylow;
+    payment.to.document = TestData.pagarme.document.valid.formatted;
   });
   
   describe('Pagar.me API', () => {
@@ -45,8 +46,8 @@ describe('Pagar.me API testing', () => {
         artist.account.bank.document = artist.document;
         artist.account.bank.document.should.equal(artist.document);
   
-        const pagarmeCreateAccountSvc = new PagarmeCreateAccountService(artist.account.bank);
-        account = await pagarmeCreateAccountSvc.create();
+        const pagarmeCreateAccountSvc = new PagarmeCreateBankAccountService();
+        account = await pagarmeCreateAccountSvc.create(artist.account.bank);
   
         account.object.should.equal(PagarmeData.PAGARME_RESPONSE_TYPE_BANK_ACCOUNT);      
         account.id.should.not.be.null;
@@ -60,16 +61,10 @@ describe('Pagar.me API testing', () => {
         account.type.should.equal(PagarmeData.PAGARME_BANK_ACCOUNT_TYPE_CONTA_CORRENTE);
       });
   
-      it('should create recipient', async () => {
-        // Assign gateway info to artist so it can be used in the next test
-        artist.account.gateway = account;
-
-        // Make sure artist gateway is valid
-        artist.account.gateway.should.not.be.empty;
-        artist.account.gateway.id.should.not.be.null;
-  
-        const pagarmeCreateRecipientSvc = new PagarmeCreateRecipientService(artist.account.gateway.id);
+      it('should create recipient', async () => {  
+        const pagarmeCreateRecipientSvc = new PagarmeCreateRecipientService(account.id);
         recipient = await pagarmeCreateRecipientSvc.create(artist);
+        console.log(recipient);
   
         recipient.object.should.equal(PagarmeData.PAGARME_RESPONSE_TYPE_RECIPIENT);
         recipient.id.should.not.be.null;
@@ -95,12 +90,13 @@ describe('Pagar.me API testing', () => {
       it('should call API and create CC transaction', async () => {
         const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: PaymentData.PAYMENT_METHOD_TYPE_CREDIT_CARD, hash: cardHash});
         transaction = await pagarmeSplitPaymentSvc.charge(payment);
-
-        console.log(transaction);
         
         transaction.should.not.be.null;
         transaction.id.should.not.be.null;
         transaction.status.should.equal(PagarmeData.PAGARME_TRANSACTION_STATUS_PROCESSING);
+        transaction.split_rules.should.not.be.null;
+        transaction.split_rules.length.should.equal(2);
+        _.forEach(transaction.split_rules, split_rule => split_rule.id.should.not.be.null);
   
         // Make sure metadata has payment id so we can process postback calls
         transaction.metadata.payment_id.should.equal(payment.id);
@@ -118,16 +114,26 @@ describe('Pagar.me API testing', () => {
         transaction.boleto_barcode.should.equal(TestData.pagarme.boleto.barcode);
       });
   
-      // TODO Pix still not working (even after enabling) - waiting for Pagar.me support
-      // it('should call API and create Pix transaction', async () => {
-      //   const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: PaymentData.PAYMENT_METHOD_TYPE_PIX });
-      //   const transaction = await pagarmeSplitPaymentSvc.charge(payment);
+      it('should call API and create Pix transaction', async () => {
+        const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: PaymentData.PAYMENT_METHOD_TYPE_PIX });
+        const transaction = await pagarmeSplitPaymentSvc.charge(payment);
         
-      //   transaction.should.not.be.null;
-      //   transaction.id.should.not.be.null;
-      //   transaction.status.should.equal(PagarmeData.PAGARME_TRANSACTION_STATUS_PROCESSING);
-      //   transaction.pix_qr_code.should.not.be.null;
-      // });
+        transaction.should.not.be.null;
+        transaction.id.should.not.be.null;
+        transaction.status.should.equal(PagarmeData.PAGARME_TRANSACTION_STATUS_WAITING_PAYMENT);
+        transaction.pix_qr_code.should.not.be.null;
+      });
+
+      it('should require manual payment when payee has no pagar.me recipient account', async () => {
+        payment.to.account.gateway = {};
+        const pagarmeSplitPaymentSvc = new PagarmeSplitPaymentService({ type: PaymentData.PAYMENT_METHOD_TYPE_CREDIT_CARD, hash: cardHash });
+
+        try {
+          await pagarmeSplitPaymentSvc.charge(payment);
+        } catch (error) {
+          error.should.be.instanceof(ManualPaymentRequiredException);
+        }
+      });
     });
 
     describe('Pagar.me transaction status update postback', () => {

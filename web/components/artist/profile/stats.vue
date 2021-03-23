@@ -4,8 +4,10 @@
       <h6>Seu perfil está incompleto e não será exibido nos resultados das buscas dos organizadores de eventos, por favor, fornece mais informações para ser encontrado</h6>
     </div>
     <h4 class="horizontal">
-      Seu perfil <h4 class="mx-2" v-if="completeness === 0">está</h4><h4 class="mx-2" v-else>é</h4> <i>{{ strengthMessage }}</i>
+      <!-- Seu perfil <h4 class="mx-2" v-if="completeness === 0">está</h4><h4 class="mx-2" v-else>é</h4> <i>{{ strengthMessage }}</i> -->
+      Força do seu Perfil
     </h4>
+    <div><small>Capacidade de seu perfil ser encontrado por contratantes em nossa ferramenta de busca</small></div>
     <div class="chart">
       <stats-donut :options="statsOptions" :chart-data="statsData" :height="200"></stats-donut>
     </div>
@@ -14,14 +16,13 @@
     <div class="mb-4">
       <h4>Etapas para um perfil de sucesso!</h4>
     </div>
-    <div class="row full-width">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-3">
+    <carousel :navigate="false">
+      <slide class="mr-5 profile-success-steps">
         <div class="mb-4">
-          <u >Aparecendo para os organizadores</u>
+          <u>Aparecendo para os organizadores</u>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasPersonalInfo && hasProposalInfo ? 'check' : ''"></font-awesome>
+          <font-awesome icon="check" :class="hasPersonalInfo ? 'check' : ''"></font-awesome>
           <span>Informações de contato e foto</span>
         </div>
         <div>
@@ -36,8 +37,8 @@
           <font-awesome icon="check" :class="hasProductsInfo ? 'check' : ''"></font-awesome>
           <span>Formatos de apresentação cadastrados</span>
         </div>
-      </div>
-      <div class="col-sm-3">
+      </slide>
+      <slide class="mr-5 profile-success-steps">
         <div class="mb-4">
           <u>Primeiros passos na plataforma</u>
         </div>
@@ -54,11 +55,11 @@
           <span>Conta verificada</span>
         </div>
         <div>
-          <font-awesome icon="check"></font-awesome>
+          <font-awesome icon="check" :class="hasConnectedBankAccount ? 'check' : ''"></font-awesome>
           <span>Cadastro de dados bancários</span>
         </div>
-      </div>
-      <div class="col-sm-3">
+      </slide>
+      <slide class="mr-5 profile-success-steps">
         <div class="mb-4">
           <u>Vender mais shows e faturar</u>
         </div>
@@ -66,8 +67,20 @@
           <font-awesome icon="check"></font-awesome>
           <span>Conta premium</span>
         </div>
-      </div>
-    </div>
+        <div>
+          <font-awesome icon="check"></font-awesome>
+          <span>Acompanhamento diário de relatórios e estatísticas</span>
+        </div>
+        <div>
+          <font-awesome icon="check"></font-awesome>
+          <span>Realize seu primeiro saque na plataforma</span>
+        </div>
+        <div>
+          <font-awesome icon="check"></font-awesome>
+          <span></span>
+        </div>
+      </slide>
+    </carousel>
   </div>
 </template>
 
@@ -87,7 +100,6 @@ export default {
         this.hasSocialInfo + 
         this.hasCategoryInfo + 
         this.hasStylesInfo +
-        this.hasProposalInfo + 
         this.hasProductsInfo + 
         this.hasFeedbacks
     },
@@ -152,12 +164,15 @@ export default {
       return !this.$empty(this.artist.feedbacks)
     },
     hasFirstPresentation() {
-      return false
+      return this.artist.has_closed_first_presentation;
+    },
+    hasConnectedBankAccount() {
+      return !this.$empty(this.artist.account) && !this.$empty(this.artist.account.bank) && !this.$empty(this.artist.account.gateway);
     }
   },
   methods: {
     checked(source) {
-      return !this.$empty(source)
+      return !this.$empty(source);
     }
   }
 }
@@ -178,26 +193,34 @@ export default {
   box-shadow: $shadow;
 }
 
-.row {
-  div {
-    div {
-      @extend .horizontal, .middle;
-      font-weight: $bold;
-      margin-bottom: 2 * $space;
-      [data-icon] {
-        box-shadow: $shadow;
-        border-radius: $rounded;
-        font-size: $small;
-        color: $layer1;
-        height: 20px;
-        width: 20px;
-        padding: 3px;
+.profile-success-steps {
+  box-shadow: $shadow;
+  background: $layer5;
+  padding: 4 * $space;
+  margin: 4 * $space;
 
-        &.check {
-          background: $brandLayer;
-          color: $brand;
-        }
-      }
+  u { 
+    font-weight: $bold;
+  }
+
+  div {
+    // @extend .horizontal, .middle;
+    // font-weight: $bold;
+    margin-bottom: 2 * $space;
+  }
+
+  [data-icon] {
+    box-shadow: $shadow;
+    border-radius: $rounded;
+    font-size: $small;
+    color: $layer1;
+    height: 20px;
+    width: 20px;
+    padding: 3px;
+
+    &.check {
+      background: $brandLayer;
+      color: $brand;
     }
   }
 }

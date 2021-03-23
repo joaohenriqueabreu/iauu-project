@@ -1,4 +1,4 @@
-module.exports = class VendorGatewayCreateSplitAccountInterface {
+module.exports = class VendorGatewayCreateAccountInterface {
   constructor() { 
     
   }

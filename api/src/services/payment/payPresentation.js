@@ -8,22 +8,22 @@ const { BadRequestException, ManualPaymentRequiredException } = require('../../e
 class PayPresentationService extends PresentationService
 {
     /** @param { VendorGatewayInterface } vendorGatewayService */
-    constructor(user, data) {
-      super(user, data);
+    constructor(user, paymentMethod, fee) {
+      super(user, paymentMethod, fee);
 
-      if (data.id === undefined) { throw new BadRequestException('Missing presentation info'); }
-      if (data.paymentMethod === undefined) { throw new BadRequestException('Payment method missing'); }
+      if (paymentMethod === undefined) { throw new BadRequestException('Payment method missing'); }
 
-      this.id = data.id;
-      this.fee = data.fee; // optional
-      this.paymentMethod = data.paymentMethod;
+      this.paymentMethod = paymentMethod;
+      this.fee = fee; // optional
 
-      this.vendorGatewayService = (new GatewaySplitPaymentServiceBuilder(this.paymentMethod)).getService();
-
+      this.splitPaymentService = (new GatewaySplitPaymentServiceBuilder(this.paymentMethod)).getService();
       this.invoice = {};
     }
 
-    async pay() {
+    async pay(id) {
+      if (id === undefined) { throw new BadRequestException('Missing presentation info'); }
+      this.id = id;
+
       await this.searchPresentation();
       this.ensurePresentationWasFound()
         .ensurePresentationIsPayable()
@@ -47,7 +47,7 @@ class PayPresentationService extends PresentationService
     }
 
     ensurePresentationIsPayable() {
-      if (! this.presentation.isCompleted()) { 
+      if (! this.presentation.is_completed) { 
         throw new Error('Presentation is not in payable state.'); 
       }
 
@@ -90,7 +90,7 @@ class PayPresentationService extends PresentationService
 
     createPayment() {
       // Artist payment
-      this.artistPayment = new Payment({ });
+      this.artistPayment = new Payment();
       this.artistPayment.method = this.paymentMethod;
 
       // TODO Will hold off referrals for now - implement
@@ -125,7 +125,7 @@ class PayPresentationService extends PresentationService
     // }
 
     async chargeGatewayPayment() {
-      this.artistPayment.transaction = await this.vendorGatewayService.charge(this.artistPayment);
+      this.artistPayment.transaction = await this.splitPaymentService.charge(this.artistPayment);
       return this;
     }
 

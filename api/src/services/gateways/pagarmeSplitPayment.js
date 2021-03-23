@@ -3,10 +3,12 @@ require('../../config/env');
 const moment = require('moment');
 const { PaymentData } = require('../../config/data');
 const PagarmeData = require('../../config/data/vendor/pagarme');
+const { DocumentHelper } = require('../../services/utils');
 
 const PagarmeConnectService = require('./pagarmeConnect');
-const { Exception, InvalidPaymentMethodProvidedException, FailedChargingPaymentMethodException } = require('../../exception');
+const { Exception, InvalidPaymentMethodProvidedException, FailedChargingPaymentMethodException, ManualPaymentRequiredException } = require('../../exception');
 const VendorGatewayInterface = require("../interfaces/vendorGateway");
+const { Artist } = require('../../models');
 
 let PAGARME_PAYMENT_METHOD_MAP = [];
 PAGARME_PAYMENT_METHOD_MAP[PaymentData.PAYMENT_METHOD_TYPE_CREDIT_CARD] = PagarmeData.PAYMENT_METHOD_TYPE_CREDIT_CARD;
@@ -22,13 +24,14 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     }
 
     this.paymentMethod = paymentMethod;
-    this.pagarmeTransactionRequestData = '';
+    this.pagarmeTransactionRequestData = {};
     this.pagarmePaymentMethod = {
       type: '',
       params: {}
     }
     
     this.pagarmeConnectSvc = new PagarmeConnectService();
+    this.paymentDocument = '';
   }
 
   async charge(payment) {
@@ -75,17 +78,30 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
       throw new Exception('Payment amount cannot be zero.');
     }
 
+    if (! this.payment.to instanceof Artist) {
+      throw new Exception('Invalid payment recipient provided');
+    }
+
+    if (this.payment.to.account.gateway.id === undefined) {
+      throw new ManualPaymentRequiredException('Artist has not connected to pagar.me account');
+    }
+
     return this;
   }
 
   translatePaymentMethod() {
     this.pagarmePaymentMethod.type = PAGARME_PAYMENT_METHOD_MAP[this.paymentMethod.type];
 
+    // Pagar.me só aceita "números" como CPF
+    this.paymentDocument = DocumentHelper.formatDocument(this.payment.to.document, false);
+
     if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_CREDIT_CARD) {
       this.pagarmePaymentMethod.extraParams = {
         async: true, // Required for anti-fraud analysis
         card_hash: this.paymentMethod.hash
       }
+
+      return this;
     }
 
     if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_BOLETO) {
@@ -93,6 +109,8 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
         async: false,
         capture: true,
       }
+
+      return this;
     }
 
     if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_PIX) {
@@ -106,9 +124,12 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
           value: "2"
         }]
       }
+
+      return this;
     }
 
-    return this;
+    // Should never reach this point as we already validate payment method type
+    throw new InvalidPaymentMethodProvidedException();
   }
 
   buildTransactionObject() {
@@ -167,7 +188,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
       email: this.payment.to.email,
       documents: [{
         type: 'cpf',
-        number: this.payment.to.document
+        number: this.paymentDocument
       }],
       phone_numbers: [this.payment.to.phone],
       birthday: this.payment.to.birthday
@@ -209,7 +230,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     return {
       payment_id: this.payment.id
     };
-  }  
+  }
 
   async createTransaction() {
     try {

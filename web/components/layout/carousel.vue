@@ -1,25 +1,24 @@
 <template>
-  <vue-carousel
-    :per-page-custom="[
-      [0, 1],
-      [768, 2],
-      [1024, 3]
-    ]"
-    :navigation-enabled="navigate"
-  >
+  <!-- <vue-carousel :per-page-custom="[[0, 1],[768, 2],[1024, 3]]" :per-page="slidesPerPage" :navigation-enabled="navigate" :pagination-enabled="paginate"> -->
+  <vue-carousel :per-page="slidesPerPage" :navigation-enabled="navigate" :pagination-enabled="paginate">
     <slot></slot>
+    <slide class="empty">
+      <div></div>
+    </slide>
   </vue-carousel>
 </template>
 
 <script>
-import { Carousel } from 'vue-carousel'
+import { Carousel } from 'vue-carousel';
 export default {
   components: {
     'vue-carousel': Carousel
   },
   props: {
     pages: 0,
-    navigate: false
+    slidesPerPage: { type: Number },
+    navigate: false,
+    paginate: true,
   }
 }
 </script>
@@ -31,5 +30,13 @@ export default {
   .VueCarousel-dot-container {
     margin-top: 0 !important;
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.empty {
+  background: none !important;
+  color: none !important;
+  width: 0 !important;
 }
 </style>

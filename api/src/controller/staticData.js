@@ -1,5 +1,5 @@
 'use strict';
-const { BankAccountHelper }  = require('../utils');
+const { BankAccountHelper }  = require('../services/utils');
 
 
 const BaseController = require('./base');

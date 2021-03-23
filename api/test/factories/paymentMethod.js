@@ -6,7 +6,8 @@ module.exports = class PaymentMethodFactory extends BaseFactory {
 
   make() {
     return {
-      card_hash: faker.random.alphaNumeric(16),
+      hash: faker.random.alphaNumeric(16),
+      type: 'cc'
     };
   }
 }

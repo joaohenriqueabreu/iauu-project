@@ -25,6 +25,7 @@ const ResetPasswordService = require('../src/services/auth/resetPassword');
 // const GoogleLoginService = require('../src/services/auth/googleLogin');
 const AssignRoleService = require('../src/services/auth/assignRole');
 const GenerateTokenService = require('../src/services/auth/generateToken');
+const CreateNotificationService = require('../src/services/notification/createNotification');
 
 const name = 'User Name';
 const pwd = '123456';
@@ -50,6 +51,7 @@ describe('Auth testing', function () {
     sandbox.stub(VerifyUserService.prototype, 'sendWelcomeMail').callsFake(generalMock);
     sandbox.stub(ResetPasswordService.prototype, 'sendPwdChangedMail').callsFake(generalMock);
     sandbox.stub(ResetPasswordService.prototype, 'sendForgotPasswordMail').callsFake(generalMock);
+    sandbox.stub(CreateNotificationService.prototype, '');
 
     // Connect to db
     await dbConnection.connect();
@@ -94,7 +96,7 @@ describe('Auth testing', function () {
       referredUser.referral.from.should.be.instanceof(User);
       referredUser.referral.from.email.should.be.equal(email);
     });
-  
+
     it('should fail when missing attribute', async function () {
       try {
         const registerUserSvc = new RegisterUserService(name, email);

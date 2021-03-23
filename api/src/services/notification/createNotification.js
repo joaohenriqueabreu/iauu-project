@@ -9,12 +9,12 @@ module.exports = class CreateNotificationService extends BaseService
       super();
 
       if ([undefined, null].includes(from) ||
-        !from instanceof User ||
+        ! from instanceof User ||
         [undefined, null].includes(to) ||
-        !to instanceof User ||
+        ! to instanceof User ||
         [undefined, null].includes(message) ||
         [undefined, null].includes(type)) {
-          throw new BadRequestException('Informações insuficientes');
+          throw new BadRequestException('Missing required information to create notification');
         }
 
       this.from_id = from.id;

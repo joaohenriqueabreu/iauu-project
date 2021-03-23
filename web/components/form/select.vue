@@ -1,6 +1,6 @@
 <template>
   <div class="hide-mobile">
-    <label :for="name" v-if="!$empty(label)">{{ label }}</label>
+    <label v-if="!$empty(label)" :for="name">{{ label }}</label>
     <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <v-selectize v-if="allowInput" :name="name" :settings="settings">
@@ -54,6 +54,7 @@ export default {
     },
     selectizeOptions() {
       return this.$collection.map(this.options, (option) => {
+        if (option.hasOwnProperty('value') && option.hasOwnProperty('display')) { return option; }
         return { value: option, display: option }
       })
     }
@@ -73,6 +74,11 @@ export default {
     transition: $transition;
     &.items.not-full.has-options::after {
       display: none;
+    }
+
+    &.items {
+      color: $white;
+      font-weight: $bold;
     }
 
     &:hover {
@@ -121,6 +127,12 @@ select {
 
   &::-ms-expand {
     display: none;
+  }
+
+  option {
+    background: $layer1;
+    color: $white;
+    font-weight: $bold;
   }
 }
 </style>

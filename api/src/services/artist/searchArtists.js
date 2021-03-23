@@ -38,7 +38,7 @@ module.exports = class SearchArtistProfileService extends BaseService
       // Artist should have some basic information filled prior to search
        this.conditions = {
         ...this.conditions,
-        ...{ public: true }, // visible profile
+        // ...{ public: true }, TODO include only visible profiles
         ...{ name: { $exists: true }},
         ...{ address: { $exists: true }},
         ...{ 'category.name': { $exists: true }},

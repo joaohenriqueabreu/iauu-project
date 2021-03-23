@@ -1,14 +1,14 @@
 require('../../config/env');
 const { Exception } = require("../../exception");
 
-const VendorGatewayCreateSplitAccountInterface = require('../interfaces/vendorGatewayCreateSplitAccount');
+const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
 const PagarmeConnectService = require('./pagarmeConnect');
 const PagarmeData = require('../../config/data/vendor/pagarme');
 const { User, Artist } = require('../../models');
-const { DocumentsHelper } = require('../utils');
+const { DocumentHelper } = require('../utils');
 const { ManualPaymentRequiredException } = require('../../exception');
 
-module.exports = class PagarmeCreateRecipientService extends VendorGatewayCreateSplitAccountInterface {
+module.exports = class PagarmeCreateRecipientService extends VendorGatewayCreateAccountInterface {
   constructor(pagarmeBankAccountId) {
     super();
     if (pagarmeBankAccountId === undefined) { throw new Exception('Must provide existing bank account information.'); }
@@ -32,9 +32,9 @@ module.exports = class PagarmeCreateRecipientService extends VendorGatewayCreate
   }
 
   ensureRecipientIsValid() {
-    if (! this.recipient instanceof Artist) {
-      throw new Exception('Invalid recipient provided');
-    }
+    // if (! this.recipient instanceof Artist) {
+    //   throw new Exception('Invalid recipient provided');
+    // }
 
     if (! this.recipient.manager instanceof User) {
       throw new Exception('Recipient must have a manager');
@@ -59,7 +59,7 @@ module.exports = class PagarmeCreateRecipientService extends VendorGatewayCreate
   }
 
   getRecipientPersonalData() {
-    switch (DocumentsHelper.getDocumentType(this.recipient.document)) {
+    switch (DocumentHelper.getDocumentType(this.recipient.document)) {
       case 'CPF': return this.getIndividualData();
       case 'CNPJ': return this.getCompanyData();
       default: return {};
@@ -69,7 +69,7 @@ module.exports = class PagarmeCreateRecipientService extends VendorGatewayCreate
   getIndividualData() {
     return {
       type: PagarmeData.PAGARME_RECIPIENT_TYPE_INDIVIDUAL,
-      document_number: this.recipient.document,
+      document_number: DocumentHelper.formatDocument(this.recipient.document, false),
       name: this.recipient.name,
       email: this.recipient.email,
     }

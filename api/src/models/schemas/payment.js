@@ -26,8 +26,8 @@ const paymentSchema = new Schema({
   status: { type: String, enum: PaymentData.PAYMENT_STATUS, required: true, default: PaymentData.PAYMENT_STATUS_PENDING },
   failed_reason: { type: String },
   notes: { type: String },
-  method: { any: Schema.Types.Mixed }, // TODO fix this for own payment method - should be transalated by callback interface
-  transaction: {any: Schema.Types.Mixed }, // Store response callback data from vendor gateway (can be any format - depends on the vendor gateway)
+  method: { type: Object, default: null }, // TODO fix this for own payment method - should be transalated by callback interface
+  transaction: {type: Object, default: null }, // Store response callback data from vendor gateway (can be any format - depends on the vendor gateway)
 }, { ...baseSchemaOptions })
 
 class Payment extends BaseRepository { }

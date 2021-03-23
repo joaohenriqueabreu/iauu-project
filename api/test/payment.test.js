@@ -1,14 +1,15 @@
 const _ = require('lodash');
 const { sandbox, setup, cleanup, generalMock } = require('./setup');
-const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory, PaymentMethodFactory } = require('./factories');
+const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory, PaymentMethodFactory,  } = require('./factories');
+const { PagarmeTransactionFactory, PagarmeRecipientFactory } = require('./factories/vendor');
 
 // Services
+const SaveArtistBankAccountService = require('../src/services/payment/saveArtistAccount');
 const CompletePresentationService = require('../src/services/presentation/completePresentation');
 const PayPresentationService = require('../src/services/payment/payPresentation');
 
 const { Exception } = require('../src/exception');
-const { PagarmeSplitPaymentService } = require('../src/services/gateways');
-const { Invoice, Payment } = require('../src/models/schemas');
+const { PagarmeSplitPaymentService, PagarmeCreateAccountService } = require('../src/services/gateways');
 
 // Test-wide objects
 let user = {};
@@ -52,7 +53,20 @@ describe('Payment testing', () => {
       sandbox.stub(CompletePresentationService.prototype, 'sendMarkedAsCompleteMail').callsFake(generalMock);
 
       // We will mock creating payment from complete presentation service, so that we can call InitiatePaymentService manually
-      sandbox.spy(PagarmeSplitPaymentService.prototype, 'charge');
+      sandbox.stub(PagarmeSplitPaymentService.prototype, 'charge').callsFake(() => (new PagarmeTransactionFactory()).getSeed());
+      sandbox.stub(PagarmeCreateAccountService.prototype, 'create').callsFake(() => (new PagarmeRecipientFactory()).getSeed());
+    });
+  });
+
+  describe('Create gateway account when saving bank account data', () => {
+    it('should save bank account data', async () => {
+      const saveArtistBankAccountSvc = new SaveArtistBankAccountService(artist.id);
+      await saveArtistBankAccountSvc.save(artist.account.bank);
+
+      const artistConnectedToGateway = saveArtistBankAccountSvc.getArtist();
+
+      artistConnectedToGateway.account.gateway.should.not.be.null;
+      artistConnectedToGateway.account.gateway.id.should.not.be.null;
     });
   });
 
@@ -62,8 +76,8 @@ describe('Payment testing', () => {
       user.artist = artist;
       user.contractor = {};
 
-      const completePresentationSvc = new CompletePresentationService(user, { id: presentation.id });
-      await completePresentationSvc.complete();
+      const completePresentationSvc = new CompletePresentationService(user);
+      await completePresentationSvc.complete(presentation.id);
 
       const completedPresentation = completePresentationSvc.getPresentation();
       completedPresentation.confirm_status.should.be.an('array');
@@ -76,8 +90,8 @@ describe('Payment testing', () => {
       user.artist = {};
       user.role = 'contractor';
 
-      const completePresentationSvc = new CompletePresentationService(user, { id: presentation.id });
-      await completePresentationSvc.complete();
+      const completePresentationSvc = new CompletePresentationService(user);
+      await completePresentationSvc.complete(presentation.id);
 
       const completedPresentation = completePresentationSvc.getPresentation();
       completedPresentation.confirm_status.should.be.an('array');
@@ -95,12 +109,10 @@ describe('Payment testing', () => {
 
   describe('Initiate Payment', () => {
     it('should save invoice', async () => {
-      const initPaymentSvc = new PayPresentationService(user, { 
-        id: presentation.id, 
-        paymentMethod: (new PaymentMethodFactory()).getSeed()
-      });
+      const paymentMethod = (new PaymentMethodFactory()).getSeed();
+      const initPaymentSvc = new PayPresentationService(user, paymentMethod);
 
-      await initPaymentSvc.pay();
+      await initPaymentSvc.pay(presentation.id);
       const paidPresentation = initPaymentSvc.getPresentation();
 
       paidPresentation.invoice.status.should.equal('pending');
@@ -130,7 +142,9 @@ describe('Payment testing', () => {
 
     it('should fail without payment method', () => {
       try {
-        new PayPresentationService(user, { id: presentation.id });
+        const payPresentationSvc = new PayPresentationService(user);
+        payPresentationSvc.pay(presentation.id);
+
       } catch (error) {
         error.should.be.instanceof(Exception);
       }

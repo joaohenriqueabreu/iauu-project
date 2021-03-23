@@ -3,7 +3,7 @@ require('dotenv').config();
 const db = require('mongoose');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
-const { PresentationData } = require('../config/data');
+const { PresentationData, InvoiceData } = require('../config/data');
 
 const proposalSchema = require('./schemas/proposal').schema;
 const addressSchema = require('./schemas/address').schema;
@@ -65,8 +65,12 @@ class Presentation extends BaseRepository {
     return this.price;
   }
 
-  isCompleted() {
+  get is_completed() {
     return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED;
+  }
+
+  get is_paid() {
+    return this.is_completed && this.invoice !== undefined && this.invoice.status === InvoiceData.COMPLETED_STATUS;
   }
 }
 

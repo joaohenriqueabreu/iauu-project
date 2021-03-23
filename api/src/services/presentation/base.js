@@ -10,9 +10,9 @@ module.exports = class PresentationService extends BaseService
     constructor(user, data) {
       super(user);
 
-      if (data === undefined) {
-        throw new BadRequestException('Data is required');
-      }
+      // if (data === undefined) {
+      //   throw new BadRequestException('Data is required');
+      // }
 
       this.user = user;
       this.presentation = {};

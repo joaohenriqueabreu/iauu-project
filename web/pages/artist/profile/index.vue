@@ -47,14 +47,16 @@
               <presentation-types v-if="typesTab" :options="presentationTypes" key="types"></presentation-types>
             </fade-transition>
             <fade-transition mode="out-in">
-              <bank-account v-if="bankAccountTab" key="bankAccount"></bank-account>
+              <bank-account v-if="bankAccountTab" key="bankAccount" @bank-account-changed="validateBankAccount"></bank-account>
             </fade-transition>
           </div>
         </div>
       </main>
       <footer>
-        <div class="half-width">
-          <form-button @action="saveProfile">Salvar</form-button>
+        <div class="half-width" v-if="statsTab">
+          <form-button v-if="!bankAccountTab" @action="saveProfile">Salvar</form-button>
+          <!-- Special handling for bank account -->
+          <form-button v-else :disabled="!validBankAccount" @action="saveArtistBankAccount">Salvar dados bancários</form-button>
         </div>
       </footer>
     </form>
@@ -101,7 +103,9 @@ export default {
   },
   data() {
     return {
-      activeTab: { type: String, default: 'stats' }
+      activeTab: { type: String, default: 'stats' },
+      validBankAccount: false,
+      bankAccount: {}
     }
   },
   computed: {
@@ -152,7 +156,7 @@ export default {
     console.log(process.env.paymentsEnabled);
   },
   methods: {
-    ...mapActions('artist', ['saveProfile']),
+    ...mapActions('artist', ['saveProfile', 'saveBankAccount']),
     uploadBG() {
       this.$refs.bgUploader.upload();
     },
@@ -161,6 +165,10 @@ export default {
     },
     categorySelect(category) {
       alert(category);
+    },
+    validateBankAccount(valid, bankAccount) {
+      this.validBankAccount = valid;
+      this.bankAccount = bankAccount;
     },
     async setBackground(url) {
       this.background = url;
@@ -171,6 +179,26 @@ export default {
       this.photo = url;
       await this.saveProfile();
       this.$toast.success('Foto atualizada');
+    },
+    async saveArtistProfile() {
+      // Special handling for bank account
+      try {
+        await this.saveProfile();
+      } catch (error) {
+        this.$toast.error('Tivemos um problema ao salvar o perfil');
+      }
+    },
+    async saveArtistBankAccount() {
+      if (this.validBankAccount) {
+        try {
+          await this.saveBankAccount(this.bankAccount);
+          this.$toast.success('Conta bancária conectada com sistema de pagamentos');
+        } catch (error) {
+          this.$toast.error('Tivemos um problema ao conectar sua conta bancária com nosso sistema de pagamento. Por favor revise os dados ou entre em contato com a nossa equipe');
+        }
+      } else {
+        this.$toast.error('Favor preencher todos os dados bancários');
+      }
     }
   }
 }

@@ -93,21 +93,22 @@ export const getters = {
   rejectedProposals: (state) =>
     _.filter(state.presentations, (presentation) => presentation.status === 'rejected'),
 
+  unpaidPresentations: (state) =>
+    _.filter(state.presentations, (presentation) =>
+      presentation.status === 'completed' && !presentation.is_paid
+    ),
   openPresentations: (state) =>
-    _.filter(
-      state.presentations,
-      (presentation) =>
-        presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isAfter(moment())
+    _.filter(state.presentations, (presentation) =>
+      presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isAfter(moment())
     ),
   pendingConfirmPresentations: (state) =>
-    _.filter(
-      state.presentations,
-      (presentation) =>
-        presentation.status === 'accepted' &&
-        moment(presentation.timeslot.end_dt).isBefore(moment())
+    _.filter(state.presentations, (presentation) =>
+      presentation.status === 'accepted' && moment(presentation.timeslot.end_dt).isBefore(moment())
     ),
-  completedPresentations: (state) =>
-    _.filter(state.presentations, (presentation) => presentation.status === 'completed'),
+  completedPresentations: (state) => 
+    _.filter(state.presentations, (presentation) => 
+      presentation.status === 'completed' && presentation.is_paid 
+    ),
   cancelledPresentations: (state) =>
     _.filter(state.presentations, (presentation) => presentation.status === 'cancelled')
 }

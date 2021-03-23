@@ -27,13 +27,8 @@ export default {
   },
   computed: {
     presentationDate() {
-      if (!this.$empty(this.presentation.timeslot)) {
-        return this.presentation.timeslot.start_dt
-      }
-
-      if (this.presentation.status === 'proposal') {
-        return this.presentation.proposal.timeslots[0].start_dt
-      }
+      if (!this.$empty(this.presentation.timeslot)) { return this.presentation.timeslot.start_dt }
+      if (this.presentation.status === 'proposal') { return this.presentation.proposal.timeslots[0].start_dt }
 
       return ''
     },

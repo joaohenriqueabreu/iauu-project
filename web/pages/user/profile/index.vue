@@ -5,7 +5,7 @@
       <div class="horizontal middle mb-4">
         <div class="mr-5">
           <image-uploader ref="avatarUploader" :rounded="true" @uploaded="setAvatar">
-            <avatar :src="avatarImg" :size="150" @click="uploadAvatar"></avatar>
+            <avatar :src="$images(this.photo)" :size="150" @click="uploadAvatar"></avatar>
           </image-uploader>
         </div>
         <div class="full-width">
@@ -71,11 +71,6 @@ export default {
       email: 'user.email',
       photo: 'user.photo',
     }),
-    avatarImg() {
-      return !this.$utils.empty(this.photo)
-        ? this.$images(this.photo)
-        : this.$config.defaultAvatarImgUrl
-    },
     isAdminUser() {
       return this.$auth.hasScope('admin');
     }
@@ -83,24 +78,24 @@ export default {
   methods: {
     ...mapActions('protected', ['renewAuth', 'saveProfile']),
     uploadAvatar() {
-      this.$refs.avatarUploader.upload()
+      this.$refs.avatarUploader.upload();
     },
     async handleSaveUserProfile() {
-      await this.saveProfile()
-      this.$toast.success('Perfil salvo com sucesso!')
+      await this.saveProfile();
+      this.$toast.success('Perfil salvo com sucesso!');
     },
     async setAvatar(url) {
-      this.photo = url
-      await this.saveProfile()
-      await this.renewAuth()
-      this.$toast.success('Foto atualizada!')
+      this.photo = url;
+      await this.saveProfile();
+      await this.renewAuth();
+      this.$toast.success('Foto atualizada!');
     },
     async loginWithFacebook(accessToken) {
       await this.$auth.loginWith('facebook', {
         data: {
           token: accessToken
         }
-      })
+      });
     },
     async loginWithGoogle(accessToken) {
       await this.$auth.loginWith('google', {
@@ -108,7 +103,7 @@ export default {
           token: accessToken,
           provider: 'google'
         }
-      })
+      });
     },
   }
 }

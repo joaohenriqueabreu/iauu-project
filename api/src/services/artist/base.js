@@ -1,4 +1,4 @@
-const Artist = require('../../models/artist')
+const { Artist } = require('../../models')
 const BaseService = require('../base')
 
 module.exports = class ArtistService extends BaseService
@@ -33,7 +33,7 @@ module.exports = class ArtistService extends BaseService
     async searchArtistWithUsers() {
       console.log('Searching for artist...')
       this.artist = await Artist.findById(this.id).populate({ path: 'users', select: 'name email photo' })
-      return this
+      return this;
     }
 
     ensureArtistWasFound() {
@@ -45,7 +45,7 @@ module.exports = class ArtistService extends BaseService
       return this
     }
 
-    async saveArtist() {      
+    async saveArtist() {
       if (this.artist.isModified) {
         await this.artist.save()
         console.log('Artist saved...')

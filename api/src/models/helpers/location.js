@@ -1,6 +1,6 @@
-const BaseStructure = require('./repositories/base');
+const BaseRepository = require('../repositories/base');
 
-class Location extends BaseStructure {
+class Location extends BaseRepository {
   constructor(data) {
     super(data);
 

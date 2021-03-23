@@ -2,7 +2,7 @@
   <div class="result" @click="$emit('select', artist)">
     <div class="logo">
       <div class="bg hide-mobile" :style="{ 'background-image': `url(${$images(bgImage)})` }"></div>
-      <avatar :src="artist.photo" :username="artist.name" :size="100"></avatar>
+      <avatar :src="$images(artist.photo)" :username="artist.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
       <div class="col-sm-6">

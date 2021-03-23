@@ -97,8 +97,8 @@ class PresentationController extends BaseController {
 
   completePresentation(req, res, next) {
     console.log('Confirming presentation...');
-    const completePresentationService = new CompletePresentationService(req.user, req.data);
-    completePresentationService.complete()
+    const completePresentationService = new CompletePresentationService(req.user);
+    completePresentationService.complete(req.data.id)
       .then(() => { res.status(200).json(completePresentationService.getPresentation()) })
       .catch((error) => next(error));
   }

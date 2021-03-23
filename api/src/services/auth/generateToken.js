@@ -6,6 +6,7 @@ require('dotenv').config();
 const { User, Artist, Contractor } = require('../../models');
 
 // 30 days (in seconds)
+// const tokenExpiration = 10;
 const tokenExpiration = 60 * 60 * 24 * 30;
 
 module.exports = class GenerateTokenService {

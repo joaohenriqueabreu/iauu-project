@@ -11,6 +11,7 @@ export default {
     cdnStaticAssetsDomain: process.env.CDN_STATIC_ASSETS_DOMAIN,
     cdnAppAssetsDomain: process.env.CDN_APP_ASSETS_DOMAIN,
     s3AppAssetsBucketUrl: process.env.S3_APP_ASSETS_BUCKET_URL,
+    s3StaticAssetsBucketUrl: process.env.S3_STATIC_ASSETS_BUCKET_URL,
     companyName: process.env.COMPANY_NAME,
     webUrl: process.env.WEB_URL,
     supportMail: process.env.SUPPORT_MAIL,

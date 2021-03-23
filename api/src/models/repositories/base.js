@@ -4,6 +4,7 @@ const BaseModel = require('../base');
 
 module.exports = class BaseRepository extends BaseModel {
   constructor(data) {
+    super(data);
     if (this.constructor === BaseRepository) { throw new TypeError('Cannot construct abstract class'); }
 
     if (data !== undefined) {

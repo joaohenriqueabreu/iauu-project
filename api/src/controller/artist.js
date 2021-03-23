@@ -5,10 +5,10 @@ const PublicArtistProfileService = require('../services/artist/publicSearch');
 const SearchArtistForProposalService = require('../services/artist/searchArtistForProposal');
 const SearchArtistProfileService = require('../services/artist/searchProfile');
 const SaveArtistProfileService = require('../services/artist/saveProfile');
+const SaveArtistAccountService = require('../services/payment/saveArtistAccount');
 const SaveProductService = require('../services/artist/saveProduct');
 const DeleteProductService = require('../services/artist/deleteProduct');
 const LookupProductsService = require('../services/artist/lookupProducts');
-const SearchArtistUsersService = require('../services/artist/searchUsers');
 const SendFeedbackService = require('../services/artist/sendFeedback');
 const CalculateArtistStatisticsService = require('../services/statistics/calculateArtistStatistics');
 
@@ -45,6 +45,17 @@ class ArtistController extends BaseController {
     saveProfileService.save()
       .then(() => { res.status(200).json(saveProfileService.getArtist()); })
       .catch((error) => next(error));
+  }
+
+  async saveBankAccount(req, res, next) {
+    console.log("Saving bank account...");
+    const saveArtistAccountSvc = new SaveArtistAccountService(req.user);
+    try {
+      await saveArtistAccountSvc.save(req.data.bankAccount);
+      res.status(200).json(saveArtistAccountSvc.getArtist());
+    } catch (error) {
+      next(error);
+    }
   }
 
   products(req, res, next) {

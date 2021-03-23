@@ -1,27 +1,25 @@
 require('../../config/env');
-const { Exception } = require("../../exception");
 
-const VendorGatewayCreateSplitAccountInterface = require('../interfaces/vendorGatewayCreateSplitAccount');
+const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
 const PagarmeConnectService = require('./pagarmeConnect');
 const PagarmeData = require('../../config/data/vendor/pagarme');
 const { ManualPaymentRequiredException } = require('../../exception');
-const { BankAccountHelper } = require('../utils');
+const { DocumentHelper, BankAccountHelper } = require('../utils');
 
-module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSplitAccountInterface {
-  constructor(artistBankAccount) {
+module.exports = class PagarmeCreateBankAccountService extends VendorGatewayCreateAccountInterface {
+  constructor() {
     super();
-    if (artistBankAccount === undefined) { throw new Exception('Must provide artist bank account information.'); }
-    
-    this.artistBankAccount = artistBankAccount;
+
     this.pagarmeAccountData = {};
     this.pagarmeAccount = {};
-
     this.pagarmeConnectSvc = new PagarmeConnectService();
   }
 
-  async create() {
-    await this.connectAPI();
+  async create(artistBankAccount) {
+    this.artistBankAccount = artistBankAccount;
+
     await this.ensureBankAccountIsValid();
+    await this.connectAPI();    
     this.translateAccounts();
     await this.createPagarmeAccount();
 
@@ -34,10 +32,13 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSp
   }
 
   async ensureBankAccountIsValid() {
-    if (this.artistBankAccount.institution === undefined || 
+    if (this.artistBankAccount === undefined ||
+      this.artistBankAccount.institution === undefined || 
       this.artistBankAccount.agency === undefined ||
       this.artistBankAccount.number === undefined ||
-      this.artistBankAccount.number_digit == undefined) {
+      this.artistBankAccount.number_digit === undefined ||
+      this.artistBankAccount.document == undefined ||
+      this.artistBankAccount.legal_name == undefined) {
       throw new ManualPaymentRequiredException('Missing required bank account information.');
     }
 
@@ -55,7 +56,7 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateSp
       agencia: this.artistBankAccount.agency,
       conta: this.artistBankAccount.number,
       conta_dv: this.artistBankAccount.number_digit,
-      document_number: this.artistBankAccount.document,
+      document_number: DocumentHelper.formatDocument(this.artistBankAccount.document),
       legal_name: this.artistBankAccount.legal_name,
       type: PagarmeData.PAGARME_BANK_ACCOUNT_TYPE_CONTA_CORRENTE // TODO only accepting conta corrente for now
     }

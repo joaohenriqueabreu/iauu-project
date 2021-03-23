@@ -10,6 +10,7 @@ api.get('/:id/private', validationMiddleware.id, authorizationMiddleware.authori
 
 api.get('/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.profile);
 api.put('/profile', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.profile, artistController.updateProfile);
+api.post('/profile/payment/account', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.bankAccount, artistController.saveBankAccount);
 
 api.get('/products', authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.products);
 api.get('/:id/products', validationMiddleware.id, authorizationMiddleware.authorize, artistController.products);
