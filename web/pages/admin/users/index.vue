@@ -21,7 +21,7 @@
             class="role-badge mr-4 horizontal center middle clickable"
             @click="filterByRole(role)"
           >
-            <font-awesome :icon="roleIcon(role)" class="mr-2"></font-awesome>
+            <icon :icon="roleIcon(role)" class="mr-2"></icon>
             {{ roleLabel(role) }}s
           </span>
           <span
@@ -31,12 +31,12 @@
             class="status-badge mr-4 horizontal center middle clickable"
             @click="filterByStatus(status)"
           >
-            <font-awesome :icon="statusIcon(status)" class="mr-2"></font-awesome>
+            <icon :icon="statusIcon(status)" class="mr-2"></icon>
             {{ statusLabel(status) }}s
           </span>
         </div>
         <div class="horizontal clickable brand-hover" @click="exportCsv">
-          <font-awesome class="mr-2" icon="file-excel"></font-awesome>
+          <icon class="mr-2" icon="file-excel"></icon>
           <h6>Exportar</h6>
         </div>
       </div>
@@ -53,12 +53,12 @@
         <tr v-for="user in users" :key="user.id" @click="openUserManagementModal(user)">
           <td class="text-center">
             <h6 class="role-badge icon-only" :class="user.role">
-              <font-awesome :icon="roleIcon(user.role)"></font-awesome>
+              <icon :icon="roleIcon(user.role)"></icon>
             </h6>
           </td>
           <td class="text-center">
             <div class="status-badge icon-only" :class="user.status">
-              <font-awesome :icon="statusIcon(user.status)"></font-awesome>
+              <icon :icon="statusIcon(user.status)"></icon>
             </div>
           </td>
           <td class="py-3 cap horizontal middle">

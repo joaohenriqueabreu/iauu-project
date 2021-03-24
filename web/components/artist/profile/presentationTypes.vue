@@ -16,7 +16,7 @@
     <div class="tags">
       <span v-for="(presentationType, index) in presentationTypes" :key="index" @click="removePresentationType(presentationType)">
         <h6>{{ presentationType }}</h6>
-        <font-awesome icon="times"></font-awesome>
+        <icon icon="times"></icon>
       </span>
     </div>
   </div>

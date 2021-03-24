@@ -6,8 +6,8 @@
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
       <div class="hide-mobile hide-menu">
-        <font-awesome class="minimize" :icon="minimized ? 'angle-double-right' : 'angle-double-left'" @click="minimize">
-        </font-awesome>
+        <icon class="minimize" :icon="minimized ? 'angle-double-right' : 'angle-double-left'" @click="minimize">
+        </icon>
       </div>
     </header>
     <main>

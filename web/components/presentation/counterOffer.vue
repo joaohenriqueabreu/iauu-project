@@ -10,7 +10,7 @@
       <div class="horizontal">
         <h6 class="mr-2">{{ counterOffer.price | currency }} para {{ counterOffer.duration | longTime }} de apresentação </h6>
         <h5 v-if="!hasAcceptedCounterOffer" class="mx-2 clickable brandHover" @click="openModal">
-          <font-awesome icon="edit"></font-awesome>
+          <icon icon="edit"></icon>
         </h5>
       </div>
     </div>

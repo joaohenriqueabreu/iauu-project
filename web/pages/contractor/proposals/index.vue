@@ -27,23 +27,18 @@
       <nuxt-link to="/search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
     </div>
     <!-- Data loaded from state -->
-    <proposal-details
-      v-if="!$empty(presentationState)"
-      ref="proposal"
-      :read-only="false"
-      @cancelled="cancelledProposal"
-    >
-    </proposal-details>
+    <proposal-summary v-if="!$empty(presentationState)" ref="proposal" :read-only="false" @cancelled="cancelledProposal">
+    </proposal-summary>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import PresentationInfo from '@/components/presentation/info'
-import ProposalDetails from '@/components/presentation/contractor/proposal'
+import ProposalSummary from '@/components/presentation/contractor/proposalSummary'
 export default {
   components: {
-    ProposalDetails,
+    ProposalSummary,
     PresentationInfo
   },
   async asyncData({ store, app }) {

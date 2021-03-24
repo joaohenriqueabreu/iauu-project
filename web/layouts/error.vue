@@ -6,7 +6,7 @@
         <h1 class="mb-5">Vish...</h1>
         <h5 class="mb-3 horizontal middle center">
           Parece que a corda da guitarra estourou
-          <font-awesome icon="frown" class="ml-2 mb-0"></font-awesome>
+          <icon icon="frown" class="ml-2 mb-0"></icon>
         </h5>
         <h5 class="mb-4">
           Nos perdoe, tivemos algum problema interno, mas já estamos trabalhando para resolver

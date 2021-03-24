@@ -13,7 +13,7 @@
         @input="emitMasked"
         @keyup.enter="$emit('enter', value)"
       />
-      <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
+      <icon v-if="iconHelper" :icon="iconHelper"></icon>
     </div>
   </div>
 </template>

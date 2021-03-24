@@ -1,32 +1,32 @@
 <template>
   <div>
     <div v-if="!readOnly">
-      <font-awesome v-for="star in MAX_RATE" :key="star" :icon="selectedStar(star)" class="clickable" @click="rate(star)">
-      </font-awesome>
+      <icon v-for="star in MAX_RATE" :key="star" :icon="selectedStar(star)" class="clickable" @click="rate(star)">
+      </icon>
     </div>
     <div v-else>
       <div v-if="short">
         <div v-if="score > 0" class="horizontal middle">
           <h5 class="bold mr-2">{{ score | oneDecimal }}</h5>
-          <font-awesome class="icon mr-1" icon="star"></font-awesome>
+          <icon class="icon mr-1" icon="star"></icon>
         </div>
       </div>
       <div v-else class="horizontal center middle">
         <div v-if="filledStars > 0">
-          <font-awesome v-for="star in filledStars" :key="star" class="icon" icon="star">
-          </font-awesome>
+          <icon v-for="star in filledStars" :key="star" class="icon" icon="star">
+          </icon>
         </div>
         <div v-if="halfStar">
-          <font-awesome class="icon" icon="star-half-alt"></font-awesome>
+          <icon class="icon" icon="star-half-alt"></icon>
         </div>
         <div v-if="noStar > 0">
-          <font-awesome
+          <icon
             v-for="star in noStar"
             :key="`-${star}`"
             class="icon"
             :icon="['far', 'star']"
           >
-          </font-awesome>
+          </icon>
         </div>
         <div v-if="amount > 0">
           <small>({{ amount }})</small>

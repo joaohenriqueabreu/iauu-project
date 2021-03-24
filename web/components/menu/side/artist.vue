@@ -2,23 +2,23 @@
   <div>
     <div class="side-menu-items">
       <nuxt-link to="/artist/schedule">
-        <font-awesome icon="calendar-alt"></font-awesome>
+        <icon icon="calendar-alt"></icon>
         <span v-show="!minimized">Agenda</span>
       </nuxt-link>
       <nuxt-link to="/artist/presentations" :class="{ routed: routed('presentations') }">
-        <font-awesome icon="music"></font-awesome>
+        <icon icon="music"></icon>
         <span v-show="!minimized">Apresentações</span>
       </nuxt-link>
       <nuxt-link to="/artist/proposals" :class="{ routed: routed('proposals') }">
-        <font-awesome icon="search-dollar"></font-awesome>
+        <icon icon="search-dollar"></icon>
         <span v-show="!minimized">Propostas</span>
       </nuxt-link>
       <nuxt-link to="/artist/profile" :class="{ routed: routed('account') }">
-        <font-awesome icon="guitar"></font-awesome>
+        <icon icon="guitar"></icon>
         <span v-show="!minimized">Banda</span>
       </nuxt-link>
       <nuxt-link to="/artist/reports" :class="{ routed: routed('reports') }">
-        <font-awesome icon="chart-line"></font-awesome>
+        <icon icon="chart-line"></icon>
         <span v-show="!minimized">Relatórios</span>
       </nuxt-link>
     </div>

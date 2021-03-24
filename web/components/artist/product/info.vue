@@ -6,11 +6,11 @@
       </div>
       <div class="product">
         <div v-if="!readOnly" class="copy clickable" @click="copyProduct">
-          <h4 class="brand-hover"><font-awesome icon="copy"></font-awesome></h4>
+          <h4 class="brand-hover"><icon icon="copy"></icon></h4>
         </div>
         <div v-if="!readOnly" class="title" @click="editProduct">
           <h2 class="cap mb-2">{{ product.name }}</h2>
-          <font-awesome icon="edit" class="ml-4"></font-awesome>
+          <icon icon="edit" class="ml-4"></icon>
         </div>
         <div v-else>
           <h2 class="cap mb-2">{{ product.name }}</h2>
@@ -20,7 +20,7 @@
             <b>{{ product.price | currency }}</b>
           </span>
           <span>
-            <font-awesome icon="clock" class="mr-1"></font-awesome>
+            <icon icon="clock" class="mr-1"></icon>
             {{ product.duration | longTime }}
           </span>
         </div>
@@ -31,14 +31,14 @@
           <div v-for="(item, index) in product.items" :key="`item_${index}`">
             <hr />
             <span class="one-line">
-              <font-awesome icon="check" class="mr-2"></font-awesome>
+              <icon icon="check" class="mr-2"></icon>
               {{ item }}
             </span>
           </div>
           <div v-for="(item, index) in notItems" :key="`not_${index}`" class="items not-items">
             <hr />
             <span class="one-line">
-              <font-awesome icon="check" class="mr-2"></font-awesome>
+              <icon icon="check" class="mr-2"></icon>
               {{ item }}
             </span>
           </div>

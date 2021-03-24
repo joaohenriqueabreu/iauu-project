@@ -33,15 +33,15 @@
               <form-validation :active="$v.product.items.$invalid" class="mb-4">Adicione ao menos 1 item</form-validation>
               <div class="horizontal middle justify-content-between mb-2">
                 <form-input v-model="newItem" class="full-width" icon="list-ol" placeholder="Iluminação, Apresentação, Fogos de Artifício, etc..." @enter="addItem"></form-input>
-                <font-awesome icon="plus" class="ml-5 clickable" @click="addItem"></font-awesome>
+                <icon icon="plus" class="ml-5 clickable" @click="addItem"></icon>
               </div>
               <div v-for="(item, itemIndex) in product.items" :key="itemIndex" class="items d-flex justify-content-between">
                 <span>{{ item }}</span>
-                <font-awesome
+                <icon
                   icon="times"
                   class="clickable"
                   @click="removeItem(itemIndex)"
-                ></font-awesome>
+                ></icon>
               </div>
             </div>
             <div class="vertical d-flex justify-content-between mb-2">
@@ -53,7 +53,7 @@
                 class="full-width"
                 placeholder="Cole o link de suas midias sociais aqui"
               ></form-input>
-              <font-awesome icon="plus" class="clickable ml-5" @click="uploadMedia"></font-awesome>
+              <icon icon="plus" class="clickable ml-5" @click="uploadMedia"></icon>
             </div>
             <fade-transition group class="mb-5">
               <div v-for="(media, mediaIndex) in product.medias" :key="mediaIndex">
@@ -68,11 +68,11 @@
             </fade-transition>
             <div class="horizontal d-flex justify-content-between mb-2">
               <h6>Adicionar documentos</h6>
-              <font-awesome
+              <icon
                 icon="plus"
                 class="ml-2 clickable"
                 @click="uploadDocument"
-              ></font-awesome>
+              ></icon>
             </div>
             <div class="vertical mb-5">
               <fade-transition group>
@@ -100,7 +100,7 @@
     <modal ref="confirm" height="tiny">
       <template v-slot:main class="vertical middle center">
         <h1 class="vertical middle center">
-          <font-awesome icon="exclamation-circle" class="mb-4"></font-awesome>
+          <icon icon="exclamation-circle" class="mb-4"></icon>
         </h1>
         Remover o formato não irá cancelar propostas ou apresentações associadas a ele. Você deve
         manualmente rejeitá-las ou redefini-las com seus clientes.

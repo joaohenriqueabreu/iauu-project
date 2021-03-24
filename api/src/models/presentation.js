@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const db = require('mongoose');
+const moment = require('moment');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 const { PresentationData, InvoiceData } = require('../config/data');
@@ -71,6 +72,28 @@ class Presentation extends BaseRepository {
 
   get is_paid() {
     return this.is_completed && this.invoice !== undefined && this.invoice.status === InvoiceData.COMPLETED_STATUS;
+  }
+
+  get display_start_dt() {
+    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
+      return this.proposal.timeslots[0].start_dt;
+    }
+
+    return this.timeslot.start_dt;
+  }
+
+  get display_end_dt() {
+    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
+      return this.proposal.timeslots[0].end_dt;
+    }
+
+    return this.timeslot.end_dt;
+  }
+
+  get is_presentation_today () {
+    return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED && 
+      moment(this.timeslot.start_dt).isSame(moment(), 'day');
+    
   }
 }
 

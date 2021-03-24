@@ -7,13 +7,13 @@
           <th></th>
           <th v-for="(product, pHeader) in products" :key="pHeader">
             <div class="clickable horizontal center middle" @click="$emit('edit-product', product)">
-              <font-awesome icon="edit" class="mb-2 ml-2"></font-awesome>
+              <icon icon="edit" class="mb-2 ml-2"></icon>
               <h5 class="mb-2 cap">{{ product.name }}</h5>
             </div>
             <h6 class="horizontal center middle">
               {{ product.price | currency }}
               <span class="mr-4"></span>
-              <font-awesome icon="clock" class="mr-1"></font-awesome> {{ product.duration }}
+              <icon icon="clock" class="mr-1"></icon> {{ product.duration }}
             </h6>
           </th>
         </tr>
@@ -25,12 +25,12 @@
             <span class="small">{{ item.description }}</span>
           </td>
           <td v-for="(product, pIndex) in products" :key="pIndex" class="text-center">
-            <font-awesome
+            <icon
               :class="selection[pIndex][iIndex] ? 'active' : 'inactive'"
               icon="check"
               class="select"
               @click="toggleSelection({ product: pIndex, item: iIndex })"
-            ></font-awesome>
+            ></icon>
           </td>
         </tr>
       </tbody>

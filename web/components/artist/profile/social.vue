@@ -23,7 +23,7 @@
           placeholder="Cole o link de suas midias sociais aqui"
           @enter="link"
         ></form-input>
-        <font-awesome icon="plus" class="clickable ml-3" @click="link"></font-awesome>
+        <icon icon="plus" class="clickable ml-3" @click="link"></icon>
       </div>
     </div>
     <div class="mb-4">

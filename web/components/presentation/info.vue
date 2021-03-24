@@ -8,11 +8,11 @@
       </div>
       <div class="horizontal">
         <h6 class="mr-5">
-          <font-awesome icon="clock" class="mr-2"></font-awesome>
+          <icon icon="clock" class="mr-2"></icon>
           {{ presentationDate | time }}
         </h6>
         <span class="" v-if="!$empty(presentation.address)">
-          <font-awesome icon="map-marker-alt" class="mr-2"></font-awesome>
+          <icon icon="map-marker-alt" class="mr-2"></icon>
           {{ presentation.address.display }}
         </span>
       </div>

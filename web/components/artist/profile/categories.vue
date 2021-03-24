@@ -41,7 +41,7 @@
     <div class="tags">
       <span v-for="(subcategory, index) in subCategories" :key="index" @click="removeSubcategory(subcategory)">
         <h6>{{ subcategory }}</h6>
-        <font-awesome icon="times"></font-awesome>
+        <icon icon="times"></icon>
       </span>
     </div>
   </div>

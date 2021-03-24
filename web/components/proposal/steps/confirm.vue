@@ -9,7 +9,7 @@
       </div>
       <div class="review">
         <div class="top-right pt-1 pr-2">
-          <font-awesome icon="check-circle" class="m-0"></font-awesome>
+          <icon icon="check-circle" class="m-0"></icon>
         </div>
         <h6 class="mb-4">
           Prezados integrantes do(a) <u>{{ proposal.artist.name }}</u
@@ -32,7 +32,7 @@
           >
         </p>
         <div class="vertical center">
-          <h1><font-awesome icon="signature"></font-awesome></h1>
+          <h1><icon icon="signature"></icon></h1>
           <hr class="light thick" />
           <h6>{{ $auth.user.name }}</h6>
         </div>
@@ -63,7 +63,7 @@
       <div v-else class="vertical middle center">
         <h6>
           Ainda faltam alguns detalhes para finalizar a proposta
-          <font-awesome icon="frown"></font-awesome>
+          <icon icon="frown"></icon>
         </h6>
         <small>Finalize os detalhes da apresentação para poder enviar a proposta</small>
       </div>

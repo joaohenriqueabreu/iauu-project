@@ -12,11 +12,11 @@
       >
         <div @click="select(timeslot)">
           <div class="horizontal mb-2">
-            <font-awesome icon="play-circle" class="start mr-2"></font-awesome>
+            <icon icon="play-circle" class="start mr-2"></icon>
             <h6>{{ timeslot.start_dt | datetime }}</h6>
           </div>
           <div class="horizontal">
-            <font-awesome icon="stop-circle" class="stop mr-2"></font-awesome>
+            <icon icon="stop-circle" class="stop mr-2"></icon>
             <h6>{{ timeslot.end_dt | datetime }}</h6>
           </div>
         </div>

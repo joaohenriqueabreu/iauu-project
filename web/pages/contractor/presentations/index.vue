@@ -50,8 +50,7 @@
       <div
         v-for="(presentation, index) in cancelledPresentations"
         :key="index"
-        @click="open(presentation.id)"
-      >
+        @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
     </div>
@@ -59,24 +58,18 @@
       Nenhuma apresentação confirmada
       <nuxt-link to="/search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
     </div>
-    <!-- Data loaded from state -->
-    <presentation-details
-      v-if="!$empty(presentationState)"
-      ref="presentation"
-      :read-only="false"
-      @confirmed="handleConfirmedPresentaion"
-    >
-    </presentation-details>
+    <presentation-summary v-if="!$empty(presentation)" ref="presentation" :read-only="false" @confirmed="handleConfirmedPresentaion">
+    </presentation-summary>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
-import PresentationInfo from '@/components/presentation/info'
-import PresentationDetails from '@/components/presentation/contractor/presentation'
+import { mapState, mapGetters, mapActions } from 'vuex';
+import PresentationInfo from '@/components/presentation/info';
+import PresentationSummary from '@/components/presentation/contractor/presentationSummary';
 export default {
   components: {
-    PresentationDetails,
+    PresentationSummary,
     PresentationInfo
   },
   async asyncData({ store, app }) {
@@ -92,7 +85,7 @@ export default {
       'cancelledPresentations'
     ]),
     ...mapState({ presentations: (state) => state.presentation.presentations }),
-    ...mapState({ presentationState: (state) => state.presentation.presentation })
+    ...mapState({ presentation: (state) => state.presentation.presentation })
   },
   methods: {
     ...mapActions('presentation', ['loadPresentation', 'loadPresentations']),

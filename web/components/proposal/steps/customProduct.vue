@@ -15,7 +15,7 @@
           @click="toggleItem(item)"
         >
           <div class="horizontal">
-            <font-awesome icon="check" class="mr-5"></font-awesome>
+            <icon icon="check" class="mr-5"></icon>
             <h6 class="mb-2">{{ item }}</h6>
           </div>
           <hr />

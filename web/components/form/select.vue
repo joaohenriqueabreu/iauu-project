@@ -14,7 +14,7 @@
           {{ option.display }}
         </option>
       </select>
-      <font-awesome :icon="iconHelper"></font-awesome>
+      <icon :icon="iconHelper"></icon>
     </div>
   </div>
 </template>

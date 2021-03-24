@@ -7,7 +7,7 @@
       <div class="modal-content" :class="[height, noPad ? 'no-pad' : '']">
         <header v-show="!hideHeader" :class="headerCustomHeight">
           <div class="close" @click="close">
-            <font-awesome icon="times"></font-awesome>
+            <icon icon="times"></icon>
           </div>
           <slot name="header"></slot>
         </header>

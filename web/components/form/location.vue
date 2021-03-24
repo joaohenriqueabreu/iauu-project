@@ -4,7 +4,7 @@
     <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <input ref="placesElement" :placeholder="placeholder" type="text" :value="selectedPlace.toString()" @input="locationInput"/>
-      <font-awesome icon="map-marker-alt"></font-awesome>
+      <icon icon="map-marker-alt"></icon>
     </div>
     <input ref="formElement" name="location" type="hidden" />
   </div>

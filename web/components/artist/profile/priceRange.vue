@@ -2,8 +2,8 @@
   <div>
     <div class="horizontal">
       <div class="mr-4 d-flex justify-content-around" v-if="short">
-        <font-awesome v-for="index in range" :key="`active_${index}`" icon="dollar-sign" class="price-range active mr-1"></font-awesome>
-        <font-awesome v-for="index in 5 - range" :key="`inactive_${index} `" icon="dollar-sign" class="price-range inactive mr-1"></font-awesome>
+        <icon v-for="index in range" :key="`active_${index}`" icon="dollar-sign" class="price-range active mr-1"></icon>
+        <icon v-for="index in 5 - range" :key="`inactive_${index} `" icon="dollar-sign" class="price-range inactive mr-1"></icon>
       </div>
       <div v-if="!short">
         <h5>{{ $config.priceRanges[range] }}</h5>

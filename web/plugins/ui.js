@@ -27,6 +27,7 @@ import Feedback from '@/components/admin/feedback';
 import Share from '@/components/layout/share';
 import PriceRange from '@/components/artist/profile/priceRange';
 import Tabs from '@/components/layout/tabs';
+import Timeline from '@/components/layout/timeline';
 
 import LineChart from '@/components/layout/charts/line';
 import BarChart from '@/components/layout/charts/bar';
@@ -73,6 +74,7 @@ Vue.component('carousel', Carousel);
 Vue.component('slide', Slide);
 Vue.component('scrollbar', VuePerfectScrollbar);
 Vue.component('tabs', Tabs);
+Vue.component('timeline', Timeline);
 
 Vue.component('form-input', FormInput);
 Vue.component('form-numeric', FormNumeric);

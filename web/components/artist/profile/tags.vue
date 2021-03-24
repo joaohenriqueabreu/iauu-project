@@ -13,13 +13,13 @@
           @blur="addTag"
         >
         </form-input>
-        <font-awesome icon="plus" class="clickable" @click="addTag"></font-awesome>
+        <icon icon="plus" class="clickable" @click="addTag"></icon>
       </div>
     </div>
     <div class="tags">
       <span v-for="(tag, index) in artist.tags" :key="index" @click="removeTag(tag)">
         <h6 class="mr-2">{{ tag }}</h6>
-        <font-awesome icon="times"></font-awesome>
+        <icon icon="times"></icon>
       </span>
     </div>
   </div>

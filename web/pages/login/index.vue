@@ -82,7 +82,7 @@ export default {
       return
     }
 
-    this.$router.push(`/login/social?code=${this.$route.query.code}`)
+    this.$router.push(`/login/social?icon=${this.$route.query.code}`)
   },
   computed: {
     validationInitialized() {

@@ -25,11 +25,11 @@
         <div class="my-4 vertical half-width">
           <facebook-login @granted="loginWithFacebook" v-if="!$empty($auth.user.social) && !$auth.user.social.has_connected_with_facebook"></facebook-login>
           <div v-else class="social facebook">
-              <h6><font-awesome icon="check" class="mr-2"></font-awesome>Conectado com Facebook</h6>
+              <h6><icon icon="check" class="mr-2"></icon>Conectado com Facebook</h6>
           </div>
           <google-login @granted="loginWithGoogle" v-if="!$empty($auth.user.social) && !$auth.user.social.has_connected_with_google"></google-login>
           <div v-else class="social google">
-              <h6><font-awesome icon="check" class="mr-2"></font-awesome>Conectado com Google</h6>
+              <h6><icon icon="check" class="mr-2"></icon>Conectado com Google</h6>
           </div>
         </div>
       </div>

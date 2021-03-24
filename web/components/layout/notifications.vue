@@ -2,7 +2,7 @@
   <div>
     <div class="dropdown">
       <a id="dropdownMenuLink" class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <font-awesome icon="bell" :class="!$empty(notifications) ? 'unread' : 'none'"></font-awesome>
+        <icon icon="bell" :class="!$empty(notifications) ? 'unread' : 'none'"></icon>
         <div class="num-notifications" v-if="!$empty(notifications)">
           {{ countUnreadNotifications }}
         </div>

@@ -22,19 +22,19 @@
           <u>Aparecendo para os organizadores</u>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasPersonalInfo ? 'check' : ''"></font-awesome>
+          <icon icon="check" :class="hasPersonalInfo ? 'check' : ''"></icon>
           <span>Informações de contato e foto</span>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasSocialInfo ? 'check' : ''"></font-awesome>
+          <icon icon="check" :class="hasSocialInfo ? 'check' : ''"></icon>
           <span>Redes Sociais Conectadas</span>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasCategoryInfo ? 'check' : ''"></font-awesome>
+          <icon icon="check" :class="hasCategoryInfo ? 'check' : ''"></icon>
           <span>Estilos musicais ou artísticos</span>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasProductsInfo ? 'check' : ''"></font-awesome>
+          <icon icon="check" :class="hasProductsInfo ? 'check' : ''"></icon>
           <span>Formatos de apresentação cadastrados</span>
         </div>
       </slide>
@@ -43,19 +43,19 @@
           <u>Primeiros passos na plataforma</u>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasFirstPresentation ? 'check' : ''"></font-awesome>
+          <icon icon="check" :class="hasFirstPresentation ? 'check' : ''"></icon>
           <span>Primeira apresentação realizada</span>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasFeedbacks ? 'check' : ''"></font-awesome>
+          <icon icon="check" :class="hasFeedbacks ? 'check' : ''"></icon>
           <span>Feedbacks de clientes</span>
         </div>
         <div>
-          <font-awesome icon="check"></font-awesome>
+          <icon icon="check"></icon>
           <span>Conta verificada</span>
         </div>
         <div>
-          <font-awesome icon="check" :class="hasConnectedBankAccount ? 'check' : ''"></font-awesome>
+          <icon icon="check" :class="hasConnectedBankAccount ? 'check' : ''"></icon>
           <span>Cadastro de dados bancários</span>
         </div>
       </slide>
@@ -64,19 +64,19 @@
           <u>Vender mais shows e faturar</u>
         </div>
         <div>
-          <font-awesome icon="check"></font-awesome>
+          <icon icon="check"></icon>
           <span>Conta premium</span>
         </div>
         <div>
-          <font-awesome icon="check"></font-awesome>
+          <icon icon="check"></icon>
           <span>Acompanhamento diário de relatórios e estatísticas</span>
         </div>
         <div>
-          <font-awesome icon="check"></font-awesome>
+          <icon icon="check"></icon>
           <span>Realize seu primeiro saque na plataforma</span>
         </div>
         <div>
-          <font-awesome icon="check"></font-awesome>
+          <icon icon="check"></icon>
           <span></span>
         </div>
       </slide>

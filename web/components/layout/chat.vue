@@ -32,7 +32,7 @@
             <h6>{{ otherParty.name }}</h6>
             <span class="mr-2">{{ presentation.proposal.title }}</span>
             <span class="horizontal middle">
-              <font-awesome icon="calendar-alt" class="mr-2"></font-awesome>
+              <icon icon="calendar-alt" class="mr-2"></icon>
               {{ presentationDate | date }}
             </span>
           </div>

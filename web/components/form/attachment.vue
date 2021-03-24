@@ -6,12 +6,12 @@
         <h6>{{ fileDisplay }}</h6>
       </a>
     </div>
-    <font-awesome
+    <icon
       v-if="removable"
       icon="times"
       class="clickable ml-5"
       @click="$emit('remove')"
-    ></font-awesome>
+    ></icon>
   </div>
 </template>
 

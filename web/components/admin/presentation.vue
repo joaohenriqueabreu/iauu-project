@@ -49,11 +49,11 @@
           <div>Data da apresentação</div>
           <div class="horizontal">
             <h6 class="mr-4">
-              <font-awesome icon="play-circle" class="mr-2"></font-awesome>
+              <icon icon="play-circle" class="mr-2"></icon>
               {{ presentation.timeslot.start_dt | datetime }}
             </h6>
             <h6>
-              <font-awesome icon="stop-circle" class="mr-2"></font-awesome
+              <icon icon="stop-circle" class="mr-2"></icon
               >{{ presentation.timeslot.end_dt | datetime }}
             </h6>
           </div>
@@ -62,7 +62,7 @@
           <div>Contratado</div>
           <h6>{{ presentation.price | currency }}</h6>
           <h6>
-            <font-awesome icon="clock" class="mr-2"></font-awesome>
+            <icon icon="clock" class="mr-2"></icon>
             {{ presentation.duration }} horas
           </h6>
         </div>

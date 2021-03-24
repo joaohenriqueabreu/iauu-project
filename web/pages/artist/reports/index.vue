@@ -19,7 +19,7 @@
           <div class="d-flex justify-content-end align-items-end">
             <h4 class="mr-4">{{ statistics.visits.count }}</h4>
             <h6 :class="statistics.visits.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.visits.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              <icon :icon="statistics.visits.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></icon>
               {{ statistics.visits.diff }}%
             </h6>
           </div>
@@ -31,7 +31,7 @@
           <div class="d-flex justify-content-end align-items-end">
             <h4 class="mr-4">{{ statistics.proposals.count }}</h4>
             <h6 :class="statistics.proposals.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.proposals.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              <icon :icon="statistics.proposals.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></icon>
               {{ statistics.proposals.diff }}%
             </h6>
           </div>
@@ -43,7 +43,7 @@
           <div class="d-flex justify-content-end align-items-end">
             <h4 class="mr-4">{{ statistics.presentations.count }}</h4>
             <h6 :class="statistics.presentations.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.presentations.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              <icon :icon="statistics.presentations.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></icon>
               {{ statistics.presentations.diff }}%
             </h6>
           </div>
@@ -56,7 +56,7 @@
           <div class="d-flex justify-content-end align-items-end">
             <h4 class="mr-4">{{ statistics.income.proposal.value | currency }}</h4>
             <h6 :class="statistics.income.proposal.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.income.proposal.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              <icon :icon="statistics.income.proposal.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></icon>
               {{ statistics.income.proposal.diff }}%
             </h6>
           </div>
@@ -69,7 +69,7 @@
           <div class="d-flex justify-content-end align-items-end">
             <h4 class="mr-4">{{ statistics.income.presentation.value | currency }}</h4>
             <h6 :class="statistics.income.presentation.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.income.presentation.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              <icon :icon="statistics.income.presentation.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></icon>
               {{ statistics.income.presentation.diff }}%
             </h6>
           </div>
@@ -82,7 +82,7 @@
           <div class="d-flex justify-content-end align-items-end">
             <h4 class="mr-4">{{ statistics.income.completed.value | currency }}</h4>
             <h6 :class="statistics.income.completed.diff > 0 ? 'positive' : 'negative'">
-              <font-awesome :icon="statistics.income.completed.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></font-awesome>
+              <icon :icon="statistics.income.completed.diff > 0 ? 'angle-up' : 'angle-down'" class="mr-0"></icon>
               {{ statistics.income.completed.diff }}%
             </h6>
           </div>

@@ -20,7 +20,7 @@
           class="status-badge mr-4 horizontal center middle clickable"
           @click="filterByStatus(status)"
         >
-          <font-awesome :icon="statusIcon(status)" class="mr-2"></font-awesome>
+          <icon :icon="statusIcon(status)" class="mr-2"></icon>
           {{ statusLabel(status) }}s
         </span>
       </div>
@@ -41,7 +41,7 @@
         >
           <td class="text-center">
             <div class="status-badge icon-only" :class="presentation.status">
-              <font-awesome :icon="statusIcon(presentation.status)"></font-awesome>
+              <icon :icon="statusIcon(presentation.status)"></icon>
             </div>
           </td>
           <td class="py-3 cap">

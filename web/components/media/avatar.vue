@@ -6,7 +6,7 @@
       </template>
       <template v-slot:hover>
         <div class="vertical middle center pl-3" @click="$emit('remove')">
-          <font-awesome icon="times"></font-awesome>
+          <icon icon="times"></icon>
         </div>
       </template>
     </overlay>

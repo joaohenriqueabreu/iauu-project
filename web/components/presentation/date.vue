@@ -22,7 +22,7 @@
     </div>
     <div class="boxed horizontal middle">
       <h3 class="mr-4">
-        <font-awesome icon="calendar-alt"></font-awesome>
+        <icon icon="calendar-alt"></icon>
         {{ eventDate }}
       </h3>
       <h5>{{ eventTime }}</h5>

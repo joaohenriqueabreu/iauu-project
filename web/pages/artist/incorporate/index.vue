@@ -4,7 +4,7 @@
       <div class="mb-5">
         <div class="share mb-4 horizontal center clickable brand-hover" @click="share">
           <h4>
-            <font-awesome icon="share-alt" class="mr-4"></font-awesome>
+            <icon icon="share-alt" class="mr-4"></icon>
             Compartilhe o link abaixo e receba mais contatos para shows
           </h4>
         </div>
@@ -26,7 +26,7 @@
       <div class="qrcodes vertical middle center mx-5">
         <div v-show="horizontal" ref="horizontal" class="qrcode horizontal center middle">
           <div v-show="!downloading" class="download">
-            <font-awesome icon="download" @click="download('horizontal')"></font-awesome>
+            <icon icon="download" @click="download('horizontal')"></icon>
           </div>
           <vue-qrcode class="mr-4" :value="shareUrl" />
           <div class="p-2 vertical middle center">
@@ -45,7 +45,7 @@
         </div>
         <div v-show="!horizontal" ref="vertical" class="qrcode vertical center middle">
           <div ref="vertical-download" class="download">
-            <font-awesome icon="download" @click="download('vertical')"></font-awesome>
+            <icon icon="download" @click="download('vertical')"></icon>
           </div>
           <vue-qrcode value="https://www.1stg.me" />
           <div class="p-2 vertical middle center">

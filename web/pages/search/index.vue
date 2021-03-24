@@ -19,21 +19,21 @@
     </div>
     <div v-else class="horizontal center middle py-5">
       <h4 class="mr-2">Nenhum artista encontrado... </h4>
-      <h4><font-awesome icon="frown"></font-awesome></h4>
+      <h4><icon icon="frown"></icon></h4>
     </div>
     <div class="compensate-filters"></div>
     <div class="filters">
       <div class="filters d-flex justify-content-around">
         <div class="vertical middle center" @click="showLocationFilter" :class="{ applied: isFilterApplied('location') }">
-          <font-awesome icon="map-marker-alt" class="mb-2"></font-awesome>
+          <icon icon="map-marker-alt" class="mb-2"></icon>
           <h6>Procurar por localização</h6>
         </div>
         <div class="vertical middle center" @click="showPriceFilter" :class="{ applied: isFilterApplied('price') }">
-          <font-awesome icon="dollar-sign" class="mb-2"></font-awesome>
+          <icon icon="dollar-sign" class="mb-2"></icon>
           <h6>Faixa de preço</h6>
         </div>
         <div class="vertical middle center" @click="showSortFilter" :class="{ applied: isFilterApplied('sort') }">
-          <font-awesome icon="sort-alpha-down" class="mb-2"></font-awesome>
+          <icon icon="sort-alpha-down" class="mb-2"></icon>
           <h6>Ordenar resultados</h6>
         </div>
       </div>
@@ -53,7 +53,7 @@
               @click="filter">
               <div class="horizontal center mb-2">
                 <h6>
-                  <font-awesome v-for="i in parseInt(index)" :key="`search_range_${i}`" icon="dollar-sign" class="mr-1"></font-awesome>
+                  <icon v-for="i in parseInt(index)" :key="`search_range_${i}`" icon="dollar-sign" class="mr-1"></icon>
                 </h6>
               </div>
               <h5>{{ range }}</h5>

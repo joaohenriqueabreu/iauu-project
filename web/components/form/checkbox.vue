@@ -8,7 +8,7 @@
       @change="$emit('change', $event.target.checked)"
     />
     <span @click="click">
-      <font-awesome v-if="checked" icon="check"></font-awesome>
+      <icon v-if="checked" icon="check"></icon>
     </span>
     <slot></slot>
   </div>

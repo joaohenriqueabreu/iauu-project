@@ -30,6 +30,10 @@ class Address extends BaseRepository {
 
     return addressDisplay.join(', ');
   }
+
+  get short_display() {
+    return this.city + ', ' + this.state;
+  }
 }
 
 addressSchema.index({ location: "2dsphere"});

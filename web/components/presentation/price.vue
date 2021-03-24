@@ -1,11 +1,11 @@
 <template>
   <div class="horizontal middle center">
     <h3 class="horizontal mr-4">
-      <font-awesome icon="dollar-sign"></font-awesome>
+      <icon icon="dollar-sign"></icon>
       {{ presentation.price }}
     </h3>
     <h3 class="horizontal">
-      <font-awesome icon="clock"></font-awesome>
+      <icon icon="clock"></icon>
       {{ presentation.duration }}
       {{ $utils.pluralize('hora', presentation.duration) }}
     </h3>

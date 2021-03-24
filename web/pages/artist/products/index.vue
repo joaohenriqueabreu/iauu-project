@@ -4,7 +4,7 @@
     <div class="horizontal middle d-flex clickable mb-5" @click="newProduct">
       <h5 class="mr-2">
         <span class="mr-2">Adicione Formatos</span>
-        <font-awesome icon="plus"></font-awesome>
+        <icon icon="plus"></icon>
       </h5>
     </div>
     <div class="align-items-stretch full-height">

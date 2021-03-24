@@ -4,7 +4,7 @@
     <div v-for="(notification, index) in notifications" :key="index">
       <div class="notification">
         <div>
-          <h6><font-awesome class="mr-4" icon="bell"></font-awesome> {{ notification.message }}</h6>
+          <h6><icon class="mr-4" icon="bell"></icon> {{ notification.message }}</h6>
         </div>
         <div class="d-flex justify-content-end">
           <small>{{ notification.created_at | timeAgo }}</small>

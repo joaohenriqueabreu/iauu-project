@@ -13,7 +13,7 @@
         </small>
       </div>
       <div class="horizontal center middle">
-        <font-awesome icon="times"></font-awesome>
+        <icon icon="times"></icon>
         <h6>Data Indisponível</h6>
       </div>
     </div>

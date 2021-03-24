@@ -1,5 +1,7 @@
 <template>
   <div class="boxed full-width">
+    <!-- Can add any title or general purpose description here -->
+    <slot></slot>
     <div>
       <ul class="horizontal horizontal-scroll mt-4 pl-0">
         <li v-for="(title, index) in tabHeaders" :key="index" 
@@ -21,12 +23,16 @@
 <script>
 export default {
   props: {
-    items: Array
+    items: Array,
+    defaultTab: Number
   },
   data() {
     return {
       activeTab: 0
     }
+  },
+  mounted() {
+    if (this.defaultTab !== undefined) { this.activeTab = this.defaultTab; }
   },
   computed: {
     tabHeaders() {

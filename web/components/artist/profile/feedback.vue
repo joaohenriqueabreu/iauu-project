@@ -5,7 +5,7 @@
         <h6 class="mb-2">{{ feedback.from.name }}</h6>
         <div class="horizontal mb-4">
           <h6 class="mr-2">{{ feedback.rating }}</h6>
-          <font-awesome icon="star"></font-awesome>
+          <icon icon="star"></icon>
         </div>
         <i>{{ feedback.notes }}</i>
       </div>

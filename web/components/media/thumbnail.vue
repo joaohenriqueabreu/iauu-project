@@ -50,7 +50,7 @@
       <template v-slot:hover>
         <div class="vertical middle center pl-3" @click="$emit('remove')">
           <h4>
-            <font-awesome icon="times"></font-awesome>Remover
+            <icon icon="times"></icon>Remover
           </h4>
         </div>
       </template>

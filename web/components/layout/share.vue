@@ -4,7 +4,7 @@
     <vue-goodshare-whatsapp :page_url="currentURL" has_icon class="mr-2"></vue-goodshare-whatsapp>
     <vue-goodshare-twitter :page_url="currentURL" has_icon class="mr-3"></vue-goodshare-twitter>
     <div class="share-icon brand-hover clickable" @click="copy">
-      <font-awesome icon="share-alt"></font-awesome>
+      <icon icon="share-alt"></icon>
     </div>
   </div>
 </template>

@@ -20,7 +20,7 @@
           <template v-slot:hover>
             <div class="full-height vertical middle center">
               <h3 class="mb-5" @click="chooseProduct(product)">
-                <font-awesome icon="hand-rock-n-roll"></font-awesome>
+                <icon icon="hand-rock-n-roll"></icon>
                 Escolher formato
               </h3>
               <form-button @action="openPreviewModal(product)">Ver mais informações</form-button>

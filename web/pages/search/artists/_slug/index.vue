@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="horizontal center middle position-relative mb-4">
-      <font-awesome icon="music"></font-awesome>
+      <icon icon="music"></icon>
       <h3 class="mr-4 cap">{{ artist.category.name }}</h3>
       <h3 v-if="artist.rating">
         <rating :score="artist.rating" :amount="artist.feedback_count" short></rating>
@@ -30,7 +30,7 @@
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
         <div class="vertical center mb-3">
           <h2 class="mr-2 mb-0 order-1">{{ stat | number('0a') }}</h2>
-          <h6 class="hide-desktop order-0"><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
+          <h6 class="hide-desktop order-0"><icon :icon="$dictionary.artist.stats.icon[statName]"></icon></h6>
           <h5 class="hide-mobile">{{ $utils.pluralize($dictionary.artist.stats.label[statName], stat) }}</h5>
         </div>
       </div>
@@ -44,7 +44,7 @@
       </div>
       <div v-if="artist.is_premium" class="verified">
         <h1 class="mr-4">
-          <font-awesome icon="grin-stars"></font-awesome>
+          <icon icon="grin-stars"></icon>
         </h1>
         <h6>
           Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
@@ -121,7 +121,7 @@
           <small>
             <span class="hide-mobile">Duração média</span>
           </small>
-          <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ artist.proposal.avg_duration | longTime }}</h4>
+          <h4><icon icon="clock" class="mr-2"></icon>{{ artist.proposal.avg_duration | longTime }}</h4>
         </div>
         <div class="horizontal middle center">
           <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >

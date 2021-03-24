@@ -2,7 +2,7 @@
   <div>
     <div class="horizontal d-flex justify-content-between mb-2">
       <slot></slot>
-      <font-awesome icon="plus" class="clickable" @click="upload"></font-awesome>
+      <icon icon="plus" class="clickable" @click="upload"></icon>
     </div>
   </div>
 </template>

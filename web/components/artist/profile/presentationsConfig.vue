@@ -29,7 +29,7 @@
     <div v-for="(range, index) in $config.priceRanges" :key="`range_${index}`" :class="{ selected: isPriceRange(index) }" class="mb-2 row price-range clickable brand-hover" @click="updatePriceRange(index)">
       <div class="col-3 col-sm-2 horizontal">
         <h6>
-          <font-awesome v-for="i in parseInt(index)" :key="i" icon="dollar-sign" class="mr-1"></font-awesome>
+          <icon v-for="i in parseInt(index)" :key="i" icon="dollar-sign" class="mr-1"></icon>
         </h6>
       </div>
       <div class="col-9">
@@ -62,7 +62,7 @@
         <small>Copie a url de seus videos mais f#(|@$ (opcional)</small>
         <div class="horizontal middle full-width mb-4">
           <form-input v-model="newVideo" class="full-width" placeholder="Cole o link de seus videos"></form-input>
-          <font-awesome icon="plus" class="clickable ml-5" @click="appendVideo"></font-awesome>
+          <icon icon="plus" class="clickable ml-5" @click="appendVideo"></icon>
         </div>
         <div class="row">
           <div v-for="(media, mediaIndex) in presentationVideos" :key="mediaIndex" class="col-sm-4 mb-4">

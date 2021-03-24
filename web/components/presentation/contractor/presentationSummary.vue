@@ -3,16 +3,12 @@
     <modal ref="modal">
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
-          <nuxt-link
+          <nuxt-link 
             v-if="!$empty(presentation.artist)"
             :to="`/search/artists/${presentation.artist.slug}`"
-            class="horizontal middle"
-          >
-            <avatar
-              class="mr-4"
-              :src="presentation.artist.photo"
-              :username="presentation.artist.name"
-            ></avatar>
+            class="horizontal middle">
+            <avatar class="mr-4" :src="presentation.artist.photo" :username="presentation.artist.name">
+            </avatar>
             <h5>{{ presentation.artist.name }}</h5>
           </nuxt-link>
           <div class="d-flex align-items-end">
@@ -100,11 +96,8 @@
         </div>
       </template>
     </modal>
-    <presentation-feedback
-      ref="feedback"
-      :presentation="presentation"
-      @sent="handleFeedback"
-    ></presentation-feedback>
+    <presentation-feedback ref="feedback" :presentation="presentation" @sent="handleFeedback">
+    </presentation-feedback>
   </div>
 </template>
 

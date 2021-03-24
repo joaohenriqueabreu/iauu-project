@@ -13,7 +13,7 @@
         @blur="afterBlur"
         @keyup.enter.prevent="afterEnter"
       />
-      <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
+      <icon v-if="iconHelper" :icon="iconHelper"></icon>
     </div>
   </div>
 </template>

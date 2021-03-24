@@ -25,6 +25,8 @@ const paymentSchema = new Schema({
   fee: { type: Number, required: true },
   status: { type: String, enum: PaymentData.PAYMENT_STATUS, required: true, default: PaymentData.PAYMENT_STATUS_PENDING },
   failed_reason: { type: String },
+  due_dt: { type: Date },
+  paid_dt: { type: Date },
   notes: { type: String },
   method: { type: Object, default: null }, // TODO fix this for own payment method - should be transalated by callback interface
   transaction: {type: Object, default: null }, // Store response callback data from vendor gateway (can be any format - depends on the vendor gateway)

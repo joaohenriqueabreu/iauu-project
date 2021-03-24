@@ -26,7 +26,7 @@
         <div v-for="(item, index) in product.items" :key="index">
           <hr />
           <span>
-            <font-awesome icon="check" class="mr-2"></font-awesome>
+            <icon icon="check" class="mr-2"></icon>
             {{ item }}
           </span>
         </div>
@@ -40,7 +40,7 @@
         <div v-for="(item, index) in notItems" :key="index" class="not-items">
           <hr />
           <span>
-            <font-awesome icon="check" class="mr-2"></font-awesome>
+            <icon icon="check" class="mr-2"></icon>
             {{ item }}
           </span>
         </div>
@@ -54,7 +54,7 @@
         </div>
         <div>
           <h4 class="horizontal">
-            <font-awesome icon="clock" class="mr-"></font-awesome>
+            <icon icon="clock" class="mr-"></icon>
             {{ product.duration }} horas
           </h4>
         </div>

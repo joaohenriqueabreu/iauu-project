@@ -3,10 +3,10 @@
     <header class="header">
       <h6 class="d-flex justify-content-between mb-3">
         <div>
-          <font-awesome icon="flask" class="mr-2"></font-awesome> Estamos em <span class="beta">beta</span>
+          <icon icon="flask" class="mr-2"></icon> Estamos em <span class="beta">beta</span>
         </div>
         <div>
-          <font-awesome :icon="minimized ? 'angle-up' : 'angle-down'" class="clickable" @click="minimized=!minimized"></font-awesome>
+          <icon :icon="minimized ? 'angle-up' : 'angle-down'" class="clickable" @click="minimized=!minimized"></icon>
         </div>
       </h6>
       <div>

@@ -2,16 +2,8 @@
   <div class="full-width">
     <div v-if="!$utils.empty(steps)" class="full-width horizontal center middle">
       <div v-for="(data, step) in steps" :key="step" class="horizontal middle center">
-        <font-awesome
-          :icon="icons[step]"
-          :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"
-          @click="goToStep(step)"
-        ></font-awesome>
-        <div
-          v-if="!isLastStep(step)"
-          class="progress"
-          :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"
-        ></div>
+        <icon :icon="stepIcons[step]" :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }" @click="goToStep(step)" :title="labels[step]"></icon>
+        <div v-if="!isLastStep(step)" class="progress" :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"></div>
       </div>
     </div>
   </div>
@@ -22,25 +14,34 @@ export default {
   props: {
     steps: { type: Number, default: 0 },
     completed: { type: Array, default: () => {} },
-    current: { type: Number, default: 0 }
+    current: { type: Number, default: 0 },
+    icons: { type: Array, default: () => {}},
+    readOnly: { type: Boolean, default: false },
+    labels: { type: Array, default: () => {}}
   },
   data() {
     return {
-      icons: ['calendar-alt', 'shopping-cart', 'coffee', 'guitar']
+      defaultIcons: ['calendar-alt', 'shopping-cart', 'coffee', 'guitar']
+    }
+  },
+  computed: {
+    stepIcons() {
+      return this.$empty(this.icons) ? this.defaultIcons : this.icons;
     }
   },
   methods: {
     isStepCompleted(step) {
-      return this.completed.includes(step)
+      return this.completed.includes(step);
     },
     isCurrentStep(step) {
-      return step === this.current
+      return step === this.current;
     },
     goToStep(step) {
-      this.$emit('goto', step)
+      if (this.readOnly) { return; }
+      this.$emit('goto', step);
     },
     isLastStep(step) {
-      return this.steps - 1 === step
+      return this.steps - 1 === step;
     }
   }
 }

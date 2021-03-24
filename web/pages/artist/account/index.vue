@@ -24,11 +24,11 @@
       </tr>
       <tr v-for="(payment, index) in payments" :key="index" class="payment">
         <td>
-          <font-awesome
+          <icon
             v-if="payment.status === 'closed'"
             icon="receipt"
             class="clickable"
-          ></font-awesome>
+          ></icon>
         </td>
         <td class="status" :class="payment.status">
           {{ $dictionary.payment.label[payment.status] }}
