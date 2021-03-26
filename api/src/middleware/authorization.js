@@ -1,8 +1,8 @@
-require('../config/env');
+const config = require('../env');
 const jwt = require('express-jwt');
 
 const authorize = jwt({ 
-  secret: process.env.AUTH_SECRET, algorithms: ['HS256'],
+  secret: config.auth.secret, algorithms: ['HS256'],
 });
 
 const owner = (req, res, next) => {
@@ -50,4 +50,13 @@ const contractor = (req, res, next) => {
   next();
 }
 
-module.exports = { authorize, owner, admin, artist, contractor }
+const app = (req, res, next) => {
+  // TODO change when splitting services
+  console.log('Checking app request...');
+  const host = req.hostname;
+  console.log(host);
+
+  next();
+}
+
+module.exports = { authorize, owner, admin, artist, contractor, app }

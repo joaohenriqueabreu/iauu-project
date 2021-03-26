@@ -1,4 +1,3 @@
-require('dotenv').config();
 const api = require('express').Router();
 
 const adminController = require('../controller/admin');

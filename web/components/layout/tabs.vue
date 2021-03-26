@@ -12,7 +12,7 @@
         </li>
       </ul>
     </div>
-    <div class="mb-5 raised vertical middle" :class="{ first: isFirstTab }">
+    <div class="mb-5 raised p-5" :class="{ first: isFirstTab }">
       <fade-transition mode="out-in" v-for="(component, index) in tabComponents" :key="index">
         <component :is="component" v-if="isActiveTab(index)"></component>
       </fade-transition>

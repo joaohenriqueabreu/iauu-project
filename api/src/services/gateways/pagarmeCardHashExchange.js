@@ -1,4 +1,3 @@
-require('../../config/env');
 const pagarme = require('pagarme');
 const { Exception } = require("../../exception");
 const PagarmeConnectService = require('./pagarmeConnect');

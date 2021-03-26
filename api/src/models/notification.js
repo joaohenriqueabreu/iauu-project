@@ -1,13 +1,9 @@
-require('dotenv').config();
-
-const db = require('mongoose');
+const { Schema, model } = require('mongoose');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 
 const proposalSchema = require('./schemas/proposal').schema;
 const addressSchema = require('./schemas/address').schema;
-
-const { Schema } = db;
 
 const notificationSchema = new Schema({  
   user: {
@@ -22,4 +18,4 @@ const notificationSchema = new Schema({
 class Notification extends BaseRepository { }
 
 notificationSchema.loadClass(Notification);
-module.exports = db.model('Notification', notificationSchema);
+module.exports = model('Notification', notificationSchema);

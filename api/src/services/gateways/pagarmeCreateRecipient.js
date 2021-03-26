@@ -1,4 +1,4 @@
-require('../../config/env');
+const config = require('../../env');
 const { Exception } = require("../../exception");
 
 const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
@@ -51,7 +51,7 @@ module.exports = class PagarmeCreateRecipientService extends VendorGatewayCreate
   populateRequestData() {
     this.pagarmeRecipientRequestData = {
       bank_account_id: this.pagarmeBankAccountId,
-      postback_url: process.env.API_URL + `/artists/${this.recipient.id}/recipient/status/update`,
+      postback_url: config.url.api + `/artists/${this.recipient.id}/recipient/status/update`,
       register_information: this.getRecipientPersonalData()
     }
     

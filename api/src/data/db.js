@@ -1,4 +1,4 @@
-require('../config/env');
+const config = require('../env');
 
 const db = require('mongoose');
 const connectionOptions = { 
@@ -34,32 +34,25 @@ db.connection.on('error', (error) => {
   console.log('ERROR: ' + error);
 });
 
-async function connect () {
-  const username    = encodeURIComponent(process.env.DB_USERNAME);
-  const password    = encodeURIComponent(process.env.DB_PASSWORD);
-  const hostname    = encodeURIComponent(process.env.DB_HOSTNAME);
-  const dbname      = encodeURIComponent(process.env.DB_NAME);
-  const authSource  = encodeURIComponent(process.env.DB_AUTH_SOURCE);
-  const dbport      = encodeURIComponent(process.env.DB_PORT);
-  
-  console.log(`Running ${process.env.NODE_ENV} environment`);
+async function connect () {  
+  console.log(`Running ${config.env} environment`);
 
   // await mongoose.connect(`mongodb://${username}:${password}@${hostname}:${dbport}/${dbname}?authSource=${authSource}`, connectionOptions)
-  if (process.env.DB_CONNECTION_TYPE === 'simple') {
+  if (config.db.connectionType === 'simple') {
     console.log('Attempting simple db connection...');
-    await db.connect(`mongodb+srv://${hostname}/${dbname} --username ${username}`, connectionOptions);
+    await db.connect(`mongodb+srv://${config.db.hostname}/${config.db.dbname} --username ${config.db.username}`, connectionOptions);
     return;
   }
 
-  if (process.env.DB_CONNECTION_TYPE === 'cluster') {
+  if (config.db.connectionType === 'cluster') {
     console.log('Attempting cluster db connection...');
-    await db.connect(`mongodb+srv://${username}:${password}@${hostname}/${dbname}?retryWrites=true&w=majority`, connectionOptions);
+    await db.connect(`mongodb+srv://${config.db.username}:${config.db.password}@${config.db.hostname}/${config.db.dbname}?retryWrites=true&w=majority`, connectionOptions);
     return;
   }
 
-  if (process.env.DB_CONNECTION_TYPE === 'full') {
+  if (config.db.connectionType === 'full') {
     console.log('Attempting full db connection...');
-    await db.connect(`mongodb://${username}:${password}@${hostname}:${dbport}/${dbname}`, connectionOptions);
+    await db.connect(`mongodb://${config.db.username}:${config.db.password}@${config.db.hostname}:${config.db.dbport}/${config.db.dbname}`, connectionOptions);
     return;
   }
 

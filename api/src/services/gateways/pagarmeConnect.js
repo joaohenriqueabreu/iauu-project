@@ -1,5 +1,4 @@
-require('../../config/env');
-
+const config = require('../../env');
 const pagarme = require('pagarme');
 const { FailedAPIConnectionException } = require('../../exception');
 
@@ -17,7 +16,7 @@ module.exports = class PagarmeConnectService {
 
   async connectAPI() {
     try {
-      this.apiClient = await pagarme.client.connect({ api_key: process.env.PAGARME_API_KEY });
+      this.apiClient = await pagarme.client.connect({ api_key: config.payment.gateway.key });
     } catch (error) {
       console.log(error);
       throw new FailedAPIConnectionException();

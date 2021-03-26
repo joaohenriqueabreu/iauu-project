@@ -1,11 +1,8 @@
-require('dotenv').config();
-
-const db = require('mongoose');
+const config = require('../../env');
+const { Schema, model } = require('mongoose');
 const BaseRepository = require('../repositories/base');
 const baseSchemaOptions = require('./options');
 const { PaymentData } = require('../../config/data');
-
-const { Schema } = db;
 
 const paymentSchema = new Schema({
   from: { 
@@ -22,7 +19,7 @@ const paymentSchema = new Schema({
   amount: { type: Number, required: true },
   net_amount: { type: Number, required: true },
   paid_amount: { type: Number, default: 0 },
-  fee: { type: Number, required: true },
+  fee: { type: Number, required: true, default: config.payment.ourFee },
   status: { type: String, enum: PaymentData.PAYMENT_STATUS, required: true, default: PaymentData.PAYMENT_STATUS_PENDING },
   failed_reason: { type: String },
   due_dt: { type: Date },
@@ -35,4 +32,4 @@ const paymentSchema = new Schema({
 class Payment extends BaseRepository { }
 
 paymentSchema.loadClass(Payment);
-module.exports = db.model('Payment', paymentSchema);
+module.exports = model('Payment', paymentSchema);

@@ -1,9 +1,6 @@
-require('dotenv').config();
-const db = require('mongoose');
+const { Schema, model } = require('mongoose');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
-
-const { Schema } = db;
 
 const statisticSchema = new Schema({
   type: { type: String, enum: ['visit'], required: true },
@@ -19,4 +16,4 @@ class Statistic extends BaseRepository {
 }
 
 statisticSchema.loadClass(Statistic);
-module.exports = db.model('Statistic', statisticSchema);
+module.exports = model('Statistic', statisticSchema);

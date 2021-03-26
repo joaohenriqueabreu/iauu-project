@@ -1,12 +1,8 @@
-require('dotenv').config()
-// const db = require('../data/db')
-const db = require('mongoose')
-const BaseRepository = require('./repositories/base')
-const baseSchemaOptions = require('./schemas/options')
+const { Schema, model } = require('mongoose');
+const BaseRepository = require('./repositories/base');
+const baseSchemaOptions = require('./schemas/options');
 
-const messageSchema = require('./schemas/message')
-
-const { Schema } = db
+const messageSchema = require('./schemas/message');
 
 const threadSchema = new Schema({  
   presentation: {
@@ -16,13 +12,9 @@ const threadSchema = new Schema({
 
   messages: [messageSchema],
 
-}, { ...baseSchemaOptions })
+}, { ...baseSchemaOptions });
 
-class MessageThread extends BaseRepository {
-  constructor() {
-    super()
-  }
-}
+class MessageThread extends BaseRepository { }
 
 threadSchema.loadClass(MessageThread)
-module.exports = db.model('Thread', threadSchema)
+module.exports = model('Thread', threadSchema)

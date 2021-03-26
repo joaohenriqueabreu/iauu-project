@@ -8,7 +8,6 @@ const { v4: uid } = require('uuid');
 const addressSchema = require('./schemas/address').schema;
 const productsSchema = require('./schemas/product').schema;
 const timeslotSchema = require('./schemas/timeslot').schema;
-const feedbackSchema = require('./schemas/feedback').schema;
 const bankAccountSchema = require('./schemas/bankAccount').schema;
 
 const artistSchema = new Schema({
@@ -70,7 +69,6 @@ const artistSchema = new Schema({
     gateway: { type: Object } // This information is returned and formatted by vendor gateway API
   },  
   rating: { type: Number },
-  feedbacks: [feedbackSchema],
   has_closed_first_presentation: { type: Boolean, default: false }
 }, { ...baseSchemaOptions });
 

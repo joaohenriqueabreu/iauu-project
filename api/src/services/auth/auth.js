@@ -1,5 +1,4 @@
-require('dotenv').config();
-
+const config = require('../../env');
 const bcrypt = require('bcryptjs');
 const BaseService = require('../base');
 const { User, Artist, Contractor } = require('../../models');
@@ -55,7 +54,7 @@ module.exports = class AuthService extends BaseService {
   }
 
   generateVerificationUrl() {
-    return `${process.env.WEB_URL}/register/verify/${this.user.verification.token}`;
+    return `${config.url.web}/register/verify/${this.user.verification.token}`;
   }
 
   generateReferralToken() {

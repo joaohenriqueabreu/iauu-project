@@ -4,9 +4,6 @@ const { Exception, BadRequestException } = require('../../exception');
 const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
 const { Artist } = require('../../models');
 
-
-require('../../config/env');
-
 module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateAccountInterface {
   constructor(artist) {
     super();

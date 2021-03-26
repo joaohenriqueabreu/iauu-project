@@ -9,42 +9,60 @@ const SaveArtistAccountService = require('../services/payment/saveArtistAccount'
 const SaveProductService = require('../services/artist/saveProduct');
 const DeleteProductService = require('../services/artist/deleteProduct');
 const LookupProductsService = require('../services/artist/lookupProducts');
-const SendFeedbackService = require('../services/artist/sendFeedback');
-const CalculateArtistStatisticsService = require('../services/statistics/calculateArtistStatistics');
 
 class ArtistController extends BaseController {
-  publicInfo(req, res, next) {
+  async validateArtist(req, res, next) {
+    try {
+      // No need for a service here
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async publicInfo(req, res, next) {
     console.log("Requesting artist public...");
 
     const publicArtistProfileService = new PublicArtistProfileService(req.user, req.data);
-    publicArtistProfileService.search(req.user, req.data)
-      .then(() => { res.status(200).json(publicArtistProfileService.getArtist()); })
-      .catch((error) => next(error));
+    try {
+      await publicArtistProfileService.search(req.user, req.data);
+      res.status(200).json(publicArtistProfileService.getArtist());
+    } catch (error) {
+      next(error);
+    }
   }
 
-  privateInfo(req, res, next) {    
+  async privateInfo(req, res, next) {    
     console.log("Requesting artist private...");
 
     const searchArtistForProposalService = new SearchArtistForProposalService(req.user, req.data);
-    searchArtistForProposalService.search(req.user, req.data)
-      .then(() => { res.status(200).json(searchArtistForProposalService.getArtist()); })
-      .catch((error) => next(error));
+    try {
+      await searchArtistForProposalService.search(req.user, req.data);
+      res.status(200).json(searchArtistForProposalService.getArtist());
+    } catch (error) {
+      next(error);
+    }
   }
 
-  profile(req, res, next) {
+  async profile(req, res, next) {
     console.log("Requesting artist...");
     const searchProfileService = new SearchArtistProfileService(req.user, req.data);
-    searchProfileService.search()
-      .then(() => { res.status(200).json(searchProfileService.getArtist()); })
-      .catch((error) => next(error));
+    try {
+      await searchProfileService.search();
+      res.status(200).json(searchProfileService.getArtist());
+    } catch (error) {
+      next(error);
+    }
   }
 
-  updateProfile(req, res, next) {
+  async updateProfile(req, res, next) {
     console.log("Updating profile...");
     const saveProfileService = new SaveArtistProfileService(req.user, req.data);
-    saveProfileService.save()
-      .then(() => { res.status(200).json(saveProfileService.getArtist()); })
-      .catch((error) => next(error));
+    try {
+      await saveProfileService.save();
+      res.status(200).json(saveProfileService.getArtist());
+    } catch (error) {
+      next(error);
+    }
   }
 
   async saveBankAccount(req, res, next) {
@@ -58,43 +76,36 @@ class ArtistController extends BaseController {
     }
   }
 
-  products(req, res, next) {
+  async products(req, res, next) {
     console.log("Looking up products...");
     const lookupProductsService = new LookupProductsService(req.user, req.data);
-    lookupProductsService.lookup()
-      .then(() => { res.status(200).json(lookupProductsService.getProducts()); })
-      .catch((error) => next(error));
+    try {
+      await lookupProductsService.lookup();
+      res.status(200).json(lookupProductsService.getProducts());
+    } catch (error) {
+      next(error);
+    }
   }
 
-  saveProduct(req, res, next) {
+  async saveProduct(req, res, next) {
     console.log('Starting to save product...');
     const saveProductService = new SaveProductService(req.user, req.data);
-    saveProductService.save()
-      .then(() => { res.status(200).json(saveProductService.getProducts()); })
-      .catch((error) => next(error));
+    try {
+      await saveProductService.save();
+      res.status(200).json(saveProductService.getProducts());
+    } catch (error) {
+      next(error);
+    }
   }
 
-  deleteProduct(req, res, next) {
+  async deleteProduct(req, res, next) {
     const deleteProductService = new DeleteProductService(req.user, req.data);
-    deleteProductService.delete()
-      .then(() => { res.status(200).json(deleteProductService.getProducts()); })
-      .catch((error) => next(error));
-  }
-
-  sendFeedback(req, res, next) {
-    console.log('Sending feedback...');
-    const sendFeedbackService = new SendFeedbackService(req.user, req.data);
-    sendFeedbackService.save()
-      .then(() => { res.status(200).json({}) })
-      .catch((error) => next(error));
-  }
-
-  calculateStatistics(req, res, next) {
-    console.log('Calculating artist statistics...');
-    const calculateStatisticSvc = new CalculateArtistStatisticsService(req.user, req.data);
-    calculateStatisticSvc.calculate()
-      .then(() => { res.status(200).json(calculateStatisticSvc.getStatistics()); })
-      .catch((error) => next(error));
+    try {
+      await deleteProductService.delete();
+      res.status(200).json(deleteProductService.getProducts());
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

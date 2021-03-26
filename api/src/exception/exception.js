@@ -1,4 +1,4 @@
-require('../config/env');
+const config = require('../env');
 const util = require('util');
 
 module.exports = class Exception extends Error {
@@ -8,7 +8,7 @@ module.exports = class Exception extends Error {
         this.message = message;
 
         // TODO Grab original error and send to sentry.io (in production or log in testing)
-        if (process.env.NODE_ENV !== 'production') {
+        if (config.isProductionEnv()) {
             console.log(error !== undefined ? `Exception: ${util.inspect(error)}` : `Exception: ${message}`);
         }
     }

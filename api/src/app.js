@@ -3,7 +3,7 @@
 Now, let's define CORS middleware, to ensure we do not run into any cross origin resource errors:
  */
 // "use strict";
-require('dotenv').config();
+const config = require('./env');
 
 // Express and Request config
 const express = require('express');
@@ -52,14 +52,14 @@ app.use(routes);
 app.use(errorMiddleware);
 
 process.title = 'iauu.api';
-let expressPort = process.env.PORT || 4444;
+let expressPort = config.http.port || 4444;
 
 app.listen(expressPort, () => {
   console.log(`Express server listening on port: ${expressPort}`);
 });
 
 const socketServer = require('./sockets/server');
-const webSocketPort = process.env.SOCKET_PORT || 555;
+const webSocketPort = config.socket.port || 555;
 
 // Wire up the server to listen to our port 500
 socketServer.listen(webSocketPort, () => {
@@ -67,8 +67,8 @@ socketServer.listen(webSocketPort, () => {
 })
 
 // CORS bypass server config
-const corsHost = process.env.HOST || '0.0.0.0';
-const corsPort = process.env.CORS_PORT || 999;
+const corsHost = config.cors.host_ip || '0.0.0.0';
+const corsPort = config.cors.port || 999;
 const cors_proxy = require('cors-anywhere');
 
 cors_proxy.createServer({

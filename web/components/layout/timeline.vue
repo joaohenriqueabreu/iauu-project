@@ -2,7 +2,9 @@
   <div class="full-width">
     <div v-if="!$utils.empty(steps)" class="full-width horizontal center middle">
       <div v-for="(data, step) in steps" :key="step" class="horizontal middle center">
-        <icon :icon="stepIcons[step]" :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }" @click="goToStep(step)" :title="labels[step]"></icon>
+        <div class="step" :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }">
+          <icon :icon="stepIcons[step]" @click="goToStep(step)" :title="labels[step]"></icon>
+        </div>
         <div v-if="!isLastStep(step)" class="progress" :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }"></div>
       </div>
     </div>
@@ -48,44 +50,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-[data-icon] {
-  @include desktop {
-    margin-right: 0;
+@mixin hover() {
+  &:hover {
+    color: $brand2;
+    border-color: $brand2;
   }
-
-  @include mobile {
-    margin-right: 4 * $space;
-  }
-
-  height: 100%;
+}
+.step {
+  @include hover();
+  height: 50px;
   transition: $transition;
   color: $layer5;
   font-size: $huge;
   cursor: pointer;
   padding-bottom: $space;
-
-  &.completed {
+  border-radius: $rounded;
+  border-color: $layer5;
+  border: solid 4px $layer5;
+  padding: $space;
+  [data-icon] {
+    @include hover();
+    margin: $space;
+  }
+  @include desktop {
+    margin-right: 0;
+  }
+  @include mobile {
+    margin-right: 15px;
+  }
+  &.completed, &.current {
+    @include hover();
     transition: $transition;
     color: $brand;
-  }
-
-  &.current {
-    transition: $transition;
-    border-bottom: solid 4px $brand;
+    border-color: $white;
+    [data-icon] {
+      @include hover();
+      color: $brand;
+    }
   }
 }
-
 .progress {
   @include desktop {
+    @include hover();
     transition: $transition;
     background: $layer5;
     border-radius: 0;
     height: 5px;
     min-width: 100px;
-    margin-left: 2 * $space;
-    margin-right: 2 * $space;
-
+    // margin-left: 2 * $space;
+    // margin-right: 2 * $space;
     &.completed {
+      @include hover();
       transition: $transition;
       background: $brand;
       // border-bottom: solid 4px $brand;

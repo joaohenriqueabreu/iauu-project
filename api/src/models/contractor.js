@@ -1,5 +1,4 @@
-require('dotenv').config();
-const db = require('mongoose');
+const { Schema, model } = require('mongoose');
 const BaseRepository = require('./repositories/base');
 
 const baseSchemaOptions = require('./schemas/options');
@@ -7,11 +6,9 @@ const addressSchema = require('./schemas/address').schema;
 const bankAccountSchema = require('./schemas/bankAccount').schema;
 const gatewayAccountSchema = require('./schemas/gatewayAccount').schema;
 
-const { Schema } = db;
-
 const contractorSchema = new Schema({
   users: [{
-    type: db.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User'
   }],
 
@@ -30,4 +27,4 @@ class Contractor extends BaseRepository {
 }
 
 contractorSchema.loadClass(Contractor);
-module.exports = db.model('Contractor', contractorSchema);
+module.exports = model('Contractor', contractorSchema);

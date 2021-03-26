@@ -1,6 +1,5 @@
-require('dotenv').config();
-
-const db = require('mongoose');
+const config = require('../env');
+const { Schema, model }  = require('mongoose');
 const moment = require('moment');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
@@ -11,9 +10,7 @@ const addressSchema = require('./schemas/address').schema;
 const timeslotSchema = require('./schemas/timeslot').schema;
 const invoiceSchema = require('./schemas/invoice').schema;
 
-const { Schema } = db;
-
-const defaultFee = process.env.PLATAFORM_FEE || 0.12;
+const defaultFee = config.payment.ourFee || 0.12;
 
 const presentationSchema = new Schema({
   contractor: {
@@ -90,12 +87,28 @@ class Presentation extends BaseRepository {
     return this.timeslot.end_dt;
   }
 
-  get is_presentation_today () {
-    return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED && 
-      moment(this.timeslot.start_dt).isSame(moment(), 'day');
-    
+  get is_contracted() {
+    return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED;
+  }
+
+  get is_presentation_close() {
+    const from = moment().subtract(7, 'days');
+    const to = moment();
+    const date = moment(this.timeslot.start_dt);
+    return date.isBetween(from, to);
+  }
+
+  get is_presentation_today() {
+    const date = moment(this.timeslot.start_dt);
+    return date.isSame(moment(), 'day');
+  }
+
+  get is_presentation_past() {
+    const tomorrow = moment().add(1, 'days');
+    const date = moment(this.timeslot.start_dt);
+    return date.diff(tomorrow) > 0;
   }
 }
 
 presentationSchema.loadClass(Presentation);
-module.exports = db.model('Presentation', presentationSchema);
+module.exports = model('Presentation', presentationSchema);

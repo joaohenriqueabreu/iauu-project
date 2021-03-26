@@ -1,12 +1,12 @@
-require('dotenv').config();
+const config = require('../env');
 const nodemailer = require('nodemailer');
 const aws = require('aws-sdk');
 
-const smtpEndpoint = process.env.SMTP_HOST;
-const port = process.env.SMTP_PORT;
+const smtpEndpoint = config.mail.host;
+const port = config.mail.port;
 
-const smtpUsername = process.env.SMTP_USER;
-const smtpPassword = process.env.SMTP_PWD;
+const smtpUsername = config.mail.user;
+const smtpPassword = config.mail.password;
 
 let transporter = {};
 

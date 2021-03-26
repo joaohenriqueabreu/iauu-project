@@ -1,0 +1,10 @@
+export * as ArtistService = require('./base');
+export * as DeleteProductService = require('./deleteProduct');
+export * as PublicArtistProfileService = require('./publicSearch');
+export * as SaveProductService = require('./saveProduct');
+export * as SaveArtistProfileService = require('./saveProfile');
+export * as SearchArtistForProposalService = require('./searchArtistForProposal');
+export * as SearchArtistsService = require('./searchArtists');
+export * as SearchProductsService = require('./searchProducts');
+export * as SearchArtistProfileService = require('./searchProfile');
+export * as SearchUsersService = require('./searchUsers');

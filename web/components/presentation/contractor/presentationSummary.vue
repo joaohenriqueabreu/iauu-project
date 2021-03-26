@@ -96,15 +96,21 @@
         </div>
       </template>
     </modal>
-    <presentation-feedback ref="feedback" :presentation="presentation" @sent="handleFeedback">
-    </presentation-feedback>
+    <modal ref="feedback" height="tiny">
+      <template v-slot:header>
+        <h5>Feedback da apresentação</h5>
+      </template>
+      <template v-slot:main>
+        <presentation-feedback ref="feedback" :presentation="presentation" @sent="handleFeedback">
+        </presentation-feedback>
+      </template>
+    </modal>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import BasePresentation from '../base'
-
 export default {
   extends: BasePresentation,
   props: {
@@ -117,67 +123,67 @@ export default {
   },
   computed: {
     canConfirmPresentation() {
-      return this.presentation.status === 'accepted'
+      return this.presentation.status === 'accepted';
     },
     hasPresentationStarted() {
-      return this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment())
+      return this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment());
     },
     hasConfirmedPresentation() {
-      return this.presentation.confirm_status.includes('contractor')
+      return this.presentation.confirm_status.includes('contractor');
     },
     waitingForConfirmation() {
-      return !this.presentation.confirm_status.includes('artist')
+      return !this.presentation.confirm_status.includes('artist');
     },
     confirmationDueDate() {
-      return this.moment(this.presentation.end_dt).add(15, 'days')
+      return this.moment(this.presentation.end_dt).add(15, 'days');
     }
   },
   methods: {
     ...mapActions('presentation', ['confirmPresentation', 'cancelPresentation']),
     openModal() {
-      this.$refs.modal.open()
-      this.isPresentationSelected = true
+      this.$refs.modal.open();
+      this.isPresentationSelected = true;
     },
     closeModal() {
-      this.$refs.modal.close()
-      this.isPresentationSelected = false
+      this.$refs.modal.close();
+      this.$refs.feedback.close();
+      this.isPresentationSelected = false;
     },
     openConfirmCancelModal() {
-      this.$refs.cancel.open()
+      this.$refs.cancel.open();
     },
     closeCancelModal() {
-      this.$refs.cancel.close()
+      this.$refs.cancel.close();
     },
     openFeedbackModal() {
-      this.$refs.feedback.openModal()
+      this.$refs.feedback.open();
     },
     async confirm() {
       try {
-        await this.confirmPresentation(this.presentation.id)
+        await this.confirmPresentation(this.presentation.id);
         this.$toast.success(
           'Obrigado por confirmar a realização da apresentação. Iniciaremos agora o procedimento de pagamento. Por favor, reserve alguns minutos para avaliar o artista, seu feedback é muito importante.',
           { duration: 10000 }
-        )
-
-        this.openFeedbackModal()
-        this.$emit('confirmed')
+        );
+        this.openFeedbackModal();
+        this.$emit('confirmed');
       } catch (error) {
-        this.$toast.info('Você já confirmou a realização da apresentação, obrigado!')
+        this.$toast.info('Você já confirmou a realização da apresentação, obrigado!');
       }
     },
     async cancel() {
       try {
-        await this.cancelPresentation(this.presentation.id)
-        this.$toast.info('Apresentação cancelada')
-        this.$emit('cancelled', this.presentation.id)
-        this.closeCancelModal()
+        await this.cancelPresentation(this.presentation.id);
+        this.$toast.info('Apresentação cancelada');
+        this.$emit('cancelled', this.presentation.id);
+        this.closeCancelModal();
       } catch (error) {
-        console.log(error)
-        this.$toast.error(error)
+        console.log(error);
+        this.$toast.error(error);
       }
     },
     handleFeedback() {
-      this.closeModal()
+      this.closeModal();
     }
   }
 }
@@ -193,7 +199,6 @@ export default {
   border-bottom: 5px solid $layer3;
   border-radius: rounded;
 }
-
 .countdown {
   width: 100%;
   background: $layer3;
@@ -201,17 +206,14 @@ export default {
   padding: 2 * $space;
   border-radius: $edges;
 }
-
 header {
   @extend .horizontal, .middle;
   justify-content: space-between;
   width: 100%;
-
   .vue-avatar--wrapper {
     margin-right: 2 * $space;
   }
 }
-
 main {
   @extend .vertical;
   margin-top: 2 * $space;
@@ -223,16 +225,13 @@ main {
   width: 100%;
   max-height: 60vh;
 }
-
 footer {
   @extend .horizontal, .center, .middle;
   margin-top: $space;
-
   h5 {
     color: transparentize($brand, 0.2);
     cursor: pointer;
     transition: $transition;
-
     &:hover {
       transition: $transition;
       color: $brand;

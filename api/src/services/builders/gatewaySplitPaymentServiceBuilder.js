@@ -1,11 +1,11 @@
-require('../../config/env');
+const config = require('../../env');
 
 const BaseServiceBuilder = require('./base');
 const { PagarmeSplitPaymentService } = require('../gateways');
 
 module.exports = class GatewaySplitPaymentServiceBuilder extends BaseServiceBuilder {
   build(data) {
-    if (process.env.PAYMENT_GATEWAY === 'pagarme') { 
+    if (config.payment.gateway.name === 'pagarme') { 
       this.service = new PagarmeSplitPaymentService(data); 
       return this;
     }

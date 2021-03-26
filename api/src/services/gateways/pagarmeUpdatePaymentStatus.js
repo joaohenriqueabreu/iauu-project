@@ -1,5 +1,3 @@
-require('../../config/env');
-
 const PagarmeData = require('../../config/data/vendor/pagarme');
 const { PaymentData } = require('../../config/data');
 

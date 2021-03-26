@@ -4,6 +4,7 @@ const status = require('./status');
 const auth = require('./auth');
 const admin = require('./admin');
 const category = require('./category');
+const feedbacks = require("./feedback");
 const artist = require('./artist');
 const contractor = require('./contractor');
 const schedule = require('./schedule');
@@ -24,6 +25,7 @@ api.use('/presentations', presentation);
 api.use('/upload', upload);
 api.use('/statistics', statistics);
 api.use('/data', data);
+api.use('/feedbacks', feedbacks);
 api.use('/', payment);
 
 module.exports = api;

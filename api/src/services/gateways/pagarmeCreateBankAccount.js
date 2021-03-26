@@ -1,5 +1,3 @@
-require('../../config/env');
-
 const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
 const PagarmeConnectService = require('./pagarmeConnect');
 const PagarmeData = require('../../config/data/vendor/pagarme');

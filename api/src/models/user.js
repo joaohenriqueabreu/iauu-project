@@ -1,13 +1,10 @@
-require('dotenv').config();
-
-const db = require('mongoose');
+const config = require('../env');
+const { Schema, model } = require('mongoose');
 const BaseRepository = require('./repositories/base');
 
 const address = require('./schemas/address').schema;
 const notification = require("./schemas/notification").schema;
 const baseSchemaOptions = require('./schemas/options');
-
-const { Schema } = db;
 
 const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
@@ -32,7 +29,7 @@ const userSchema = new Schema({
   referral: {
     token: { type: String },
     from: { 
-      type: db.Schema.Types.ObjectId, 
+      type: Schema.Types.ObjectId, 
       ref: 'User' 
     }
   },
@@ -44,11 +41,11 @@ const userSchema = new Schema({
     google_id: { type: String },
   },
   artist: {
-    type: db.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Artist'
   },
   contractor: {
-    type: db.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Contractor'
   },
   notifications: [notification],
@@ -85,7 +82,7 @@ class User extends BaseRepository {
   }
 
   generateResetPasswordUrl() {
-    return `${process.env.WEB_URL}/reset/password/${this.verification.token}`;
+    return `${config.url.web}/reset/password/${this.verification.token}`;
   }
 
   getRoleId() {
@@ -106,4 +103,4 @@ userSchema.index({ email: 'text', name: 'text' });
 
 // https://mongoosejs.com/docs/api.html#schema_Schema-loadClass
 userSchema.loadClass(User);
-module.exports = db.model('User', userSchema);
+module.exports = model('User', userSchema);

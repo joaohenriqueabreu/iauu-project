@@ -24,6 +24,7 @@ import _ from 'lodash'; // TODO use from global
 import { mapState } from 'vuex';
 import ProposalDetails from '@/components/presentation/contractor/proposal';
 import PresentationProduction from '@/components/presentation/contractor/production';
+import PresentationFeedback from '@/components/presentation/contractor/feedback';
 import InvoiceDetails from '@/components/presentation/contractor/invoice';
 // Map presentation status to tab index
 export default {
@@ -49,7 +50,7 @@ export default {
         { title: 'Proposta', component: ProposalDetails },
         { title: 'Contrato', component: ProposalDetails },
         { title: 'Produção', component: PresentationProduction },
-        { title: 'Apresentação', component: ProposalDetails },
+        { title: 'Apresentação', component: PresentationFeedback },
         { title: 'Faturamento', component: InvoiceDetails },
         { title: 'Resumo', component: ProposalDetails },
       ]
@@ -70,10 +71,9 @@ export default {
       return _.range(this.presentationStatusIndex);
     },
     presentationStatusIndex() {
-      if (this.presentation.status === 'accepted' && this.presentation.is_presentation_today) {
+      if (this.presentation.is_contracted && (this.presentation.is_presentation_close || this.presentation.is_presentation_past)) {
         return 3; // Index of "Apresentação"
       }
-
       return this.$array.indexOf(this.PRESENTATION_STATUS_MAP, this.presentation.status);
     }
   }
@@ -81,5 +81,4 @@ export default {
 </script>
 
 <style>
-
 </style>

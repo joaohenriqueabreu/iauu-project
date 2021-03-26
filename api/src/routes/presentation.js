@@ -1,29 +1,28 @@
-require('dotenv').config()
-const api = require('express').Router()
+const api = require('express').Router();
 
-const presentationController = require('../controller/presentation')
-const authorizationMiddleware = require('../middleware/authorization')
-const validationMiddleware = require('../middleware/validation')
+const presentationController = require('../controller/presentation');
+const authorizationMiddleware = require('../middleware/authorization');
+const validationMiddleware = require('../middleware/validation');
 
-api.get('/types', presentationController.getTypes)
-api.get('/', authorizationMiddleware.authorize, presentationController.searchPresentations)
-api.get('/proposals', authorizationMiddleware.authorize, presentationController.searchProposals)
+api.get('/types', presentationController.getTypes);
+api.get('/', authorizationMiddleware.authorize, presentationController.searchPresentations);
+api.get('/proposals', authorizationMiddleware.authorize, presentationController.searchProposals);
 
 api.post('/proposal', 
   authorizationMiddleware.authorize,
   authorizationMiddleware.contractor,
   validationMiddleware.proposal,
   presentationController.sendProposal
-)
+);
 
-api.get('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.search)
-api.put('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.completePresentation)
-api.delete('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.cancelPresentation)
+api.get('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.search);
+api.put('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.completePresentation);
+api.delete('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.cancelPresentation);
 
-api.put('/:id/timeslot', authorizationMiddleware.authorize, validationMiddleware.id, validationMiddleware.timeslot, presentationController.selectTimeslot)
+api.put('/:id/timeslot', authorizationMiddleware.authorize, validationMiddleware.id, validationMiddleware.timeslot, presentationController.selectTimeslot);
 
-api.post('/:id/proposal', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.id, presentationController.acceptProposal)
-api.delete('/:id/proposal', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.rejectProposal)
+api.post('/:id/proposal', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.id, presentationController.acceptProposal);
+api.delete('/:id/proposal', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.rejectProposal);
 
 api.post('/:id/proposal/counterOffer', 
   authorizationMiddleware.authorize, 
@@ -31,20 +30,20 @@ api.post('/:id/proposal/counterOffer',
   validationMiddleware.id, 
   validationMiddleware.counterOffer, 
   presentationController.sendCounterOffer
-)
+);
 
 api.put('/:id/proposal/counterOffer', 
   authorizationMiddleware.authorize, 
   authorizationMiddleware.contractor, 
   validationMiddleware.id, 
   presentationController.acceptCounterOffer
-)
+);
 
 api.delete('/:id/proposal/counterOffer', 
   authorizationMiddleware.authorize,  
   authorizationMiddleware.contractor, 
   validationMiddleware.id, 
   presentationController.rejectCounterOffer
-)
+);
 
 module.exports = api;

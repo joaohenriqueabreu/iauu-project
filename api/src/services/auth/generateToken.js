@@ -1,7 +1,7 @@
+const config = require('../../env');
 const jwt = require('jwt-simple');
 const faker = require('faker');
 const crypto = require('crypto');
-require('dotenv').config();
 
 const { User, Artist, Contractor } = require('../../models');
 
@@ -16,7 +16,7 @@ module.exports = class GenerateTokenService {
 
     static async generateForUser(user) {  
         const payload = await this.getUserPayload(user);
-        return jwt.encode(payload, process.env.AUTH_SECRET);
+        return jwt.encode(payload, config.auth.secret);
     }
 
     static async getUserPayload(user) {
@@ -56,15 +56,15 @@ module.exports = class GenerateTokenService {
 
     static encryptId(id) {
         // https://www.w3schools.com/nodejs/ref_crypto.asp
-        const encryptionMethod = crypto.createCipheriv('aes-256-cbc', process.env.CRYPTO_KEY, process.env.CRYPTO_IV);
+        const encryptionMethod = crypto.createCipheriv('aes-256-cbc', config.encrypt.key, config.encrypt.salt);
         let encrypted = encryptionMethod.update(id, 'utf8', 'hex');
         encrypted += encryptionMethod.final('hex');
         return encrypted;
     }
 
     static decryptId(id) {
-        let key = crypto.createHash('sha256').update(String(process.env.CRYPTO_SECRET)).digest('base64').substr(0, 32);
-        var encryptionMethod = crypto.createDecipheriv('aes-256-cbc', process.env.CRYPTO_KEY, process.env.CRYPTO_IV);
+        let key = crypto.createHash('sha256').update(String(config.encrypt.secret)).digest('base64').substr(0, 32);
+        var encryptionMethod = crypto.createDecipheriv('aes-256-cbc', config.encrypt.key, config.encrypt.salt);
         var decrypted = encryptionMethod.update(id, 'hex', 'utf8');
         decrypted += encryptionMethod.final('utf8');;
         return decrypted;

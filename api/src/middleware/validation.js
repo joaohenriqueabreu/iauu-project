@@ -233,6 +233,17 @@ const filters = (req, res, next) => {
   return validate(req.query, req, next, schema)
 }
 
+const feedback = (req, res, next) => {
+  const schema = validateRequest.object({
+    artist: validateRequest.string().required(),
+    presentation: validateRequest.string().required(),
+    rate: validateRequest.number().min(1).max(5),
+    feedback: validateRequest.string().optional().allow('')
+  });
+
+  return validate(req.query, req, next, schema)
+}
+
 module.exports = { 
   id,
   query,
@@ -258,5 +269,6 @@ module.exports = {
   counterOffer,
   category,
   files,
-  filters
+  filters,
+  feedback,
  }

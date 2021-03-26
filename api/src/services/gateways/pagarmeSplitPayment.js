@@ -1,4 +1,4 @@
-require('../../config/env');
+const config = require('../../env');
 
 const moment = require('moment');
 const { PaymentData } = require('../../config/data');
@@ -138,7 +138,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
       async: this.shouldRunApiInAsyncMode,
       amount: PagarmeSplitPaymentService.convertAmountToPagarmeFormat(this.payment.amount),
       installments: 1,
-      postback_url: process.env.API_URL + `/payments/${this.payment.id}/status/update`,
+      postback_url: config.url.api + `/payments/${this.payment.id}/status/update`,
       customer: this.getPaymentCustomerInfo(),
       billing: this.getPaymentBillingInfo(),
       items: this.getPaymentItemsInfo(),
@@ -171,7 +171,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
         charge_processing_fee: true, // Processing fee should be charged to the artist
       },
       { // Our Fee
-        recipient_id: process.env.PAGARME_OUR_RECIPIENT_ID,
+        recipient_id: config.payment.gateway.recipientId,
         amount: ourFee,
         liable: true, 
         charge_processing_fee: false,

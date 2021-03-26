@@ -1,11 +1,9 @@
-require('dotenv').config()
+const config = require('../../env');
 const fs = require('fs')
 const { v4: uid } = require('uuid');
 
-const BaseService = require('../base')
-const BadRequestException = require('../../exception/bad')
-
-const AWS = require('aws-sdk')
+const BaseService = require('../base');
+const AWS = require('aws-sdk');
 
 module.exports = class S3FileUploadService extends BaseService
 {
@@ -25,8 +23,8 @@ module.exports = class S3FileUploadService extends BaseService
 
     async initS3() {
       this.s3 = new AWS.S3({
-        accessKeyId: process.env.AWS_S3_FILE_UPLOADER_PUBLIC_KEY,
-        secretAccessKey: process.env.AWS_S3_FILE_UPLOADER_SECRET
+        accessKeyId: config.storage.key,
+        secretAccessKey: config.storage.secret
       })
     
       return this

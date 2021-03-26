@@ -1,4 +1,4 @@
-require('dotenv').config();
+const config = require('../config');
 const db = require('../data/db');
 
 const RegisterAdminUserService = require('../services/auth/registerAdminUser');
@@ -7,7 +7,7 @@ const RegisterAdminUserService = require('../services/auth/registerAdminUser');
  */
 async function up () {
   await db.connect();
-  const registerAdminUserSvc = new RegisterAdminUserService('admin', process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD);
+  const registerAdminUserSvc = new RegisterAdminUserService('admin', config.admin.mail, config.admin.password);
   await registerAdminUserSvc.register();
 }
 

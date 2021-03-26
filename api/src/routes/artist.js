@@ -1,4 +1,3 @@
-require('dotenv').config();
 const api = require('express').Router();
 
 const artistController = require('../controller/artist');
@@ -16,15 +15,5 @@ api.get('/products', authorizationMiddleware.authorize, authorizationMiddleware.
 api.get('/:id/products', validationMiddleware.id, authorizationMiddleware.authorize, artistController.products);
 api.post('/products', validationMiddleware.product, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.saveProduct);
 api.delete('/products/:id', validationMiddleware.id, authorizationMiddleware.authorize, authorizationMiddleware.artist, artistController.deleteProduct);
-
-api.put('/:id/feedback', 
-  authorizationMiddleware.authorize, 
-  authorizationMiddleware.contractor, 
-  validationMiddleware.id, 
-  validationMiddleware.body, 
-  artistController.sendFeedback
-);
-
-api.get('/statistics', authorizationMiddleware.authorize, authorizationMiddleware.artist, validationMiddleware.query, artistController.calculateStatistics);
 
 module.exports = api;

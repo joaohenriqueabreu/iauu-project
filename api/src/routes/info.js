@@ -1,5 +1,4 @@
-require('dotenv').config()
-const api = require('express').Router()
+const api = require('express').Router();
 
 const infoController = require('../controller/artist')
 
