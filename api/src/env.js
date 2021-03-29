@@ -5,7 +5,7 @@ module.exports = {
   env: process.env.NODE_ENV,
   isProductionEnv: () => process.env.NODE_ENV === 'production',
   http: {
-    port: process.env.PORT
+    port: process.env.HTTP_PORT
   },
   socket: {
     port: process.env.SOCKET_PORT
@@ -34,6 +34,7 @@ module.exports = {
     web: process.env.WEB_URL,
   },
   auth: {
+    app_secret: 'ashdaslhdlashdjhasofhoeqrjqe',
     secret: process.env.AUTH_SECRET
   },
   payment: {

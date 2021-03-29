@@ -11,8 +11,7 @@
           :completed="presentationStatusIndexes" 
           :current="presentationStatusIndex" 
           :icons="presentationIcons"
-          :labels="presentationLabels"
-          >
+          :labels="presentationLabels">
         </timeline>
       </div>
     </tabs>
@@ -25,7 +24,7 @@ import { mapState } from 'vuex';
 import ProposalDetails from '@/components/presentation/contractor/proposal';
 import PresentationProduction from '@/components/presentation/contractor/production';
 import PresentationFeedback from '@/components/presentation/contractor/feedback';
-import InvoiceDetails from '@/components/presentation/contractor/invoice';
+import BillingDetails from '@/components/presentation/contractor/billing';
 // Map presentation status to tab index
 export default {
   async asyncData({ app, store, route }) {
@@ -51,13 +50,13 @@ export default {
         { title: 'Contrato', component: ProposalDetails },
         { title: 'Produção', component: PresentationProduction },
         { title: 'Apresentação', component: PresentationFeedback },
-        { title: 'Faturamento', component: InvoiceDetails },
+        { title: 'Faturamento', component: BillingDetails },
         { title: 'Resumo', component: ProposalDetails },
       ]
     },
     presentationIcons() {
       return [
-        'search-dollar', 'signature', 'cogs', 'music', 'credit-card', 'check'
+        'search-dollar', 'signature', 'tasks', 'music', 'credit-card', 'check'
       ];
     },
     presentationLabels() {
@@ -71,9 +70,16 @@ export default {
       return _.range(this.presentationStatusIndex);
     },
     presentationStatusIndex() {
-      if (this.presentation.is_contracted && (this.presentation.is_presentation_close || this.presentation.is_presentation_past)) {
+      if (this.presentation.is_completed || 
+        (this.presentation.is_contracted && this.presentation.is_presentation_past && this.presentation.was_confirmed_by_contractor)) {
+        return 4; // Index of "Faturamento"
+      }
+
+      if (this.presentation.is_contracted && 
+        (this.presentation.is_presentation_close || this.presentation.is_presentation_today || this.presentation.is_presentation_past)) {
         return 3; // Index of "Apresentação"
       }
+
       return this.$array.indexOf(this.PRESENTATION_STATUS_MAP, this.presentation.status);
     }
   }

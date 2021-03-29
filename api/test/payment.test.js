@@ -4,9 +4,9 @@ const { PresentationFactory, UserFactory, ArtistFactory, ContractorFactory, Paym
 const { PagarmeTransactionFactory, PagarmeRecipientFactory } = require('./factories/vendor');
 
 // Services
-const SaveArtistBankAccountService = require('../src/services/payment/saveArtistAccount');
+const SaveArtistBankAccountService = require('../src/services/billing/saveArtistAccount');
 const CompletePresentationService = require('../src/services/presentation/completePresentation');
-const PayPresentationService = require('../src/services/payment/payPresentation');
+const PayPresentationService = require('../src/services/billing/payPresentation');
 
 const { Exception } = require('../src/exception');
 const { PagarmeSplitPaymentService, PagarmeCreateAccountService } = require('../src/services/gateways');
@@ -108,17 +108,17 @@ describe('Payment testing', () => {
   });
 
   describe('Initiate Payment', () => {
-    it('should save invoice', async () => {
+    it('should save billing', async () => {
       const paymentMethod = (new PaymentMethodFactory()).getSeed();
       const initPaymentSvc = new PayPresentationService(user, paymentMethod);
 
       await initPaymentSvc.pay(presentation.id);
       const paidPresentation = initPaymentSvc.getPresentation();
 
-      paidPresentation.invoice.status.should.equal('pending');
-      paidPresentation.invoice.total_amount.should.equal(presentation.price);
+      paidPresentation.billing.status.should.equal('pending');
+      paidPresentation.billing.total_amount.should.equal(presentation.price);
 
-      _.forEach(paidPresentation.invoice.payments, (payment) => {
+      _.forEach(paidPresentation.billing.payments, (payment) => {
         // TODO should have a cleaner way to assert this
         payment.from._id.toString().should.equal(contractor.id);
         payment.to._id.toString().should.equal(artist.id);

@@ -15,7 +15,7 @@ module.exports = class DeleteTimeslotService extends ArtistService
     }
 
     async delete() {
-      await this.lookupArtist()
+      await this.searchArtist()
       await this.ensureArtistWasFound()
       await this.ensureTimeslotExists()
       await this.deleteTimeslot()

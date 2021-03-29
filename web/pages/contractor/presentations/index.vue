@@ -25,32 +25,21 @@
     </div>
     <div v-if="!$empty(pendingConfirmPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Apresentações realizadas (aguardando confirmação)</h6>
-      <div
-        v-for="(presentation, index) in pendingConfirmPresentations"
-        :key="index"
-        @click="open(presentation.id)"
-      >
+      <div v-for="(presentation, index) in pendingConfirmPresentations" :key="index" @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
       <hr />
     </div>
     <div v-if="!$empty(completedPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Apresentações concluídas</h6>
-      <div
-        v-for="(presentation, index) in completedPresentations"
-        :key="index"
-        @click="open(presentation.id)"
-      >
+      <div v-for="(presentation, index) in completedPresentations" :key="index" @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
       <hr />
     </div>
     <div v-if="!$empty(cancelledPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Apresentações canceladas</h6>
-      <div
-        v-for="(presentation, index) in cancelledPresentations"
-        :key="index"
-        @click="open(presentation.id)">
+      <div v-for="(presentation, index) in cancelledPresentations" :key="index" @click="open(presentation.id)">
         <presentation-info :presentation="presentation"></presentation-info>
       </div>
     </div>
@@ -90,8 +79,8 @@ export default {
   methods: {
     ...mapActions('presentation', ['loadPresentation', 'loadPresentations']),
     async open(id) {
-      await this.loadPresentation(id);
-      this.$refs.presentation.openModal();
+      const route = this.$router.resolve({path: `/contractor/presentations/${id}`});
+      window.open(route.href, '_blank');
     },
     async handleConfirmedPresentaion() {
       await this.loadPresentations();

@@ -1,6 +1,6 @@
-const validateRequest = require('@hapi/joi')
-const { ValidationError } = require('@hapi/joi')
-const BadRequestException = require('../exception/bad')
+const validateRequest = require('@hapi/joi');
+const { ValidationError } = require('@hapi/joi');
+const BadRequestException = require('../exception/bad');
 
 const validate = (data, req, next, schema) => {
   console.log('Validating Request...')
@@ -12,10 +12,10 @@ const validate = (data, req, next, schema) => {
 
   const { error, value } = schema.validate(data, options)
   if (error) {
-    next(new BadRequestException(`Validation error: ${error.details.map((x) => x.message).join(', ')}`))
+    next(new BadRequestException(`Validation error: ${error.details.map((x) => x.message).join(', ')}`));
   }
 
-  console.log('Request Validated...')
+  console.log('Request Validated...');
 
   // Allows multiple validations combined
   if (req.data === undefined) {
@@ -24,7 +24,7 @@ const validate = (data, req, next, schema) => {
     req.data = { ...req.data, ...value }
   }
 
-  next()
+  next();
 }
 
 const newCrendentials = (req, res, next) => {
@@ -36,7 +36,7 @@ const newCrendentials = (req, res, next) => {
     artist_token: validateRequest.string().optional()
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const credentials = (req, res, next) => {
@@ -45,7 +45,7 @@ const credentials = (req, res, next) => {
     password: validateRequest.string().required(),
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const adminCredentials = (req, res, next) => {
@@ -54,7 +54,7 @@ const adminCredentials = (req, res, next) => {
     id: validateRequest.string().required(),
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const verify = (req, res, next) => {
@@ -63,7 +63,7 @@ const verify = (req, res, next) => {
     token: validateRequest.string().required(),
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const token = (req, res, next) => {
@@ -71,7 +71,7 @@ const token = (req, res, next) => {
     token: validateRequest.string().valid('artist, contractor').required(),
   })
 
-  return validate(req.headers, req, next, schema)
+  return validate(req.headers, req, next, schema);
 }
 
 const forgotPassword = (req, res, next) => {
@@ -79,7 +79,7 @@ const forgotPassword = (req, res, next) => {
     email: validateRequest.string().required(),
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const resetPassword = (req, res, next) => {
@@ -89,7 +89,7 @@ const resetPassword = (req, res, next) => {
     passwordConfirm: validateRequest.string().required(),
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const role = (req, res, next) => {
@@ -97,7 +97,7 @@ const role = (req, res, next) => {
     role: validateRequest.string().required()
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const social = (req, res, next) => {
@@ -105,7 +105,7 @@ const social = (req, res, next) => {
     token: validateRequest.string().required()
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const social2 = (req, res, next) => {
@@ -114,7 +114,7 @@ const social2 = (req, res, next) => {
     provider: validateRequest.string().required()
   })
 
-  return validate(req.body, req, next, schema)
+  return validate(req.body, req, next, schema);
 }
 
 const id = (req, res, next) => {
@@ -122,23 +122,23 @@ const id = (req, res, next) => {
     id: validateRequest.string().required()    
   })
 
-  return validate(req.params, req, next, schema)
+  return validate(req.params, req, next, schema);
 }
 
 // Raw query and body parsing to data
 const query = (req, res, next) => {
   req.data = { ...req.data, ...req.query }
-  next()
+  next();
 }
 
 const body = (req, res, next) => {
   req.data = { ...req.data, ...req.body }
-  next()
+  next();
 }
 
 const files = (req, res, next) => {
   req.data = req.files
-  next()
+  next();
 }
 
 const slug = (req, res, next) => {
@@ -235,13 +235,24 @@ const filters = (req, res, next) => {
 
 const feedback = (req, res, next) => {
   const schema = validateRequest.object({
-    artist: validateRequest.string().required(),
     presentation: validateRequest.string().required(),
-    rate: validateRequest.number().min(1).max(5),
-    feedback: validateRequest.string().optional().allow('')
+    artist: validateRequest.string().required(),
+    contractor: validateRequest.string().required(),
+    rating: validateRequest.number().min(1).max(5).required(),
+    notes: validateRequest.string().optional().allow('')
   });
 
-  return validate(req.query, req, next, schema)
+  return validate(req.body, req, next, schema)
+}
+
+const billing = (req, res, next) => {
+  const schema = validateRequest.object({
+    artist: validateRequest.string().required(),    
+    contractor: validateRequest.string().required(),
+    presentation: validateRequest.string().required(),
+  });
+
+  return validate(req.body, req, next, schema)
 }
 
 module.exports = { 
@@ -271,4 +282,5 @@ module.exports = {
   files,
   filters,
   feedback,
+  billing,
  }

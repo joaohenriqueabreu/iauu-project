@@ -97,6 +97,14 @@ class User extends BaseRepository {
 
     return null;
   }
+
+  get is_contractor() {
+    return this.role ===  'contractor';
+  }
+
+  get is_artist() {
+    this.role === 'artist';
+  }
 }
 
 userSchema.index({ email: 'text', name: 'text' });

@@ -37,7 +37,7 @@ module.exports = class CalculateAppPresentationsStatisticsService extends Calcul
       return this;
     }
 
-    async lookupArtist() {
+    async searchArtist() {
       console.log('Searching for artist...')
       this.artist = await Artist.findById(this.id)
       return this

@@ -8,7 +8,7 @@ const feedbacks = require("./feedback");
 const artist = require('./artist');
 const contractor = require('./contractor');
 const schedule = require('./schedule');
-const payment = require('./payment');
+const billing = require('./billing');
 const presentation = require('./presentation');
 const upload = require('./upload');
 const statistics = require('./statistics');
@@ -16,6 +16,7 @@ const data = require('./data');
 
 api.use('/', status);
 api.use('/', auth);
+api.use('/data', data);
 api.use('/admin', admin);
 api.use('/categories', category);
 api.use('/artists', artist);
@@ -24,8 +25,7 @@ api.use('/schedules', schedule);
 api.use('/presentations', presentation);
 api.use('/upload', upload);
 api.use('/statistics', statistics);
-api.use('/data', data);
 api.use('/feedbacks', feedbacks);
-api.use('/', payment);
+api.use('/billing', billing);
 
 module.exports = api;

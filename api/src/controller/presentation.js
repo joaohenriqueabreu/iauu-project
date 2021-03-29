@@ -13,8 +13,33 @@ const AcceptCounterOfferService = require('../services/presentation/acceptCounte
 const RejectCounterOfferService = require('../services/presentation/rejectCounterOffer');
 const CompletePresentationService = require('../services/presentation/completePresentation');
 const CancelPresentationService = require('../services/presentation/cancelPresentation');
+const RequestEndpointService = require('../services/request');
+const { Presentation } = require('../models');
+const { BadRequestException } = require('../exception');
 
 class PresentationController extends BaseController {
+  async validatePresentation(req, res, next) {
+    try {
+      const exists = await Presentation.exists({_id: req.data.id});
+      if (!exists) { throw new BadRequestException('Presentation does not exist'); }
+
+      res.status(200).json({});
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async fetchPresentation(req, res, next) {
+    try {
+      const presentation = await Presentation.findById(req.data.id);
+      if (!presentation instanceof Presentation) { throw new BadRequestException('Presentation does not exist'); }
+
+      res.status(200).json(presentation);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   searchProposals(req, res, next) {
     console.log('Searching proposals...');
     const searchProposalsService = new SearchProposalsService(req.user, req.data);
@@ -79,12 +104,29 @@ class PresentationController extends BaseController {
       .catch((error) => next(error));
   }
 
-  acceptProposal(req, res, next) {
+  async acceptProposal(req, res, next) {
     console.log('Accepting proposal...');
     const acceptProposalService = new AcceptProposalService(req.user, req.data);
-    acceptProposalService.reply()
-      .then(() => { res.status(200).json(acceptProposalService.getPresentation()) })
-      .catch((error) => next(error));
+    const requestEndpointSvc = new RequestEndpointService();
+    let newPresentation = {};
+    try {
+      await acceptProposalService.reply();
+      newPresentation = acceptProposalService.getPresentation();
+    } catch (error) {
+      next(error);
+    }
+
+    // Send separate request to create billing for billing service
+    try {
+      await requestEndpointSvc.post('billing', { 
+        presentation: newPresentation.id,
+        artist: newPresentation.artist.id,
+        contractor: newPresentation.contractor.id
+      });
+    } catch (error) {
+      // TODO we should probably rollback presentation in case billing fails creating
+      next(error);
+    }
   }
 
   rejectProposal(req, res, next) {

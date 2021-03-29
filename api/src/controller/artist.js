@@ -1,19 +1,34 @@
-'use strict';
-
 const BaseController = require('./base');
 const PublicArtistProfileService = require('../services/artist/publicSearch');
-const SearchArtistForProposalService = require('../services/artist/searchArtistForProposal');
+const SearchArtistService = require('../services/artist/searchArtist');
 const SearchArtistProfileService = require('../services/artist/searchProfile');
 const SaveArtistProfileService = require('../services/artist/saveProfile');
-const SaveArtistAccountService = require('../services/payment/saveArtistAccount');
 const SaveProductService = require('../services/artist/saveProduct');
 const DeleteProductService = require('../services/artist/deleteProduct');
 const LookupProductsService = require('../services/artist/lookupProducts');
+const { Artist } = require('../models');
+
 
 class ArtistController extends BaseController {
   async validateArtist(req, res, next) {
     try {
-      // No need for a service here
+      console.log(`Validating artist ${req.data.id}`);
+      const exists = await Artist.exists({_id: req.data.id});
+      if (!exists) { throw new BadRequestException('Artist does not exist'); }
+
+      res.status(200).json({});
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async fetchArtist(req, res, next) {
+    try {
+      console.log(`Fetching artist ${req.data.id}`);
+      const artist = await Artist.findById(req.data.id);
+      if (!artist instanceof Artist) { throw new BadRequestException('Artist does not exist'); }
+
+      res.status(200).json(artist);
     } catch (error) {
       next(error);
     }
@@ -31,13 +46,13 @@ class ArtistController extends BaseController {
     }
   }
 
-  async privateInfo(req, res, next) {    
-    console.log("Requesting artist private...");
+  async privateInfo(req, res, next) {
+    console.log("Requesting artist...");
 
-    const searchArtistForProposalService = new SearchArtistForProposalService(req.user, req.data);
+    const searchArtistSvc = new SearchArtistService(req.user);
     try {
-      await searchArtistForProposalService.search(req.user, req.data);
-      res.status(200).json(searchArtistForProposalService.getArtist());
+      await searchArtistSvc.search(req.data.id);
+      res.status(200).json(searchArtistSvc.getArtist());
     } catch (error) {
       next(error);
     }

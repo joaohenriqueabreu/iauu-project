@@ -10,27 +10,27 @@ module.exports = class SendCounterOfferService extends PresentationService
     constructor(user, data) {
       super(user, data)
       
-      this.id = data.id
-      this.counterOffer = data.counter_offer
+      this.id = data.id;
+      this.counterOffer = data.counter_offer;
     }
 
     async reply() {
-      await this.searchPresentation()
-      await this.ensurePresentationWasFound()
-      await this.ensureProposal()
-      await this.ensureCounterOfferExists()
-      await this.ensureCounterOfferIsNotAccepted()
-      await this.populateModel()
-      await this.savePresentation()
+      await this.searchPresentation();
+      await this.ensurePresentationWasFound();
+      await this.ensureProposal();
+      await this.ensureCounterOfferExists();
+      await this.ensureCounterOfferIsNotAccepted();
+      await this.populateModel();
+      await this.savePresentation();
 
-      this.sendMail()
-      this.createNotification()
+      this.sendMail();
+      this.createNotification();
       return this
     }
 
     ensureProposal() {
       if (this.presentation.status !== 'proposal') {
-        throw new BadRequestException('Cannot save counter offer for non proposal')
+        throw new BadRequestException('Cannot save counter offer for non proposal');
       }
 
       return this
@@ -38,29 +38,29 @@ module.exports = class SendCounterOfferService extends PresentationService
 
     ensureCounterOfferExists() {
       if (this.presentation.proposal.counter_offer === undefined || this.presentation.proposal.counter_offer === null) {
-        throw new BadRequestException('Counter offer does not exists')
+        throw new BadRequestException('Counter offer does not exists');
       }
 
-      return this
+      return this;
     }
 
     ensureCounterOfferIsNotAccepted() {
       if (this.presentation.proposal.counter_offer !== undefined && this.presentation.proposal.counter_offer.status === 'accepted') {
-        throw new BadRequestException('Counter offer already accepted')
+        throw new BadRequestException('Counter offer already accepted');
       }
 
       return this
     }
 
     populateModel() {
-      return this
+      return this;
     }
 
     sendMail() {
-      console.log('Sending counter offer mail...')
+      console.log('Sending counter offer mail...');
     }
 
     createNotification() {
-      console.log('Creating counter offer notification...')
+      console.log('Creating counter offer notification...');
     }
 }

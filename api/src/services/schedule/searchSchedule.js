@@ -23,7 +23,7 @@ module.exports = class SearchScheduleService extends BaseService
     }
 
     async search() {
-      await this.lookupArtist()
+      await this.searchArtist()
       await this.lookupPresentations()
       await this.ensureArtistWasFound()
       await this.populateYearSchedule(this.year)
@@ -31,7 +31,7 @@ module.exports = class SearchScheduleService extends BaseService
       return this
     }
 
-    async lookupArtist() {
+    async searchArtist() {
       console.log('Searching for artist...')
       this.artist = await Artist.findById(this.id)
       return this

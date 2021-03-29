@@ -2,18 +2,14 @@
   <div>
     <div class="full-height">
       <div class="mb-4">
-        Conta pra gente como foi sua experiência com <b>{{ otherParty.name }}</b>
+        Seu feedback é muito importante para nós! Conta pra gente como foi sua experiência com <b>{{ otherParty.name }}</b>
       </div>
       <div class="mb-4 horizontal middle center">
         <rating :read-only="false" @rated="setRating"></rating>
       </div>
       <div class="mb-4">
-        <form-textarea
-          v-model="feedback.notes"
-          class="full-width"
-          placeholder="O que mais o artista fez que te encantou ou que você não curtiu? Conta pra gente"
-          :rows="5"
-        ></form-textarea>
+        <form-textarea v-model="feedback.notes" class="full-width" placeholder="O que mais o artista fez que te encantou ou que você não curtiu? Conta pra gente" :rows="5">
+        </form-textarea>
       </div>
       <small>Agradecemos seu feedback!</small>
     </div>
@@ -46,7 +42,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('artist', ['sendFeedback']),
+    ...mapActions('feedback', ['sendFeedback']),
     openModal() {
       this.$refs.modal.open()
     },
@@ -58,11 +54,10 @@ export default {
     },
     async send() {
       await this.sendFeedback({
-        id: this.presentation.artist.id,
-        presentation: {
-          id: this.presentation.id
-        },
-        feedback: this.feedback
+        artist: this.presentation.artist.id,
+        presentation: this.presentation.id,
+        rating: this.feedback.rating,
+        notes: this.feedback.notes,
       })
       this.$toast.success('Obrigado pelo seu feedback!');
       this.$emit('sent');

@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const GatewayCallbackServiceBuilder = require('../builders/gatewayCallbackServiceBuilder');
 const { Presentation } = require('../../models');
-const { Invoice, Payment } = require('../../models/schemas');
-const { PaymentData, InvoiceData, PresentationData } = require('../../config/data');
+const { Billing, Payment } = require('../../models/schemas');
+const { PaymentData, BillingData, PresentationData } = require('../../config/data');
 const { FailedChargingPaymentMethodException, BadRequestException, Exception } = require('../../exception');
 const PresentationService = require('../presentation/base');
 
@@ -32,7 +32,7 @@ module.exports = class UpdatePaymentStatusService extends PresentationService
           .ensurePaymentWasFound()
           .createServiceFromPayment()
           .updatePaymentState()
-          .updateInvoiceState();
+          .updateBillingState();
   
         await this.savePresentation();
         this.sendStatusUpdateMail();
@@ -46,14 +46,14 @@ module.exports = class UpdatePaymentStatusService extends PresentationService
     }
 
     async searchPresentationFromPayment() {
-      this.presentation = await Presentation.findOne({ 'invoice.payments.id': this.id })
-        .populate({ path: 'invoice', populate: { path: 'payments' }});
+      this.presentation = await Presentation.findOne({ 'billing.payments.id': this.id })
+        .populate({ path: 'billing', populate: { path: 'payments' }});
 
       return this;
     }
 
     ensurePresentationCanBeUpdated() {
-      if (this.presentation.invoice.status.includes([InvoiceData.COMPLETED_STATUS])) {
+      if (this.presentation.billing.status.includes([BillingData.COMPLETED_STATUS])) {
         throw new Exception('Presentation already paid');
       }
 
@@ -61,7 +61,7 @@ module.exports = class UpdatePaymentStatusService extends PresentationService
     }
 
     retrieveTargetPayment() {
-      this.payment = _.find(this.presentation.invoice.payments, (payment) => payment.id = this.id);
+      this.payment = _.find(this.presentation.billing.payments, (payment) => payment.id = this.id);
       return this;
     }
 
@@ -88,12 +88,11 @@ module.exports = class UpdatePaymentStatusService extends PresentationService
       return this;
     }
 
-    updateInvoiceState() {
-      // TODO allow partial payments
-      this.presentation.invoice.total_paid += this.payment.net_amount;
+    updateBillingState() {
+      this.presentation.billing.total_paid += this.payment.net_amount;
 
-      if (this.presentation.invoice.isFullyPaid()) {
-        this.presentation.invoice.status = InvoiceData.COMPLETED_STATUS
+      if (this.presentation.billing.is_fully_paid) {
+        this.presentation.billing.status = BillingData.COMPLETED_STATUS
       }
 
       return this;

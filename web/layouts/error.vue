@@ -5,7 +5,7 @@
       <div class="content">
         <h1 class="mb-5">Vish...</h1>
         <h5 class="mb-3 horizontal middle center">
-          Parece que a corda da guitarra estourou
+          {{ randomFunnyPhrase }}
           <icon icon="frown" class="ml-2 mb-0"></icon>
         </h5>
         <h5 class="mb-4">
@@ -25,6 +25,13 @@
 </template>
 
 <script>
+const RANDOM_FUNNY_PHRASES = [
+  'Parece que a corda da guitarra estourou',
+  'Parece que o vocalista acordou com a garganta inflamada',
+  'Parece que o agente marcou dois shows no mesmo dia',
+  'Parece que o baterista perdeu as baquetas',
+  'Parece que a corda do baixo estourou',
+]
 export default {
   layout: 'guest',
   props: {
@@ -33,6 +40,10 @@ export default {
   computed: {
     bgImage() {
       return this.$images('error.jpg')
+    },
+    randomFunnyPhrase() {
+      const randomIndex = Math.round(Math.random() * RANDOM_FUNNY_PHRASES.length);
+      return RANDOM_FUNNY_PHRASES[randomIndex];
     }
   }
 }

@@ -1,15 +1,16 @@
-const axios = require('axios');
 const BaseService  = require('../base');
+const RequestEndpointService  = require('../request');
 const { BadRequestException }  = require('../../exception');
 const { Feedback }  = require('../../models');
 
 module.exports = class SendFeedbackService extends BaseService
 {
     constructor(user) {
-      super(user)
+      super(user);
 
-      this.user = this.user;
+      this.user = user;
       this.feedback = {};
+      this.requestEndpointSvc = new RequestEndpointService();
     }
 
     async save(data) {
@@ -23,30 +24,32 @@ module.exports = class SendFeedbackService extends BaseService
     }
 
     ensureFeedbackIsValid() {
-      if (data.artist === undefined || data.presentation === undefined || data.rating === undefined || data.contractor === undefined) {
-        throw new BadRequestException('Missing required feedback information');
-      }
-
       return this;
     }
 
     async ensurePartiesExist() {
       try {
-        await axios.head(`/artists/${this.feedback.artist_id}/exists`);
-        await axios.head(`/presentations/${this.feedback.presentation_id}/exists`);
+        console.log('Verifying parties services...');
+        await this.requestEndpointSvc.get(`/artists/${this.feedback.artist_id}/validate`);
+        await this.requestEndpointSvc.get(`/presentations/${this.feedback.presentation_id}/validate`);
       } catch (error) {
+        console.log(error);
         throw new BadRequestException('Invalid parties provided');
       }
+
+      console.log('Parties exists...');
+      return this;
     }
 
     populateFeedbackModel() {
+      console.log('Populating feedback...');
       this.feedback = new Feedback(this.feedbackData);
       this.feedback.artist_id = this.feedbackData.artist;
       this.feedback.presentation_id = this.feedbackData.presentation;
       this.feedback.from = {
-        contractor_id: this.feedbackData.contractor.id,
-        name: this.feedbackData.contractor.name,
-        photo: this.feedbackData.contractor.photo
+        contractor_id: this.user.id,
+        name: this.user.name,
+        photo: this.user.photo
       };
 
       return this;
@@ -55,6 +58,11 @@ module.exports = class SendFeedbackService extends BaseService
 
     async saveFeedback() {
       await this.feedback.save();
+      console.log('Presentation Feedback saved');
       return this;
+    }
+
+    getFeedback() {
+      return this.feedback;
     }
 }

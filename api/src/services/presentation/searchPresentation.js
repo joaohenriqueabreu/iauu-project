@@ -6,13 +6,12 @@ module.exports = class SearchPresentationService extends PresentationService
 {
     constructor(user, data) {
       super(user, data)
-
-      this.id = data.id
     }
 
-    async search() {
-      await this.searchPresentation()
-      await this.ensurePresentationWasFound()
-      return this
+    async search(id) {
+      this.id = id;
+      await this.searchPresentation();
+      await this.ensurePresentationWasFound();
+      return this;
     }
 }

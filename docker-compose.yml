@@ -43,6 +43,17 @@ services:
                 depends_on: 
                         - web
                         - api
+        broker:
+                image: rabbitmq:3-management-alpine
+                container_name: broker
+                ports:
+                        - 5672:5672
+                        - 15672:15672
+                volumes:
+                        - ./broker/data/:/var/lib/rabbitmq/
+                        - ~/broker/logs/:/var/log/rabbitmq
+                networks:
+                        iauu_net:
         ssl:
                 image: certbot/certbot
                 container_name: ssl

@@ -19,7 +19,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
     }
 
     async calculate() {
-      await this.lookupArtist();
+      await this.searchArtist();
       this.ensureArtistWasFound();
       
       if (this.hasExistingCacheRecord()) {
@@ -49,7 +49,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
       return this;
     }
 
-    async lookupArtist() {
+    async searchArtist() {
       console.log('Searching for artist...')
       this.artist = await Artist.findById(this.id)
       return this

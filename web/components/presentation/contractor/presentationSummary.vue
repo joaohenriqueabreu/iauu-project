@@ -53,19 +53,12 @@
           </small>
         </div>
         <div class="horizontal center middle mb-3">
-          <div
-            v-if="canConfirmPresentation && hasPresentationStarted && !hasConfirmedPresentation"
-            class="mr-5"
-          >
+          <div v-if="canConfirmPresentation && hasPresentationStarted && !hasConfirmedPresentation" class="mr-5">
             <form-button @action="confirm">
               Confirmar Realização
             </form-button>
           </div>
-          <div
-            v-if="hasPresentationStarted && hasConfirmedPresentation"
-            class="clickable my-4"
-            @click="openFeedbackModal"
-          >
+          <div v-if="hasPresentationStarted && hasConfirmedPresentation" class="clickable my-4" @click="openFeedbackModal">
             <h4><u>Enviar Feedback</u></h4>
           </div>
           <div>
@@ -129,10 +122,10 @@ export default {
       return this.moment(this.presentation.timeslot.start_dt).isBefore(this.moment());
     },
     hasConfirmedPresentation() {
-      return this.presentation.confirm_status.includes('contractor');
+      return this.presentation.was_confirmed_by_contractor;
     },
     waitingForConfirmation() {
-      return !this.presentation.confirm_status.includes('artist');
+      return !this.presentation.was_confirmed_by_artist;
     },
     confirmationDueDate() {
       return this.moment(this.presentation.end_dt).add(15, 'days');

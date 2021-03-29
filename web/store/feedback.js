@@ -27,8 +27,14 @@ export const actions = {
   async loadArtistRating({ commit }, artistId) {
     const { data } = await this.$axios.get(`feedbacks/artist/${artistId}/rating`);
     commit('set_rating', data);
-  }
+  },
+  async sendFeedback({ commit }, feedback) {
+    const { data } = await this.$axios.post(`feedbacks`, feedback);
+    commit('set_feedback', data);
+  },
 }
 
-export const getters = { getField }
+export const getters = { 
+  getField,
+ }
 /* eslint-disable */

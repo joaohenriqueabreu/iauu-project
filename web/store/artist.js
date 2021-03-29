@@ -73,10 +73,6 @@ export const actions = {
     const { data } = await this.$axios.delete(`artists/products/${id}`);
     commit('set_products', data);
   },
-  async sendFeedback({ commit }, data) {
-    const { id } = data;
-    await this.$axios.put(`artists/${id}/feedback`, data);
-  },
   async calculateStatistics({ commit }, filters) {
     if (filters === undefined) {
       filters = { start: moment().startOf('year').toISOString(), end: moment().toISOString() };

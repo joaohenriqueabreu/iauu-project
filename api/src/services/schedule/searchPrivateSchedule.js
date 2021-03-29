@@ -20,7 +20,7 @@ module.exports = class SearchPrivateScheduleService extends SearchScheduleServic
   }
 
   async search() {
-    await this.lookupArtist()
+    await this.searchArtist()
     await this.ensureArtistWasFound()
     await this.lookupPresentations()
     await this.populateProposalSchedule()

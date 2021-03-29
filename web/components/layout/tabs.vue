@@ -12,7 +12,7 @@
         </li>
       </ul>
     </div>
-    <div class="mb-5 raised p-5" :class="{ first: isFirstTab }">
+    <div class="mb-5 raised p-5" :class="{ first: isFirstTabActive }">
       <fade-transition mode="out-in" v-for="(component, index) in tabComponents" :key="index">
         <component :is="component" v-if="isActiveTab(index)"></component>
       </fade-transition>
@@ -40,10 +40,12 @@ export default {
     },
     tabComponents() {
       return this.$collection.map(this.items, 'component');
+    },
+    isFirstTabActive() { 
+      return this.isActiveTab(0);
     }
   },
   methods: {
-    isFirstTab() { return this.isActiveTab(0); },
     isActiveTab(index) { return this.activeTab === index; }
   }
 }

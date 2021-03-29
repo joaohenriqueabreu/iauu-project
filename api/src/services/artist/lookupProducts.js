@@ -9,12 +9,12 @@ module.exports = class SaveProfileService extends ArtistService
     }
 
     async lookup() {
-      await this.lookupArtistWithProducts()
+      await this.searchArtistWithProducts()
       await this.ensureArtistWasFound()
       return this
     }
 
-    async lookupArtistWithProducts() {
+    async searchArtistWithProducts() {
       console.log('Searching for products...')
       this.artist = await Artist.findById(this.id).populate('products')
       return this

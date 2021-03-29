@@ -17,7 +17,7 @@ module.exports = class SaveArtistAccountService extends SaveArtistProfileService
       this.bankAccount = bankAccountData;
       this.ensureBankAccountIsValid();
 
-      await this.lookupArtist();
+      await this.searchArtist();
       this.ensureArtistWasFound();
 
       this.ensureArtistCanConnectBankAccount()

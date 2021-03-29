@@ -5,7 +5,7 @@ const Proposal = require('./proposal');
 const Timeslot = require('./timeslot');
 const Product = require('./product');
 
-const Invoice = require('./invoice');
+const Billing = require('./billing');
 const Payment = require('./payment');
 const BankAccount = require('./bankAccount');
 const GatewayAccount = require('./gatewayAccount');
@@ -16,7 +16,7 @@ module.exports = {
   Proposal, 
   Timeslot, 
   Product, 
-  Invoice, 
+  Billing, 
   Payment,
   BankAccount,
   GatewayAccount

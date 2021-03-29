@@ -95,6 +95,7 @@ import {
   faCreditCard,
   faWallet,
   faCogs,
+  faTasks,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -243,6 +244,7 @@ library.add(
   faCreditCard,
   faWallet,
   faCogs,
+  faTasks,
 );
 
 Vue.component('icon', FontAwesomeIcon);

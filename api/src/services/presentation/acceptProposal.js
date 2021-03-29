@@ -3,7 +3,7 @@ const moment = require('moment');
 const ReplyProposalService = require('./replyProposal');
 const BadRequestException = require('../../exception/bad');
 
-module.exports = class RejectProposalService extends ReplyProposalService
+module.exports = class AcceptProposalService extends ReplyProposalService
 {
   ensureCanReplyProposal() {
     // ensurePresentationHasTimeslot

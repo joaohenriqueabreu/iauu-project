@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const PresentationService = require('../presentation/base');
 const GatewaySplitPaymentServiceBuilder = require('../builders/gatewaySplitPaymentServiceBuilder');
-const { Invoice, Payment } = require('../../models/schemas');
+const { Billing, Payment } = require('../../models/schemas');
 const { PaymentData } = require('../../config/data');
 const { BadRequestException, ManualPaymentRequiredException } = require('../../exception');
 
@@ -17,7 +17,7 @@ class PayPresentationService extends PresentationService
       this.fee = fee; // optional
 
       this.splitPaymentService = (new GatewaySplitPaymentServiceBuilder(this.paymentMethod)).getService();
-      this.invoice = {};
+      this.billing = {};
     }
 
     async pay(id) {
@@ -27,7 +27,7 @@ class PayPresentationService extends PresentationService
       await this.searchPresentation();
       this.ensurePresentationWasFound()
         .ensurePresentationIsPayable()
-        .createInvoice()
+        .createBilling()
         .calculateTransactionFee()
         .ensureAmountIsValid()
         .createPayment() // TODO we might come up with a way of making multiple payments
@@ -39,7 +39,7 @@ class PayPresentationService extends PresentationService
         // .queuePayments();
 
       await this.chargeGatewayPayment();
-      this.linkPresentationInvoiceAndPayments();
+      this.linkPresentationBillingAndPayments();
       await this.savePresentation();
         
       this.sendPaymentSuccessMails();
@@ -51,7 +51,7 @@ class PayPresentationService extends PresentationService
         throw new Error('Presentation is not in payable state.'); 
       }
 
-      if (typeof this.presentation.invoice === 'object') {
+      if (typeof this.presentation.billing === 'object') {
         throw new Error('Presentation already has an initiated payment processing'); 
       }
 
@@ -66,8 +66,8 @@ class PayPresentationService extends PresentationService
       return this;
     }
 
-    createInvoice() {
-      this.invoice = new Invoice({
+    createBilling() {
+      this.billing = new Billing({
         total_amount: this.presentation.price,
         status: 'pending'
       });
@@ -76,15 +76,15 @@ class PayPresentationService extends PresentationService
     }
 
     ensureAmountIsValid() {
-      if (this.invoice.total_amount <= 0) {
-        throw new Error('Invoiced amount cannot be zero');
+      if (this.billing.total_amount <= 0) {
+        throw new Error('Billingd amount cannot be zero');
       }
 
       return this;
     }
 
     calculateTransactionFee() {
-      this.invoice.fee = this.fee !== undefined ? this.fee : this.presentation.fee;
+      this.billing.fee = this.fee !== undefined ? this.fee : this.presentation.fee;
       return this;
     }
 
@@ -106,9 +106,9 @@ class PayPresentationService extends PresentationService
     }
 
     calculatePaymentAmounts() {
-      this.artistPayment.fee = this.invoice.fee;
-      this.artistPayment.amount = this.invoice.total_amount;
-      this.artistPayment.net_amount = this.invoice.total_amount * (1 - this.invoice.fee);
+      this.artistPayment.fee = this.billing.fee;
+      this.artistPayment.amount = this.billing.total_amount;
+      this.artistPayment.net_amount = this.billing.total_amount * (1 - this.billing.fee);
       
       return this;
     }
@@ -129,9 +129,9 @@ class PayPresentationService extends PresentationService
       return this;
     }
 
-    linkPresentationInvoiceAndPayments() {
-      this.invoice.payments.push(this.artistPayment);
-      this.presentation.invoice = this.invoice;
+    linkPresentationBillingAndPayments() {
+      this.billing.payments.push(this.artistPayment);
+      this.presentation.billing = this.billing;
       return this;
     }
 

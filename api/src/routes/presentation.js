@@ -1,8 +1,11 @@
 const api = require('express').Router();
 
 const presentationController = require('../controller/presentation');
-const authorizationMiddleware = require('../middleware/authorization');
-const validationMiddleware = require('../middleware/validation');
+const { authorizationMiddleware, validationMiddleware, dataMiddleware } = require('../middleware');
+
+// Apps endpoints
+api.get('/:id/validate', authorizationMiddleware.app, validationMiddleware.id, presentationController.validatePresentation);
+api.get('/:id/fetch', authorizationMiddleware.app, validationMiddleware.id, presentationController.search);
 
 api.get('/types', presentationController.getTypes);
 api.get('/', authorizationMiddleware.authorize, presentationController.searchPresentations);

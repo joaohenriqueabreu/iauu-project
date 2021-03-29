@@ -16,7 +16,7 @@ module.exports = class SaveProductService extends ArtistService
     }
 
     async save() {
-      await this.lookupArtist()
+      await this.searchArtist()
       await this.ensureArtistWasFound()
       await this.populateTimeslot()
       await this.saveArtist()

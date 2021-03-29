@@ -22,7 +22,7 @@ module.exports = class SaveArtistProfileService extends ArtistService
     }
 
     async save() {
-      await this.lookupArtist();
+      await this.searchArtist();
       this.ensureArtistWasFound()
         .sanitizeData();
       await this.populateSlug(0);
@@ -31,7 +31,7 @@ module.exports = class SaveArtistProfileService extends ArtistService
       return this;
     }
 
-    async lookupArtist() {
+    async searchArtist() {
       console.log('Searching for artist...');
       this.artist = await Artist.findById(this.id).populate('users');
       return this;

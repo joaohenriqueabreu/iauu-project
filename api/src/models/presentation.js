@@ -3,24 +3,18 @@ const { Schema, model }  = require('mongoose');
 const moment = require('moment');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
-const { PresentationData, InvoiceData } = require('../config/data');
+const { PresentationData, BillingData } = require('../config/data');
 
 const proposalSchema = require('./schemas/proposal').schema;
 const addressSchema = require('./schemas/address').schema;
 const timeslotSchema = require('./schemas/timeslot').schema;
-const invoiceSchema = require('./schemas/invoice').schema;
 
 const defaultFee = config.payment.ourFee || 0.12;
 
 const presentationSchema = new Schema({
-  contractor: {
-    type: Schema.Types.ObjectId,
-    ref: 'Contractor'
-  },
-  artist: {
-    type: Schema.Types.ObjectId,
-    ref: 'Artist'
-  },
+  contractor: { type: Schema.Types.ObjectId, ref: 'Contractor' },
+  artist: { type: Schema.Types.ObjectId, ref: 'Artist' },
+  billing: { type: Schema.Types.ObjectId, ref: 'Billing' },
   fee: { type: Number, required: true, default: defaultFee, max: 1 },
   address: addressSchema,
 
@@ -37,7 +31,6 @@ const presentationSchema = new Schema({
   confirm_status: [String],
   timeslot: timeslotSchema,
   proposal: proposalSchema,
-  invoice: invoiceSchema,
   price: { type: Number },
   duration: { type: String }
 }, { ...baseSchemaOptions })
@@ -68,7 +61,7 @@ class Presentation extends BaseRepository {
   }
 
   get is_paid() {
-    return this.is_completed && this.invoice !== undefined && this.invoice.status === InvoiceData.COMPLETED_STATUS;
+    return this.is_completed && this.billing !== undefined && this.billing.status === BillingData.COMPLETED_STATUS;
   }
 
   get display_start_dt() {
@@ -91,22 +84,36 @@ class Presentation extends BaseRepository {
     return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED;
   }
 
+  get is_completed() {
+    return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED;
+  }
+
   get is_presentation_close() {
+    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) { return false; }
     const from = moment().subtract(7, 'days');
-    const to = moment();
+    const today = moment();
     const date = moment(this.timeslot.start_dt);
-    return date.isBetween(from, to);
+    return date.isBetween(from, date);
   }
 
   get is_presentation_today() {
-    const date = moment(this.timeslot.start_dt);
-    return date.isSame(moment(), 'day');
+    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) { return false; }
+    return moment(this.timeslot.start_dt).isSame(moment(), 'day');
   }
 
   get is_presentation_past() {
-    const tomorrow = moment().add(1, 'days');
+    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) { return false; }
+    const today = moment();
     const date = moment(this.timeslot.start_dt);
-    return date.diff(tomorrow) > 0;
+    return today.diff(date, 'days') > 0;
+  }
+
+  get was_confirmed_by_contractor() {
+    return this.is_contracted && this.confirm_status.includes('contractor');
+  }
+
+  get was_confirmed_by_artist() {
+    return this.is_contracted && this.confirm_status.includes('artist');
   }
 }
 

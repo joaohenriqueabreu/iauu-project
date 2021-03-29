@@ -14,7 +14,37 @@ const addressSchema = new db.Schema({
     location: { type: Coordinates }, 
 }, baseSchemaOptions);
 
-const SHOW_PROPS = ['street', 'number', 'neighboorhood', 'city', 'state', 'country']
+const SHOW_PROPS = ['street', 'number', 'neighboorhood', 'city', 'state', 'country'];
+const STATE_SHORTNAME_MAP = {
+  'Acre': 'AC',
+  'Alagoas': 'AL',
+  'Amapá': 'AP',
+  'Amazonas': 'AM',
+  'Bahia': 'BA',
+  'Ceará': 'CE',
+  'Distrito Federal': 'DF',
+  'Espirito Santo': 'ES',
+  'Goiás': 'GO',
+  'Maranhão': 'MA',
+  'Mato Grosso': 'MT',
+  'Mato Grosso do Sul': 'MS',
+  'Minas Gerais': 'MG',
+  'Pará': 'PA',
+  'Paraíba': 'PB',
+  'Paraná': 'PR',
+  'Pernambuco': 'PE',
+  'Piauí': 'PI',
+  'Roraima': 'RR',
+  'Rondônia': 'RO',
+  'Rio de Janeiro': 'RJ',
+  'Rio Grande do Norte': 'RN',
+  'Rio Grande do Sul': 'RS',
+  'Santa Catarina': 'SC',
+  'São Paulo': 'SP',
+  'Sergipe': 'SE',
+  'Tocantins': 'TO',
+};
+
 class Address extends BaseRepository {
   constructor() {
     super();
@@ -22,8 +52,10 @@ class Address extends BaseRepository {
 
   get display() {
     const addressDisplay = []
-    for (const prop in this) {
+    for (let prop in this) {
       if (SHOW_PROPS.includes(prop) && this[prop] !== undefined && this[prop] !==null && this[prop].length > 0) {
+        if (prop === 'state' && this.in_brasil) { prop = 'short_state'; }
+
         addressDisplay.push(this[prop]);
       }
     }
@@ -31,8 +63,16 @@ class Address extends BaseRepository {
     return addressDisplay.join(', ');
   }
 
+  get in_brasil() {
+    return this.country === 'Brasil';
+  }
+
   get short_display() {
-    return this.city + ', ' + this.state;
+    return this.city + ', ' + this.short_state;
+  }
+
+  get short_state() {
+    return this.state.length > 2 ? STATE_SHORTNAME_MAP[this.state] : this.state;
   }
 }
 
