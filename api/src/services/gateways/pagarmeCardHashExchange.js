@@ -1,5 +1,5 @@
 const pagarme = require('pagarme');
-const { Exception } = require("../../exception");
+const { Exception } = require('../../exception');
 const PagarmeConnectService = require('./pagarmeConnect');
 
 // This service should not be used by the backend - CREATED ONLY FOR TESTING PURPOSES

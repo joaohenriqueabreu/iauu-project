@@ -16,7 +16,7 @@ const CalculateAppUsersStatisticsService = require('../services/statistics/calcu
 
 class AdminController extends BaseController {
   calculateUsersStatistics(req, res, next) {    
-    console.log("Requesting users stats...");
+    console.log('Requesting users stats...');
 
     const statsService = new CalculateAppUsersStatisticsService(req.user, req.data);
     statsService.calculate()
@@ -25,7 +25,7 @@ class AdminController extends BaseController {
   }
 
   calculatePresentationsStatistics(req, res, next) {    
-    console.log("Requesting presentations stats...");
+    console.log('Requesting presentations stats...');
 
     const statsService = new PresentationsStatsService();
     statsService.retrieve()
@@ -34,7 +34,7 @@ class AdminController extends BaseController {
   }
 
   getUsers(req, res, next) {    
-    console.log("Requesting app users...");
+    console.log('Requesting app users...');
 
     const searchUsersService = new SearchUsersService(req.data);
     searchUsersService.search()
@@ -43,7 +43,7 @@ class AdminController extends BaseController {
   }
 
   getUserStats(req, res, next) {    
-    console.log("Requesting user stats...");
+    console.log('Requesting user stats...');
 
     const userStatsService = new UserStatsService(req.data);
     userStatsService.retrieve()
@@ -52,7 +52,7 @@ class AdminController extends BaseController {
   }
 
   blockUser(req, res, next) {    
-    console.log("Blocking user...");
+    console.log('Blocking user...');
 
     const blockUserService = new BlockUserService(req.data);
     blockUserService.block()
@@ -61,7 +61,7 @@ class AdminController extends BaseController {
   }
 
   activateUser(req, res, next) {
-    console.log("Activating user...");
+    console.log('Activating user...');
 
     const activateUserService = new ActivateUserService(req.data);
     activateUserService.activate()
@@ -70,7 +70,7 @@ class AdminController extends BaseController {
   }
 
   async verifyUser(req, res, next) {
-    console.log("Verifying user...");
+    console.log('Verifying user...');
 
     const userService = new UserService(req.data);
     await userService.search();
@@ -85,7 +85,7 @@ class AdminController extends BaseController {
   }
 
   async resendVerification(req, res, next) {
-    console.log("Verifying user...");
+    console.log('Verifying user...');
 
     const userService = new UserService(req.data);
     await userService.search();
@@ -109,7 +109,7 @@ class AdminController extends BaseController {
   }
 
   getPresentations(req, res, next) {  
-    console.log("Requesting app presentations...");
+    console.log('Requesting app presentations...');
 
     const searchPresentationsService = new SearchPresentationsService(req.data);
     searchPresentationsService.search()

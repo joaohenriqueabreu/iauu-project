@@ -4,7 +4,7 @@ const parseLocation = (location) => {
   }
 
   return {
-    type: "Point",
+    type: 'Point',
     coordinates: [location.longitude, location.latitude]
   }
 };

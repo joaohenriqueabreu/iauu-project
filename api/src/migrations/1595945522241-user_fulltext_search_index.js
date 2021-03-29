@@ -6,7 +6,7 @@ const { User } = require('../models')
 async function up () {
   User.collection.dropIndexes(() => {
     User.collection.reIndex(() => {
-      console.log("finished re-indexing")
+      console.log('finished re-indexing')
     })
   })
 }

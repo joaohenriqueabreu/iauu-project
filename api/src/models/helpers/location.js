@@ -11,7 +11,7 @@ class Location extends BaseRepository {
 
   convertGeoData(locationData) {
     this.location = {
-      type: "Point",
+      type: 'Point',
       coordinates: [locationData.longitude, locationData.latitude]
     }
   }    

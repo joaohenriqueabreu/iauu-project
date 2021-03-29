@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const BaseRepository = require('./repositories/base');
 
 const address = require('./schemas/address').schema;
-const notification = require("./schemas/notification").schema;
+const notification = require('./schemas/notification').schema;
 const baseSchemaOptions = require('./schemas/options');
 
 const userSchema = new Schema({

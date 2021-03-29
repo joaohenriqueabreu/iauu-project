@@ -8,7 +8,7 @@ const DeleteTimeslotService = require('../services/schedule/deleteTimeslot')
 
 class ScheduleController extends BaseController {
   publicSearch(req, res, next) {
-    console.log("Requesting schedule...")
+    console.log('Requesting schedule...')
 
     const searchScheduleService = new SearchScheduleService(req.user, req.data)
     searchScheduleService.search(req.user, req.data)
@@ -17,7 +17,7 @@ class ScheduleController extends BaseController {
   }
   
   mySchedule(req, res, next) {
-    console.log("Requesting private schedule...")
+    console.log('Requesting private schedule...')
 
     const searchScheduleService = new SearchPrivateScheduleService(req.user, req.data)
     searchScheduleService.search(req.user, req.data)
@@ -26,7 +26,7 @@ class ScheduleController extends BaseController {
   }
 
   saveTimeslot(req, res, next) {
-    console.log("Saving timeslot...")
+    console.log('Saving timeslot...')
 
     const saveTimeslotService = new SaveTimeslotService(req.user, req.data)
     saveTimeslotService.save(req.user, req.data)
@@ -35,7 +35,7 @@ class ScheduleController extends BaseController {
   }
 
   deleteTimeslot(req, res, next) {    
-    console.log("Deleting timeslot...")
+    console.log('Deleting timeslot...')
 
     const deleteTimeslotService = new DeleteTimeslotService(req.user, req.data)
     deleteTimeslotService.delete(req.user, req.data)

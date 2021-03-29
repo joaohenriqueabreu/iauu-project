@@ -5,7 +5,7 @@ const SaveBillingService = require('../services/billing/saveBilling');
 
 class BillingController extends BaseController {
   async saveBankAccount(req, res, next) {
-    console.log("Saving bank account...");
+    console.log('Saving bank account...');
     const saveArtistAccountSvc = new SaveArtistAccountService(req.user);
     try {
       await saveArtistAccountSvc.save(req.data.bankAccount);

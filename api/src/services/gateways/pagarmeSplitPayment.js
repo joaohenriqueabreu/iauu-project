@@ -7,7 +7,7 @@ const { DocumentHelper } = require('../../services/utils');
 
 const PagarmeConnectService = require('./pagarmeConnect');
 const { Exception, InvalidPaymentMethodProvidedException, FailedChargingPaymentMethodException, ManualPaymentRequiredException } = require('../../exception');
-const VendorGatewayInterface = require("../interfaces/vendorGateway");
+const VendorGatewayInterface = require('../interfaces/vendorGateway');
 const { Artist } = require('../../models');
 
 let PAGARME_PAYMENT_METHOD_MAP = [];
@@ -92,7 +92,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
   translatePaymentMethod() {
     this.pagarmePaymentMethod.type = PAGARME_PAYMENT_METHOD_MAP[this.paymentMethod.type];
 
-    // Pagar.me só aceita "números" como CPF
+    // Pagar.me só aceita 'números' como CPF
     this.paymentDocument = DocumentHelper.formatDocument(this.payment.to.document, false);
 
     if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_CREDIT_CARD) {
@@ -120,8 +120,8 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
         pix_expiration_date: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
         // TODO Check how this value is displayed for user
         pix_additional_fields: [{
-          name: "Quantidade",
-          value: "2"
+          name: 'Quantidade',
+          value: '2'
         }]
       }
 

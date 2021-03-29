@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const baseSchemaOptions = require("./schemas/options");
+const { Schema, model } = require('mongoose');
+const baseSchemaOptions = require('./schemas/options');
 
 const feedbackSchema = new Schema({
     rating: { type: Number, required: true, min: 1, max: 5 },

@@ -35,7 +35,7 @@ class ArtistController extends BaseController {
   }
 
   async publicInfo(req, res, next) {
-    console.log("Requesting artist public...");
+    console.log('Requesting artist public...');
 
     const publicArtistProfileService = new PublicArtistProfileService(req.user, req.data);
     try {
@@ -47,7 +47,7 @@ class ArtistController extends BaseController {
   }
 
   async privateInfo(req, res, next) {
-    console.log("Requesting artist...");
+    console.log('Requesting artist...');
 
     const searchArtistSvc = new SearchArtistService(req.user);
     try {
@@ -59,7 +59,7 @@ class ArtistController extends BaseController {
   }
 
   async profile(req, res, next) {
-    console.log("Requesting artist...");
+    console.log('Requesting artist...');
     const searchProfileService = new SearchArtistProfileService(req.user, req.data);
     try {
       await searchProfileService.search();
@@ -70,7 +70,7 @@ class ArtistController extends BaseController {
   }
 
   async updateProfile(req, res, next) {
-    console.log("Updating profile...");
+    console.log('Updating profile...');
     const saveProfileService = new SaveArtistProfileService(req.user, req.data);
     try {
       await saveProfileService.save();
@@ -81,7 +81,7 @@ class ArtistController extends BaseController {
   }
 
   async saveBankAccount(req, res, next) {
-    console.log("Saving bank account...");
+    console.log('Saving bank account...');
     const saveArtistAccountSvc = new SaveArtistAccountService(req.user);
     try {
       await saveArtistAccountSvc.save(req.data.bankAccount);
@@ -92,7 +92,7 @@ class ArtistController extends BaseController {
   }
 
   async products(req, res, next) {
-    console.log("Looking up products...");
+    console.log('Looking up products...');
     const lookupProductsService = new LookupProductsService(req.user, req.data);
     try {
       await lookupProductsService.lookup();

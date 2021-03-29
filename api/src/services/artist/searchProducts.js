@@ -1,5 +1,5 @@
-const Artist = require("../../models/artist");
-const ArtistService = require("./base");
+const Artist = require('../../models/artist');
+const ArtistService = require('./base');
 
 module.exports = class SaveProfileService extends ArtistService
 {

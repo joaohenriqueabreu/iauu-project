@@ -76,6 +76,6 @@ class Address extends BaseRepository {
   }
 }
 
-addressSchema.index({ location: "2dsphere"});
+addressSchema.index({ location: '2dsphere'});
 addressSchema.loadClass(Address);
 module.exports = db.model('Address', addressSchema);

@@ -72,7 +72,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
       const data = await Statistic.aggregate([
         { $match: { type: 'visit', route: artistRoute }},
         { $group: { 
-          _id: { year: { $year: "$created_at" } , month: { $month: "$created_at" }, index: { $dateToString: { format: "%Y-%m", date: '$created_at' }}}, 
+          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
           value: { $sum: 1 }
         }},
         { $sort: { _id: 1 }}
@@ -170,10 +170,10 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
     async calculateYearlyFeedbacks() {
       const data = await Artist.aggregate([
         { $match: { _id: this.artist._id }},
-        { $unwind: "$feedbacks" },
+        { $unwind: '$feedbacks' },
         { $group: { 
-          _id: { year: { $year: "$feedbacks.created_at" } , month: { $month: "$feedbacks.created_at" }, index: { $dateToString: { format: "%Y-%m", date: '$feedbacks.created_at' }}}, 
-          avg: { $avg: "$feedbacks.rating" },
+          _id: { year: { $year: '$feedbacks.created_at' } , month: { $month: '$feedbacks.created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$feedbacks.created_at' }}}, 
+          avg: { $avg: '$feedbacks.rating' },
         }},
         { $sort: { _id: 1 }}
       ]);
@@ -191,7 +191,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
       const data = await Presentation.aggregate([
         { $match: { artist: this.artist._id }},
         { $group: { 
-          _id: { state: "$address.state" }, 
+          _id: { state: '$address.state' }, 
           value: { $sum: 1 },
         }},
         { $sort: { _id: 1 }}
@@ -208,7 +208,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
       const data = await Presentation.aggregate([
         { $match: { artist: this.artist._id }},
         { $group: { 
-          _id: { year: { $year: "$proposal.created_at" } , month: { $month: "$proposal.created_at" }, index: { $dateToString: { format: "%Y-%m", date: '$proposal.created_at' }}}, 
+          _id: { year: { $year: '$proposal.created_at' } , month: { $month: '$proposal.created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$proposal.created_at' }}}, 
           count: { $sum: 1 },
           sum: { $sum: '$proposal.price' }
         }},
@@ -225,7 +225,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
       const data = await Presentation.aggregate([
         { $match: { artist: this.artist._id, status: { $nin: ['proposal', 'rejected'] }}},
         { $group: { 
-          _id: { year: { $year: "$created_at" } , month: { $month: "$created_at" }, index: { $dateToString: { format: "%Y-%m", date: '$created_at' }}}, 
+          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
           count: { $sum: 1 },
           sum: { $sum: '$price' }
         }},

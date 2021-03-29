@@ -2,7 +2,6 @@
  We have required all the packages we need for our application, defined the database, created an express server and an express router.
 Now, let's define CORS middleware, to ensure we do not run into any cross origin resource errors:
  */
-// "use strict";
 const config = require('./env');
 
 // Express and Request config

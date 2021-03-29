@@ -1,5 +1,5 @@
-const BaseService = require("../base");
-const Feedback = require("../../models/feedback");
+const BaseService = require('../base');
+const Feedback = require('../../models/feedback');
 
 module.exports = class SearchArtistFeedbacksService extends BaseService
 {

@@ -18,13 +18,13 @@ module.exports = class StatsService extends BaseService
     async calculateUserStats() {
       this.stats.users = {}
       // this.stats.users = await User.aggregate([
-      //   { $group: { "_id": "$role", count: { $sum: 1 }} }
+      //   { $group: { '_id': '$role', count: { $sum: 1 }} }
       // ])
       
       this.stats.users = await User.aggregate([]).facet({
-        all: [{ $match: {} }, { $count: "count" }],
-        artists: [{ $match: { role: 'artist'} }, { $count: "count" }],
-        contractors: [{ $match: { role: 'contractor'} }, { $count: "count" }]
+        all: [{ $match: {} }, { $count: 'count' }],
+        artists: [{ $match: { role: 'artist'} }, { $count: 'count' }],
+        contractors: [{ $match: { role: 'contractor'} }, { $count: 'count' }]
       })
 
       return this

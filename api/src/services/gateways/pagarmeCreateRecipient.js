@@ -1,5 +1,5 @@
 const config = require('../../env');
-const { Exception } = require("../../exception");
+const { Exception } = require('../../exception');
 
 const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
 const PagarmeConnectService = require('./pagarmeConnect');

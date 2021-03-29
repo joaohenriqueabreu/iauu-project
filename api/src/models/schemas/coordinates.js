@@ -10,7 +10,7 @@ class Coordinates extends BaseRepository {
   constructor(latitude, longitude) {
     super();
 
-    this.type = "Point";
+    this.type = 'Point';
     this.coordinates = [longitude, latitude];
   }
 }

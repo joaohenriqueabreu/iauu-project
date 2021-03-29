@@ -1,11 +1,11 @@
-const BaseController = require( "./base");
-const SearchPresentationFeedbackService = require("../services/feedback/searchPresentationFeedback");
-const SearchArtistFeedbacksService = require("../services/feedback/searchArtistFeedbacks");
-const SaveFeedbackService = require("../services/feedback/saveFeedback");
+const BaseController = require( './base');
+const SearchPresentationFeedbackService = require('../services/feedback/searchPresentationFeedback');
+const SearchArtistFeedbacksService = require('../services/feedback/searchArtistFeedbacks');
+const SaveFeedbackService = require('../services/feedback/saveFeedback');
 
 class FeedbackController extends BaseController {
   async presentationFeedback(req, res, next) {
-    console.log("Requesting presentation feedback...");
+    console.log('Requesting presentation feedback...');
 
     const searchPresentationFeedbackSvc = new SearchPresentationFeedbackService(req.user);
     try {
@@ -17,7 +17,7 @@ class FeedbackController extends BaseController {
   }
 
   async artistFeedbacks(req, res, next) {
-    console.log("Requesting artist feedbacks...");
+    console.log('Requesting artist feedbacks...');
 
     const searchArtistFeedbacksSvc = new SearchArtistFeedbacksService(req.user);
     try {
@@ -29,7 +29,7 @@ class FeedbackController extends BaseController {
   }
 
   async saveFeedback(req, res, next) {
-    console.log("Saving presentation feedback...");
+    console.log('Saving presentation feedback...');
 
     const saveFeedbackSvc = new SaveFeedbackService(req.user);
     try {

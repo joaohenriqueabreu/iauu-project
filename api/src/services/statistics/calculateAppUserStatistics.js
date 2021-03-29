@@ -31,7 +31,7 @@ module.exports = class CalculateAppUsersStatisticsService extends CalculateStati
       const data = await Statistic.aggregate([
         { $match: { type: 'visit' }},
         { $group: { 
-          _id: { year: { $year: "$created_at" } , month: { $month: "$created_at" }, index: { $dateToString: { format: "%Y-%m", date: '$created_at' }}}, 
+          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
           value: { $sum: 1 }
         }},
         { $sort: { _id: 1 }}
@@ -49,7 +49,7 @@ module.exports = class CalculateAppUsersStatisticsService extends CalculateStati
 
       const data = await User.aggregate([
         { $group: { 
-          _id: { year: { $year: "$created_at" } , month: { $month: "$created_at" }, index: { $dateToString: { format: "%Y-%m", date: '$created_at' }}}, 
+          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
           value: { $sum: 1 }
         }},
         { $sort: { _id: 1 }}
@@ -61,7 +61,7 @@ module.exports = class CalculateAppUsersStatisticsService extends CalculateStati
     }
 
     async calculateUserRoles() {
-      const data = await User.aggregate([{ $group: { _id: "$role", count: { $sum: 1 } }}]);
+      const data = await User.aggregate([{ $group: { _id: '$role', count: { $sum: 1 } }}]);
 
       this.statistics.roles = data;
       return this;
@@ -70,7 +70,7 @@ module.exports = class CalculateAppUsersStatisticsService extends CalculateStati
     async calculateYearlySignups() {
       const data = await User.aggregate([
         { $group: { 
-          _id: { year: { $year: "$created_at" } , month: { $month: "$created_at" }, index: { $dateToString: { format: "%Y-%m", date: '$created_at' }}}, 
+          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
           count: { $sum: 1 },
         }},
         { $sort: { _id: 1 }}

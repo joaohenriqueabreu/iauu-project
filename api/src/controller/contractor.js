@@ -42,7 +42,7 @@ class ContractorController extends BaseController {
   }
 
   profile(req, res, next) {
-    console.log("Requesting contractor profile...");
+    console.log('Requesting contractor profile...');
     const searchProfileService = new SearchContractorProfileService(req.user, req.data);
     searchProfileService.search()
       .then(() => { res.status(200).json(searchProfileService.getContractor()); })
@@ -50,7 +50,7 @@ class ContractorController extends BaseController {
   }
 
   updateProfile(req, res, next) {
-    console.log("Updating profile...");
+    console.log('Updating profile...');
     const saveProfileService = new SaveContractorProfileService(req.user, req.data);
     saveProfileService.save()
       .then(() => { res.status(200).json(saveProfileService.getContractor()); })

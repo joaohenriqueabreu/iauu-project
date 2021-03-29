@@ -34,7 +34,7 @@ module.exports = class UsersService extends BaseService
     async calculateStats() {
       const roleQuery = this.user.role === 'artist' ? { artist: this.user.artist } : { contractor: this.user.contractor }
       this.stats = await Presentation.aggregate([{ $match: roleQuery}]).facet({
-        presentations: [{ $count: "count" }],
+        presentations: [{ $count: 'count' }],
         proposals: [{ $match: { status: 'proposal'}}, { $count: 'count' }],
         rejected: [{ $match: { status: 'rejected'}}, { $count: 'count' }],
         accepted: [{ $match: { status: 'accepted'}}, { $count: 'count' }],

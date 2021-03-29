@@ -61,12 +61,12 @@ module.exports = class SearchArtistProfileService extends BaseService
     }
 
     buildLocationConditions() {
-      if (typeof this.location !== "object" || typeof this.location.location !== "object") { return this; }
-      console.log("Searching by location...");
+      if (typeof this.location !== 'object' || typeof this.location.location !== 'object') { return this; }
+      console.log('Searching by location...');
 
       this.conditions = {
         ...this.conditions,
-        ...{ "address.location": { 
+        ...{ 'address.location': { 
           $near: { $geometry: LocationUtils.parseLocation(this.location.location), $maxDistance: searchDistance.city }
         }}
       };

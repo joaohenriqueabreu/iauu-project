@@ -5,7 +5,7 @@ const BadRequestException = require('../../exception/bad');
 const LocationUtils = require('../utils/location');
 
 const slugify = (value) => {
-  return value.replace(/[^a-zA-Z ]/g, "").toLowerCase().replace(' ', '-');
+  return value.replace(/[^a-zA-Z ]/g, '').toLowerCase().replace(' ', '-');
 }
 
 module.exports = class SaveArtistProfileService extends ArtistService
