@@ -7,5 +7,5 @@ const gatewayAccountSchema = new db.Schema({
     document: { type: String },
     account_id: { type: String }
 }, baseSchemaOptions);
-
+ 
 module.exports = db.model('GatewayAccount', gatewayAccountSchema);

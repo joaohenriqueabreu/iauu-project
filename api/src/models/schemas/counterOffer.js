@@ -7,5 +7,5 @@ const counterOfferSchema = new db.Schema({
     status: { type: String, enum: ['void', 'pending', 'accepted', 'rejected'], default: 'void'},
     notes: { type: String },
 }, baseSchemaOptions);
-
+ 
 module.exports = db.model('CounterOffer', counterOfferSchema);

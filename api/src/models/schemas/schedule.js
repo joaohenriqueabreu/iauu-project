@@ -1,4 +1,3 @@
-// const db = require('../../data/db')
 const db = require('mongoose')
 const timeslotSchema = require('./timeslot')
 const baseSchemaOptions = require('../schemas/options')

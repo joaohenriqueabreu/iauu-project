@@ -8,5 +8,5 @@ const accountSchema = new db.Schema({
   address: { type: address },
   document: { type: String },
 }, baseSchemaOptions)
-
+ 
 module.exports = accountSchema

@@ -13,5 +13,5 @@ const productSchema = new db.Schema({
     medias: [mediaSchema],
     items: [String]
 }, baseSchemaOptions)
-
+ 
 module.exports = db.model('Product', productSchema);

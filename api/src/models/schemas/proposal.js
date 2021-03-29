@@ -13,6 +13,6 @@ const proposalSchema = new db.Schema({
     product: productSchema,
     notes: { type: String },
     counter_offer: counterOfferSchema
-}, baseSchemaOptions)
+}, baseSchemaOptions);
 
 module.exports = db.model('Proposal', proposalSchema);

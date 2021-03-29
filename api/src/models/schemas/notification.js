@@ -8,6 +8,6 @@ const notificationSchema = new db.Schema({
   type: { type: String, enum: ['user', 'role', 'product', 'presentation', 'proposal']},
   target: { type: String },
   read: { type: Boolean, default: false }
-}, baseSchemaOptions)
-
+}, baseSchemaOptions);
+ 
 module.exports = db.model('Notification', notificationSchema);

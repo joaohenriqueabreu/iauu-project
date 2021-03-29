@@ -1,10 +1,23 @@
-export * as ArtistService = require('./base');
-export * as DeleteProductService = require('./deleteProduct');
-export * as PublicArtistProfileService = require('./publicSearch');
-export * as SaveProductService = require('./saveProduct');
-export * as SaveArtistProfileService = require('./saveProfile');
-export * as SearchArtistForProposalService = require('./searchArtistForProposal');
-export * as SearchArtistsService = require('./searchArtists');
-export * as SearchProductsService = require('./searchProducts');
-export * as SearchArtistProfileService = require('./searchProfile');
-export * as SearchUsersService = require('./searchUsers');
+const ArtistService = require('./base');
+const DeleteProductService = require('./deleteProduct');
+const PublicArtistProfileService = require('./publicSearch');
+const SaveProductService = require('./saveProduct');
+const SaveArtistProfileService = require('./saveProfile');
+const SearchArtistService = require('./searchArtist');
+const SearchArtistsService = require('./searchArtists');
+const SearchProductsService = require('./searchProducts');
+const SearchArtistProfileService = require('./searchProfile');
+const SearchUsersService = require('./searchUsers');
+
+module.exports = {
+  ArtistService,
+  DeleteProductService,
+  PublicArtistProfileService,
+  SaveProductService,
+  SaveArtistProfileService,
+  SearchArtistService,
+  SearchArtistsService,
+  SearchProductsService,
+  SearchArtistProfileService,
+  SearchUsersService
+}

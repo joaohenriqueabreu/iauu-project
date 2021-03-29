@@ -13,7 +13,7 @@ const timeslotSchema = new Schema({
   type: { type: String, enum: ['event', 'busy']},
   repeat: { type: String, enum: ['day', 'week', 'month', 'year']},
 }, baseSchemaOptions);
-
+ 
 class Timeslot extends BaseRepository {
   constructor() { super(); }
 

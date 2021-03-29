@@ -3,12 +3,12 @@ const ArtistService = require('./base')
 module.exports = class SearchArtistProfileService extends ArtistService
 {
     constructor(user, data) {
-      super(user)
+      super(user);
     }
 
     async search() {
-      await this.searchArtistWithUsers()
-      this.ensureArtistWasFound()
-      return this
+      await this.searchArtistWithUsers();
+      this.ensureArtistWasFound();
+      return this;
     }
 }

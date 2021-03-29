@@ -11,5 +11,5 @@ const messageSchema = new db.Schema({
     type: { type: String, enum: ['text', 'emoji', 'file'] },
     data: { type: Object }
 }, baseSchemaOptions)
-
+ 
 module.exports = messageSchema

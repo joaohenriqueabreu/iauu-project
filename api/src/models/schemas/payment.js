@@ -15,7 +15,7 @@ const paymentSchema = new Schema({
     ref: 'Artist', 
     required: true
   },
-
+ 
   amount: { type: Number, required: true },
   net_amount: { type: Number, required: true },
   paid_amount: { type: Number, default: 0 },

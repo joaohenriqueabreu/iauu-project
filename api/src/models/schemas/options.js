@@ -6,7 +6,7 @@ const hideSensitiveData = (doc, model, options) => {
   delete model.__v  
   delete model._id  
 }
-
+ 
 module.exports = {
   timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
   toObject: { virtuals: true, transform: hideSensitiveData },
