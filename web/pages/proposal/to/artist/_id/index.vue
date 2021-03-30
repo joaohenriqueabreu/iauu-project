@@ -10,7 +10,7 @@
             :proposal="proposal"
             :products="products"
             class="step"
-            :steps="stepComponents"
+            :steps="proposalStepComponents"
             :completed-steps="completedSteps"
             @complete="completeStep"
             @incomplete="revertStep"
@@ -27,12 +27,14 @@
       </div>
       <div class="col-8 horizontal center middle">
         &nbsp;
-        <timeline
-          :steps="stepComponents.length"
-          :completed="completedSteps"
-          :current="currentStep"
-          @goto="goToStep"
-        ></timeline>
+        <timeline 
+          :steps="proposalStepComponents.length" 
+          :completed="completedSteps" 
+          :current="currentStep" 
+          :icons="proposalStepIcons" 
+          :labels="proposalStepLabels" 
+          @goto="goToStep">
+        </timeline>
       </div>
       <div class="col-2 d-flex justify-content-end pr-3">
         &nbsp;
@@ -84,20 +86,22 @@ export default {
     return {
       currentStep: 0,
       completedSteps: [],
-      stepComponents: [DateStep, ProductStep, DetailsStep, ConfirmStep]
+      proposalStepComponents: [DateStep, ProductStep, DetailsStep, ConfirmStep],
+      proposalStepIcons: ['calendar-alt', 'shopping-cart', 'map-marker-alt' , 'envelope'],
+      proposalStepLabels: ['Data do evento', 'Escolha seu produto', 'Mais detalhes sobre o evento', 'Enviar proposta']
     }
   },
   computed: {
     // ...mapState({ timeslots: (state) => state.schedule.timeslots }),
     stepComponent() {
-      return this.stepComponents[this.currentStep];
+      return this.proposalStepComponents[this.currentStep];
     },
     canPrevious() {
       return this.currentStep > 0;
     },
     canNext() {
-      return this.currentStep < this.stepComponents.length - 1;
-    }
+      return this.currentStep < this.proposalStepComponents.length - 1;
+    },
   },
   methods: {
     submit() {

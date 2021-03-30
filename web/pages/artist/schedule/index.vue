@@ -128,12 +128,9 @@ export default {
       this.$refs.busy.closeModal()
     },
     async handleAcceptProposal(id) {
-      await this.loadMySchedule()
-      this.$refs.calendar.refresh()
-      this.$refs.proposal.closeModal()
-      this.$toast.success(
-        'Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato'
-      )
+      this.$refs.proposal.closeModal();
+      this.$toast.success('Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato');
+      this.$router.push(`/artist/presentations/${id}`);
     },
     async handleRejectProposal(id) {
       await this.loadMySchedule()

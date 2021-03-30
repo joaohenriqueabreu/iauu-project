@@ -1,0 +1,19 @@
+{
+    "name": "iauu-library",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "postinstall": "link-module-alias"
+    },
+    "dependencies": {
+        "@hapi/joi": "17.1.1",
+        "axios": "0.21.1",
+        "express-jwt": "6.0.0"
+    },
+    "devDependencies": {
+        "link-module-alias": "1.2.0"
+    },
+    "_moduleAliases": {
+        "api": "../platform/src/"
+    }
+}

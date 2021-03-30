@@ -137,27 +137,27 @@ export default {
       'sendCounterOffer'
     ]),
     openModal() {
-      return this.$refs.modal.open()
+      return this.$refs.modal.open();
     },
     closeModal() {
-      return this.$refs.modal.close()
+      return this.$refs.modal.close();
     },
     async selectedTimeslot(timeslot) {
-      await this.selectTimeslot({ id: this.presentation.id, timeslot })
-      this.$toast.success('Data da apresentação selecionada')
+      await this.selectTimeslot({ id: this.presentation.id, timeslot });
+      this.$toast.success('Data da apresentação selecionada');
     },
     async accept() {
-      await this.acceptProposal(this.presentation.id)
-      this.$emit('accepted', this.presentation.id)
+      await this.acceptProposal(this.presentation.id);
+      this.$emit('accepted', this.presentation.id);
     },
     async reject() {
-      await this.rejectProposal(this.presentation.id)
-      this.$emit('rejected', this.presentation.id)
+      await this.rejectProposal(this.presentation.id);
+      this.$emit('rejected', this.presentation.id);
     },
     async dispatchCounterOffer(counterOffer) {
-      await this.sendCounterOffer(counterOffer)
-      this.$toast.success(`Orçamento enviado para ${this.presentation.contractor.name}`)
-      this.$refs.modal.close()
+      await this.sendCounterOffer(counterOffer);
+      this.$toast.success(`Orçamento enviado para ${this.presentation.contractor.name}`);
+      this.$refs.modal.close();
     }
   }
 }
