@@ -73,20 +73,24 @@ const artistSchema = new Schema({
 }, { ...baseSchemaOptions });
 
 class Artist extends BaseRepository {
-  constructor(data) { super(data); }
-
   get feedback_count() {
-    if (this.feedbacks === undefined) { return 0; }
+    if (this.feedbacks == null) { return 0; }
     return this.feedbacks.length;
   }
 
   get city_location() {
-    if (this.address === undefined) { return ''; }
+    if (this.address == null) { return ''; }
     return `${this.address.city}, ${this.address.state}`;
   }
 
   get manager() {
     return this.users[0];
+  }
+
+  // Used for payment
+  get unformatted_phone() {
+    if (this.phone == null) { return ''; }
+    return '+' + this.phone.replace(/[^a-zA-Z0-9 ]/g, '');
   }
 }
 

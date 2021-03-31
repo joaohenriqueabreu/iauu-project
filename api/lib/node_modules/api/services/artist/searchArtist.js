@@ -1,10 +1,9 @@
-const Artist = require('../../models/artist')
-const ArtistService = require('./base')
-const BadRequestException = require('../../exception/bad')
+const ArtistService = require('./base');
+const BadRequestException = require('../../exception/bad');
 
 module.exports = class SearchArtistProfileService extends ArtistService
 {
-    constructor(user, data) {
+    constructor(user) {
       super(user);
     }
 

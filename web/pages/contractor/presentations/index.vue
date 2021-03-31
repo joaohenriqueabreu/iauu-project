@@ -2,7 +2,7 @@
   <div>
     <div v-if="!$empty(unpaidPresentations)" class="vertical mb-4">
       <h6 class="mb-4">Pagamentos pendentes</h6>
-      <overlay v-for="(presentation, index) in openPresentations" :key="index">
+      <overlay v-for="(presentation, index) in unpaidPresentations" :key="index">
         <template v-slot:default>
           <nuxt-link :to="`presentations/${presentation.id}`" target="_blank">
             <presentation-info :presentation="presentation"></presentation-info>

@@ -7,6 +7,7 @@ const instalmentSchema = new Schema({
     num: { type: Number, require: true, default: 0 },
     due_dt: { type: Date, required: true },
     amount: { type: Number, required: true },
+    status: { type: String, enum: ['pending', 'paid'] },
     notes: { type: String }
 }, baseSchemaOptions)
  

@@ -1,7 +1,8 @@
 const moment = require('moment');
 const BaseService = require('../base');
-const { Billing } = require('../../models');
+const { Artist, Billing } = require('../../models');
 const RequestEndpointService = require('lib/services/request');
+const { BadRequestException } = require('../../exception');
 
 module.exports = class SaveArtistAccountService extends BaseService
 {
@@ -12,8 +13,13 @@ module.exports = class SaveArtistAccountService extends BaseService
       this.requestEndpointSvc = new RequestEndpointService();
     }
 
+    /***
+     * Assume (no need for second validation - middleware should fail before in case) we have all required information from dataMiddleware
+     * @requires presentation
+     * @requires artist
+     * @requires contractor
+     */
     async save(billingData) {
-      // By dataMiddleware assume that we have all required information (presentation, artist, contractor)
       this.billingData = billingData;
 
       await this.searchArtist();
@@ -23,7 +29,20 @@ module.exports = class SaveArtistAccountService extends BaseService
     }
 
     async searchArtist() {
-      this.artist = await Artist.find({ _id: this.billingData.artist.id });
+      // TODO for now (while monolith), just pass artist data down the road
+      this.artist = this.billingData.artist;
+      
+      // TODO when migrating to micro-service Fetch or create a (billing) artist model if one doesn't exist
+      // this.artist = await Artist.findById(this.billingData.artist.id);
+
+      // if (! this.artist instanceof Artist) {
+      //   throw new BadRequestException('Invlid Artist provided');
+      // }
+
+      // if (!this.artist instanceof Artist) { 
+      //   await (new CreateArtistService()).save();
+      // }
+
       return this;
     }
 
@@ -40,7 +59,7 @@ module.exports = class SaveArtistAccountService extends BaseService
       }
 
       this.billing.artist = this.artist.id;
-      this.billing.contractor = this.billingData.contractor.id
+      this.billing.contractor = { id: this.billingData.contractor.id }
 
       return this;
     }
@@ -48,5 +67,9 @@ module.exports = class SaveArtistAccountService extends BaseService
     async saveBilling() {
       await this.billing.save();
       return this;
+    }
+
+    getBilling() {
+      return this.billing;
     }
 }

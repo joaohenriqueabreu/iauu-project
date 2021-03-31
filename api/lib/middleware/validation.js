@@ -165,6 +165,15 @@ const bankAccount = (req, res, next) => {
   return validate(req.body, req, next, schema);
 }
 
+const payment = (req, res, next) => {
+  const schema = validateRequest.object({
+    method: validateRequest.object().required(),
+    instalment: validateRequest.string().optional(),
+  });
+
+  return validate(req.body, req, next, schema);
+}
+
 const product = (req, res, next) => {
   const schema = validateRequest.object({
     product: validateRequest.object().required()
@@ -271,6 +280,7 @@ module.exports = {
   resetPassword, 
   profile,
   bankAccount,
+  payment,
   role, 
   product,
   search,

@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .boxed {
   @extend .vertical, .middle;
   text-align: left;

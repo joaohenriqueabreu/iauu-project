@@ -4,7 +4,7 @@ const artistController = require('../controller/artist');
 const { authorizationMiddleware, validationMiddleware, dataMiddleware }  = require('lib/middleware');
 
 api.get('/:id/validate', authorizationMiddleware.app, validationMiddleware.id, artistController.validateArtist);
-api.get('/:id/fetch', authorizationMiddleware.app, validationMiddleware.id, artistController.privateInfo);
+api.get('/:id/fetch', authorizationMiddleware.app, validationMiddleware.id, artistController.fetchArtist);
 
 api.get('/:slug/public', validationMiddleware.slug, artistController.publicInfo);
 api.get('/:id/private', validationMiddleware.id, authorizationMiddleware.authorize, artistController.privateInfo);

@@ -16,14 +16,18 @@ const contractorSchema = new Schema({
   photo: { type: String },
   phone: { type: String }, 
   address: {type: addressSchema},
-  account: {
-    bank: bankAccountSchema,
-    gateway: gatewayAccountSchema
-  }
 }, { ...baseSchemaOptions });
 
 class Contractor extends BaseRepository {
-  constructor(data) { super(data); }
+  get has_pending_required_payment_information() {
+    return this.phone == null || 
+      this.address == null || 
+      this.address.has_pending_required_payment_information;
+  }
+
+  get manager() {
+    return this.users[0];
+  }
 }
 
 contractorSchema.loadClass(Contractor);

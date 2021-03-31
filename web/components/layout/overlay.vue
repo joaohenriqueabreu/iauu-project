@@ -3,7 +3,7 @@
     <div class="sub-wrapper full-height">
       <slot name="default"></slot>
     </div>
-    <div class="overlay" :class="{ rounded, selected }">
+    <div class="overlay" :class="{ rounded, edges, selected }">
       <slot name="hover"></slot>
     </div>
   </div>
@@ -12,7 +12,8 @@
 <script>
 export default {
   props: {
-    rounded: Boolean,
+    rounded: { type: Boolean, default: false },
+    edges: { type: Boolean, default: false },
     selected: { type: Boolean, default: false } // fixed styling
   }
 }
@@ -55,8 +56,13 @@ div {
   -ms-transform: translate(-50%, -50%);
   text-align: center;
   cursor: pointer;
+
   &.rounded {
     border-radius: $rounded !important;
+  }
+
+  &.edges {
+    border-radius: $edges !important;
   }
 }
 </style>

@@ -15,10 +15,11 @@
       <div class="boxed mb-4">
         <h6>Atualize suas informações pessoais</h6>
         <small>
-          Não se preocupe, somente com sua autorização, suas informações serão compartilhadas 
+          Não se preocupe, somente com sua autorização, suas informações serão compartilhadas. 
           <nuxt-link to="terms"><small><u>Em caso de dúvidas, Leia nossa política de privacidade</u></small></nuxt-link>
         </small>
-        <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone"></form-masked>
+        <form-masked v-model="phone" icon="phone" placeholder="Telefone" mask="phone" class="mb-4"></form-masked>
+        <form-location :default="address" street placeholder="Endereço" :model="address" prop="address" @selected="updateAddress"></form-location>
       </div>
       <div class="boxed" v-if="!isAdminUser">
         <h6>Faça login via redes sociais</h6>
@@ -70,19 +71,24 @@ export default {
       phone: 'user.phone',
       email: 'user.email',
       photo: 'user.photo',
+      address: 'user.address',
     }),
     isAdminUser() {
       return this.$auth.hasScope('admin');
     }
   },
   methods: {
-    ...mapActions('protected', ['renewAuth', 'saveProfile']),
+    ...mapActions('protected', ['renewAuth', 'saveProfile', 'saveAddress']),
     uploadAvatar() {
       this.$refs.avatarUploader.upload();
     },
     async handleSaveUserProfile() {
       await this.saveProfile();
       this.$toast.success('Perfil salvo com sucesso!');
+    },
+    async updateAddress(address) {      
+      await this.saveAddress(address);
+      this.$toast.success('Endereço adicionado com sucesso!');
     },
     async setAvatar(url) {
       this.photo = url;

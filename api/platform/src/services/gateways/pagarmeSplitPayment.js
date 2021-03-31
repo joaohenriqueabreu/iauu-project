@@ -190,7 +190,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
         type: 'cpf',
         number: this.paymentDocument
       }],
-      phone_numbers: [this.payment.to.phone],
+      phone_numbers: [this.payment.to.unformatted_phone],
       birthday: this.payment.to.birthday
     }
   }
@@ -199,13 +199,13 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     return {
       name: this.payment.from.name,
       address: {
-        country: this.payment.from.address.country,
+        country: this.payment.from.address.short_country.toLowerCase(),
         street: this.payment.from.address.street,
-        street_number: this.payment.from.address.number,
-        state: this.payment.from.address.state,
+        street_number: this.payment.from.address.number || '01',
+        state: this.payment.from.address.short_state.toLowerCase(),
         city: this.payment.from.address.city,
         neighborhood: this.payment.from.address.neighborhood,
-        zipcode: this.payment.from.address.zipcode
+        zipcode: this.payment.from.address.unformatted_zipcode
       }
     }
   }
@@ -236,6 +236,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     try {
       this.transaction = await this.apiClient.transactions.create(this.pagarmeTransactionRequestData);
     } catch (error) {
+      console.log(error.response.errors);
       throw new FailedChargingPaymentMethodException('Failed creating transaction', error.response.errors);
     }
     

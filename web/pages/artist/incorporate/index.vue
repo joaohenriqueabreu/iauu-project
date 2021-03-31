@@ -86,7 +86,7 @@ export default {
     try {
       await store.dispatch('artist/loadArtist')
     } catch (error) {
-      $sentry.captureException(e)
+      $sentry.captureException(error)
       error({ statusCode: 404, message: 'Perfil não encontrado' })
     }
   },

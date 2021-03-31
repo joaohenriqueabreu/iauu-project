@@ -9,11 +9,12 @@
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
+        :class="transparent ? 'transparent' : ''"
         @input="afterInput"
         @blur="afterBlur"
         @keyup.enter.prevent="afterEnter"
       />
-      <icon v-if="iconHelper" :icon="iconHelper"></icon>
+      <icon v-if="!noIcon" :icon="iconHelper"></icon>
     </div>
   </div>
 </template>
@@ -41,15 +42,17 @@ export default {
     placeholder: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
     icon: { type: String, default: null },
+    noIcon: { type: Boolean, default: false },
     value: { type: [String, Number, Boolean], default: null },
-    required: { type: Boolean, default: false }
+    required: { type: Boolean, default: false },
+    transparent: { type: Boolean, default: false }
   },
   computed: {
     type() {
       return 'text';
     },
     iconHelper() {
-      return !this.$utils.empty(this.icon) ? this.icon : 'search';
+      return !this.$empty(this.icon) ? this.icon : 'search';
     }
   },
   methods: {
@@ -104,6 +107,20 @@ export default {
     padding: 2 * $space 5 * $space 2 * $space 2 * $space;
     cursor: pointer;
 
+    &::placeholder {
+      transition: $transition;
+    }
+
+    &.transparent {
+      background-color: transparent;
+
+      &::placeholder {
+        transition: $transition;
+        color: $white;
+        opacity: 0.7;
+      }
+    }
+
     &:focus,
     &:active {
       border-top-color: transparent;
@@ -119,9 +136,15 @@ export default {
       background: $brandLayer;
       color: $layer1;
     }
+
     &:hover {
+      transition: $transition;
       // background-color: $layer5;
-      background-color: $brandLayer;
+      // background-color: $brandLayer;
+      &::placeholder {
+        transition: $transition;
+        color: $brandLayer;
+      }
     }
   }
 

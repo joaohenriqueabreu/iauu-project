@@ -2,12 +2,10 @@
   <div v-if="!$empty(presentation)">
     <tabs :items="presentationTabs" :default-tab="presentationStatusIndex">
       <div class="mb-4 position-relative">
-        <h1 class="mb-2">{{ presentation.proposal.title }} {{ presentationDt }} </h1>
-        <h6 class="mb-2">{{ presentation.address.short_display }}</h6>
-        <h4 class="mb-5">{{ presentationLabels[presentationStatusIndex] }}</h4>
+        <presentation-info simple show-status :presentation="presentation" class="mb-5"></presentation-info>
         <timeline
           class="mb-4"
-          :steps="PRESENTATION_STATUS_MAP.length" 
+          :steps="PRESENTATION_STATUS_TABS_MAP.length" 
           :completed="presentationStatusIndexes" 
           :current="presentationStatusIndex" 
           :icons="presentationIcons"
@@ -21,25 +19,29 @@
 <script>
 import _ from 'lodash'; // TODO use from global
 import { mapState } from 'vuex';
+import PresentationInfo from '@/components/presentation/info';
 import ProposalDetails from '@/components/presentation/contractor/proposal';
 import PresentationProduction from '@/components/presentation/contractor/production';
 import PresentationFeedback from '@/components/presentation/contractor/feedback';
 import BillingDetails from '@/components/presentation/contractor/billing';
 // Map presentation status to tab index
 export default {
+  components: {
+    PresentationInfo,
+  },
   async asyncData({ app, store, route }) {
     await store.dispatch('presentation/loadPresentation', route.params.id);
   },
   data() {
     return { 
-      PRESENTATION_STATUS_MAP: [
+      PRESENTATION_STATUS_TABS_MAP: [
         'proposal', // Proposta
         'accepted', // Contrato
         null, // Produção
         null, // Apresentação
         'completed', // Faturamento
         'paid' // Resumo
-      ]
+      ],
     }
   },
   computed: {
@@ -80,7 +82,7 @@ export default {
         return 3; // Index of "Apresentação"
       }
 
-      return this.$array.indexOf(this.PRESENTATION_STATUS_MAP, this.presentation.status);
+      return this.$array.indexOf(this.PRESENTATION_STATUS_TABS_MAP, this.presentation.status);
     }
   }
 }

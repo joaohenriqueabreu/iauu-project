@@ -1,7 +1,6 @@
 
 const BaseController = require('./base');
-const SaveArtistAccountService = require('../services/billing/saveArtistAccount');
-const SaveBillingService = require('../services/billing/saveBilling');
+const { SaveArtistAccountService, SaveBillingService, SearchPresentationBillingService, PaymentService, PayInstalmentService } = require('../services/billing');
 
 class BillingController extends BaseController {
   async saveBankAccount(req, res, next) {
@@ -42,7 +41,21 @@ class BillingController extends BaseController {
   }
 
   async chargePayment(req, res, next) {
+    console.log('Paying presentation...');
+    
+    const payBillingSvc = req.data.instalment !== undefined
+      ? new PayInstalmentService(req.user, req.data.instalment, req.data.method, req.data.fee)
+      : new PaymentService(req.user, req.data.id, req.data.method, req.data.fee);
 
+    try {
+      await payBillingSvc.pay();
+      res.status(200).json({
+        billing: payBillingSvc.getBilling(),
+        payment: payBillingSvc.getPayment(),
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

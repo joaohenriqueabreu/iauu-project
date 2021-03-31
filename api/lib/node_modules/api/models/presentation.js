@@ -31,6 +31,11 @@ const presentationSchema = new Schema({
   confirm_status: [String],
   timeslot: timeslotSchema,
   proposal: proposalSchema,
+  checklist: [{
+    name: { type: String },
+    completed: { type: String },
+    completed_at: { type: Date },
+  }],
   price: { type: Number },
   duration: { type: String }
 }, { ...baseSchemaOptions })
@@ -56,8 +61,24 @@ class Presentation extends BaseRepository {
     return this.price;
   }
 
+  get is_proposal() {
+    return this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL;
+  }
+
+  get is_rejected() {
+    return this.status === PresentationData.PRESENTATION_STATUS_REJECTED;
+  }
+
+  get is_contracted() {
+    return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED;
+  }
+
   get is_completed() {
     return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED;
+  }
+
+  get is_cancelled() {
+    return this.status === PresentationData.PRESENTATION_STATUS_CANCELLED;
   }
 
   get is_paid() {
@@ -78,14 +99,6 @@ class Presentation extends BaseRepository {
     }
 
     return this.timeslot.end_dt;
-  }
-
-  get is_contracted() {
-    return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED;
-  }
-
-  get is_completed() {
-    return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED;
   }
 
   get is_presentation_close() {

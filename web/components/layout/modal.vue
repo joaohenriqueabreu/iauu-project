@@ -4,7 +4,7 @@
     <!-- TODO This is breaking artist profile page, not showing scrollbar - investigate -->
     <!-- @before-open="disableBodyScroll"
     @before-close="enableBodyScroll" -->
-      <div class="modal-content" :class="[height, noPad ? 'no-pad' : '']">
+      <div class="modal-content" :class="[modalHeight, noPad ? 'no-pad' : '']">
         <header v-show="!hideHeader" :class="headerCustomHeight">
           <div class="close" @click="close">
             <icon icon="times"></icon>
@@ -32,6 +32,9 @@ import { v4 } from 'uuid'
 export default {
   props: {
     height: { type: String, default: 'regular' },
+    // Or provide heights as params
+    small: { type: Boolean, default: false },
+
     headerHeight: { type: String, default: null },
     hideHeader: { type: Boolean, default: false },
     noPad: { type: Boolean, default: false }
@@ -40,7 +43,13 @@ export default {
     name: () => v4(),
     headerCustomHeight() {
       if (!this.$empty(this.headerHeight)) { return this.headerHeight }
-      return this.height
+      return this.modalHeight;
+    },
+    modalHeight() {
+      if (this.small) { return 'small'; }
+      if (this.tiny) { return 'tiny'; }
+
+      return this.height;
     }
   },
   methods: {
@@ -91,15 +100,15 @@ export default {
     padding: 0;
   }
 
-  // &.tiny {
-  //   height: 50vh;
-  // }
-  // &.small {
-  //   height: 70vh;
-  // }
-  // &.regular {
-  //   height: 95vh;
-  // }
+  &.tiny {
+    height: 50vh;
+  }
+  &.small {
+    height: 70vh;
+  }
+  &.regular {
+    height: 95vh;
+  }
 
   header {
     // @extend .vertical, .middle, .center;
@@ -129,6 +138,7 @@ export default {
       height: 30px;
       opacity: 1; // overwrite from some other style
       padding-left: 9px;
+      z-index: $above;
     }
   }
 

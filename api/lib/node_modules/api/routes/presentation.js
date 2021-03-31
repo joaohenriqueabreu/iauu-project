@@ -19,7 +19,7 @@ api.post('/proposal',
 );
 
 api.get('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.search);
-api.put('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.completePresentation);
+api.put('/:id/complete', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.completePresentation);
 api.delete('/:id', authorizationMiddleware.authorize, validationMiddleware.id, presentationController.cancelPresentation);
 
 api.put('/:id/timeslot', authorizationMiddleware.authorize, validationMiddleware.id, validationMiddleware.timeslot, presentationController.selectTimeslot);
@@ -47,6 +47,14 @@ api.delete('/:id/proposal/counterOffer',
   authorizationMiddleware.contractor, 
   validationMiddleware.id, 
   presentationController.rejectCounterOffer
+);
+
+api.put('/:id', 
+  authorizationMiddleware.authorize,
+  authorizationMiddleware.contractor,
+  validationMiddleware.id,
+  validationMiddleware.body,
+  presentationController.editPresentation
 );
 
 module.exports = api;

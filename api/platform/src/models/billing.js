@@ -1,25 +1,19 @@
-const db = require('mongoose');
+const _ = require('lodash');
+const { Schema, model } = require('mongoose');
 const BaseRepository = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
 const paymentSchema = require('./schemas/payment').schema;
 const instalmentSchema = require('./schemas/instalment').schema;
 const { BillingData } = require('../config/data');
 
-const { Schema } = db;
-
 const billingSchema = new Schema({
 // TODO move to own presentation / artist / contractor models for billing micro-service
-  presentation_id: { 
-    id: {type: String, required: true },
-    title: { type: String, required: true },
-    presentation_dt: { type: Date, required: true }
-  },
-  contractor_id: { 
-    id: { type: String, required: true }
-  },
-  artist: { type: Schema.Types.ObjectId, required: true },
+  presentation: { type: Schema.Types.ObjectId, ref: 'Presentation', required: true },
+  contractor: { type: Schema.Types.ObjectId, ref: 'Contractor', required: true },
+  artist: { type: Schema.Types.ObjectId, ref: 'Artist', required: true },
+
   total_amount: { type: Number, required: true },
-  total_paid: { type: Number, default: 0 },
+  // total_paid: { type: Number, default: 0 },
   fee: { type: Number, required: true },
   status: { type: String, enum: BillingData.BILLING_STATUS, default: BillingData.PENDING_STATUS, required: true },
   instalments: [instalmentSchema],
@@ -31,10 +25,25 @@ class Billing extends BaseRepository {
     return this.total_paid >= this.total_amount;
   }
 
+  get is_pending() {
+    return this.status === BillingData.PENDING_STATUS;
+  }
+
   get installments() {
     return this.payments.length;
+  }
+
+  get amount_due() {
+    return this.total_amount - this.total_paid;
+  }
+
+  get total_paid() {
+    return _.reduce(this.payments, (total, payment) => {
+      total += (payment.is_paid ? payment.paid_amount : 0);
+      return total;
+    }, 0);
   }
 }
 
 billingSchema.loadClass(Billing);
-module.exports = db.model('Billing', billingSchema);
+module.exports = model('Billing', billingSchema);

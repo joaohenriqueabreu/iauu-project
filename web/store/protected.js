@@ -8,7 +8,10 @@ export const state = () => ({
 export const mutations = {
   updateField,
   set_user(state, data) {
-    state.user = data
+    state.user = data;
+  },
+  update_user(state, data) {
+    state.user = { ...state.user, ...data};
   },
   set_token(state, token) {
     state.token = token
@@ -26,6 +29,10 @@ export const actions = {
   async saveProfile({ commit, state }) {
     const { data } = await this.$axios.put('users/profile', { profile: state.user })
     commit('set_user', data)
+  },
+  async saveAddress({ commit, dispatch }, address) {
+    commit('update_user', { address });
+    await dispatch('saveProfile');
   },
   register({ commit }, credentials) {
     return this.$axios.post('register', credentials)

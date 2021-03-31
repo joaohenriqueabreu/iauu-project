@@ -13,6 +13,7 @@ const AcceptCounterOfferService = require('../services/presentation/acceptCounte
 const RejectCounterOfferService = require('../services/presentation/rejectCounterOffer');
 const CompletePresentationService = require('../services/presentation/completePresentation');
 const CancelPresentationService = require('../services/presentation/cancelPresentation');
+const ManagePresentationChecklistService = require('../services/presentation/manageChecklist');
 const RequestEndpointService = require('lib/services/request');
 const { Presentation } = require('../models');
 const { BadRequestException } = require('../exception');
@@ -109,6 +110,7 @@ class PresentationController extends BaseController {
     const acceptProposalService = new AcceptProposalService(req.user, req.data);
     const requestEndpointSvc = new RequestEndpointService();
     let newPresentation = {};
+    
     try {
       await acceptProposalService.reply();
       newPresentation = acceptProposalService.getPresentation();
@@ -127,6 +129,8 @@ class PresentationController extends BaseController {
       // TODO we should probably rollback presentation in case billing fails creating
       next(error);
     }
+
+    res.status(200).json(newPresentation);
   }
 
   rejectProposal(req, res, next) {
@@ -151,6 +155,18 @@ class PresentationController extends BaseController {
     cancelPresentationService.cancel()
       .then(() => { res.status(200).json(cancelPresentationService.getPresentation()) })
       .catch((error) => next(error));
+  }
+
+  // TODO change for actual edit service if necessary
+  async editPresentation(req, res, next) {
+    console.log('Creating checklist...');
+    const manageChecklistSvc = new ManagePresentationChecklistService(req.data.id);
+    try {
+      await manageChecklistSvc.update(req.data);
+      res.status(200).json(manageChecklistSvc.getPresentation());
+    } catch (error) {
+      next(error);
+    }
   }
 
   getTypes(req, res, next) {  

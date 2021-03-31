@@ -6,7 +6,7 @@ const { PagarmeTransactionFactory, PagarmeRecipientFactory } = require('./factor
 // Services
 const SaveArtistBankAccountService = require('../src/services/billing/saveArtistAccount');
 const CompletePresentationService = require('../src/services/presentation/completePresentation');
-const PayPresentationService = require('../src/services/billing/payPresentation');
+const PayPresentationService = require('../src/services/billing/payment');
 
 const { Exception } = require('../src/exception');
 const { PagarmeSplitPaymentService, PagarmeCreateAccountService } = require('../src/services/gateways');

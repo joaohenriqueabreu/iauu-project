@@ -1,5 +1,8 @@
 <template>
-  <div class="event">
+  <div class="event position-relative" :class="simple ? '': 'interact'">
+    <div v-if="showStatus" class="label">
+      {{ presentationStatusLabel }}
+    </div>
     <h4>{{ presentationDate | date }}</h4>
     <div class="info">
       <div class="mb-3">
@@ -23,12 +26,28 @@
 <script>
 export default {
   props: {
-    presentation: { type: Object, default: () => {} }
+    presentation: { type: Object, default: () => {} },
+    simple: { type: Boolean, default: false },
+    showStatus: { type: Boolean, default: false }
+  },
+  data() {
+    return {
+      PRESENTATION_STATUS_LABELS_MAP: {
+        'proposal': 'Proposta',
+        'accepted': 'Contratada',
+        'completed': 'Realizada', 
+        'paid': 'Fechada' 
+      }
+    }
   },
   computed: {
+    presentationStatusLabel() {
+      console.log(this.presentation.status);
+      return this.PRESENTATION_STATUS_LABELS_MAP[this.presentation.status];
+    },
     presentationDate() {
       if (!this.$empty(this.presentation.timeslot)) { return this.presentation.timeslot.start_dt }
-      if (this.presentation.status === 'proposal') { return this.presentation.proposal.timeslots[0].start_dt }
+      if (this.presentation.is_proposal) { return this.presentation.proposal.timeslots[0].start_dt }
 
       return ''
     },
@@ -45,13 +64,22 @@ export default {
 
 <style lang="scss" scoped>
 .event {
-  @extend .full-width, .horizontal, .middle, .clickable;
+  @extend .full-width, .horizontal, .middle;
   margin-bottom: 3 * $space;
   padding: 2 * $space;
-  background: $layer3;
-  box-shadow: $shadow;
-  border-radius: $edges;
   transition: $transition;
+  border-radius: $edges;
+
+  &.interact {
+    @extend .clickable;
+    box-shadow: $shadow;
+    background: $layer3;
+
+    &:hover {
+      transition: $transition;
+      background: $layer4;
+    }
+  }
 
   h4 {
     margin-right: 4 * $space;
@@ -61,10 +89,30 @@ export default {
     border-left: 5px solid $layer2;
     padding-left: 4 * $space;
   }
+}
 
-  &:hover {
-    transition: $transition;
-    background: $layer4;
+.label {
+  padding: $space;
+  font-weight: $bold;
+  border-radius: $edges;
+  position: absolute;
+  top: $space;
+  right: $space;
+  font-size: $small;
+
+  &.proposal {
+    background: $layer5;
+    color: $white;
+  }
+
+  &.accepted {
+    background: $brandLayer;
+    color: $white;
+  }
+
+  &.completed, &.paid {
+    background: $success;
+    color: $white;
   }
 }
 </style>

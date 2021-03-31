@@ -3,11 +3,13 @@ const BaseService = require('../base')
 
 module.exports = class ArtistService extends BaseService
 {
-    constructor({ id, role_id }) {
+    constructor(data) {
       super();
 
-      this.id = role_id;
-      this.userId = id;
+      if (data === undefined) { return; }
+
+      this.id = data.role_id;
+      this.userId = data.id;
       this.artist = {};
     }
 

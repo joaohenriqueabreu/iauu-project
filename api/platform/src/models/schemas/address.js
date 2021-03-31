@@ -74,6 +74,22 @@ class Address extends BaseRepository {
   get short_state() {
     return this.state.length > 2 ? STATE_SHORTNAME_MAP[this.state] : this.state;
   }
+
+  get short_country() {
+    return 'BR';
+  }
+
+  get unformatted_zipcode() {
+    return this.zipcode.replace(/[^a-zA-Z0-9 ]/g, '');
+  }
+
+  get has_pending_required_payment_information() {
+    return this.street == null || 
+      this.number == null || 
+      this.city == null || 
+      this.state == null || 
+      this.country == null;
+  }
 }
 
 addressSchema.index({ location: '2dsphere'});

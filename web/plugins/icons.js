@@ -97,6 +97,10 @@ import {
   faWallet,
   faCogs,
   faTasks,
+  faBarcode,
+  faQrcode,
+  faTrashAlt,
+  faAsterisk,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -247,6 +251,10 @@ library.add(
   faWallet,
   faCogs,
   faTasks,
+  faBarcode,
+  faQrcode,
+  faTrashAlt,
+  faAsterisk,
 );
 
 Vue.component('icon', FontAwesomeIcon);
