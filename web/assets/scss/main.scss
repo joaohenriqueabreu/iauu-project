@@ -14,6 +14,10 @@ body {
     'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: $brand;
   background: $layer2;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 h1,
@@ -36,7 +40,6 @@ h6 {
 
 .content {
   position: relative;
-  // height: 100vh;
 }
 
 main {
@@ -130,6 +133,13 @@ a {
   display: flex;
   flex-direction: row;
 
+  &.desktop-only {
+    @include mobile {
+      display: flex;
+      flex-direction: column
+    }
+  }
+
   &.center {
     justify-content: center;
   }
@@ -159,10 +169,6 @@ a {
 
 .clickable {
   cursor: pointer;
-}
-
-.disable-scroll {
-  overflow: hidden !important;
 }
 
 .hide-mobile {
@@ -197,8 +203,12 @@ a {
   right: 0px;
 }
 
-.toast-container {
+.toasted-container {
   max-width: 50vw;
+  .toasted {
+    padding: 2 * $space;
+    background: $brand;
+  }
 }
 
 .one-line {
@@ -224,4 +234,39 @@ a {
   font-weight: $bold;
   border-bottom: 5px solid $layer3;
   border-radius: rounded;
+}
+
+.brand-hover {
+  transition: $transition;
+  &:hover {
+    transition: $transition;
+    color: $brandLayer;
+  }
+}
+
+.dropdown-menu {
+  min-width: 250px;
+  z-index: $moveToTop !important;
+  div, h6, a {
+    z-index: $moveToTop !important;
+  }
+}
+
+div {
+  z-index: auto;
+}
+
+.horizontal-scroll {
+  white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  
+  &::-webkit-scrollbar {
+    display: none; 
+  }
+}
+
+.table {
+  color: $white;
 }

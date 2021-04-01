@@ -1,59 +1,73 @@
 <template>
   <modal ref="modal">
-    <template v-slot:header v-if="!$empty(presentation)">
+    <template v-if="!$empty(presentation)" v-slot:header>
       <div class="d-flex justify-content-between">
         <div class="vertical middle">
           <h4 class="mb-2">{{ presentation.proposal.title }}</h4>
           <h6 class="status-badge mr-4" :class="presentation.status">{{ statusLabel }}</h6>
         </div>
         <div class="d-flex align-items-end">
-          <h5 class="identifier">{{ presentation.status === 'proposal' ? 'Proposta' : 'Apresentação' }}</h5>
+          <h5 class="identifier">
+            {{ presentation.status === 'proposal' ? 'Proposta' : 'Apresentação' }}
+          </h5>
         </div>
       </div>
     </template>
-    <template v-slot:main v-if="!$empty(presentation)">
+    <template v-if="!$empty(presentation)" v-slot:main>
       <div>
         <h4 class="mb-4">Informações</h4>
         <div>ID</div>
         <h6 class="mb-4">{{ presentation.id }}</h6>
         <div class="vertical mb-4">
           <div>Contratante</div>
-          <h6>{{ presentation.contractor.user.name }}</h6>
-          <div>{{ presentation.contractor.user.email }}</div>
+          <h6>{{ presentation.contractor.name }}</h6>
         </div>
         <div class="vertical mb-4">
           <div>Artista</div>
-          <h6>{{ presentation.artist.user.name }}</h6>
-          <div>{{ presentation.artist.user.email }}</div>
+          <h6>{{ presentation.artist.name }}</h6>
         </div>
         <div v-if="presentation.status === 'proposal'">
           <div>Valor em negociação</div>
         </div>
-        <div v-else>
-
-        </div>
+        <div v-else></div>
         <div v-if="presentation.status === 'proposal'" class="mb-4">
           <div>Datas da proposta</div>
           <div class="horizontal">
-            <div v-for="(timeslot, index) in presentation.proposal.timeslots" :key="index" class="vertical">
-              <h6 class="mr-2 horizontal">{{ timeslot.start_dt | datetime }} <span v-if="index < presentation.proposal.timeslots.length - 1">,</span></h6>
+            <div
+              v-for="(timeslot, index) in presentation.proposal.timeslots"
+              :key="index"
+              class="vertical"
+            >
+              <h6 class="mr-2 horizontal">
+                {{ timeslot.start_dt | datetime }}
+                <span v-if="index < presentation.proposal.timeslots.length - 1">,</span>
+              </h6>
             </div>
           </div>
         </div>
         <div v-else class="mb-4">
           <div>Data da apresentação</div>
           <div class="horizontal">
-            <h6 class="mr-4"><font-awesome icon="play-circle" class="mr-2"></font-awesome> {{ presentation.timeslot.start_dt | datetime }}</h6>
-            <h6><font-awesome icon="stop-circle" class="mr-2"></font-awesome>{{ presentation.timeslot.end_dt | datetime }}</h6>
+            <h6 class="mr-4">
+              <icon icon="play-circle" class="mr-2"></icon>
+              {{ presentation.timeslot.start_dt | datetime }}
+            </h6>
+            <h6>
+              <icon icon="stop-circle" class="mr-2"></icon
+              >{{ presentation.timeslot.end_dt | datetime }}
+            </h6>
           </div>
         </div>
         <div v-if="presentation.status !== 'proposal'">
           <div>Contratado</div>
           <h6>{{ presentation.price | currency }}</h6>
-          <h6><font-awesome icon="clock" class="mr-2"></font-awesome> {{ presentation.duration }} horas</h6>
+          <h6>
+            <icon icon="clock" class="mr-2"></icon>
+            {{ presentation.duration }} horas
+          </h6>
         </div>
       </div>
-      <hr>
+      <hr />
       <!-- <div>
         <h4 class="mb-4">Gerenciar</h4>
         <div class="row">
@@ -72,10 +86,14 @@
         </div>
       </div> -->
     </template>
-    <template v-slot:footer v-if="!$empty(presentation)">
+    <template v-if="!$empty(presentation)" v-slot:footer>
       <div class="horizontal center middle full-height">
-        <form-button @action="handleLoginAs(presentation.contractor.user.id)" class="mr-4">Fazer login como {{ presentation.contractor.user.name }}</form-button>
-        <form-button @action="handleLoginAs(presentation.artist.user.id)">Fazer login como {{ presentation.artist.user.name }}</form-button>
+        <form-button class="mr-4" @action="handleLoginAs(presentation.contractor.users[0].id)"
+          >Fazer login como {{ presentation.contractor.name }}</form-button
+        >
+        <form-button @action="handleLoginAs(presentation.artist.users[0].id)"
+          >Fazer login como {{ presentation.artist.name }}</form-button
+        >
       </div>
     </template>
   </modal>
@@ -85,15 +103,25 @@
 // import { mapActions } from 'vuex'
 export default {
   props: {
-    presentation: { type: Object, default: () => {}},
+    presentation: { type: Object, default: () => {} }
   },
   computed: {
     statusLabel() {
-      if (this.presentation.status === 'proposal') { return 'Proposta'}
-      if (this.presentation.status === 'rejected') { return 'Proposta recusada'}
-      if (this.presentation.status === 'accepted') { return 'Apresentação contratada'}
-      if (this.presentation.status === 'completed') { return 'Apresentação realizada'}
-      if (this.presentation.status === 'cancelled') { return 'Apresentação cancelada'}
+      if (this.presentation.status === 'proposal') {
+        return 'Proposta'
+      }
+      if (this.presentation.status === 'rejected') {
+        return 'Proposta recusada'
+      }
+      if (this.presentation.status === 'accepted') {
+        return 'Apresentação contratada'
+      }
+      if (this.presentation.status === 'completed') {
+        return 'Apresentação realizada'
+      }
+      if (this.presentation.status === 'cancelled') {
+        return 'Apresentação cancelada'
+      }
       return ''
     }
   },
@@ -106,7 +134,7 @@ export default {
       await this.$auth.loginWith('admin', {
         data: {
           token: this.$auth.user.admin_token,
-          id: id
+          id
         }
       })
     }
@@ -116,7 +144,9 @@ export default {
 
 <style lang="scss" scoped>
 // TODO move to a common layer (repeated from admin/user/index)
-.role-badge, .status-badge, .verification-label {
+.role-badge,
+.status-badge,
+.verification-label {
   &.icon-only {
     width: 25px;
     height: 25px;
@@ -133,18 +163,30 @@ export default {
   }
 
   // Role specific classes
-  &.admin { background: $layer1; }
-  &.artist { background: $layer5; }
-  &.contractor { 
-    background: $brandLayer; 
+  &.admin {
+    background: $layer1;
+  }
+  &.artist {
+    background: $layer5;
+  }
+  &.contractor {
+    background: $brandLayer;
     color: $layer5;
   }
 
   // Status specific classes
-  &.pending { background: $layer5; }
-  &.active { background: $green; }
-  &.blocked { background: $error;  }
+  &.pending {
+    background: $layer5;
+  }
+  &.active {
+    background: $green;
+  }
+  &.blocked {
+    background: $error;
+  }
 
-  &.verified { background: $green; }
+  &.verified {
+    background: $green;
+  }
 }
 </style>

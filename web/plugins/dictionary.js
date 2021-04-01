@@ -11,12 +11,12 @@ const dictionary = {
     stats: {
       label: {
         presentations: 'Apresentações',
-        fans: 'Fãs',
+        followers: 'Seguidores',
         score: 'Avaliações'
       },
       icon: {
         presentations: 'music',
-        fans: 'child',
+        followers: 'child',
         score: 'star'
       }
     }

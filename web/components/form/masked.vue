@@ -1,6 +1,7 @@
 <template>
   <div>
-    <label :for="name">{{ label }}</label>
+    <label v-if="!$empty(label)" :for="name">{{ label }}</label>
+    <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <input
         v-mask="maskHelper"
@@ -12,18 +13,19 @@
         @input="emitMasked"
         @keyup.enter="$emit('enter', value)"
       />
-      <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
+      <icon v-if="iconHelper" :icon="iconHelper"></icon>
     </div>
   </div>
 </template>
 
 <script>
-import Input from '@/components/form/input'
+import Input from '@/components/form/input';
+
 const MASKS = {
   phone: ['(##) ####-####', '(##) #####-####'],
   document: ['###.###.###-##', '##.###.###/####-##'],
-  agency: ['###', '###-#', '###-##'],
-  bankAccount: ['###-#', '####-#', '#####-#', '######-#'],
+  // agency: ['###', '###-#', '###-##'],
+  // bankAccount: ['###-#', '####-#', '#####-#', '######-#', '#######-#', '########-#', '#########-#', '##########-#'],
   creditCard: ['#### #### #### ####'],
   cvc: ['###'],
   cardExpiry: ['##/##', '##/####']

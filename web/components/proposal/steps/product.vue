@@ -3,7 +3,7 @@
     <div class="mb-5 vertical">
       <h6 class="mb-2">Escolha o produto do artista que você deseja contratar</h6>
     </div>
-    <carousel class="full-height" :navigationEnabled="true">
+    <carousel class="full-height" :navigation-enabled="true">
       <slide v-for="(product, index) in products" :key="index" class="mr-5">
         <overlay>
           <template v-slot:default>
@@ -12,7 +12,7 @@
                 :ref="`info_${product.id}`"
                 :product="product"
                 :not-items="notItems(product.items)"
-                proposal-view
+                read-only
                 @selected="chooseProduct(product)"
               ></product-info>
             </div>
@@ -20,7 +20,7 @@
           <template v-slot:hover>
             <div class="full-height vertical middle center">
               <h3 class="mb-5" @click="chooseProduct(product)">
-                <font-awesome icon="hand-rock-n-roll"></font-awesome>
+                <icon icon="hand-rock-n-roll"></icon>
                 Escolher formato
               </h3>
               <form-button @action="openPreviewModal(product)">Ver mais informações</form-button>
@@ -33,6 +33,7 @@
           <h3>Personalize sua apresentação</h3>
         </div>
       </slide>
+      <slide></slide>
     </carousel>
     <product-preview ref="preview" @selected="chooseProduct"></product-preview>
     <custom-product ref="custom" :all-items="allItems" @selected="chooseProduct"></custom-product>
@@ -46,9 +47,9 @@ import ProductPreview from '@/components/artist/product/preview'
 import CustomProduct from '@/components/proposal/steps/customProduct'
 export default {
   components: {
-    'product-info': ProductInfo,
-    'product-preview': ProductPreview,
-    'custom-product': CustomProduct
+    ProductInfo,
+    ProductPreview,
+    CustomProduct
   },
   extends: Step,
   props: {

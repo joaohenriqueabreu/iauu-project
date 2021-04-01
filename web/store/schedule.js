@@ -24,7 +24,7 @@ export const mutations = {
 
 export const actions = {
   async loadSchedule({ commit }, { id, year }) {
-    const { data } = await this.$axios.get(`schedules/public/${id}`, { params: { year }})
+    const { data } = await this.$axios.get(`schedules/public/${id}`, { params: { year } })
     commit('set_schedule', data)
   },
   async loadMySchedule({ commit }, query) {
@@ -52,7 +52,9 @@ export const getters = {
     return this.$array.last(state.timeslots)
   },
   presentations(state) {
-    return state.timeslots.filter((timeslot) => ['accepted', 'completed', 'cancelled'].includes(timeslot.status))
+    return state.timeslots.filter((timeslot) =>
+      ['accepted', 'completed', 'cancelled'].includes(timeslot.status)
+    )
   },
   proposals(state) {
     return state.timeslots.filter((timeslot) => timeslot.status === 'proposal')

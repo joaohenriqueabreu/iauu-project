@@ -1,56 +1,68 @@
-import pluralize from 'pluralize'
-import { Model } from 'vue-mc'
+import plural from 'pluralize-ptbr';
+import Model from '../models/model';
 
 const utils = {
-  pluralize: (value, count) => pluralize(value, count),
+  pluralize: (value, count) => {
+    return plural(value, count);
+  },
   genCalendarEventId: (timeslot) => `${timeslot.type}_${timeslot.id}`,
 
   empty: (variable) => {
     if (variable === undefined || variable === null) {
-      return true
+      return true;
     }
 
     if (variable instanceof Model) {
-      return variable.id === 0 || variable.id === null
+      return variable.id === 0 || variable.id === null;
     }
 
     if (typeof variable === 'number') {
-      return variable === 0
+      return variable === 0;
     }
 
     if (typeof variable === 'boolean') {
-      return !variable
+      return !variable;
     }
 
-    if (Array.isArray(variable) || typeof variable === 'string') {
-      return variable.length === 0
+    if (Array.isArray(variable)) {
+      return variable.length === 0;
+    }
+
+    if (typeof variable === 'string') {
+      return variable === '';
     }
 
     if (typeof variable === 'object') {
       for (const key in variable) {
-        if (Object.prototype.hasOwnProperty.call(variable, key)) return false
+        if (Object.prototype.hasOwnProperty.call(variable, key)) return false;
       }
 
-      return true
+      return true;
     }
 
-    return false
+    return false;
   },
-  isMobile: () =>  {
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-      return true
+  isMobile: () => {
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    ) {
+      return true;
     } else {
-      return false
+      return false;
     }
-  }, 
+  },
   delay: () => {
-    return setTimeout(() => {}, 5000)
+    return setTimeout(() => {}, 5000);
+  },
+  genAbsoluteUrl: (relativeUrl) => {
+    const url = window.location;
+    return `${url.protocol}//${url.host}${relativeUrl}`;
   }
 }
 
 export default ({ app }, inject) => {
   // We use empty a lot, so inject it separately too
-  inject('empty', utils.empty)
-  inject('mobile', utils.isMobile)
-  inject('utils', utils)
+  inject('empty', utils.empty);
+  inject('mobile', utils.isMobile);
+  inject('utils', utils);
 }

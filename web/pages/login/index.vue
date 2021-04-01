@@ -1,48 +1,53 @@
 <template>
-  <div class="login">
-    <div class="bg"></div>
-    <form>
-      <h5>Entre</h5>
-      <form-email v-model="credentials.email" @input="resetError"></form-email>
-      <form-password v-model="credentials.password" @input="resetError"></form-password>
-      <form-validation :active="hasError">Usuário ou senha inválidos</form-validation>
-      <div class="mb-2"></div>
-      <div class="forgot-password" @click="openForgotPasswordModal">
-        <span>Esqueceu sua senha?</span>
+  <client-only>
+    <div class="login">
+      <div v-if="validationInitialized">
+        <div class="bg" :style="`background-image: url('${$images('concert.png')}');`"></div>
+        <form>
+          <h5 class="mb-4">Entre</h5>
+          <form-email v-model="$v.credentials.email.$model"></form-email>
+          <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
+          <form-password v-model="$v.credentials.password.$model"></form-password>
+          <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
+          <div class="mb-2"></div>
+          <div class="forgot-password" @click="openForgotPasswordModal">
+            <span>Esqueceu sua senha?</span>
+          </div>
+          <div class="mb-5"></div>
+          <form-button ref="login" @action="login">Login</form-button>
+          <div class="mb-5"></div>
+          <facebook-login @granted="loginWithFacebook"></facebook-login>
+          <google-login @granted="loginWithGoogle"></google-login>
+        </form>
+        <modal ref="forgotPassword" height="tiny">
+          <template v-slot:header>
+            <div class="vertical middle center">
+              <h4>Esqueceu sua senha?</h4>
+            </div>
+          </template>
+          <template v-slot:main>
+            <div class="vertical middle center">
+              <span>Entre com o seu email para solicitar uma nova senha</span>
+              <form-email v-model="forgotPasswordForEmail" class="full-width px-5"></form-email>
+              <form-validation :active="$utils.empty(forgotPasswordForEmail)">
+                Entre com um email válido
+              </form-validation>
+            </div>
+          </template>
+          <template v-slot:footer>
+            <div class="half-width">
+              <form-button :disabled="$utils.empty(forgotPasswordForEmail)" @action="sendForgotPassword">Enviar</form-button>
+            </div>
+          </template>
+        </modal>
       </div>
-      <div class="mb-5"></div>
-      <form-button ref="login" @action="login">Login</form-button>
-      <div class="mb-5"></div>
-      <facebook-login></facebook-login>
-      <google-login></google-login>
-    </form>
-    <modal ref="forgotPassword" height="tiny">
-      <template v-slot:header>
-        <div class="vertical middle center">
-          <h4>Esqueceu sua senha?</h4>
-        </div>
-      </template>
-      <template v-slot:main>
-        <div class="vertical middle center">
-          <span>Entre com o seu email para solicitar uma nova senha</span>
-          <form-email v-model="forgotPasswordForEmail" class="full-width px-5"></form-email>
-          <form-validation :active="$utils.empty(forgotPasswordForEmail)"
-            >Entre com um email válido</form-validation
-          >
-        </div>
-      </template>
-      <template v-slot:footer>
-        <div class="half-width">
-          <form-button :disabled="$utils.empty(forgotPasswordForEmail)" @action="sendForgotPassword"
-            >Enviar</form-button
-          >
-        </div>
-      </template>
-    </modal>
-  </div>
+    </div>
+  </client-only>
 </template>
 
 <script>
+import Vuelidate from 'vuelidate'
+import { required, email } from 'vuelidate/lib/validators'
 import { mapActions } from 'vuex'
 import FacebookLogin from '@/components/auth/facebook'
 import GoogleLogin from '@/components/auth/google'
@@ -58,8 +63,13 @@ export default {
         email: '',
         password: ''
       },
-      forgotPasswordForEmail: '',
-      hasError: false
+      forgotPasswordForEmail: ''
+    }
+  },
+  validations: {
+    credentials: {
+      email: { required, email },
+      password: { required }
     }
   },
   created() {
@@ -72,25 +82,47 @@ export default {
       return
     }
 
-    this.$router.push(`/login/social?code=${this.$route.query.code}`)
+    this.$router.push(`/login/social?icon=${this.$route.query.code}`)
+  },
+  computed: {
+    validationInitialized() {
+      return !this.$empty(this.$v)
+    }
   },
   methods: {
     ...mapActions('auth', ['login']),
     ...mapActions('protected', ['forgotPassword']),
     async login() {
+      this.$v.$touch();
+      if (this.$v.credentials.$invalid) { 
+        this.$toast.error('Formulário inválido');
+        return;
+      }
+
       try {
         await this.$auth.loginWith('user', {
           data: this.credentials
-        })
+        });
+
         this.$router.push('/artist/schedule')
       } catch (error) {
-        console.log(error)
-        this.hasError = true
-        this.$refs.login.reset()
+        console.log(error);
       }
     },
-    resetError() {
-      this.hasError = false
+    async loginWithFacebook(accessToken) {
+      await this.$auth.loginWith('facebook', {
+        data: {
+          token: accessToken
+        }
+      })
+    },
+    async loginWithGoogle(accessToken) {
+      await this.$auth.loginWith('google', {
+        data: {
+          token: accessToken,
+          provider: 'google'
+        }
+      })
     },
     openForgotPasswordModal() {
       this.$refs.forgotPassword.open()
@@ -112,6 +144,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+form {
+  position: relative;
+  z-index: $above;
+}
+
 .login {
   @extend .vertical, .middle, .center;
   position: relative;
@@ -135,13 +172,13 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/imgs/concert.png?webp');
     height: 100%;
     width: 100%;
     opacity: 0.2;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    z-index: 0;
   }
 }
 

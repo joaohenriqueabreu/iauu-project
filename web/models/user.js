@@ -1,4 +1,4 @@
-import { Model } from 'vue-mc'
+import Model from './model'
 import Media from './media'
 
 export default class User extends Model {

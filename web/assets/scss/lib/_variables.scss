@@ -8,12 +8,12 @@ $higherShadow: 0 0 40px rgba(0, 0, 0, 0.5);
 $transition: all 0.5s ease;
 
 // For z-index
-$above:     10;
-$secondLayer: 20;
-$thridLayer: 30;
+$above: 1;
+$secondLayer: 2;
+$thridLayer: 3;
 $moveToTop: 100;
 $base: 0;
-$below:     -1;
+$below: -1;
 
 // Spacing 
 $space: 0.5rem;
@@ -28,4 +28,5 @@ $bold: 700;
 
 // border-radius
 $rounded: 50rem;
+$extraEdges: 2rem;
 $edges: 1rem;

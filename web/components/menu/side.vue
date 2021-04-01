@@ -1,15 +1,13 @@
 <template>
   <div>
-    <header class="horizontal center middle">
-      <nuxt-link v-show="!minimized" to="/">
+    <header>
+      <!-- <nuxt-link v-show="!minimized" to="/"> -->
+      <nuxt-link to="/">
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
       <div class="hide-mobile hide-menu">
-        <font-awesome
-          class="minimize"
-          :icon="minimized ? 'angle-double-right' : 'angle-double-left'"
-          @click="minimize">
-        </font-awesome>
+        <icon class="minimize" :icon="minimized ? 'angle-double-right' : 'angle-double-left'" @click="minimize">
+        </icon>
       </div>
     </header>
     <main>
@@ -21,7 +19,6 @@
 </template>
 
 <script>
-import Logo from '@/components/layout/logo'
 import AdminMenu from '@/components/menu/side/admin'
 import ArtistMenu from '@/components/menu/side/artist'
 import ContractorMenu from '@/components/menu/side/contractor'
@@ -40,7 +37,7 @@ export default {
     minimize() {
       this.minimized = !this.minimized
       this.$emit('minimize', this.minimized)
-    },
+    }
   }
 }
 </script>

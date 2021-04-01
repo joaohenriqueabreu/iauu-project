@@ -1,4 +1,4 @@
-import { Model } from 'vue-mc'
+import Model from './model'
 
 export default class Schedule extends Model {
   defaults() {

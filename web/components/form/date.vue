@@ -4,7 +4,7 @@ export default {
   extends: Input,
   computed: {
     type() {
-      return 'time'
+      return 'date'
     }
   }
 }

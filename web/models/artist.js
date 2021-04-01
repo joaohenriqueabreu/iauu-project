@@ -8,7 +8,6 @@ export default class Artist extends Model {
     this.id = null
     this.user = new User()
     this.name = ''
-    this.company_name = ''
     this.is_verified = ''
     this.photo = new Media()
     this.ratings = []

@@ -10,7 +10,7 @@
             :proposal="proposal"
             :products="products"
             class="step"
-            :steps="stepComponents"
+            :steps="proposalStepComponents"
             :completed-steps="completedSteps"
             @complete="completeStep"
             @incomplete="revertStep"
@@ -23,20 +23,22 @@
       <div class="col-2 d-flex justify-content-start">
         <!-- Including any content so that col- will be displayed eventhough the arrow btn is hidden -->
         &nbsp;
-        <font-awesome v-show="canPrevious" icon="arrow-left" @click="previousStep"></font-awesome>
+        <icon v-show="canPrevious" icon="arrow-left" @click="previousStep"></icon>
       </div>
       <div class="col-8 horizontal center middle">
         &nbsp;
-        <steps-counter
-          :steps="stepComponents.length"
-          :completed="completedSteps"
-          :current="currentStep"
-          @goto="goToStep"
-        ></steps-counter>
+        <timeline 
+          :steps="proposalStepComponents.length" 
+          :completed="completedSteps" 
+          :current="currentStep" 
+          :icons="proposalStepIcons" 
+          :labels="proposalStepLabels" 
+          @goto="goToStep">
+        </timeline>
       </div>
       <div class="col-2 d-flex justify-content-end pr-3">
         &nbsp;
-        <font-awesome v-show="canNext" icon="arrow-right" @click="nextStep"></font-awesome>
+        <icon v-show="canNext" icon="arrow-right" @click="nextStep"></icon>
       </div>
     </footer>
   </div>
@@ -44,31 +46,27 @@
 
 <script>
 // import Proposal from '@/models/proposal'
-import StepsCounter from '@/components/proposal/steps/counter'
-import DateStep from '@/components/proposal/steps/date'
-import ProductStep from '@/components/proposal/steps/product'
+import DateStep from '@/components/proposal/steps/date';
+import ProductStep from '@/components/proposal/steps/product';
 // import DocsStep from '@/components/proposal/steps/docsStep'
-import DetailsStep from '@/components/proposal/steps/details'
-import ConfirmStep from '@/components/proposal/steps/confirm'
+import DetailsStep from '@/components/proposal/steps/details';
+import ConfirmStep from '@/components/proposal/steps/confirm';
 export default {
   layout: 'guest',
-  components: {
-    'steps-counter': StepsCounter
-  },
   // Load all required data for components (they get re-rendered everytime we switch components)
   // Variables are passed by reference so it's ok.
   async asyncData({ app, store, route }) {
     // Required for all components
-    store.dispatch('contractor/initProposal')
+    store.dispatch('contractor/initProposal');
 
     // await store.dispatch('contractor/loadArtistPrivate', route.params.id)
 
     // Required for dateStep
-    await store.dispatch('schedule/loadSchedule', { id: route.params.id, year: 2020 })
+    await store.dispatch('schedule/loadSchedule', { id: route.params.id, year: 2020 });
 
     // if page was reloaded we will lose artist data, verify and reload if necessary
     if (app.$utils.empty(store.state.contractor.artist)) {
-      await store.dispatch('contractor/loadArtistPrivate', route.params.id)
+      await store.dispatch('contractor/loadArtistPrivate', route.params.id);
     }
 
     // Initialize proposal
@@ -76,7 +74,7 @@ export default {
     store.dispatch('contractor/editProposal', {
       prop: 'artist',
       value: store.state.contractor.artist
-    })
+    });
 
     return {
       proposal: store.state.contractor.proposal,
@@ -88,39 +86,41 @@ export default {
     return {
       currentStep: 0,
       completedSteps: [],
-      stepComponents: [DateStep, ProductStep, DetailsStep, ConfirmStep]
+      proposalStepComponents: [DateStep, ProductStep, DetailsStep, ConfirmStep],
+      proposalStepIcons: ['calendar-alt', 'shopping-cart', 'map-marker-alt' , 'envelope'],
+      proposalStepLabels: ['Data do evento', 'Escolha seu produto', 'Mais detalhes sobre o evento', 'Enviar proposta']
     }
   },
   computed: {
     // ...mapState({ timeslots: (state) => state.schedule.timeslots }),
     stepComponent() {
-      return this.stepComponents[this.currentStep]
+      return this.proposalStepComponents[this.currentStep];
     },
     canPrevious() {
-      return this.currentStep > 0
+      return this.currentStep > 0;
     },
     canNext() {
-      return this.currentStep < this.stepComponents.length - 1
-    }
+      return this.currentStep < this.proposalStepComponents.length - 1;
+    },
   },
   methods: {
     submit() {
       // do nothing for now
     },
     completeStep() {
-      this.completedSteps.push(this.currentStep)
+      this.completedSteps.push(this.currentStep);
     },
     revertStep() {
-      this.$delete(this.completedSteps, this.currentStep)
+      this.$delete(this.completedSteps, this.currentStep);
     },
     nextStep() {
-      this.currentStep++
+      this.currentStep++;
     },
     previousStep() {
-      this.currentStep--
+      this.currentStep--;
     },
     goToStep(step) {
-      this.currentStep = step
+      this.currentStep = step;
     }
   }
 }
@@ -146,7 +146,7 @@ footer {
   height: 10vh;
   width: 100vw;
   margin: 0;
-  z-index: $moveToTop;
+  z-index: $secondLayer;
 
   [data-icon] {
     cursor: pointer;

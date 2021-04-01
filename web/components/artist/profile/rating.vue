@@ -1,27 +1,32 @@
 <template>
   <div>
     <div v-if="!readOnly">
-      <font-awesome v-for="star in MAX_RATE" :key="star" @click="rate(star)" :icon="selectedStar(star)" class="clickable">
-      </font-awesome>
+      <icon v-for="star in MAX_RATE" :key="star" :icon="selectedStar(star)" class="clickable" @click="rate(star)">
+      </icon>
     </div>
     <div v-else>
       <div v-if="short">
-        <div v-if="score > 0">
-          <font-awesome class="icon mr-1" icon="star"></font-awesome>
-          <small class="bold">{{ score | oneDecimal }}</small>
+        <div v-if="score > 0" class="horizontal middle">
+          <h5 class="bold mr-2">{{ score | oneDecimal }}</h5>
+          <icon class="icon mr-1" icon="star"></icon>
         </div>
       </div>
       <div v-else class="horizontal center middle">
         <div v-if="filledStars > 0">
-          <font-awesome v-for="star in filledStars" :key="star" class="icon" icon="star">
-          </font-awesome>
+          <icon v-for="star in filledStars" :key="star" class="icon" icon="star">
+          </icon>
         </div>
         <div v-if="halfStar">
-          <font-awesome class="icon" icon="star-half-alt"></font-awesome>
+          <icon class="icon" icon="star-half-alt"></icon>
         </div>
         <div v-if="noStar > 0">
-          <font-awesome v-for="star in noStar" :key="`-${star}`" class="icon" :icon="['far', 'star']">
-          </font-awesome>
+          <icon
+            v-for="star in noStar"
+            :key="`-${star}`"
+            class="icon"
+            :icon="['far', 'star']"
+          >
+          </icon>
         </div>
         <div v-if="amount > 0">
           <small>({{ amount }})</small>
@@ -37,7 +42,7 @@ export default {
     score: { type: Number, default: 1 },
     amount: { type: Number, default: 0 },
     short: { type: Boolean, default: false },
-    readOnly: { type: Boolean, default: true },
+    readOnly: { type: Boolean, default: true }
   },
   data() {
     return {
@@ -45,9 +50,6 @@ export default {
       hoverValue: 0,
       MAX_RATE: 5
     }
-  },
-  mounted() {
-    this.value = this.score
   },
   computed: {
     filledStars() {
@@ -64,6 +66,9 @@ export default {
       return this.MAX_RATE - (this.filledStars + this.halfStar)
     }
   },
+  mounted() {
+    this.value = this.score
+  },
   methods: {
     selectedStar(star) {
       if (star <= this.value) {
@@ -73,7 +78,9 @@ export default {
       return ['far', 'star']
     },
     rate(rating) {
-      if (this.readOnly) { return }
+      if (this.readOnly) {
+        return
+      }
 
       this.value = rating
       this.$emit('rated', this.value)
@@ -82,4 +89,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+[data-icon] {
+  font-size: 16px;
+}
+</style>

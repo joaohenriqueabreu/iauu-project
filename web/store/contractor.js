@@ -1,11 +1,16 @@
 import Vue from 'vue'
+import { getField, updateField } from 'vuex-map-fields'
 import Artist from '@/models/artist'
 import Proposal from '@/models/proposal'
 import Contractor from '~/models/contractor'
 
-import { getField, updateField } from 'vuex-map-fields'
-
 export const state = () => ({
+  searchFilters: {
+    term: '',
+    location: '',
+    sort: '',
+    price: 0,
+  },
   contractor: null,
   artists: [],
   artist: null,
@@ -52,11 +57,15 @@ export const mutations = {
   },
   edit_proposal(state, { prop, value }) {
     Vue.set(state.proposal, prop, value)
+  },
+  set_search_filters(state, filters) {
+    state.searchFilters = filters
   }
 }
 
 export const actions = {
   async searchArtists({ commit }, filters) {
+    console.log(filters)
     const { data } = await this.$axios.get('contractors/artists/search', { params: filters })
     commit('set_artists', data)
   },
@@ -84,6 +93,9 @@ export const actions = {
   },
   async sendProposal({ state, commit }) {
     await this.$axios.post('presentations/proposal', { proposal: state.proposal })
+  },
+  setSearchFilters({ commit }, searchFilters) {
+    commit('set_search_filters', searchFilters)
   }
 }
 

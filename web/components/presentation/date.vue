@@ -4,27 +4,29 @@
       <countdown v-if="!isPresentationPast" :time="timeUntilPresentation">
         <template slot-scope="props">
           <h5 v-if="props.days > 1">Faltam {{ props.days }} dias</h5>
-          <h5 v-else>Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos</h5>
+          <h5 v-else>
+            Faltam {{ props.days }} dias : {{ props.hours }} horas : {{ props.minutes }} minutos
+          </h5>
         </template>
       </countdown>
       <div v-else>
         <p>
-          Conta pra gente como foi a apresentação! Confirme a Realização para podermos finalizar o processo de pagamento.
+          Conta pra gente como foi a apresentação! Confirme a Realização para podermos finalizar o
+          processo de pagamento.
         </p>
         <p>
           Caso a apresentação não seja confirmada por ambas as partes em até
-          <b>{{ $config.closePresentationDeadline }} dias</b> ela será automaticamente
-          encerrada.
+          <b>{{ $config.closePresentationDeadline }} dias</b> ela será automaticamente encerrada.
         </p>
       </div>
     </div>
     <div class="boxed horizontal middle">
       <h3 class="mr-4">
-        <font-awesome icon="calendar-alt"></font-awesome>
+        <icon icon="calendar-alt"></icon>
         {{ eventDate }}
       </h3>
       <h5>{{ eventTime }}</h5>
-    </div>    
+    </div>
   </div>
 </template>
 
@@ -36,7 +38,7 @@ export default {
     countdown: VueCountdown
   },
   props: {
-    presentation: { type: Object, default: () => {}}
+    presentation: { type: Object, default: () => {} }
   },
   computed: {
     timeUntilPresentation() {
@@ -66,6 +68,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

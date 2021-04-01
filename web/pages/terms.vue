@@ -3,8 +3,8 @@
   <h2>Política Privacidade</h2>
   <p>
     A sua privacidade é importante para nós.
-    política do iauu respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no site
-    a href=https://www.iauu.com.br>iauu</a>, e outros sites que possuímos e operamos.
+    política do {{ companyName }} respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no site
+    <a :href="webUrl">{{ companyName }}</a>, e outros sites que possuímos e operamos.
   </p>
   <p>
     Solicitamos informações pessoais apenas quando realmente precisamos delas para lhe fornecer um serviço.
@@ -32,7 +32,7 @@
     O uso continuado de nosso site será considerado como aceitação de nossas práticas em torno de privacidade e informações pessoais.
     Se você tiver alguma dúvida sobre como lidamos com dados do usuário e informações pessoais, entre em contacto connosco.
   </p>
-  <h2>Política de Cookies iauu</h2>
+  <h2>Política de Cookies {{ companyName }}</h2>
   <h3>O que são cookies?</h3>
   <p>Como é prática comum em quase todos os sites profissionais, este site usa cookies, que são pequenos arquivos baixados no seu computador, para melhorar sua experiência. Esta página descreve quais informações eles coletam, como as usamos e por que às vezes precisamos armazenar esses cookies. Também compartilharemos como você pode impedir que esses cookies sejam armazenados, no entanto, isso pode fazer o downgrade ou 'quebrar' certos elementos da funcionalidade do site.</p>
   <h3>Como usamos os cookies?</h3>
@@ -71,7 +71,12 @@
 </template>
 
 <script>
-export default {}
+export default {
+  computed: {
+    webUrl() { return this.$config.webUrl },
+    companyName() { return this.$config.companyName },
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -3,50 +3,65 @@
     <div class="vertical mb-5">
       <div class="vertical middle mb-4">
         <h4 class="mr-4">Propostas & Apresentações</h4>
-        <form-input class="full-width mr-5" v-model="searchTerm" @enter="handleSearch" @blur="handleSearch" placeholder="Pesquisa" icon="music"></form-input>
+        <form-input
+          v-model="searchTerm"
+          class="full-width mr-5"
+          placeholder="Pesquisa"
+          icon="music"
+          @enter="handleSearch"
+          @blur="handleSearch"
+        ></form-input>
       </div>
       <div class="horizontal">
-        <span v-for="status in ['proposal', 'rejected', 'accepted', 'completed', 'cancelled']" 
-          :key="status" 
-          :class="{status, selected: status === filter}" 
-          class="status-badge mr-4 horizontal center middle clickable" 
-          @click="filterByStatus(status)">
-          <font-awesome :icon="statusIcon(status)" class="mr-2"></font-awesome>
+        <span
+          v-for="status in ['proposal', 'rejected', 'accepted', 'completed', 'cancelled']"
+          :key="status"
+          :class="{ status, selected: status === filter }"
+          class="status-badge mr-4 horizontal center middle clickable"
+          @click="filterByStatus(status)"
+        >
+          <icon :icon="statusIcon(status)" class="mr-2"></icon>
           {{ statusLabel(status) }}s
         </span>
       </div>
     </div>
-    <perfect-scrollbar>
-      <table class="full-width">
-        <thead>
-          <th></th>
-          <th>Título</th>
-          <th>Artista</th>
-          <th>Contratante</th>
-          <th>Data</th>
-        </thead>
-        <tbody>
-          <tr v-for="(presentation, index) in presentations" :key="index" @click="openPresentationManagementModal(presentation)">
-            <td class="text-center">
-              <div class="status-badge icon-only" :class="presentation.status">
-                <font-awesome :icon="statusIcon(presentation.status)"></font-awesome>
-              </div>
-            </td>
-            <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.proposal.title }}</span>
-            </td>
-            <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.artist.user.name }}</span>
-            </td>
-            <td class="py-3 cap">
-              <span class="mr-2">{{ presentation.contractor.user.name }}</span>
-            </td>
-            <td>{{ presentationDate(presentation) | date }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </perfect-scrollbar>
-    <presentation-management ref="presentation" :presentation="selectedPresentation" @updated="loadPresentations">
+    <table class="full-width">
+      <thead>
+        <th></th>
+        <th>Título</th>
+        <th>Artista</th>
+        <th>Contratante</th>
+        <th>Data</th>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(presentation, index) in presentations"
+          :key="index"
+          @click="openPresentationManagementModal(presentation)"
+        >
+          <td class="text-center">
+            <div class="status-badge icon-only" :class="presentation.status">
+              <icon :icon="statusIcon(presentation.status)"></icon>
+            </div>
+          </td>
+          <td class="py-3 cap">
+            <span class="mr-2">{{ presentation.proposal.title }}</span>
+          </td>
+          <td class="py-3 cap">
+            <span class="mr-2">{{ presentation.artist.name }}</span>
+          </td>
+          <td class="py-3 cap">
+            <span class="mr-2">{{ presentation.contractor.name }}</span>
+          </td>
+          <td>{{ presentationDate(presentation) | date }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <presentation-management
+      ref="presentation"
+      :presentation="selectedPresentation"
+      @updated="loadPresentations"
+    >
     </presentation-management>
   </div>
 </template>
@@ -55,15 +70,21 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 import PresentationManagement from '@/components/admin/presentation'
 export default {
-  async asyncData({ store }) {
-    await store.dispatch('admin/loadPresentations')
-  },
   components: {
     PresentationManagement
   },
+  async asyncData({ store }) {
+    await store.dispatch('admin/loadPresentations')
+  },
   computed: {
     ...mapState({ allPresentations: (state) => state.admin.presentations }),
-    ...mapGetters('admin', ['proposalPresentations', 'rejectedPresentations', 'acceptedPresentations', 'completedPresentations', 'cancelledPresentations']),
+    ...mapGetters('admin', [
+      'proposalPresentations',
+      'rejectedPresentations',
+      'acceptedPresentations',
+      'completedPresentations',
+      'cancelledPresentations'
+    ])
   },
   data() {
     return {
@@ -73,20 +94,20 @@ export default {
       selectedPresentation: {}
     }
   },
-  mounted() {
-    this.presentations = this.allPresentations
-  },
   watch: {
     allPresentations(value) {
       this.presentations = value
     }
+  },
+  mounted() {
+    this.presentations = this.allPresentations
   },
   methods: {
     ...mapActions('admin', ['loadPresentations', 'searchPresentation']),
     async handleSearch() {
       if (this.$empty(this.searchTerm)) {
         await this.loadPresentations()
-        return 
+        return
       }
 
       await this.searchPresentations(this.searchTerm)
@@ -107,32 +128,62 @@ export default {
 
       this.filter = status
 
-      if (status === 'proposal') { this.presentations = this.proposalPresentations }
-      if (status === 'rejected') { this.presentations = this.rejectedPresentations }
-      if (status === 'accepted') { this.presentations = this.acceptedPresentations }
-      if (status === 'completed') { this.presentations = this.completedPresentations }
-      if (status === 'cancelled') { this.presentations = this.cancelledPresentations }
+      if (status === 'proposal') {
+        this.presentations = this.proposalPresentations
+      }
+      if (status === 'rejected') {
+        this.presentations = this.rejectedPresentations
+      }
+      if (status === 'accepted') {
+        this.presentations = this.acceptedPresentations
+      }
+      if (status === 'completed') {
+        this.presentations = this.completedPresentations
+      }
+      if (status === 'cancelled') {
+        this.presentations = this.cancelledPresentations
+      }
     },
     statusLabel(status) {
-      if (status === 'proposal') { return 'Proposta'}
-      if (status === 'rejected') { return 'Recusada'}
-      if (status === 'accepted') { return 'Contratada'}
-      if (status === 'completed') { return 'Realizada'}
-      if (status === 'cancelled') { return 'Cancelada'}
+      if (status === 'proposal') {
+        return 'Proposta'
+      }
+      if (status === 'rejected') {
+        return 'Recusada'
+      }
+      if (status === 'accepted') {
+        return 'Contratada'
+      }
+      if (status === 'completed') {
+        return 'Realizada'
+      }
+      if (status === 'cancelled') {
+        return 'Cancelada'
+      }
       return ''
     },
     statusIcon(status) {
-      if (status === 'proposal') { return 'dollar-sign' }
-      if (status === 'rejected') { return 'thumbs-down' }
-      if (status === 'accepted') { return 'music' }
-      if (status === 'completed') { return 'check' }
-      if (status === 'cancelled') { return 'times' }
+      if (status === 'proposal') {
+        return 'dollar-sign'
+      }
+      if (status === 'rejected') {
+        return 'thumbs-down'
+      }
+      if (status === 'accepted') {
+        return 'music'
+      }
+      if (status === 'completed') {
+        return 'check'
+      }
+      if (status === 'cancelled') {
+        return 'times'
+      }
       return ''
     },
     openPresentationManagementModal(presentation) {
       this.selectedPresentation = presentation
       this.$refs.presentation.openModal()
-    },
+    }
   }
 }
 </script>
@@ -161,7 +212,9 @@ table {
   padding: 4 * $space;
 }
 
-.role-badge, .status-badge, .verification-label {
+.role-badge,
+.status-badge,
+.verification-label {
   &.icon-only {
     width: 25px;
     height: 25px;
@@ -178,10 +231,19 @@ table {
   }
 
   // Status specific classes
-  &.proposal { background: $layer5; }
-  &.rejected, &.cancelled { background: $error; }
-  &.accepted { background: $info;  }
-  &.completed { background: $green; }
+  &.proposal {
+    background: $layer5;
+  }
+  &.rejected,
+  &.cancelled {
+    background: $error;
+  }
+  &.accepted {
+    background: $info;
+  }
+  &.completed {
+    background: $green;
+  }
 }
 
 .login-as {

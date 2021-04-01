@@ -1,6 +1,6 @@
 <template>
   <nav :class="theme" class="navbar d-flex justify-content-between">
-    <div>
+    <div class="logo">
       <nuxt-link to="/">
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
@@ -28,6 +28,9 @@ export default {
 <style lang="scss" scoped>
 .navbar {
   @extend .full-height, .horizontal, .middle;
+  .logo {
+    z-index: $moveToTop;
+  }
 }
 // nav {
 //   transition: $transition;

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <label :for="name">{{ label }}</label>
+    <label v-if="!$empty(label)" :for="name" :class="labelClass">{{ label }}</label>
+    <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <input
         :value="value"
@@ -8,26 +9,27 @@
         :name="name"
         :placeholder="placeholder"
         :disabled="disabled"
-        @input="$emit('input', $event.target.value)"
-        @blur="$emit('blur', value)"
-        @keyup.enter.prevent="$emit('enter', value)"
+        :class="transparent ? 'transparent' : ''"
+        @input="afterInput"
+        @blur="afterBlur"
+        @keyup.enter.prevent="afterEnter"
       />
-      <font-awesome v-if="iconHelper" :icon="iconHelper"></font-awesome>
+      <icon v-if="!noIcon" :icon="iconHelper"></icon>
     </div>
   </div>
 </template>
 
 <script>
-import VueFilters from 'vue2-filters'
+import VueFilters from 'vue2-filters';
 
 export default {
   filters: {
     getFilter(value, type) {
       if (type === 'numeric') {
-        return VueFilters.Number(value)
+        return VueFilters.Number(value);
       }
 
-      return value
+      return value;
     }
   },
   props: {
@@ -36,20 +38,34 @@ export default {
     prop: { type: String, default: '' },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
+    labelClass: { type: String, default: '' },
     placeholder: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
     icon: { type: String, default: null },
+    noIcon: { type: Boolean, default: false },
     value: { type: [String, Number, Boolean], default: null },
-    required: { type: Boolean, default: false }
+    required: { type: Boolean, default: false },
+    transparent: { type: Boolean, default: false }
   },
   computed: {
     type() {
-      return 'text'
+      return 'text';
     },
     iconHelper() {
-      return !this.$utils.empty(this.icon) ? this.icon : 'search'
+      return !this.$empty(this.icon) ? this.icon : 'search';
     }
   },
+  methods: {
+    afterInput(event) {
+      this.$emit('input', event.target.value);
+    },
+    afterBlur(value) {
+      this.$emit('blur', value);
+    },
+    afterEnter(value) {
+      this.$emit('enter', value);
+    }
+  }
 }
 </script>
 
@@ -91,6 +107,20 @@ export default {
     padding: 2 * $space 5 * $space 2 * $space 2 * $space;
     cursor: pointer;
 
+    &::placeholder {
+      transition: $transition;
+    }
+
+    &.transparent {
+      background-color: transparent;
+
+      &::placeholder {
+        transition: $transition;
+        color: $white;
+        opacity: 0.7;
+      }
+    }
+
     &:focus,
     &:active {
       border-top-color: transparent;
@@ -106,9 +136,15 @@ export default {
       background: $brandLayer;
       color: $layer1;
     }
+
     &:hover {
+      transition: $transition;
       // background-color: $layer5;
-      background-color: $brandLayer;
+      // background-color: $brandLayer;
+      &::placeholder {
+        transition: $transition;
+        color: $brandLayer;
+      }
     }
   }
 

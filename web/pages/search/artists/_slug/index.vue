@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div :style="{ 'background-image': `url(${bgImage})` }" class="bg"></div>
+    <div :style="{ 'background-image': `url(${$images('concert.png')})` }" class="bg"></div>
     <div class="title">
-      <avatar :src="artist.user.photo" :username="artist.company_name" :size="200"></avatar>
-      <h1>{{ artist.company_name || artist.name }}</h1>
+      <avatar :src="artist.photo" :username="artist.name" :size="200"></avatar>
+      <div class="horizontal">
+        <h1 class="mr-4">{{ artist.name }}</h1>
+      </div>
     </div>
-    <div class="horizontal center middle mb-4">
-      <font-awesome icon="music"></font-awesome>
-      <h3 class="mr-4">{{ artist.category.name }}</h3>
-      <h3>
+    <div class="horizontal center middle position-relative mb-4">
+      <icon icon="music"></icon>
+      <h3 class="mr-4 cap">{{ artist.category.name }}</h3>
+      <h3 v-if="artist.rating">
         <rating :score="artist.rating" :amount="artist.feedback_count" short></rating>
       </h3>
     </div>
@@ -20,84 +22,113 @@
     <div class="horizontal center middle half-width mb-5">
       <div v-for="(media, mediaIndex) in socialMedias" :key="mediaIndex" class="mx-4">
         <a :href="media.url" target="_blank">
-          <media-thumbnail :media="media" avatar></media-thumbnail>
+          <media-avatar :media="media"></media-avatar>
         </a>
       </div>
     </div>
-    <div class="stats mb-5">
+    <div class="stats mb-5" v-if="!$empty(artist.stats)">
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
-        <div class="horizontal d-flex align-items-end mb-3">
-          <h2 v-if="statName === 'score'" class="mr-2 mb-0">{{ stat | number('0.0') }}</h2>
-          <h2 v-if="statName === 'fans' && stat >= 100000" class="mr-2 mb-0">
-            {{ stat | number('0a') }}
-          </h2>
-          <h2 v-if="statName === 'fans' && stat < 100000" class="mr-2 mb-0">
-            {{ stat | number('0,0') }}
-          </h2>
-          <h2 v-if="statName === 'presentations'" class="mr-2 mb-0">{{ stat | number('0,0') }}</h2>
-          <h6><font-awesome :icon="$dictionary.artist.stats.icon[statName]"></font-awesome></h6>
-        </div>
-        <div class="horizontal">
-          <h5 v-if="statName === 'score'" class="mr-1">{{ artist.rating.amount }}</h5>
-          <h5>{{ $dictionary.artist.stats.label[statName] }}</h5>
+        <div class="vertical center mb-3">
+          <h2 class="mr-2 mb-0 order-1">{{ stat | number('0a') }}</h2>
+          <h6 class="hide-desktop order-0"><icon :icon="$dictionary.artist.stats.icon[statName]"></icon></h6>
+          <h5 class="hide-mobile">{{ $utils.pluralize($dictionary.artist.stats.label[statName], stat) }}</h5>
         </div>
       </div>
     </div>
-    <div v-if="artist.is_premium" class="verified">
-      <h1 class="mr-4">
-        <font-awesome icon="grin-stars"></font-awesome>
-      </h1>
-      <h6>
-        Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
-      </h6>
-    </div>
-    <div class="story">
-      <h4 class="mb-5">Nossa história</h4>
-      {{ artist.story }}
-    </div>
-    <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
-      <h4 class="mb-5">O que falam sobre nosso show?</h4>
-      <div v-for="(feedback, index) in artist.feedbacks" :key="index" class="horizontal">
-        <div v-if="!$empty(feedback.notes)">
-          <div class="testemonial">
-            <h6 class="mb-2">{{ feedback.from.name }}</h6>
-            <div class="horizontal mb-4">
-              <h6 class="mr-2">{{ feedback.rating }}</h6>
-              <font-awesome icon="star"></font-awesome>
-            </div>
-            <i>{{ feedback.notes }}</i>
+    <div class="container">
+      <div class="mt-4 mr-4 d-flex justify-content-end">
+        <div class="vertical">
+          <h6 class="mb-2">Compartilhe!</h6>
+          <share></share>
+        </div>
+      </div>
+      <div v-if="artist.is_premium" class="verified">
+        <h1 class="mr-4">
+          <icon icon="grin-stars"></icon>
+        </h1>
+        <h6>
+          Este artista foi verificado pela nossa equipe e é um dos destaques da plataforma
+        </h6>
+      </div>
+      <div class="story my-5" v-if="!$empty(artist.story)">
+        <h4 class="mb-5">Nossa história</h4>
+        <span v-html="$string.nl2br(artist.story)"></span>
+      </div>
+      <div class="my-5">
+        <h4 class="mb-4">Conheça um pouco mais da nossa apresentação</h4>
+        <div class="mb-4" v-if="hasConnectedSpotify">
+          <hr>
+          <div class="horizontal center middle">
+            <spotify-player :url="spotifyUrl"></spotify-player>
           </div>
+          <hr>
+        </div>
+        <div class="mb-5" v-if="!$empty(artist.presentation) && !$empty(artist.presentation.videos)">
+          <carousel>
+            <slide v-for="(video, index) in artist.presentation.videos" :key="index" class="full-height mr-4 mb-4">
+              <media-thumbnail :media="video"></media-thumbnail>
+            </slide>
+            <slide></slide>
+          </carousel>
+          <hr>
+        </div>
+        <div class="mb-4" v-if="hasConnectedInstagram">
+          <instagram-gallery :url="instagramUrl"></instagram-gallery>
+        </div>
+        <div class="story my-5" v-if="!$empty(artist.presentation.description)">
+          <h4 class="mb-5">Como é nossa apresentação</h4>
+          <span v-html="$string.nl2br(artist.story)"></span>
+        </div>
+      </div>
+      <div class="my-5" v-if="artist.proposal.display_products">
+        <h4 class="mb-4">Conheça nossos formatos de apresentação</h4>
+        <carousel :per-page="3" :navigation-enabled="true" class="row d-flex align-items-stretch">
+          <slide v-for="(product, index) in artist.products" :key="index" class="col-12 col-sm-4">
+            <div class="full-height mr-4">
+              <product-info hide-price read-only @preview="openPreviewModal(product)" :product="product" class="full-height"></product-info>
+            </div>
+          </slide>
+          <slide></slide>
+        </carousel>
+        <product-preview read-only ref="preview"></product-preview>
+      </div>
+      <div v-if="!$utils.empty(artist.feedbacks)" class="mb-5 mx-5">
+        <h4 class="mb-4">O que falam sobre nosso show?</h4>
+        <div v-for="(feedback, index) in artist.feedbacks" :key="index" class="horizontal">
+          <presentation-feedback :feedback="feedback"></presentation-feedback>
         </div>
       </div>
     </div>
     <div class="proposal">
-      <div class="horizontal middle full-height d-flex justify-content-around">
+      <div v-if="$empty(artist.proposal) || $empty(artist.proposal.display_price)" class="horizontal center middle full-height full-width">
+        <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >
+          Enviar proposta
+        </nuxt-link>
+        <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">
+          <h6 class="hide-mobile">Cadastre-se para contratar este artista</h6>
+          <h6 class="hide-desktop">Cadastre-se</h6>
+        </nuxt-link>
+      </div>
+      <div v-else class="horizontal middle full-height d-flex justify-content-around">
         <div class="vertical">
           <small class="hide-mobile">
-            <span v-if="$auth.loggedIn">Valor da apresentação</span>
-            <span v-else>Valor aproximado da apresentação</span>
+            <span>Valor da apresentação</span>
           </small>
-          <h4 v-if="$auth.loggedIn">{{ artist.score | currency }}</h4>
-          <h4 v-else>{{ rateMin | currency }} - {{ rateMax | currency }}</h4>
+          <price-range :range="artist.proposal.price_range"></price-range>
           <div class="mb-4 hide-desktop"></div>
         </div>
         <div class="vertical">
           <small>
             <span class="hide-mobile">Duração média</span>
           </small>
-          <h4><font-awesome icon="clock" class="mr-2"></font-awesome>{{ avgDuration }} horas</h4>
+          <h4><icon icon="clock" class="mr-2"></icon>{{ artist.proposal.avg_duration | longTime }}</h4>
         </div>
         <div class="horizontal middle center">
-          <nuxt-link
-            v-if="$auth.loggedIn && $auth.hasScope('contractor')"
-            class="brand-btn"
-            :to="`/proposal/to/artist/${artist.id}`"
-          >
+          <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >
             Enviar proposta
           </nuxt-link>
-          <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">
-            <h6 class="hide-mobile">Cadastre-se para contratar este artista</h6>
-            <h6 class="hide-desktop">Cadastre-se</h6>
+          <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" :to="`/search/artists/${artist.slug}/schedule`">
+            <h6>Ver agenda <span class="hide-mobile">do artista</span></h6>
           </nuxt-link>
         </div>
       </div>
@@ -107,27 +138,64 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex';
+import ProductInfo from '@/components/artist/product/info';
+import ProductPreview from '@/components/artist/product/preview';
+import PresentationFeedback from '@/components/artist/profile/feedback';
+import InstagramGallery from '@/components/social/instagramGallery';
+import SpotifyPlayer from '@/components/social/spotifyPlayer';
 export default {
   async asyncData({ store, route }) {
-    await store.dispatch('contractor/loadArtist', route.params.slug)
+    await store.dispatch('contractor/loadArtist', route.params.slug);
+  },
+  components: {
+    ProductInfo,
+    ProductPreview,
+    PresentationFeedback,
+    InstagramGallery,
+    SpotifyPlayer
+  },
+  async mounted() {
+    await this.emitVisitEvent(this.$router.currentRoute);
   },
   computed: {
     ...mapState({ artist: (state) => state.contractor.artist }),
-    bgImage() {
-      return require('@/assets/imgs/concert.png?webp')
-    },
     socialMedias() {
-      return this.$array.slice(this.artist.social, 0, 4)
+      return this.$array.slice(this.artist.social, 0, 4);
     },
     rateMin() {
-      return Math.round(this.artist.score * 0.5)
+      return Math.round(this.artist.score * 0.5);
     },
     rateMax() {
-      return Math.round(this.artist.score * 1.5)
+      return Math.round(this.artist.score * 1.5);
     },
-    avgDuration() {
-      return Math.round(this.$math.mean(this.$collection.map(this.artist.products, 'duration')))
+    hasConnectedInstagram() {
+      return this.$isClientSide && !this.$empty(this.instagramUrl);
+    },
+    instagramUrl() {
+      const instagramUrl = this.$collection.filter(this.artist.social, (social) => social.includes('instagram'));
+      if (!this.$empty(instagramUrl)) {
+        return instagramUrl[0];
+      }
+
+      return null;
+    },
+    hasConnectedSpotify() {
+      return this.$isClientSide && !this.$empty(this.spotifyUrl);
+    },
+    spotifyUrl() {
+      const spotifyUrl = this.$collection.filter(this.artist.social, (social) => social.includes('spotify'));
+      if (!this.$empty(spotifyUrl)) {
+        return spotifyUrl[0];
+      }
+
+      return null;
+    },
+  },
+  methods: {
+    ...mapActions('statistic', ['emitVisitEvent']),
+    openPreviewModal(product) {
+      this.$refs.preview.openModal(product);
     }
   }
 }
@@ -164,38 +232,27 @@ div:not(.bg) {
   margin: 0 2 * $space;
 }
 
-@include desktop {
-  .stats {
-    display: flex;
-    flex-direction: row;
-    .stat {
-      margin: 0 4 * $space;
-    }
-  }
-}
-
-@include mobile {
-  .stats {
-    display: flex;
-    flex-direction: column;
-
-    .stat {
-      margin-bottom: 4 * $space;
-    }
-  }
-}
-
 .stats {
+  @extend .horizontal;
   justify-content: center;
   align-items: center;
   .stat {
     @extend .vertical, .middle, .center;
-    width: 150px;
-    height: 150px;
+    @include desktop {
+      margin: 0 4 * $space;
+      width: 150px;
+      height: 150px;
+    }
+
+    @include mobile {
+      margin: 3 * $space;
+      width: 75px;
+      height: 75px;
+    }
+    
     border-radius: $rounded;
     background: $layer3;
     box-shadow: $shadow;
-    border: 5px solid $brand;
   }
 }
 
@@ -213,18 +270,7 @@ div:not(.bg) {
   border-radius: $edges;
   box-shadow: $shadow;
   margin: 5 * $space 4 * $space;
-}
-
-.testemonial {
   background: $layer3;
-  margin: 2 * $space 0 2 * $space 4 * $space;
-  padding: 3 * $space;
-  box-shadow: $shadow;
-  border-top-right-radius: $rounded;
-  border-bottom-right-radius: $rounded;
-  border-bottom-left-radius: $rounded;
-  max-width: 80vw;
-  min-width: 20vw;
 }
 
 .proposal {

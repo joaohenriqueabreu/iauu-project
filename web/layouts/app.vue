@@ -13,6 +13,7 @@
           <nuxt />
         </main>
       </div>
+      <feedback v-if="showFeedback"></feedback>
     </client-only>
   </div>
 </template>
@@ -34,7 +35,10 @@ export default {
   },
   computed: {
     ...mapState({ theme: (state) => state.layout.theme }),
-    ...mapState({ alert: (state) => state.app.alert })
+    ...mapState({ alert: (state) => state.app.alert }),
+    showFeedback() {
+      return process.env.BETA_MODE
+    }
   },
   methods: {
     minimize(value) {
@@ -46,17 +50,20 @@ export default {
 
 <style lang="scss" scoped>
 header {
-  position: relative;
-  min-height: 10vh;
-  padding: 10px 0;
-  background: transparent;
+  position: fixed;
+  width: 100vw;
   z-index: $above;
+  height: 10vh;
+  background: transparent;
 }
 
 main {
-  position: relative;
-  padding: 0 20px;
-  padding-bottom: 8 * $space;
+  position: relative;  
+  padding-top: 10vh;
+  padding-left: 2vw;
+  padding-right: 1vw;
+  padding-bottom: 20vh;
+  z-index: $base;
 
   @include desktop {
     &.full {
@@ -73,7 +80,7 @@ aside {
   background: $layer1;
   position: fixed;
   left: 0;
-  z-index: $moveToTop;
+  z-index: $secondLayer;
   @include desktop {
     .mini {
       width: 7vw;

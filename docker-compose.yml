@@ -1,5 +1,6 @@
 version: '3.7'
 services:
+<<<<<<< HEAD
         db:
                 # build: ./db
                 image: mongo:4.2.7
@@ -10,18 +11,35 @@ services:
                         - db:/data/db
                 networks:
                         iauu_net:
+=======
+        # db:
+        #          build: ./db
+        #          container_name: db
+        #          ports:
+        #                  - "27017:27017"
+        #          volumes:
+        #                  - db:/data/db
+        #          networks:
+        #                   iauu_net:
+>>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
         api:
                 build: ./api
                 restart: always
                 container_name: api
+<<<<<<< HEAD
                 command: npm run dev
                 # volumes:
                 #         - ./api:/usr/app
                 #         - /usr/app/node_modules
+=======
+>>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
                 ports:
                         - "4444:4444"
+                        - "555:555"
+                        - "999:999"
                 networks:
                         iauu_net:
+<<<<<<< HEAD
                 depends_on: 
                         - db
         web:
@@ -38,17 +56,61 @@ services:
                         iauu_net:
                 depends_on:
                         - api
+=======
+        web:
+               build: ./web
+               container_name: web
+               ports:
+                       - "3000:3000"
+               networks:
+                       iauu_net:
+               depends_on:
+                       - api
+>>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
         server:
-                build: ./server
-                container_name: server   
-                restart: always                   
+                image: nginx:1.19
+                container_name: server
+                restart: always
                 ports:
-                        - "8080:80"
+                        - "80:80"
+                        - "443:443"
+                volumes:
+                        - ./server/app.conf:/etc/nginx/conf.d/default.conf
+                        - ./server/certbot/conf:/etc/letsencrypt
+                        - ./server/certbot/www:/var/www/certbot
                 networks:
+<<<<<<< HEAD
                         iauu_net:                             
                 depends_on:
                         - api                
+=======
+                        iauu_net:
+                depends_on: 
+                        - web
+                        - api
+        broker:
+                image: rabbitmq:3-management-alpine
+                container_name: broker
+                ports:
+                        - 5672:5672
+                        - 15672:15672
+                volumes:
+                        - ./broker/data/:/var/lib/rabbitmq/
+                        - ~/broker/logs/:/var/log/rabbitmq
+                networks:
+                        iauu_net:
+        ssl:
+                image: certbot/certbot
+                container_name: ssl
+                volumes:
+                        - ./server/certbot/conf:/etc/letsencrypt
+                        - ./server/certbot/www:/var/www/certbot
+                depends_on:
+                        - server
+                entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+>>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
 networks:
-        iauu_net:        
+        iauu_net:
 volumes:
-        db:        
+        db:

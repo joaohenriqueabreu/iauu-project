@@ -7,21 +7,32 @@
       <h6 class="mb-2">Escolha os itens que deseja incluir em sua apresentação</h6>
       <p class="mb-5">O artista irá retornar brevemente com o valor final da apresentação</p>
       <div class="vertical mx-5">
-        <perfect-scrollbar>
-          <div v-for="(item, index) in allItems" :key="index" class="items mb-3" :class="{ selected: isCustomItemSelected(item) }" @click="toggleItem(item)">
-            <div class="horizontal">
-              <font-awesome icon="check" class="mr-5"></font-awesome>
-              <h6 class="mb-2">{{ item }}</h6>
-            </div>
-            <hr />
+        <div
+          v-for="(item, index) in allItems"
+          :key="index"
+          class="items mb-3"
+          :class="{ selected: isCustomItemSelected(item) }"
+          @click="toggleItem(item)"
+        >
+          <div class="horizontal">
+            <icon icon="check" class="mr-5"></icon>
+            <h6 class="mb-2">{{ item }}</h6>
           </div>
-        </perfect-scrollbar>
+          <hr />
+        </div>
       </div>
-      <form-textarea v-model="notes" placeholder="Observações" :rows="5" class="mb-5"></form-textarea>
+      <form-textarea
+        v-model="notes"
+        placeholder="Observações"
+        :rows="5"
+        class="mb-5"
+      ></form-textarea>
     </template>
     <template v-slot:footer>
       <div class="vertical center">
-        <form-button v-if="customItems.length > 0" class="mb-3 half-width" @action="selectProduct">Selecionar</form-button>
+        <form-button v-if="customItems.length > 0" class="mb-3 half-width" @action="selectProduct"
+          >Selecionar</form-button
+        >
         <span v-else class="error mb-3">Selecione um ou mais itens</span>
         <span class="clickable text-center" @click="cancel">Escolher outro formato</span>
       </div>

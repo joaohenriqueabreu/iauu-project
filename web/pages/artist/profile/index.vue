@@ -1,8 +1,8 @@
 <template>
   <div>
     <form @submit.prevent="saveProfile">
-      <image-uploader ref="bgUploader" @uploaded="setBackground">
-        <header :style="{ 'background-image': `url(${backgroundImg})` }" @click="uploadBG"></header>
+      <image-uploader ref="bgUploader" @uploaded="setBackground" resolution="background">
+        <header :style="{ 'background-image': `url(${$images(backgroundImg)})` }" @click="uploadBG"></header>
       </image-uploader>
       <main>
         <div class="logo">
@@ -12,56 +12,51 @@
         </div>
         <div class="pt-5"></div>
         <div class="boxed full-width">
-          <ul class="nav nav-tabs mt-4">
-            <li class="nav-link first">
-              <a class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'">
-                Stats
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'">
-                Informações
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'">
-                Redes Sociais
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'">
-                Categorias
-              </a>
-            </li>
-            <li class="nav-link">
-              <a class="nav-link" :class="{ active: tagsTab }" @click="activeTab = 'tags'">
-                Pesquisa
-              </a>
-            </li>
-          </ul>
+          <div class="">
+            <ul class="horizontal horizontal-scroll mt-4 pl-0">
+              <li class="nav-link" :class="{ active: statsTab }" @click="activeTab = 'stats'"><h6>Geral</h6></li>
+              <li class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'"><h6>Informações</h6></li>
+              <li class="nav-link" :class="{ active: presentationsTab }" @click="activeTab = 'presentations'"><h6>Apresentações</h6></li>
+              <li class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'"><h6>Estilo</h6></li>
+              <li class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'"><h6>Eventos</h6></li>
+              <li class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'"><h6>Redes Sociais</h6></li>
+              <li class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'"><h6>Integrantes</h6></li>              
+              <li v-if="arePaymentsEnabled" class="nav-link" :class="{ active: bankAccountTab }" @click="activeTab = 'bankAccount'"><h6>Dados bancários</h6></li>
+            </ul>
+          </div>
           <div class="mb-5 raised vertical middle" :class="{ first: statsTab }">
             <fade-transition mode="out-in">
-              <profile-stats v-show="statsTab" key="stats"></profile-stats>
+              <profile-stats v-if="statsTab" key="stats"></profile-stats>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-info v-show="infoTab" ref="info" key="artist"></artist-info>
+              <presentation-config v-show="presentationsTab" ref="presentations"></presentation-config>
             </fade-transition>
             <fade-transition mode="out-in">
-              <social-networks v-show="socialTab" ref="social" key="social"></social-networks>
+              <artist-users v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-users>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-categories v-show="catTab" key="categories" :categories="categories">
-              </artist-categories>
+              <artist-info v-if="infoTab" ref="info"></artist-info>
             </fade-transition>
             <fade-transition mode="out-in">
-              <search-tags v-show="tagsTab" key="tags"></search-tags>
+              <social-networks v-if="socialTab" ref="social" key="social"></social-networks>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <artist-categories v-if="catTab" key="categories" :categories="categories"></artist-categories>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <presentation-types v-if="typesTab" :options="presentationTypes" key="types"></presentation-types>
+            </fade-transition>
+            <fade-transition mode="out-in">
+              <bank-account v-if="bankAccountTab" key="bankAccount" @bank-account-changed="validateBankAccount"></bank-account>
             </fade-transition>
           </div>
         </div>
       </main>
       <footer>
-        <div class="half-width">
-          <form-button @action="saveProfile">Salvar</form-button>
+        <div class="half-width" v-if="statsTab">
+          <form-button v-if="!bankAccountTab" @action="saveProfile">Salvar</form-button>
+          <!-- Special handling for bank account -->
+          <form-button v-else :disabled="!validBankAccount" @action="saveArtistBankAccount">Salvar dados bancários</form-button>
         </div>
       </footer>
     </form>
@@ -69,87 +64,141 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
-import ProfileStats from '@/components/artist/profile/stats'
-import ArtistInfo from '@/components/artist/profile/info'
-import SocialNetworks from '@/components/artist/profile/social'
-import ArtistCategories from '@/components/artist/profile/categories'
-import SearchTags from '@/components/artist/profile/tags'
+import { mapFields } from 'vuex-map-fields';
+import { mapActions, mapState, mapMutations } from 'vuex';
+import ProfileStats from '@/components/artist/profile/stats';
+import ArtistInfo from '@/components/artist/profile/info';
+import PresentationConfig from '@/components/artist/profile/presentationsConfig';
+import ArtistUsers from '@/components/artist/profile/users';
+import SocialNetworks from '@/components/artist/profile/social';
+import ArtistCategories from '@/components/artist/profile/categories';
+import PresentationTypes from '@/components/artist/profile/presentationTypes';
+import BankAccount from '@/components/artist/profile/bankAccount';
 export default {
   components: {
-    'profile-stats': ProfileStats,
-    'artist-info': ArtistInfo,
-    'social-networks': SocialNetworks,
-    'artist-categories': ArtistCategories,
-    'search-tags': SearchTags
+    ProfileStats,
+    PresentationConfig,
+    ArtistInfo,
+    ArtistUsers,
+    SocialNetworks,
+    ArtistCategories,
+    PresentationTypes,
+    BankAccount,
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
-      await store.dispatch('artist/loadArtist')
-      const { data } = await app.$axios.get('categories')
-      return { categories: data }
+      await store.dispatch('artist/loadArtist');
+      const catResponse = await app.$axios.get('categories');
+      const presentationTypesResponse = await app.$axios.get('presentations/types');
+      const roleIdResponse = await app.$axios.get('/users/exchange');
+      return { 
+        categories: catResponse.data,
+        presentationTypes: presentationTypesResponse.data,
+        shareableId:  roleIdResponse.data
+      }
     } catch (e) {
       $sentry.captureException(e)
-      error({ statusCode: 404, message: 'Perfil não encontrado' })
+      error({ statusCode: 404, message: 'Perfil não encontrado' });
     }
   },
   data() {
     return {
-      activeTab: { type: String, default: 'stats' }
+      activeTab: { type: String, default: 'stats' },
+      validBankAccount: false,
+      bankAccount: {}
     }
   },
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
+    ...mapFields('artist', {
+      photo: 'artist.photo',
+      background: 'artist.background'
+    }),
     statsTab() {
-      return this.activeTab === 'stats'
+      return this.activeTab === 'stats';
+    },
+    presentationsTab() {
+      return this.activeTab === 'presentations';
     },
     infoTab() {
-      return this.activeTab === 'info'
+      return this.activeTab === 'info';
+    },
+    usersTab() {
+      return this.activeTab === 'users';
     },
     socialTab() {
-      return this.activeTab === 'social'
+      return this.activeTab === 'social';
     },
     catTab() {
-      return this.activeTab === 'categories'
+      return this.activeTab === 'categories';
     },
-    tagsTab() {
-      return this.activeTab === 'tags'
+    typesTab() {
+      return this.activeTab === 'types';
+    },
+    bankAccountTab() {
+      return this.activeTab === 'bankAccount';
     },
     backgroundImg() {
-      return !this.$utils.empty(this.artist.media.bg)
-        ? this.artist.media.bg
-        : this.$config.defaultBGImgUrl
+      return !this.$utils.empty(this.background)
+        ? this.background
+        : this.$config.defaultBGImgUrl;
     },
     avatarImg() {
-      return !this.$utils.empty(this.artist.user.photo)
-        ? this.artist.user.photo
-        : this.$config.defaultAvatarImgUrl
+      return !this.$utils.empty(this.photo) ? this.photo : this.$config.defaultAvatarImgUrl
+    },
+    arePaymentsEnabled() {
+      return process.env.paymentsEnabled === 'true';
     }
   },
   created() {
-    this.profile = this.$object.clone(this.artist)
-    this.activeTab = 'stats'
+    this.profile = this.$object.clone(this.artist);
+    this.activeTab = 'stats';
+    console.log(process.env.paymentsEnabled);
   },
   methods: {
-    ...mapActions('artist', ['saveProfile']),
-    ...mapMutations('artist', { updateProfile: 'update_profile' }),
-
+    ...mapActions('artist', ['saveProfile', 'saveBankAccount']),
     uploadBG() {
-      this.$refs.bgUploader.upload()
+      this.$refs.bgUploader.upload();
     },
     uploadAvatar() {
-      this.$refs.avatarUploader.upload()
+      this.$refs.avatarUploader.upload();
     },
     categorySelect(category) {
-      alert(category)
+      alert(category);
     },
-    async setBackground({ url }) {
-      this.updateProfile({ prop: 'media.bg', data: url })
-      await this.saveProfile()
+    validateBankAccount(valid, bankAccount) {
+      this.validBankAccount = valid;
+      this.bankAccount = bankAccount;
     },
-    async setAvatar({ url }) {
-      this.updateProfile({ prop: 'user.photo', data: url })
-      await this.saveProfile()
+    async setBackground(url) {
+      this.background = url;
+      await this.saveProfile();
+      this.$toast.success('Background atualizado');
+    },
+    async setAvatar(url) {
+      this.photo = url;
+      await this.saveProfile();
+      this.$toast.success('Foto atualizada');
+    },
+    async saveArtistProfile() {
+      // Special handling for bank account
+      try {
+        await this.saveProfile();
+      } catch (error) {
+        this.$toast.error('Tivemos um problema ao salvar o perfil');
+      }
+    },
+    async saveArtistBankAccount() {
+      if (this.validBankAccount) {
+        try {
+          await this.saveBankAccount(this.bankAccount);
+          this.$toast.success('Conta bancária conectada com sistema de pagamentos');
+        } catch (error) {
+          this.$toast.error('Tivemos um problema ao conectar sua conta bancária com nosso sistema de pagamento. Por favor revise os dados ou entre em contato com a nossa equipe');
+        }
+      } else {
+        this.$toast.error('Favor preencher todos os dados bancários');
+      }
     }
   }
 }
@@ -171,7 +220,6 @@ form {
 
   main {
     @extend .vertical, .center, .middle;
-    min-height: 70vh;
     position: relative;
     margin-bottom: 5 * $space;
     .logo {
@@ -186,6 +234,43 @@ form {
       box-shadow: $shadow;
       border-radius: $edges;
       padding: 5 * $space;
+      position: relative;
+      z-index: $base;
+
+      ul {
+        // background: $layer4;
+        margin-bottom: 0;
+        padding-left: 0;
+        z-index: $above;
+        border-top-left-radius: $edges;
+        border-top-right-radius: $edges;
+
+        li {
+          padding-top: 2 * $space;
+          padding-bottom: 2 * $space;
+          z-index: $above;
+          min-width: 100px;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          margin-right: 2 * $space;
+
+          transition: $transition;
+          &:hover {
+            transition: $transition;
+            color: $brandLayer;
+          }
+
+          &.active {
+            background: $layer4;
+            border-top-left-radius: $edges;
+            border-top-right-radius: $edges;
+          }
+        }
+        
+      }
 
       .raised {
         transition: $transition;
@@ -195,10 +280,14 @@ form {
         width: 100%;
         border-radius: $edges;
         min-height: 50vh;
-
+        border-radius: $edges;
         &.first {
-          border-radius: 0 $edges $edges $edges;
+          border-radius: 0 $edges $edges $edges; 
         }
+
+        // &.first {
+        //   border-radius: 0 $edges $edges $edges;
+        // }
       }
     }
 
@@ -215,7 +304,7 @@ form {
   // Overwrite bootstrap styling
   .nav-tabs {
     border-bottom: none;
-    z-index: $moveToTop;
+    z-index: $above;
     .nav-link {
       padding-bottom: 0;
       border: none;

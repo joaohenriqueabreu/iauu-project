@@ -1,20 +1,22 @@
 <template>
   <div>
-    <h6 class="mb-4">Escolha uma opção de data e  horário para a apresentação:</h6>
+    <h6 class="mb-4">Escolha uma opção de data e horário para a apresentação:</h6>
     <carousel class="horizontal center middle">
       <slide
         v-for="(timeslot, index) in timeslots"
         :key="index"
         class="timeslot"
-        :class="{ selected: !$empty(selectedTimeslot) && selectedTimeslot.start_dt === timeslot.start_dt }"
+        :class="{
+          selected: !$empty(selectedTimeslot) && selectedTimeslot.start_dt === timeslot.start_dt
+        }"
       >
         <div @click="select(timeslot)">
           <div class="horizontal mb-2">
-            <font-awesome icon="play-circle" class="mr-2"></font-awesome>
+            <icon icon="play-circle" class="start mr-2"></icon>
             <h6>{{ timeslot.start_dt | datetime }}</h6>
           </div>
           <div class="horizontal">
-            <font-awesome icon="stop-circle" class="mr-2"></font-awesome>
+            <icon icon="stop-circle" class="stop mr-2"></icon>
             <h6>{{ timeslot.end_dt | datetime }}</h6>
           </div>
         </div>
@@ -66,6 +68,16 @@ export default {
   &.selected {
     border: 2px solid $brandLayer;
     background: $layer4;
+  }
+}
+
+[data-icon] {
+  &.start {
+    color: $green;
+  }
+
+  &.stop {
+    color: $error;
   }
 }
 </style>

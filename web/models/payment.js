@@ -1,4 +1,4 @@
-import { Model } from 'vue-mc'
+import Model from './model'
 import Presentation from '@/models/presentation'
 
 export default class Payment extends Model {

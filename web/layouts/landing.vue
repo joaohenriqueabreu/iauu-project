@@ -5,11 +5,9 @@
         <h1>this is a header</h1>
       </nav>
     </header>
-    <perfect-scrollbar>
-      <main>
-        <nuxt />
-      </main>
-    </perfect-scrollbar>
+    <main>
+      <nuxt />
+    </main>
   </div>
 </template>
 

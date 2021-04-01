@@ -79,11 +79,17 @@ export default {
     },
     unavailableTimeslots() {
       const self = this
-      return this.$collection.filter(this.timeslots, (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot))
+      return this.$collection.filter(
+        this.timeslots,
+        (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot)
+      )
     },
     availableTimeslots() {
       const self = this
-      return this.$collection.filter(this.timeslots, (timeslot) => !self.$empty(timeslot) && !self.isUnavailable(timeslot))
+      return this.$collection.filter(
+        this.timeslots,
+        (timeslot) => !self.$empty(timeslot) && !self.isUnavailable(timeslot)
+      )
     },
     headerButtons: () => {
       return {
@@ -250,7 +256,9 @@ export default {
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
         if (!this.$empty(timeslot)) {
-          this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot)))
+          this.calendarEvents.push(
+            this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot))
+          )
         }
       })
     },
@@ -400,11 +408,14 @@ export default {
 }
 
 // Overwrite buttons
-.fc-button,
-fc-button-primary {
-  background: $brandLayer;
+.fc-button, .fc-button-primary {
+  background: $layer5;
   border: none;
-  transition: $transition;
+  transition: $transition;  
+
+  &.fc-button-active {
+    background: $brandLayer !important;
+  }
 
   &:disabled {
     background: transparentize($brandLayer, 0.5);
@@ -412,6 +423,7 @@ fc-button-primary {
 
   &:hover {
     transition: $transition;
+    background: $brandLayer;
   }
 }
 
@@ -500,5 +512,21 @@ td:not(.fc-minor) {
 .fc-day.fc-disabled-day {
   background: $layer2;
   cursor: default;
+}
+
+.fc-toolbar {
+  @include mobile {
+    flex-direction: column;
+  }
+
+  div {
+    margin-bottom: $space;
+  }
+
+  // .fc-center {
+  //   @include mobile {
+  //     display: none;
+  //   }
+  // }
 }
 </style>

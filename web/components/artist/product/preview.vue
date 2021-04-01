@@ -1,7 +1,7 @@
 <template>
   <modal ref="modal" hide-header>
     <template v-slot:main>
-      <div class="bg-image" :style="{ 'background-image': `url(${productPhoto})` }"></div>
+      <div class="bg-image" :style="{ 'background-image': `url(${$images(productPhoto)})` }"></div>
       <carousel
         v-if="!$utils.empty(product.medias)"
         :per-page="2"
@@ -26,7 +26,7 @@
         <div v-for="(item, index) in product.items" :key="index">
           <hr />
           <span>
-            <font-awesome icon="check" class="mr-2"></font-awesome>
+            <icon icon="check" class="mr-2"></icon>
             {{ item }}
           </span>
         </div>
@@ -40,21 +40,21 @@
         <div v-for="(item, index) in notItems" :key="index" class="not-items">
           <hr />
           <span>
-            <font-awesome icon="check" class="mr-2"></font-awesome>
+            <icon icon="check" class="mr-2"></icon>
             {{ item }}
           </span>
         </div>
       </div>
       <div class="mb-5">&nbsp;</div>
     </template>
-    <template v-slot:footer>
+    <template v-slot:footer v-if="!readOnly">
       <div class="horizontal middle center my-4 d-flex justify-content-between">
         <div>
           <h4>{{ product.price | currency }}</h4>
         </div>
         <div>
           <h4 class="horizontal">
-            <font-awesome icon="clock" class="mr-"></font-awesome>
+            <icon icon="clock" class="mr-"></icon>
             {{ product.duration }} horas
           </h4>
         </div>
@@ -68,6 +68,9 @@
 
 <script>
 export default {
+  props: {
+    readOnly: { type: Boolean, default: false }
+  },
   data() {
     return {
       product: {},

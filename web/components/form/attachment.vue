@@ -6,12 +6,12 @@
         <h6>{{ fileDisplay }}</h6>
       </a>
     </div>
-    <font-awesome
+    <icon
       v-if="removable"
       icon="times"
       class="clickable ml-5"
       @click="$emit('remove')"
-    ></font-awesome>
+    ></icon>
   </div>
 </template>
 
@@ -25,10 +25,10 @@ export default {
   computed: {
     attachmentIcon() {
       if (this.file.type.includes(this.$config.pdfSubstringMatch)) {
-        return require('@/assets/imgs/social/pdf.png')
+        return this.$images('social/pdf.png')
       }
 
-      return require('@/assets/imgs/music.png')
+      return this.$images('music.png')
     },
     fileDisplay() {
       if (!this.$utils.empty(this.file)) {

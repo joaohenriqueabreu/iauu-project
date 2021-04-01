@@ -1,33 +1,60 @@
 <template>
   <div>
-    <div v-if="avatar">
-      <overlay :rounded="true">
-        <template v-slot:default>
-          <avatar :size="50" :src="networkIcon"></avatar>
-        </template>
-        <template v-if="removable" v-slot:hover>
-          <div class="vertical middle center pl-3" @click="$emit('remove')">
-            <font-awesome icon="times"></font-awesome>
-          </div>
-        </template>
-      </overlay>
+    <div class="simple-container" v-if="!removable">
+      <a :href="media" target="_blank">
+        <link-preview :url="url">
+          <template slot-scope="props">
+            <div class="preview-img">
+              <div class="network-icon">
+                <avatar :src="networkIcon" :size="30" class="social"> </avatar>
+              </div>
+              <div>
+                <img class="card-img-top" :src="$images(props.img)" :alt="props.title" />
+              </div>
+            </div>
+            <div class=" thumb-description">
+              {{ props.title }}
+            </div>
+          </template>
+          <template slot="loading">
+            <div class="loading"></div>
+          </template>
+        </link-preview>
+      </a>
     </div>
-    <div v-if="!avatar && loaded" class="simple-container d-flex justify-content-between">
-      <div class="horizontal middle">
-        <avatar :size="50" :src="networkIcon" class="mr-4"></avatar>
-        <a :href="link" target="_blank">
-          <h6>{{ media.url }}</h6>
-          <!-- <link-preview :url="media.url">
-            <template slot-scope="props">{{ props.title }} </template>
-            <template slot="loading">
-              <div class="loading"></div>
-            </template>
-          </link-preview> -->
-        </a>
-      </div>
-      <font-awesome v-if="removable" icon="times" class="clickable ml-5" @click="$emit('remove')">
-      </font-awesome>
-    </div>
+    <overlay class="full-height" v-else>
+      <template v-slot:default class="full-height">
+        <div class="simple-container">
+          <a :href="media" target="_blank">
+            <link-preview :url="url">
+              <template slot-scope="props">
+                <div class="preview-img">
+                  <div class="network-icon">
+                    <avatar :src="networkIcon" :size="30" class="social"> </avatar>
+                  </div>
+                  <div>
+                    <img class="card-img-top" :src="$images(props.img)" :alt="props.title" />
+                  </div>
+                </div>
+                <div class=" thumb-description">
+                  {{ props.title }}
+                </div>
+              </template>
+              <template slot="loading">
+                <div class="loading"></div>
+              </template>
+            </link-preview>
+          </a>
+        </div>
+      </template>
+      <template v-slot:hover>
+        <div class="vertical middle center pl-3" @click="$emit('remove')">
+          <h4>
+            <icon icon="times"></icon>Remover
+          </h4>
+        </div>
+      </template>
+    </overlay>
   </div>
 </template>
 

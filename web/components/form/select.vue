@@ -1,19 +1,20 @@
 <template>
-  <div>
-    <label :for="name">{{ label }}</label>
+  <div class="hide-mobile">
+    <label v-if="!$empty(label)" :for="name">{{ label }}</label>
+    <h6 v-else class="mb-2"><slot></slot></h6>
     <div class="form-input">
       <v-selectize v-if="allowInput" :name="name" :settings="settings">
-        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
-          >{{ option.display }}
+        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value">
+          {{ option.display }}
         </option>
       </v-selectize>
-      <select v-else required>
-        <option disabled selected hidden value="" class="placeholder">{{ placeholder }}</option>
-        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value"
-          >{{ option.display }}
+      <select v-else required :value="value" @change="$emit('input', $event.target.value)">
+        <option disabled selected hidden value="" v-if="!$empty(placeholder)" class="placeholder">{{ placeholder }}</option>
+        <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value">
+          {{ option.display }}
         </option>
       </select>
-      <font-awesome :icon="iconHelper"></font-awesome>
+      <icon :icon="iconHelper"></icon>
     </div>
   </div>
 </template>
@@ -28,7 +29,7 @@ export default {
   extends: Input,
   props: {
     allowInput: { type: Boolean, default: true },
-    options: { type: Array, default: () => [] },
+    options: { type: [Array, Object], default: () => [] },
     name: { type: String, default: '' },
     label: { type: String, default: '' },
     autoOpen: { type: Boolean, default: false },
@@ -53,6 +54,7 @@ export default {
     },
     selectizeOptions() {
       return this.$collection.map(this.options, (option) => {
+        if (option.hasOwnProperty('value') && option.hasOwnProperty('display')) { return option; }
         return { value: option, display: option }
       })
     }
@@ -72,6 +74,11 @@ export default {
     transition: $transition;
     &.items.not-full.has-options::after {
       display: none;
+    }
+
+    &.items {
+      color: $white;
+      font-weight: $bold;
     }
 
     &:hover {
@@ -120,6 +127,12 @@ select {
 
   &::-ms-expand {
     display: none;
+  }
+
+  option {
+    background: $layer1;
+    color: $white;
+    font-weight: $bold;
   }
 }
 </style>

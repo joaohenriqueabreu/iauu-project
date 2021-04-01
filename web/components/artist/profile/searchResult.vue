@@ -1,26 +1,23 @@
 <template>
   <div class="result" @click="$emit('select', artist)">
-    <div class="logo" v-if="!$empty(artist.user)">
-      <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
-      <avatar :src="artist.user.photo" :username="artist.user.name" :size="100"></avatar>
+    <div class="logo">
+      <div class="bg hide-mobile" :style="{ 'background-image': `url(${$images(bgImage)})` }"></div>
+      <avatar :src="$images(artist.photo)" :username="artist.name" :size="100"></avatar>
     </div>
     <div class="row p-3 full-width">
       <div class="col-sm-6">
-        <div>
-          <h2>{{ artist.company_name || artist.name }}</h2>
+        <div class="mb-4">
+          <h2>{{ artist.name }}</h2>
         </div>
-        <div>
-          <h6 class="cat-badge">{{ artist.category.name }}</h6>
+        <div class="horizontal">
+          <h6 class="cat-badge mr-4">{{ artist.category.name }}</h6>
+          <price-range short :range="artist.proposal.price_range"></price-range>
         </div>
         <div v-if="!$utils.empty(artist.address)" class="mb-4">
-          <small>{{ artist.address.street }}</small>
+          <small>{{ artist.city_location }}</small>
         </div>
         <div class="horizontal middle">
-          <span
-            v-for="(subcategory, index) in artist.category.subcategories"
-            :key="index"
-            class="sub-badge"
-          >
+          <span v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="sub-badge">
             {{ subcategory }}
           </span>
         </div>
@@ -28,27 +25,7 @@
       <div class="col-sm-6 d-flex justify-content-end">
         <div class="vertical">
           <div v-if="!$utils.empty(artist.rating)" class="mb-3">
-            <rating :score="artist.rating" :amount="artist.feedback_count"></rating>
-          </div>
-          <div class="d-flex full-height">
-            <div class="vertical">
-              <div v-if="!$utils.empty(artist.stats)" class="horizontal justify-content-end">
-                <h5 :title="`${artist.stats.presentations} Apresentações realizadas`">
-                  <font-awesome icon="music" class="mr-2"></font-awesome>
-                  {{ artist.stats.presentations }}
-                </h5>
-              </div>
-              <div v-if="false" class="d-flex align-items-end full-height">
-                <div v-if="artist.display_rate" class="horizontal middle">
-                  <client-only>
-                    <h4>R$ {{ rateMin | number('0,0') }} - R$ {{ rateMax | number('0,0') }}</h4>
-                  </client-only>
-                </div>
-                <div v-if="!artist.display_rate" class="horizontal middle">
-                  <span>Entre em contato para orçar</span>
-                </div>
-              </div>
-            </div>
+            <rating :score="artist.rating" :amount="artist.feedback_count" short></rating>
           </div>
         </div>
       </div>
@@ -64,11 +41,8 @@ export default {
   },
   computed: {
     bgImage() {
-      // if (this.$utils.empty(this.artist.bg_photo)) {
-      return require('@/assets/imgs/concert.png')
-      // }
-
-      // return this.artist.bg_photo
+      if (!this.$utils.empty(this.artist.background)) { return this.artist.background }
+       return 'concert.png'
     },
     rateMin() {
       return Math.round(this.artist.score * 0.5)
@@ -80,8 +54,7 @@ export default {
   methods: {
     // TODO This is not best neither the correct for this to be - refactor to the model (?) in the future, or send from the backend
     getSlug() {
-      const name = this.artist.company_name || this.artist.name
-      return name.toLowerCase().replace(' ', '-')
+      return this.artist.name.toLowerCase().replace(' ', '-')
     }
   }
 }
@@ -89,11 +62,23 @@ export default {
 
 <style lang="scss" scoped>
 .result {
-  @extend .horizontal;
+  @include desktop {
+    display: flex;
+    flex-direction: row;
+    border-top-right-radius: $edges;
+    border-bottom-right-radius: $edges;
+  }
+
+  @include mobile {
+    border-radius: $edges;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   background: $layer3;
   box-shadow: $shadow;
-  border-top-right-radius: $edges;
-  border-bottom-right-radius: $edges;
   transition: $transition;
   cursor: pointer;
 
@@ -104,6 +89,11 @@ export default {
 
   .logo {
     @extend .horizontal, .middle, .center;
+    @include mobile {
+      background: $layer4;
+      width: 100%;
+    }
+
     width: 30%;
     min-height: 20vh;
     position: relative;
@@ -139,6 +129,11 @@ export default {
     padding: $space 2 * $space;
     color: $brand;
     margin-right: 2 * $space;
+    width: 150px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .stats-badge {

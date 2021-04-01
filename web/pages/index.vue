@@ -1,20 +1,22 @@
 <template>
   <div>
-    <div class="section main"></div>
+    <client-only>
+      <div class="section main" :style="`background-image: url('${$images('home.jpg')}');`"></div>
+    </client-only>
     <div class="section search">
-      <h1 class="text-center">Aperte o play em seu evento</h1>
+      <h1 class="text-center mb-4">Aperte o play de seu evento</h1>
       <div class="half-width vertical middle center">
         <client-only>
-          <search-artist @seach="search"></search-artist>
+          <search-artist @search="search"></search-artist>
           <nuxt-link ref="searchLink" to="/search">Vamos lá!</nuxt-link>
         </client-only>
       </div>
     </div>
     <div class="section even">
-      <h1>Todo mundo faz iauu</h1>
+      <h1>Todo mundo faz {{ $config.companyName }}</h1>
     </div>
     <div class="section odd">
-      <h1>Por que iauu?</h1>
+      <h1>Por que {{ $config.companyName }}?</h1>
     </div>
     <div class="section even">
       <h1>Queridinhos da galera</h1>
@@ -26,6 +28,16 @@
       <h1 class="mb-4">Contrate sua banda agora</h1>
       <nuxt-link to="/search">Vamos lá!</nuxt-link>
     </div>
+    <!-- Need to wrap lib on client-only tag as it uses document element -->
+    <client-only>
+      <cookie-policy buttonText="OK" class="cookies">
+        <div slot="message">
+          <h6>Nosso site utiliza cookies para melhorar a sua experiência. Ao utilizar a plataforma você consente com nossa
+          <nuxt-link to="/terms">Política de privacidade</nuxt-link>.
+          </h6>
+        </div>
+      </cookie-policy>
+    </client-only>
   </div>
 </template>
 
@@ -34,7 +46,7 @@ import { mapActions } from 'vuex'
 import SearchArtist from '@/components/artist/searchInput'
 export default {
   components: {
-    'search-artist': SearchArtist
+    SearchArtist
   },
   mounted() {
     if (
@@ -47,10 +59,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('app', ['setSearchFilters']),
     search(term) {
-      this.setSearchFilters({ term })
-      this.$router.push('/search')
+      console.log(term)
+      this.$router.push(`/search?term=${encodeURI(term)}`)
     }
   }
 }
@@ -66,7 +77,6 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('~assets/imgs/home.jpg?webp');
     height: 110vh;
     width: 100%;
     opacity: 0.2;
@@ -106,5 +116,24 @@ export default {
       color: $layer1;
     }
   }
+}
+
+.cookies {
+  background: $layer5;
+  color: $brand;
+  z-index: $above;
+
+  a {
+    color: $brand;
+  }
+}
+</style>
+
+<!-- Cookie-law overrides -->
+<style lang="scss">
+.Cookie__button {
+  background: $brandLayer !important;
+  font-weight: $bold;
+  border-radius: $rounded !important;
 }
 </style>

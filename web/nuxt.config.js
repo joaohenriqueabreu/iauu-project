@@ -1,11 +1,22 @@
 require('dotenv').config()
 
 export default {
-  mode: 'universal',
-  // mode: 'spa',
+  dev: process.env.NODE_ENV !== 'production',
   env: {
-    // baseURL: process.env.BASE_URL,
-    fileStackApiKey: process.env.FILESTACK_API_KEY
+    fileStackApiKey: process.env.FILESTACK_API_KEY,
+    googleAnalyticsKey: process.env.GOOGLE_ANALYTICS_KEY,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    facebookPixelKey: process.env.FACEBOOK_PIXEL_KEY,
+    cdnStaticAssetsDomain: process.env.CDN_STATIC_ASSETS_DOMAIN,
+    cdnAppAssetsDomain: process.env.CDN_APP_ASSETS_DOMAIN,
+    s3AppAssetsBucketUrl: process.env.S3_APP_ASSETS_BUCKET_URL,
+    s3StaticAssetsBucketUrl: process.env.S3_STATIC_ASSETS_BUCKET_URL,
+    companyName: process.env.COMPANY_NAME,
+    webUrl: process.env.WEB_URL,
+    supportMail: process.env.SUPPORT_MAIL,
+    corsProxyUrl: process.env.CORS_PROXY_URL,
+    paymentsEnabled: process.env.PAYMENTS_ENABLED
   },
   /*
    ** Headers of the page
@@ -19,6 +30,10 @@ export default {
         hid: 'description',
         name: 'description',
         content: process.env.npm_package_description || ''
+      },
+      {
+        name:'google-signin-client_id',
+        content: process.env.GOOGLE_CLIENT_ID
       }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
@@ -26,20 +41,20 @@ export default {
       {
         src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`
       },
+      // Required for bootstrap
       {
-        src: 'https://code.jquery.com/jquery-3.5.1.slim.min.js',
-        integrity: 'sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj',
-        crossorigin: 'anonymous'
+        src: "https://code.jquery.com/jquery-3.3.1.slim.min.js",
+        type: "text/javascript"
       },
       {
-        src: 'https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js',
-        integrity: 'sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo',
-        crossorigin: 'anonymous'
+        src:
+          "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js",
+        type: "text/javascript"
       },
       {
-        src: 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js',
-        integrity: 'sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI',
-        crossorigin: 'anonymous'
+        src:
+          "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js",
+        type: "text/javascript"
       }
     ]
   },
@@ -53,8 +68,9 @@ export default {
   css: [
     'bootstrap/dist/css/bootstrap.css',
     'bootstrap-vue/dist/bootstrap-vue.css',
-    'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css',
-    'selectize/dist/css/selectize.bootstrap3.css'
+    'selectize/dist/css/selectize.bootstrap3.css',
+    'filepond/dist/filepond.min.css',
+    'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
   ],
   styleResources: {
     scss: [
@@ -63,7 +79,6 @@ export default {
       '@/assets/scss/lib/_colors.scss',
       '@/assets/scss/lib/_variables.scss',
       '@/assets/scss/lib/_responsive.scss',
-      'bootstrap/scss/bootstrap',
       '@/assets/scss/main.scss'
     ]
   },
@@ -73,99 +88,77 @@ export default {
   plugins: [
     { src: '@/plugins/config' },
     { src: '@/plugins/utils' },
-    // { src: '@/plugins/http' },
-    // { src: '@/plugins/auth' },
-
-    // { src: '@/plugins/ui' },
     { src: '@/plugins/icons' },
     { src: '@/plugins/data' },
+    { src: '@/plugins/cdn' },
     { src: '@/plugins/dictionary' },
-    // { src: '@/plugins/full-calendar' },
-
+    { src: '@/plugins/cors', mode: 'client' },
+    { src: '@/plugins/ssr', mode: 'client' },
     { src: '@/plugins/ui', mode: 'client' },
-    // { src: '@/plugins/icons', mode: 'client' },
-    // { src: '@/plugins/data', mode: 'client' },
-    // { src: '@/plugins/dictionary', mode: 'client' },
-    { src: '@/plugins/full-calendar', mode: 'client' },
-    { src: '@/plugins/html2canvas', mode: 'client' }
-    // { src: '@/plugins/full-calendar', ssr: false }
+    { src: '@/plugins/fullCalendar', mode: 'client' },
+    { src: '@/plugins/html2canvas', mode: 'client' },
+    { src: '@/plugins/cookies', mode: 'client' },
+    { src: '@/plugins/facebookPixel', mode: 'client' },
+    { src: '@/plugins/hotjarTracker', mode: 'client' },
+    { src: '@/plugins/googleAnalytics', mode: 'client' },
+    { src: '@/plugins/socialLogin', mode: 'client' },
+    { src: '@/plugins/validation' },
   ],
-  // serverMiddleware: [{ path: 'api/v1', handler: '@/plugins/proxy.js' }],
 
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    // '@nuxtjs/eslint-module',
-    '@aceforth/nuxt-optimized-images'
-  ],
-  /*
-   ** Nuxt.js modules
-   */
+  buildModules: [],
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-    // Doc: https://github.com/nuxt-community/dotenv-module
+    // '@nuxtjs/pwa',
     '@nuxtjs/dotenv',
     '@nuxtjs/proxy',
     '@nuxtjs/auth',
     'nuxt-socket-io',
     '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
   ],
-  optimizedImages: {
-    optimizeImages: true,
-    defaultImageLoader: 'img-loader',
-    optipng: {
-      optimizationLevel: 3
-    },
-    webp: {
-      preset: 'default',
-      quality: 75
-    }
-  },
   axios: {
-    // baseURL: process.env.API_URL,
     baseURL: '/api/v1/'
   },
   proxy: {
-    '/api/v1': process.env.API_URL
+    '/api/v1': `${process.env.API_URL}`
   },
   auth: {
+    plugins: [{ src: '@/plugins/auth.js', ssr: false }],
+    resetOnError: true,
     scopeKey: 'role',
     strategies: {
-      facebook: {
-        // response_type: 'token', // Use auth code flow
-        // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
-        // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        // authorization_endpoint: '/login/facebook',
-        // access_token_endpoint: '/login/facebook',
-        // userinfo_endpoint: `${process.env.API_URL}/login/facebook`,
-        // userinfo_endpoint: '/login/facebook',
-        client_id: process.env.FACEBOOK_CLIENT_ID,
-        access_token_endpoint: false,
-        userinfo_endpoint: false,
-        scope: ['public_profile', 'email', 'user_birthday'],
-        redirect_uri: `${process.env.WEB_URL}/login/facebook/`
-      },
-      google: {
-        // response_type: 'code', // Use auth code flow
-        // client_secret: 'fad1ae1a1577baeabe6d594fce0e245d',
-        // access_token_endpoint: 'http://localhost:4444/login/facebook',
-        // userinfo_endpoint: `${process.env.API_URL}/login/google`,
-        // userinfo_endpoint: 'validate',
-        // scope: ['public_profile', 'email', 'user_birthday']
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        userinfo_endpoint: false,
-        redirect_uri: `${process.env.WEB_URL}/login/google/`
-      },
       user: {
         _scheme: 'local',
         endpoints: {
           login: { url: 'login', method: 'post', propertyName: false },
+          logout: { url: 'login', method: 'delete' },
+          user: { url: 'validate', method: 'post', propertyName: false }
+        }
+      },
+      facebook: {
+        _scheme: 'local',
+        endpoints: {
+          login: { url: 'login/facebook', method: 'post', propertyName: false },
+          logout: { url: 'login', method: 'delete' },
+          user: { url: 'validate', method: 'post', propertyName: false }
+        }
+      },
+      google: {
+        _scheme: 'local',
+        endpoints: {
+          login: { url: 'login/google', method: 'post', propertyName: false },
+          logout: { url: 'login', method: 'delete' },
+          user: { url: 'validate', method: 'post', propertyName: false }
+        }
+      },
+      verify: {
+        _scheme: 'local',
+        endpoints: {
+          login: { url: 'verify', method: 'post', propertyName: false },
           logout: { url: 'login', method: 'delete' },
           user: { url: 'validate', method: 'post', propertyName: false }
         }
@@ -178,18 +171,10 @@ export default {
           user: { url: 'validate', method: 'post', propertyName: false }
         }
       }
-      // tokenRequired: false,
-      // tokenName: 'Authorization',
-      // tokenType: 'bearer',
-      // globalToken: true
     }
   },
   io: {
-    // module options
-    sockets: [{
-      name: 'chat',
-      url: 'http://localhost:500'
-    }]
+    sockets: [{ url: `${process.env.SOCKET_URL}` }]
   },
   sentry: {
     dsn: process.env.SENTRY_DSN,
@@ -198,22 +183,49 @@ export default {
   toast: {
     position: 'bottom-left',
     duration: 5000,
-    containerClass: 'toast-container',
-    iconPack: 'fontawesome'
+    containerClass: 'toast-container'
   },
   /*
    ** Build configuration
    */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
-
     extend(config, ctx) {},
+<<<<<<< HEAD
     transpile: ['@nuxtjs/auth']
     // babelrc: true
   },
 
+=======
+    parallel: true,
+    cache: true,
+    hardsource: true,
+    terser: false,
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: false,
+        minifyJS: false,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true
+      }
+    },
+    optimization: {
+      minimize: true
+    },
+    optimizeCSS: true
+  },
+
+  generate: {
+    minify: {
+      collapseWhitespace: false
+    }
+  },
+
+>>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
   server: {
     port: 3000,
     host: '0.0.0.0'

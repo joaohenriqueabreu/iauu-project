@@ -6,7 +6,7 @@
           <div class="network-icon">
             <avatar :src="networkIcon" :size="30" class="social"> </avatar>
           </div>
-          <img v-if="!$utils.empty(link.images)" :src="link.images[0]" />
+          <img v-if="!$utils.empty(link.images)" :src="$images(link.images[0])" />
         </div>
         <div class="preview-text">
           <h6>{{ link.title }}</h6>
@@ -23,8 +23,7 @@
 import { getLinkPreview } from 'link-preview-js'
 export default {
   props: {
-    media: { type: Object, default: () => {} },
-    simple: { type: Boolean, default: false },
+    media: { type: [Object, String], default: () => {} },
     avatar: { type: Boolean, default: false },
     removable: { type: Boolean, default: false }
   },
@@ -35,38 +34,43 @@ export default {
     }
   },
   computed: {
+    url() {
+      if (typeof this.media === 'object' && this.media.hasOwnProperty('url')) { return this.media.url }
+      return this.media
+    },
     networkIcon() {
-      if (this.isSocialMatch(this.media.url, this.$config.youtubeSubstringMatch)) {
-        return require('@/assets/imgs/social/youtube.png')
+      if (this.isSocialMatch(this.url, this.$config.youtubeSubstringMatch)) {
+        return this.$images('social/youtube.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.tiktokSubstringMatch)) {
-        return require('@/assets/imgs/social/tiktok.png')
+      if (this.isSocialMatch(this.url, this.$config.tiktokSubstringMatch)) {
+        return this.$images('social/tiktok.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.spotifySubstringMatch)) {
-        return require('@/assets/imgs/social/spotify.png')
+      if (this.isSocialMatch(this.url, this.$config.spotifySubstringMatch)) {
+        return this.$images('social/spotify.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.instagramSubstringMatch)) {
-        return require('@/assets/imgs/social/instagram.png')
+      if (this.isSocialMatch(this.url, this.$config.instagramSubstringMatch)) {
+        return this.$images('social/instagram.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.vimeoSubstringMatch)) {
-        return require('@/assets/imgs/social/vimeo.png')
+      if (this.isSocialMatch(this.url, this.$config.vimeoSubstringMatch)) {
+        return this.$images('social/vimeo.png')
       }
 
-      if (this.isSocialMatch(this.media.url, this.$config.facebookSubstringMatch)) {
-        return require('@/assets/imgs/social/facebook.png')
+      if (this.isSocialMatch(this.url, this.$config.facebookSubstringMatch)) {
+        return this.$images('social/facebook.png')
       }
 
-      return require('@/assets/imgs/music.png')
+      return this.$images('music.png')
     }
   },
   async mounted() {
     // Use proxy server to bypass CORS restriction
     try {
-      this.link = await getLinkPreview(`https://cors-anywhere.herokuapp.com/${this.media.url}`)
+      this.link = await getLinkPreview(`${this.$config.bypassCORSUrl}${this.url}`)
+      // this.link = await this.$linkPreview(this.url)
     } catch (error) {
       this.$sentry.captureException(error)
     }
@@ -99,20 +103,24 @@ export default {
 }
 
 .simple-container {
-  @extend .horizontal, .middle, .full-width;
-  border-radius: $rounded;
-  padding: $space;
+  // @extend .horizontal, .middle, .full-width;
+  // border-radius: $edges;
+  // padding: $space;
   transition: $transition;
+  box-shadow: $shadow;
+  height: 100%;
+  // max-width: 500px;
 
-  a {
-    max-width: 85%;
-  }
+  // a {
+  //   max-width: 85%;
+  // }
 
   &:hover {
     transition: $transition;
     box-shadow: $shadow;
   }
 }
+
 a {
   background: transparent;
   outline: none;
@@ -132,45 +140,88 @@ a {
   }
 }
 
-.preview {
-  @extend .vertical;
-  width: 100%;
-  height: 100%;
+// .preview {
+//   @include desktop {
+//     display: flex;
+//     flex-direction: row;
+//   }
 
-  margin-bottom: 4 * $space;
-  box-shadow: $shadow;
+//   @include mobile {
+//     display: flex;
+//     flex-direction: column;
+//   }
+  
+//   width: 100%;
+//   height: 100%;
+
+//   margin-bottom: 4 * $space;
+//   box-shadow: $shadow;
+//   position: relative;
+//   background: $layer4;
+
+//   .preview-img {
+//     position: relative;
+//     // height: 100%;
+//     // max-height: 100px;
+//     .network-icon {
+//       position: absolute;
+//       bottom: 5px;
+//       right: 5px;
+//       height: 30px;
+//       width: 30px;
+//     }
+//     // width: 50%;
+//     img {
+//       width: 100%;
+//       max-height: 100px;
+//     }
+//   }
+
+//   .preview-text {
+//     display: block;
+//     max-width: 100%;
+//     padding: 2 * $space;
+//     text-align: left;
+//     font-size: $small;
+//     margin-bottom: 0;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     word-wrap: break-word;
+//     white-space: nowrap;
+//   }
+// }
+
+.preview-img {
   position: relative;
-  background: $layer4;
+  // height: 100%;
+  // max-height: 100px;
+  .network-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    height: 30px;
+    width: 30px;
+  }
+  // width: 50%;
+  img {
+    width: 100%;
+    max-height: 100px;
+  }
+}
 
-  .preview-img {
-    position: relative;
-    height: 100%;
-    // max-height: 100px;
-    .network-icon {
-      position: absolute;
-      bottom: 5px;
-      right: 5px;
-      height: 30px;
-      width: 30px;
-    }
-    // width: 50%;
-    img {
-      width: 100%;
-      max-height: 100px;
-    }
+.card-img-top {
+  max-width: auto;
+  min-height: 200px;
+}
+
+.thumb-description {
+  transition: $transition;
+  padding: $space;
+
+  &:hover {
+    transition: $transition;
+    color: $brandLayer;
   }
 
-  .preview-text {
-    display: block;
-    max-width: 100%;
-    padding: 2 * $space;
-    text-align: left;
-    font-size: $small;
-    margin-bottom: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    white-space: nowrap;
-  }
 }
 </style>

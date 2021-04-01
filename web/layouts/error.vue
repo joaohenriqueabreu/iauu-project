@@ -1,28 +1,37 @@
 <template>
-  <div class="error-content">
-    <div class="bg" :style="{ 'background-image': `url(${bgImage})` }"></div>
-    <div class="content">
-      <h1 class="mb-5">Vish...</h1>
-      <h5 class="mb-3 horizontal middle center">
-        Parece que a corda da guitarra estourou
-        <font-awesome icon="frown" class="ml-2 mb-0"></font-awesome>
-      </h5>
-      <h5 class="mb-4">
-        Nos perdoe, tivemos algum problema interno, mas já estamos trabalhando para resolver
-      </h5>
-      <div class="mb-4">
-        <h5 v-if="error.statusCode === 404">{{ error.message }}</h5>
+  <client-only>
+    <div class="error-content">
+      <div class="bg" :style="{ 'background-image': `url(${$images(bgImage)})` }"></div>
+      <div class="content">
+        <h1 class="mb-5">Vish...</h1>
+        <h5 class="mb-3 horizontal middle center">
+          {{ randomFunnyPhrase }}
+          <icon icon="frown" class="ml-2 mb-0"></icon>
+        </h5>
+        <h5 class="mb-4">
+          Nos perdoe, tivemos algum problema interno, mas já estamos trabalhando para resolver
+        </h5>
+        <div class="mb-4">
+          <h5 v-if="error.statusCode === 404">{{ error.message }}</h5>
+        </div>
+        <h5 class="mb-2">
+          Atualize a página e tente novamente ou entre em contato com a nossa equipe
+        </h5>
+        <h3 class="mb-4"><code>{{ $config.supportMail }}</code></h3>
+        <nuxt-link to="/">Voltar para a Home</nuxt-link>
       </div>
-      <h5 class="mb-2">
-        Atualize a página e tente novamente ou entre em contato com a nossa equipe
-      </h5>
-      <h3 class="mb-4"><code>roadies@iauu.com.br</code></h3>
-      <nuxt-link to="/">Voltar para a Home</nuxt-link>
     </div>
-  </div>
+  </client-only>
 </template>
 
 <script>
+const RANDOM_FUNNY_PHRASES = [
+  'Parece que a corda da guitarra estourou',
+  'Parece que o vocalista acordou com a garganta inflamada',
+  'Parece que o agente marcou dois shows no mesmo dia',
+  'Parece que o baterista perdeu as baquetas',
+  'Parece que a corda do baixo estourou',
+]
 export default {
   layout: 'guest',
   props: {
@@ -30,7 +39,11 @@ export default {
   },
   computed: {
     bgImage() {
-      return require('@/assets/imgs/error.jpg')
+      return this.$images('error.jpg')
+    },
+    randomFunnyPhrase() {
+      const randomIndex = Math.round(Math.random() * RANDOM_FUNNY_PHRASES.length);
+      return RANDOM_FUNNY_PHRASES[randomIndex];
     }
   }
 }

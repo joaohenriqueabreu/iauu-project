@@ -5,6 +5,7 @@
         <span>Interaja com seus próximos eventos e responda a propostas de clientes</span>
       </div>
     </div>
+    <presentations-yearly v-if="timeslots.length > 0"></presentations-yearly>
     <div v-if="timeslots">
       <calendar
         ref="calendar"
@@ -25,7 +26,10 @@
           @rejected="handleRejectProposal"
         ></proposal>
         <presentation
-          v-if="!$empty(presentation) && ['accepted', 'completed', 'cancelled'].includes(presentation.status)"
+          v-if="
+            !$empty(presentation) &&
+              ['accepted', 'completed', 'cancelled'].includes(presentation.status)
+          "
           ref="presentation"
           :read-only="false"
           @confirmed="handleConfirmPresentation"
@@ -34,6 +38,7 @@
       </div>
     </div>
     <div class="horizontal middle center text-right">
+      <h6 class="mr-3">Legenda:</h6>
       <div class="horizontal middle mr-4">
         <span class="event-subtitle proposal"></span>
         <h6>Proposta</h6>
@@ -48,14 +53,16 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import BusySlot from '@/components/artist/schedule/busy'
+import Busy from '@/components/artist/schedule/busy'
 import Proposal from '@/components/presentation/artist/proposal'
 import Presentation from '@/components/presentation/artist/presentation'
+import PresentationsYearly from '@/components/artist/schedule/yearly'
 export default {
   components: {
-    busy: BusySlot,
-    proposal: Proposal,
-    presentation: Presentation
+    Busy,
+    Proposal,
+    Presentation,
+    PresentationsYearly
   },
   async asyncData({ app, store }) {
     await store.dispatch('schedule/loadMySchedule', { year: new Date().getFullYear() })
@@ -121,10 +128,9 @@ export default {
       this.$refs.busy.closeModal()
     },
     async handleAcceptProposal(id) {
-      await this.loadMySchedule()
-      this.$refs.calendar.refresh()
-      this.$refs.proposal.closeModal()
-      this.$toast.success('Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato')
+      this.$refs.proposal.closeModal();
+      this.$toast.success('Uuhul! Apresentação confirmada. Vamos comunicar ao contratante e em breve entraremos em contato');
+      this.$router.push(`/artist/presentations/${id}`);
     },
     async handleRejectProposal(id) {
       await this.loadMySchedule()

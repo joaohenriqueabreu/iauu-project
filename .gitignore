@@ -1,1 +1,3 @@
 .env
+/api/tmp
+/db/playground.mongodb

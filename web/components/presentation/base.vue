@@ -2,7 +2,6 @@
 import { mapState } from 'vuex'
 import PresentationAddress from '@/components/presentation/address'
 import PickTimeslot from '@/components/presentation/timeslot'
-import PresentationDetails from '@/components/presentation/details'
 import PresentationDate from '@/components/presentation/date'
 import PresentationProduct from '@/components/presentation/product'
 import PresentationPrice from '@/components/presentation/price'
@@ -19,15 +18,15 @@ export default {
     PresentationPrice,
     CounterOffer,
     PresentationFeedback,
-    Chat,
+    Chat
   },
   computed: {
     ...mapState({ presentation: (state) => state.presentation.presentation })
-  },
+  }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .boxed {
   @extend .vertical, .middle;
   text-align: left;
@@ -75,48 +74,48 @@ export default {
 //   max-height: 100%;
 //   position: relative;
 
-  .header {
-    // @extend .full-width, .horizontal, .middle;
-    // justify-content: space-between;
-    // width: 100%;
+.header {
+  // @extend .full-width, .horizontal, .middle;
+  // justify-content: space-between;
+  // width: 100%;
 
-    .vue-avatar--wrapper {
-      margin-right: 2 * $space;
-    }
+  .vue-avatar--wrapper {
+    margin-right: 2 * $space;
   }
+}
 
-  // .main {
-  //   @extend .vertical;
-  //   margin-top: 2 * $space;
-  //   margin-bottom: 2 * $space;
-  //   padding: 2 * $space;
-  //   box-shadow: $shadow;
-  //   background: $layer3;
-  //   border-radius: $edges;
-  //   width: 100%;
-  //   max-height: 60vh;
-  // }
+// .main {
+//   @extend .vertical;
+//   margin-top: 2 * $space;
+//   margin-bottom: 2 * $space;
+//   padding: 2 * $space;
+//   box-shadow: $shadow;
+//   background: $layer3;
+//   border-radius: $edges;
+//   width: 100%;
+//   max-height: 60vh;
+// }
 
-  // .footer {
-  //   @extend .horizontal, .center, .middle;
-  //   margin-top: $space;
+// .footer {
+//   @extend .horizontal, .center, .middle;
+//   margin-top: $space;
 
-  //   h5 {
-  //     color: transparentize($brand, 0.2);
-  //     cursor: pointer;
-  //     transition: $transition;
+//   h5 {
+//     color: transparentize($brand, 0.2);
+//     cursor: pointer;
+//     transition: $transition;
 
-  //     &:hover {
-  //       transition: $transition;
-  //       color: $brand;
-  //     }
-  //   }
-  // }
+//     &:hover {
+//       transition: $transition;
+//       color: $brand;
+//     }
+//   }
+// }
 
-  // h4 {
-  //   margin-right: 4 * $space;
-  //   padding-right: 4 * $space;
-  //   border-right: 5px solid $layer3;
-  // }
+// h4 {
+//   margin-right: 4 * $space;
+//   padding-right: 4 * $space;
+//   border-right: 5px solid $layer3;
+// }
 // }
 </style>
