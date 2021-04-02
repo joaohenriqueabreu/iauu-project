@@ -31,10 +31,10 @@
         <hr>
       </div>
     </div>
-    <div class="box mb-5" v-if="!presentation.is_presentation_past">
+    <div class="box mb-5">
       <h3>Checklist</h3>
       <small>Clique para marcar a tarefa como completa</small>
-      <div v-if="presentation.is_presentation_today">
+      <div v-if="!presentation.is_presentation_today && !presentation.is_presentation_past">
         <form-input 
           v-model="newChecklistItem" 
           transparent 
@@ -47,16 +47,17 @@
         <div v-for="(item, index) in checkListItems" :key="index" class="mb-3">
           <hr class="light" v-if="index !== 0">
           <div class="horizontal middle justify-content-between">
-            <div class="horizontal middle">
+            <div class="horizontal middle clickable brand-hover" @click="markItemCompleted(index, item)">
               <icon 
                 :icon="isItemCompleted(item) ? 'check' : 'asterisk'"
-                class="clickable brand-hover"
-                :class="itemClass(item)" 
-                @click="markItemCompleted(index)">
+                :class="itemClass(item)">
               </icon>
               <h6 :class="itemClass(item)" class="mr-5">{{ item.name }}</h6>
             </div>
-            <icon v-show="!isItemCompleted(item)" class="text-right clickable brand-hover" icon="trash-alt" @click="removeChecklistItem(index)"></icon>
+            <icon 
+              v-show="!isItemCompleted(item) && !presentation.is_presentation_today && !presentation.is_presentation_past" 
+              class="text-right clickable brand-hover" icon="trash-alt" @click="removeChecklistItem(index)">
+            </icon>
           </div>
         </div>
       </div>
@@ -126,9 +127,11 @@ export default {
       this.$toast.success('Item adicionado com sucesso ao checklist');
       this.newChecklistItem = '';
     },
-    async markItemCompleted(index) {
+    async markItemCompleted(index, item) {
+      if (this.isItemCompleted(item)) { return; }
+
       let checkListItems = this.$object.clone(this.checkListItems);
-      this.checkListItems[index].completed = true;
+      checkListItems[index].completed = true;
       this.checkListItems = checkListItems;
 
       await this.editPresentation();
@@ -151,6 +154,10 @@ export default {
 <style lang="scss" scoped>
 .completed {
   color: $brandLayer;
+}
+
+[data-icon="asterisk"] {
+  font-size: $tiny;
 }
 
 .message {
