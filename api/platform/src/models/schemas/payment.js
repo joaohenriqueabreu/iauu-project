@@ -34,6 +34,30 @@ class Payment extends BaseRepository {
     }
   }
 
+  get charge_url() {
+    if (this.method.type === PaymentData.PAYMENT_METHOD_TYPE_BOLETO) {
+      return this.transaction.boleto_url;
+    }
+
+    return '';
+  }
+
+  get transaction_due_dt() {
+    if (this.due_dt != null) { 
+      return this.due_dt;
+    }
+
+    if (this.method.type === PaymentData.PAYMENT_METHOD_TYPE_BOLETO) {
+      return this.transaction.boleto_expiration_date;
+    }
+
+    if (this.method.type === PaymentData.PAYMENT_METHOD_TYPE_PIX) {
+      return this.transaction.pix_expiration_date;
+    }
+
+    return '';
+  }
+
   get is_paid() {
     return this.status === PaymentData.PAYMENT_STATUS_COMPLETED;
   }

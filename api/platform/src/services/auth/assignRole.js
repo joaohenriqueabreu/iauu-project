@@ -1,7 +1,7 @@
 const axios = require('axios');
 const AuthService = require('./auth');
 const { User, Artist, Contractor } = require('../../models');
-const CreateNotificationService = require('../notification/createNotification');
+const RequestEndpointService = require('lib/services/request');
 const BadRequestException = require('../../exception/bad');
 
 module.exports = class AssignRoleService extends AuthService {
@@ -11,6 +11,7 @@ module.exports = class AssignRoleService extends AuthService {
     this.id = data.id;
     this.role = role;
     this.roleInstance = {};
+    this.requestNotificationEndpointSvc = new RequestEndpointService('notification');
   }
 
   async assign() {
@@ -178,16 +179,26 @@ module.exports = class AssignRoleService extends AuthService {
   }
 
   async generateCompleteProfileNotification(adminUser) {
-    const completeProfileMsg = 'Bem vindo a iauü! Para começar a receber propostas, complete seu perfil';
-    const createNotificationSvc = new CreateNotificationService(adminUser, this.user, completeProfileMsg, 'role', this.user);
-    await createNotificationSvc.notify();
+    await this.requestNotificationEndpointSvc.post('/', {
+      from: adminUser, 
+      to: this.user, 
+      message: 'Bem vindo a iauü! Para começar a receber propostas, complete seu perfil', 
+      type: 'role', 
+      target: this.user
+    });
+
     return this;
   }
 
   async generateCreateProductNotification(adminUser) {
-    const createProductMsg = 'Inclua formatos de apresentação para ser encontrado';
-    const createNotificationSvc = new CreateNotificationService(adminUser, this.user, createProductMsg, 'product', this.user);
-    await createNotificationSvc.notify();
+    await this.requestNotificationEndpointSvc.post('/', {
+      from: adminUser, 
+      to: this.user, 
+      message: 'Inclua formatos de apresentação para ser encontrado', 
+      type: 'product', 
+      target: this.user
+    });
+
     return this;
   }
 }

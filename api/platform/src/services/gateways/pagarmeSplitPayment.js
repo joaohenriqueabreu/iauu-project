@@ -117,7 +117,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
       this.pagarmePaymentMethod.extraParams = {
         async: false,
         capture: true,
-        pix_expiration_date: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
+        pix_expiration_date: moment().add(7, 'days').format('YYYY-MM-DD').toString(),
         // TODO Check how this value is displayed for user
         pix_additional_fields: [{
           name: 'Quantidade',

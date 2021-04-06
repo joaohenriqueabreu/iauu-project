@@ -1,6 +1,6 @@
 const validateRequest = require('@hapi/joi');
 const { ValidationError } = require('@hapi/joi');
-const BadRequestException = require('api/exception/bad');
+const BadRequestException = require('../exception/bad');
 
 const validate = (data, req, next, schema) => {
   console.log('Validating Request...')

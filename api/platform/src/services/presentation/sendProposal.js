@@ -2,7 +2,6 @@ const _ = require('lodash');
 const BadRequestException = require('../../exception/bad');
 const PresentationService = require('./base');
 const SendMailService = require('../mail/sendMail');
-const CreateNotificationService = require('../notification/createNotification');
 const { Presentation } = require('../../models');
 const Location = require('../../models/helpers/location');
 
@@ -55,16 +54,18 @@ module.exports = class SendProposalService extends PresentationService
 
     sendMail() {
       console.log('Sending proposal mail...');
-      // const mailSvc = new SendMailService(this.user.email, 'Proposta enviada')
-      // await mailSvc.buildBody('proposal', {})
-      // await mailSvc.send()
-      // return this
     }
 
-    createNotification() {
+    async createNotification() {
       console.log('Creating proposal notification...');
-      // const createNotificationService = new createNotificationService(this.user, this.proposal)
-      // await createNotificationService.notify()
-      // return this
+      await this.requestNotificationEndpointSvc.post('/', {
+        from: this.proposal.contractor, 
+        to: this.proposal.artist, 
+        message: 'Você recebeu uma nova proposta', 
+        type: 'proposal', 
+        target: this.proposal
+      });
+
+      return this;
     }
 }

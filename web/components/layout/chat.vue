@@ -121,6 +121,8 @@ export default {
     }
   },
   mounted() {
+    if (! process.env.isChatEnabled) { return; }
+
     const self = this
     self.socket = self.$nuxtSocket({
       name: 'chat',

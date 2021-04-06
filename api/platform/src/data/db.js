@@ -1,11 +1,11 @@
-const config = require('../env');
+const config = require('lib/env');
 
 const db = require('mongoose');
 const connectionOptions = { 
     useCreateIndex: true, 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
-    autoIndex: process.env.NODE_ENV !== 'production'
+    autoIndex: config.env !== 'production'
     // useFindAndModify: false,
     // autoReconnect: true,
     // reconnectTries: 1000000,

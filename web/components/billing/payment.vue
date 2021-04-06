@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import CCPaymentForm from '@/components/billing/ccPayment';
 import BoletoPaymentForm from '@/components/billing/boletoPayment';
 import PixPaymentForm from '@/components/billing/pixPayment';
@@ -62,8 +63,14 @@ export default {
     paymentMethodForm() { return this.COMPONENT_PAYMENT_METHOD_MAP[this.selectedPaymentMethod]; }
   },
   methods: {
+    ...mapActions('billing', ['resetPayment']),
     changePaymentMethod(method) { 
       this.selectedPaymentMethod = method; 
+    }
+  },
+  watch: {
+    selectedPaymentMethod() {
+      this.resetPayment();
     }
   }
 }

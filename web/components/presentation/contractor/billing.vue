@@ -2,16 +2,23 @@
   <div>
     <div v-if="presentation.is_proposal || !$empty(billing)">
       <div class="row mb-5">
-        <div class="col">
+        <div class="col-12 mb-4">
           <div class="total">
             <h4 class="mb-3">Total</h4>
-            <h1>{{ billing.total_amount | currency }}</h1>
+            <h1 class="text-right">{{ billing.total_amount | currency }}</h1>
+          </div>
+        </div>
+        <div class="col">
+          <div class="total">
+            <h4 class="mb-2">Iniciado</h4>
+            <small>Pagamento com cartão, ou boleto emito, ou código Pix gerado ainda válidos</small>
+            <h4 class="text-right">{{ billing.total_paid | currency }}</h4>
           </div>
         </div>
         <div class="col">
           <div class="total">
             <h4 class="mb-3">Pago</h4>
-            <h1>{{ billing.total_paid | currency }}</h1>
+            <h4 class="text-right">{{ billing.total_paid | currency }}</h4>
           </div>
         </div>
         <div class="col">
@@ -20,12 +27,12 @@
               <div class="total">
                 <h4>Pendente</h4>
                 <small class="mb-4">Clique para pagar o saldo em aberto</small>
-                <h1>{{ billing.amount_due | currency }}</h1>
+                <h4 class="text-right">{{ billing.amount_due | currency }}</h4>
               </div>
             </template>
             <template v-slot:hover>
               <div class="full-fill horizontal middle center" @click="openPaymentModal(billing.amount_due)">
-                <h1>Pagar {{ billing.amount_due | currency }}</h1>
+                <h4>Pagar {{ billing.amount_due | currency }}</h4>
               </div>
             </template>
           </overlay>
@@ -70,9 +77,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(payment, index) in billing.payments" :key="index">
+            <tr v-for="(payment, index) in billing.payments" :key="index" @click="openPaymentInfoModal(payment)">
               <td>{{ paymentId(payment) }}</td>
-              <td>{{ paymentStatus(payment) }}</td>
+              <td>{{ payment.status | translate('billing.payment.status') }}</td>
               <td>{{ payment.amount | currency }}</td>
               <td>{{ payment.paid_amount | currency }}</td>
               <td>{{ payment.due_dt | date }}</td>
@@ -100,6 +107,19 @@
       <template v-slot:main>
         <payment-form :billing="billing" :amount-to-pay="amountToPay"></payment-form>
       </template>
+      <template v-slot:footer>
+        <div class="horizontal middle center">
+          <nuxt-link to="/terms" target="_blank" class="text-center">
+            Em caso de dúvidas, clique aqui para revisar nossa política de pagamentos, privacidade de dados, taxas e fluxo de pagamentos.
+          </nuxt-link>
+        </div>
+      </template>
+    </modal>
+    <modal ref="paymentInfo">
+      <template v-slot:header v-if="selectedPayment"><h4>Detalhes do pagamento {{ paymentId(selectedPayment) }}</h4></template>
+      <template v-slot:main>
+        <paymen-info :payment="selectedPayment"></paymen-info>
+      </template>
     </modal>
   </div>
 </template>
@@ -114,7 +134,8 @@ export default {
   },
   data() {
     return {
-      amountToPay: { type: Number, default: 0 }
+      amountToPay: { type: Number, default: 0 },
+      selectedPayment: { type: Object, default: () => {}}
     }
   },
   computed: {
@@ -132,12 +153,13 @@ export default {
     paymentId(payment) {
       return payment.id.substr(0, 4);
     },
-    paymentStatus(payment) {
-      return payment.status;
-    },
     openPaymentModal(amountToPay) {
       this.amountToPay = amountToPay;
       this.$refs.payment.open();
+    },
+    openPaymentInfoModal(payment) {
+      this.selectedPayment = payment;
+      this.$refs.paymentInfo.open();
     }
   }
 }
@@ -150,6 +172,9 @@ export default {
   padding: 2 * $space;
   background: $layer5;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   h1 {
     text-align: right;

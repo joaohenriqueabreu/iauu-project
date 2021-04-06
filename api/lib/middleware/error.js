@@ -1,4 +1,4 @@
-const Exception = require('api/exception/exception');
+const Exception = require('../exception/exception');
 
 module.exports = (error, req, res, next) => {  
     console.log('Something is wrong...');

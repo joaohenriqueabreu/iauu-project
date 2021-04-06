@@ -2,7 +2,6 @@ const _ = require('lodash')
 const BadRequestException = require('../../exception/bad')
 const PresentationService = require('./base')
 const SendMailService = require('../mail/sendMail')
-const CreateNotificationService = require('../notification/createNotification')
 const Presentation = require('../../models/presentation')
 
 module.exports = class SendCounterOfferService extends PresentationService

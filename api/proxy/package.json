@@ -1,0 +1,31 @@
+{
+    "name": "iauu-proxy",
+    "version": "0.1.0",
+    "private": true,
+    "watch": {
+        "server": "src/app.js"
+    },
+    "scripts": {
+        "server": "node src/app",
+        "start": "node src/app",
+        "dev": "nodemon -L src/app.js",
+        "debug": "node --inspect  src/app.js",
+        "stop": "pkill --signal SIGINT reforma.ai.server",
+        "migrate": "./node_modules/.bin/migrate -c src",
+        "test": "mocha --timeout 50000 --exit",
+        "test-file": "mocha --timeout 50000 --exit --grep",
+        "postinstall": "link-module-alias"
+    },
+    "dependencies": {
+        "app-module-path": "^2.2.0",
+        "cors": "2.8.5",
+        "cors-anywhere": "0.4.3",
+        "dotenv": "8.2.0",
+    },
+    "devDependencies": {
+        "link-module-alias": "^1.2.0",
+    },
+    "_moduleAliases": {
+        "lib": "../lib/"
+    }
+}

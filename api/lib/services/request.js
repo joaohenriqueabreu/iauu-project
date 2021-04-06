@@ -1,12 +1,31 @@
 const axios = require('axios').default;
-const config = require('api/env');
+const config = require('../env');
+const { BadRequestException } = require('../exception');
 
 module.exports = class RequestEndpointService {
-  constructor() {
+  constructor(service) {
+    const requestPort = this.mapServiceToPort(service);
+
     this.http = axios.create({
-      baseURL: `http://localhost:${config.http.port}`,
+      baseURL: `http://localhost:${requestPort}`,
       headers: {'Authorization' : `Bearer ${config.auth.app_secret}`}
     });
+  }
+
+  mapServiceToPort(service) {
+    if (service === undefined) {
+      return config.http.port;
+    }
+
+    if (service === 'notification') {
+      return config.socket.port;
+    }
+
+    if (service === 'proxy') {
+      return config.proxy.port;
+    }
+
+    throw new BadRequestException('Invalid service provided');
   }
 
   async get(endpoint) {

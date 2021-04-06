@@ -1,4 +1,4 @@
-const config = {
+export default {
   companyName: process.env.companyName,
   supportMail: process.env.supportMail,
   dateFormat: 'DD/MM/YYYY',
@@ -50,7 +50,6 @@ const config = {
   corsBypassUrl: process.env.corsProxyUrl,
   socialConnect: {
     getInstagramFetchEndpoint: (username) => `https://www.instagram.com/${username}?__a=1`
-  }
+  },
+  paymentAPIPublicKey: process.env.PAGARME_API_KEY,
 }
-
-export default config;

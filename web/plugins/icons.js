@@ -101,13 +101,15 @@ import {
   faQrcode,
   faTrashAlt,
   faAsterisk,
+  faKey,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
   faEnvelope as farEnvelope,
   faStar as farStar,
   faComment,
-  faFrown as farFrown
+  faFrown as farFrown,
+  faCreditCard as farCreditCard,
 } from '@fortawesome/free-regular-svg-icons';
 
 import {
@@ -119,7 +121,10 @@ import {
   faLinkedin,
   faSpotify,
   faYoutube,
-  faProductHunt
+  faProductHunt,
+  faCcVisa,
+  faCcMastercard,
+  faCcAmex,
 } from '@fortawesome/free-brands-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -255,6 +260,11 @@ library.add(
   faQrcode,
   faTrashAlt,
   faAsterisk,
+  faKey,
+  farCreditCard,
+  faCcVisa,
+  faCcMastercard,
+  faCcAmex,
 );
 
 Vue.component('icon', FontAwesomeIcon);

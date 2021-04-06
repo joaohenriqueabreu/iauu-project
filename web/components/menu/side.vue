@@ -5,10 +5,10 @@
       <nuxt-link to="/">
         <logo :height="50" :width="50"></logo>
       </nuxt-link>
-      <div class="hide-mobile hide-menu">
+      <!-- <div class="hide-mobile hide-menu">
         <icon class="minimize" :icon="minimized ? 'angle-double-right' : 'angle-double-left'" @click="minimize">
         </icon>
-      </div>
+      </div> -->
     </header>
     <main>
       <admin-menu v-if="$auth.hasScope('admin')" :minimized="minimized"></admin-menu>
@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      minimized: true
+      minimized: false
     }
   },
   methods: {

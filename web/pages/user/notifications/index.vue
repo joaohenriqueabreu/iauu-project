@@ -23,6 +23,7 @@ data() {
     }
   },
   mounted() {
+    if (! process.env.areNotificationsEnabled) { return; }
     const self = this
     self.socket = self.$nuxtSocket({
       name: 'notification',

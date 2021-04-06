@@ -16,7 +16,9 @@ export default {
     webUrl: process.env.WEB_URL,
     supportMail: process.env.SUPPORT_MAIL,
     corsProxyUrl: process.env.CORS_PROXY_URL,
-    paymentsEnabled: process.env.PAYMENTS_ENABLED
+    paymentsEnabled: process.env.PAYMENTS_ENABLED,
+    isChatEnabled: process.env.CHAT_ENABLED,
+    areNotificationsEnabled: process.env.NOTIFICATIONS_ENABLED
   },
   /*
    ** Headers of the page
@@ -190,12 +192,6 @@ export default {
    */
   build: {
     extend(config, ctx) {},
-<<<<<<< HEAD
-    transpile: ['@nuxtjs/auth']
-    // babelrc: true
-  },
-
-=======
     parallel: true,
     cache: true,
     hardsource: true,
@@ -225,7 +221,6 @@ export default {
     }
   },
 
->>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
   server: {
     port: 3000,
     host: '0.0.0.0'

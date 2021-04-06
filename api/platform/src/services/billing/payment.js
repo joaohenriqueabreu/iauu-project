@@ -1,4 +1,6 @@
 const _ = require('lodash');
+const moment = require('moment');
+const config = require('lib/env');
 const BaseService = require('../base');
 const GatewaySplitPaymentServiceBuilder = require('../builders/gatewaySplitPaymentServiceBuilder');
 const { Billing } = require('src/models');
@@ -28,10 +30,14 @@ module.exports = class PaymentService extends BaseService
         .calculatePaymentAmounts();
 
       await this.chargeGatewayPayment();
-      this.linkBillingAndPayment();
+      this.updatePaymentDueDt().
+        linkBillingAndPayment();
+
       await this.saveBilling();
 
-      this.sendPaymentSuccessMails();
+      this.sendPaymentSuccessMails()
+        .createPaymentNotifications();
+
       return this;
     }
 
@@ -93,6 +99,11 @@ module.exports = class PaymentService extends BaseService
       return this;
     }
 
+    updatePaymentDueDt() {
+      this.payment.due_dt = moment(this.payment.transaction_due_dt).format(config.format.date);
+      return this;
+    }
+
     linkBillingAndPayment() {
       this.billing.payments.push(this.payment);
       return this;
@@ -103,11 +114,15 @@ module.exports = class PaymentService extends BaseService
       return this;
     }
 
-    async sendPaymentSuccessMails() {
+    sendPaymentSuccessMails() {
       return this;
     }
 
     async sendPaymentFailedMails() {
+      return this;
+    }
+
+    createPaymentNotifications() {
       return this;
     }
 

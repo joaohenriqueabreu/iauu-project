@@ -1,9 +1,7 @@
-const config = require('api/env');
+const config = require('../env');
 const jwt = require('express-jwt');
 
-const authorize = jwt({ 
-  secret: config.auth.secret, algorithms: ['HS256'],
-});
+const authorize = jwt({ secret: config.auth.secret, algorithms: ['HS256'] });
 
 const owner = (req, res, next) => {
   // Should always come after authorize 

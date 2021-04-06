@@ -12,6 +12,9 @@ export const mutations = {
   },
   set_payment(state, PaymentData) {
     state.payment = { ...PaymentData };
+  },
+  reset_payment(state) {
+    state.payment = {}
   }
 }
 
@@ -26,6 +29,9 @@ export const actions = {
     commit('set_billing', data.billing);
     commit('set_payment', data.payment);
   },
+  resetPayment({ commit }) {
+    commit('reset_payment');
+  }
 }
 
 export const getters = {

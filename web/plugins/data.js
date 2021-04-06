@@ -5,11 +5,12 @@ import math from 'lodash/math';
 import clone from 'lodash/cloneDeep';
 import moment from 'moment';
 import VueFilters from 'vue2-filters';
+import dictionary from '../static/data/dictionary';
 
 Vue.use(VueFilters, {
   number: { thousandsSeparator: '.', decimalSeparator: ',' },
   currency: { symbol: 'R$ ', thousandsSeparator: '.', decimalSeparator: ',' }
-})
+});
 
 // Custom filters
 const dateFilter = (value) => { return moment(value).format('DD/MM/YYYY') }
@@ -101,27 +102,72 @@ const nl2br = (str, is_xhtml) => {
   return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
 }
 
+const translate = (str, path)  => {
+  try {
+    return Object.byString(dictionary, `${path}.${str}`);  
+  } catch {
+    return str;
+  }
+}
+
+const decimalsMap  = {order: 1, symbol: ''};
+const thousandsMap = {order: 1000, symbol: 'k'};
+const millionsMap  = {order: 1000000, symbol: 'M'};
+
+const NUMERIC_SCALE_LOG_MAP = [
+  decimalsMap, decimalsMap, decimalsMap,
+  thousandsMap, thousandsMap, thousandsMap,
+  millionsMap, millionsMap, millionsMap
+];
+
+const shortMoney = (value) => {
+  if (isNaN(value)) { return value; }
+
+  const scaleMap    = NUMERIC_SCALE_LOG_MAP[Math.round(Math.log10(value))];
+  const scaleSymbol = scaleMap.symbol;
+  const shortValue  = Math.round(value / scaleMap.order);
+  
+  return `R$ ${shortValue}${scaleSymbol}`;
+}
+
+// https://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-and-arrays-by-string-path
+Object.byString = function(o, s) {
+  s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+  s = s.replace(/^\./, '');           // strip a leading dot
+  var a = s.split('.');
+  for (var i = 0, n = a.length; i < n; ++i) {
+      var k = a[i];
+      if (k in o) {
+          o = o[k];
+      } else {
+          return;
+      }
+  }
+  return o;
+}
 
 // Registering custom filters
-Vue.filter('date', dateFilter)
-Vue.filter('longDate', longDateFilter)
-Vue.filter('datetime', datetimeFilter)
-Vue.filter('time', timeFilter)
-Vue.filter('oneDecimal', oneDecimal)
-Vue.filter('twoDecimals', twoDecimals)
-Vue.filter('timeAgo', timeAgoFilter)
-Vue.filter('longTime', longTimeFilter)
-Vue.filter('nl2br', nl2br)
+Vue.filter('date', dateFilter);
+Vue.filter('longDate', longDateFilter);
+Vue.filter('datetime', datetimeFilter);
+Vue.filter('time', timeFilter);
+Vue.filter('oneDecimal', oneDecimal);
+Vue.filter('twoDecimals', twoDecimals);
+Vue.filter('timeAgo', timeAgoFilter);
+Vue.filter('longTime', longTimeFilter);
+Vue.filter('nl2br', nl2br);
+Vue.filter('translate', translate);
+Vue.filter('shortMoney', shortMoney);
 
 export default ({ app }, inject) => {
-  inject('array', _)
-  inject('collection', collection)
-  inject('math', math)
-  inject('object', { clone })
-  inject('moment', moment)
-  inject('csv', { download: downloadCsv, convert: convertToCsv })
-  inject('copyToClipboard', copyToClipboard)
-  inject('date', { convertTimeToNumber })
-  inject('linkPreview', { linkPreview })
-  inject('string', { nl2br })
+  inject('array', _);
+  inject('collection', collection);
+  inject('math', math);
+  inject('object', { clone });
+  inject('moment', moment);
+  inject('csv', { download: downloadCsv, convert: convertToCsv });
+  inject('copyToClipboard', copyToClipboard);
+  inject('date', { convertTimeToNumber });
+  inject('linkPreview', { linkPreview });
+  inject('string', { nl2br });
 }

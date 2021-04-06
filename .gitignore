@@ -1,3 +1,4 @@
 .env
+/.vscode
 /api/tmp
 /db/playground.mongodb

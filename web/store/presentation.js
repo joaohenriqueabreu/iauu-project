@@ -102,6 +102,8 @@ export const getters = {
     _.filter(state.presentations, (presentation) => presentation.is_contracted && !presentation.is_past),
   pendingConfirmPresentations: (state) =>
     _.filter(state.presentations, (presentation) => presentation.is_confirmed && presentation.is_past),
+  completedPresentations:  (state) =>
+  _.filter(state.presentations, (presentation) => presentation.is_completed && presentation.is_past),
   cancelledPresentations: (state) =>
     _.filter(state.presentations, (presentation) => presentation.is_cancelled)
 }
