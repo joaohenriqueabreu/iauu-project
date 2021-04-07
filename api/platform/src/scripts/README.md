@@ -1,0 +1,1 @@
+Need to link with .env in order to run db commands
