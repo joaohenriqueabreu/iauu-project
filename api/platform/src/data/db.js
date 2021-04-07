@@ -12,6 +12,10 @@ const connectionOptions = {
     // reconnectInterval: 3000
 };
 
+if (config.debug) {
+  db.set('debug', true);
+}
+
 db.Promise = Promise;
 db.connection.on('connected', () => {
   console.log('Connection Established');

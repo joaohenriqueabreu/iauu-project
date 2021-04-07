@@ -2,3 +2,4 @@
 /.vscode
 /api/tmp
 /db/playground.mongodb
+api/scripts/node_modules

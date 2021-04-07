@@ -1,5 +1,5 @@
 // const db = require('../data/db')
-const db = require('mongoose');
+const db        = require('mongoose');
 const BaseModel = require('../base');
 
 module.exports = class BaseRepository extends BaseModel {

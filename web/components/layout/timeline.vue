@@ -59,6 +59,8 @@ export default {
 .step {
   @include hover();
   height: 50px;
+  width: 50px;
+  text-align: center;
   transition: $transition;
   color: $layer5;
   font-size: $huge;
@@ -68,16 +70,20 @@ export default {
   border-color: $layer5;
   border: solid 4px $layer5;
   padding: $space;
+
   [data-icon] {
     @include hover();
     margin: $space;
   }
+
   @include desktop {
     margin-right: 0;
   }
+
   @include mobile {
     margin-right: 15px;
   }
+  
   &.completed, &.current {
     @include hover();
     transition: $transition;

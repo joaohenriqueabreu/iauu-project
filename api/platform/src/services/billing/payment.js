@@ -59,6 +59,10 @@ module.exports = class PaymentService extends BaseService
         throw new BadRequestException('Presentation already has an initiated payment in process'); 
       }
 
+      if (! this.billing.has_amount_due) {
+        throw new Exception('Presentation has no amount due payment');
+      }
+
       if (this.billing.amount_due <= 0) {
         throw new Exception('Presentation fully paid');
       }
@@ -88,8 +92,8 @@ module.exports = class PaymentService extends BaseService
 
     calculatePaymentAmounts() {
       this.payment.fee = this.billing.fee;
-      this.payment.amount = this.billing.total_amount;
-      this.payment.net_amount = this.billing.total_amount * (1 - this.billing.fee);
+      this.payment.amount = this.billing.amount_due;
+      this.payment.net_amount = this.billing.amount_due * (1 - this.billing.fee);
       
       return this;
     }
@@ -100,7 +104,7 @@ module.exports = class PaymentService extends BaseService
     }
 
     updatePaymentDueDt() {
-      this.payment.due_dt = moment(this.payment.transaction_due_dt).format(config.format.date);
+      this.payment.due_at = moment(this.payment.transaction_due_at).format(config.format.date);
       return this;
     }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <fade-transition :duration="300" mode="out-in">
-      <div v-if="!submitted && !disabled" key="submitting" class="button" :class="{ disabled, small }" @click="submit">
+      <div v-if="!submitted && !disabled" key="submitting" class="button" :class="{ disabled, small, noShadow }" @click="submit">
         <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
@@ -19,11 +19,12 @@
 export default {
   props: {
     disabled: { type: Boolean, default: false },
-    small: { type: Boolean, default: false }
+    small:    { type: Boolean, default: false },
+    noShadow: { type: Boolean, default: false },
   },
   data() {
     return {
-      submitted: false,
+      submitted:  false,
       submitting: false
     }
   },
@@ -31,20 +32,20 @@ export default {
     submit() {
       // Prevent submit when disable or while submitting
       if (this.disabled || this.submitting) {
-        return
+        return;
       }
 
-      this.submitting = true
-      this.$emit('action')
-      this.submitted = true
-      setTimeout(this.reset, 3000)
+      this.submitting = true;
+      this.$emit('action');
+      this.submitted = true;
+      setTimeout(this.reset, 3000);
     },
     reset() {
-      this.submitted = false
-      this.submitting = false
+      this.submitted = false;
+      this.submitting = false;
     },
     delay() {
-      return setTimeout(() => {}, 1000)
+      return setTimeout(() => {}, 1000);
     }
   }
 }
@@ -69,6 +70,11 @@ input {
   font-weight: $bold;
   border: none;
   outline: none;
+
+  &.noShadow {
+    box-shadow: none;
+  }
+
   @include desktop {
     &:not(.small) {
       min-width: 150px;

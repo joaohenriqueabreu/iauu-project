@@ -13,16 +13,17 @@ Vue.use(VueFilters, {
 });
 
 // Custom filters
-const dateFilter = (value) => { return moment(value).format('DD/MM/YYYY') }
-const longDateFilter = (value) => { return moment(value).format('LL') }
-const datetimeFilter = (value) => { return moment(value).format('DD/MM/YYYY HH:mm') }
-const timeFilter = (value) => { return moment(value).format('HH:mm') }
-const timeAgoFilter = (value) => { return moment(value).fromNow() }
+const dateFilter = (value) => { return moment(value).format('DD/MM/YYYY'); }
+const dateNotEmptyFilter = (value) => { return value != null ? moment(value).format('DD/MM/YYYY') : '-'; }
+const longDateFilter = (value) => { return moment(value).format('LL'); }
+const datetimeFilter = (value) => { return moment(value).format('DD/MM/YYYY HH:mm'); }
+const timeFilter = (value) => { return moment(value).format('HH:mm'); }
+const timeAgoFilter = (value) => { return moment(value).fromNow(); }
 const longTimeFilter = (time) => {
-  if (time === undefined || time === null) { return '-' }
-  if (typeof time === 'number') { return `${time} horas${time > 1 ? 's' : ''}` } // raw value
-  const parts = time.split(':')
-  return `${parts[0]} hora${parts[0] > 1 ? 's' : ''} ${parts[1] > 0 ? parts[1] + ' mins' : ''}`
+  if (time === undefined || time === null) { return '-'; }
+  if (typeof time === 'number') { return `${time} horas${time > 1 ? 's' : ''}`; } // raw value
+  const parts = time.split(':');
+  return `${parts[0]} hora${parts[0] > 1 ? 's' : ''} ${parts[1] > 0 ? parts[1] + ' mins' : ''}`;
 }
 
 const oneDecimal = (value) => { return (Math.round(value * 100) / 100).toFixed(1) }
@@ -148,6 +149,7 @@ Object.byString = function(o, s) {
 
 // Registering custom filters
 Vue.filter('date', dateFilter);
+Vue.filter('dateNotEmpty', dateNotEmptyFilter);
 Vue.filter('longDate', longDateFilter);
 Vue.filter('datetime', datetimeFilter);
 Vue.filter('time', timeFilter);

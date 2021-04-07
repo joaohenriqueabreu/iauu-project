@@ -1,5 +1,5 @@
-const validateRequest = require('@hapi/joi');
-const { ValidationError } = require('@hapi/joi');
+const atob                = require('atob');
+const validateRequest     = require('joi');
 const BadRequestException = require('../exception/bad');
 
 const validate = (data, req, next, schema) => {
@@ -24,7 +24,7 @@ const validate = (data, req, next, schema) => {
     req.data = { ...req.data, ...value }
   }
 
-  next();
+  next(); 
 }
 
 const newCrendentials = (req, res, next) => {
@@ -124,6 +124,12 @@ const id = (req, res, next) => {
 
   return validate(req.params, req, next, schema);
 }
+
+// Should be used only by id validator
+// const decodeId = (req, res, next) => {
+//   req.data.id = atob(req.data.id);
+//   next();
+// }
 
 // Raw query and body parsing to data
 const query = (req, res, next) => {

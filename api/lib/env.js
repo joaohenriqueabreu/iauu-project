@@ -3,6 +3,7 @@ dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.testing' : '.env'}
 
 module.exports = {
   env: process.env.NODE_ENV,
+  debug: false,
   isProductionEnv: () => process.env.NODE_ENV === 'production',
   format: {
     date: 'DD-MM-YYYY',

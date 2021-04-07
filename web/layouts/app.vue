@@ -6,12 +6,14 @@
       </aside>
         <div class="app">
           <header class="d-flex justify-content-end">
-            <top-menu></top-menu>
+            <top-menu :scroll-height="scrollHeight"></top-menu>
           </header>
-          <main>
-            <alert></alert>
-            <nuxt />
-          </main>
+          <scrollbar @ps-scroll-y="handleScroll">
+            <main>
+              <alert></alert>
+              <nuxt />
+            </main>
+          </scrollbar>
         </div>
       <feedback v-if="showFeedback"></feedback>
     </client-only>
@@ -30,7 +32,8 @@ export default {
   },
   data() {
     return {
-      minimized: false
+      minimized: false,
+      scrollHeight: 0
     }
   },
   computed: {
@@ -43,6 +46,10 @@ export default {
   methods: {
     minimize(value) {
       this.minimized = value
+    },
+    handleScroll(evt) {
+      // TODO maybe better to move this to store
+      this.scrollHeight = evt.target.scrollTop;
     }
   }
 }

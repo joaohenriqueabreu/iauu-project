@@ -2,32 +2,20 @@
   <div>
     <div v-if="presentation.is_proposal || !$empty(billing)">
       <div class="row mb-5">
-        <div class="col-12 mb-4">
+        <div class="col">
           <div class="total">
             <h4 class="mb-3">Total</h4>
-            <h1 class="text-right">{{ billing.total_amount | currency }}</h1>
+            <h4 class="text-right">{{ billing.total_amount | currency }}</h4>
           </div>
         </div>
         <div class="col">
-          <div class="total">
-            <h4 class="mb-2">Iniciado</h4>
-            <small>Pagamento com cartão, ou boleto emito, ou código Pix gerado ainda válidos</small>
-            <h4 class="text-right">{{ billing.total_paid | currency }}</h4>
-          </div>
-        </div>
-        <div class="col">
-          <div class="total">
-            <h4 class="mb-3">Pago</h4>
-            <h4 class="text-right">{{ billing.total_paid | currency }}</h4>
-          </div>
-        </div>
-        <div class="col">
-          <overlay edges>
+          <overlay edges v-if="billing.has_amount_due">
             <template v-slot:default>
               <div class="total">
-                <h4>Pendente</h4>
-                <small class="mb-4">Clique para pagar o saldo em aberto</small>
-                <h4 class="text-right">{{ billing.amount_due | currency }}</h4>
+                <h4>Pago</h4>
+                <small class="mb-2">Valores pagos ou em processamento</small>
+                <h4 class="text-right mb-2">{{ billing.total_paid | currency }}</h4>
+                <progress-bar :complete="billing.total_paid / billing.total_amount * 100"></progress-bar>
               </div>
             </template>
             <template v-slot:hover>
@@ -36,7 +24,19 @@
               </div>
             </template>
           </overlay>
+          <div class="total" v-else>
+            <h4>Pago</h4>
+            <small class="mb-2">Valores pagos ou em processamento</small>
+            <h4 class="text-right mb-3">{{ billing.total_paid | currency }}</h4>
+            <progress-bar :complete="billing.total_paid / billing.total_amount * 100"></progress-bar>
+          </div>
         </div>
+      </div>
+      <div class="mb-5" v-if="billing.has_amount_due">
+        <hr>
+        <h4 class="mb-3 text-center">Escolher forma de pagamento</h4>
+        <form-button no-shadow class="half-width mb-4" @action="openPaymentModal(billing.amount_due)">Pagar saldo em aberto <u class="ml-2">{{ billing.amount_due | currency }}</u></form-button>
+        <hr>
       </div>
       <div class="mb-5 boxed">
         <h4 class="mb-4">Parcelas</h4>
@@ -54,7 +54,7 @@
             <tr v-for="(instalment, index) in billing.instalments" :key="index">
               <td>{{ instalment.num }}</td>
               <td>{{ instalment.amount }}</td>
-              <td>{{ instalment.due_dt | date }}</td>
+              <td>{{ instalment.due_at | date }}</td>
             </tr>
           </tbody>
         </table>
@@ -73,17 +73,20 @@
               <th>Status</th>
               <th>Valor</th>
               <th>Pago</th>
+              <th>Data Vencimento</th>
               <th>Data Pagamento</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(payment, index) in billing.payments" :key="index" @click="openPaymentInfoModal(payment)">
               <td>{{ paymentId(payment) }}</td>
-              <td>{{ payment.status | translate('billing.payment.status') }}</td>
+              <td>{{ ! $empty(payment.instalment) ? payment.instalment.num : '-' }}</td>
+              <td :class="payment.is_failed ? 'failed' : ''">{{ payment.status | translate('billing.payment.status') }}</td>
               <td>{{ payment.amount | currency }}</td>
               <td>{{ payment.paid_amount | currency }}</td>
-              <td>{{ payment.due_dt | date }}</td>
-              <td>{{ payment.paid_dt | date }}</td>
+              <td>{{ payment.due_at | date }}</td>
+              <td v-if="!$empty(payment.paid_at)">{{ payment.paid_at | date }}</td>
+              <td v-else>-</td>
             </tr>
           </tbody>
         </table>
@@ -105,7 +108,7 @@
     <modal ref="payment" small>
       <template v-slot:header><h4>Pagar apresentação</h4></template>
       <template v-slot:main>
-        <payment-form :billing="billing" :amount-to-pay="amountToPay"></payment-form>
+        <payment-manager :billing="billing" :amount-to-pay="amountToPay"></payment-manager>
       </template>
       <template v-slot:footer>
         <div class="horizontal middle center">
@@ -116,9 +119,8 @@
       </template>
     </modal>
     <modal ref="paymentInfo">
-      <template v-slot:header v-if="selectedPayment"><h4>Detalhes do pagamento {{ paymentId(selectedPayment) }}</h4></template>
       <template v-slot:main>
-        <paymen-info :payment="selectedPayment"></paymen-info>
+        <payment-info :payment="selectedPayment"></payment-info>
       </template>
     </modal>
   </div>
@@ -127,10 +129,12 @@
 <script>
 /** @requires presentation state to be loaded */
 import { mapState, mapActions } from 'vuex';
-import PaymentForm from '@/components/billing/payment';
+import PaymentManager from '@/components/billing/paymentManager';
+import PaymentInfo from '@/components/billing/paymentInfo';
 export default {
   components: {
-    PaymentForm
+    PaymentManager,
+    PaymentInfo
   },
   data() {
     return {
@@ -151,7 +155,7 @@ export default {
   methods: {
     ...mapActions('billing', ['loadPresentationBilling']),
     paymentId(payment) {
-      return payment.id.substr(0, 4);
+      return payment.id.substr(-4);
     },
     openPaymentModal(amountToPay) {
       this.amountToPay = amountToPay;
@@ -166,6 +170,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.failed {
+  color: $error;
+  font-weight: $bold;
+}
 .total {
   transition: $transition;
   border-radius: $edges;

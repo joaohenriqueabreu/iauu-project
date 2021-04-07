@@ -13,7 +13,6 @@ const billingSchema = new Schema({
   artist: { type: Schema.Types.ObjectId, ref: 'Artist', required: true },
 
   total_amount: { type: Number, required: true },
-  // total_paid: { type: Number, default: 0 },
   fee: { type: Number, required: true },
   status: { type: String, enum: BillingData.BILLING_STATUS, default: BillingData.PENDING_STATUS, required: true },
   instalments: [instalmentSchema],
@@ -37,9 +36,13 @@ class Billing extends BaseRepository {
     return this.total_amount - this.total_paid;
   }
 
+  get has_amount_due() {
+    return this.amount_due > 0;
+  }
+
   get total_paid() {
     return _.reduce(this.payments, (total, payment) => {
-      total += (payment.is_paid ? payment.paid_amount : 0);
+      total += (! payment.is_failed ? payment.amount : 0);
       return total;
     }, 0);
   }

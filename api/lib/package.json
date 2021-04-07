@@ -6,10 +6,11 @@
         "postinstall": "link-module-alias"
     },
     "dependencies": {
-        "@hapi/joi": "17.1.1",
+        "atob": "^2.1.2",
         "axios": "0.21.1",
-        "dotenv": "^8.2.0",
-        "express-jwt": "6.0.0"
+        "dotenv": "8.2.0",
+        "express-jwt": "6.0.0",
+        "joi": "17.4.0"
     },
     "devDependencies": {
         "link-module-alias": "1.2.0"

@@ -59,14 +59,14 @@ export default {
     ArtistMenu,
     ContractorMenu
   },
+  props: {
+    scrollHeight: 0
+  },
   data() {
     return {
       displaySubmenu: false,
       scrolled: false
     }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.scrollY)
   },
   computed: {
     userRoleDefaultRedirect() {
@@ -82,14 +82,12 @@ export default {
       return ''
     }
   },
-  methods: {
-    scrollY(event) {
-      this.scrolled = window.scrollY > 50
-    }
-  },
   watch: {
     $route(to, from) {
-      this.displaySubmenu = false
+      this.displaySubmenu = false;
+    },
+    scrollHeight(value) {
+      this.scrolled = value > 50;
     }
   }
 }

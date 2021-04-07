@@ -107,7 +107,7 @@ export default {
     height: 70vh;
   }
   &.regular {
-    height: 95vh;
+    height: 85vh;
   }
 
   header {
