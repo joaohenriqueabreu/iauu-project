@@ -1,33 +1,33 @@
 // Shadow
-$shadow: 0 0 20px rgba(0, 0, 0, 0.7); 
-$lightShadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-$higherShadow: 0 0 40px rgba(0, 0, 0, 0.5);
+$shadow:        0 0 20px rgba(0, 0, 0, 0.7); 
+$lightShadow:   0 5px 10px rgba(0, 0, 0, 0.5);
+$higherShadow:  0 0 40px rgba(0, 0, 0, 0.5);
 
 
 // Transition effects
-$transition: all 0.5s ease;
+$transition:    all 0.5s ease;
 
 // For z-index
-$above: 1;
-$secondLayer: 2;
-$thridLayer: 3;
-$moveToTop: 100;
-$base: 0;
-$below: -1;
+$above:         1;
+$secondLayer:   2;
+$thridLayer:    3;
+$moveToTop:     100;
+$base:          0;
+$below:         -1;
 
 // Spacing 
-$space: 0.5rem;
+$space:         0.5rem;
 
 // font-sizes
-$tiny: 7px;
-$small: 10px;
-$regular: 12px;
-$large: 15px;
-$huge: 20px;
+$tiny:          7px;
+$small:         10px;
+$regular:       12px;
+$large:         15px;
+$huge:          20px;
 
-$bold: 700;
+$bold:          700;
 
 // border-radius
-$rounded: 50rem;
-$extraEdges: 2rem;
-$edges: 1rem;
+$rounded:       50rem;
+$extraEdges:    2rem;
+$edges:         1rem;

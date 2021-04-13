@@ -1,11 +1,11 @@
 <template>
   <div>
     <fade-transition :duration="300" mode="out-in">
-      <div v-if="!submitted && !disabled" key="submitting" class="button" :class="{ disabled, small, noShadow }" @click="submit">
+      <div v-if="!submitted && !disabled && !processing" key="submitting" class="button" :class="{ disabled, small, noShadow }" @click="submit">
         <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
-      <div v-if="submitted && !disabled" key="submitted" class="button">
+      <div v-if="(submitted && !disabled) || processing" key="submitted" class="button loading">
         <loading :active="true"></loading>
       </div>
       <div v-if="disabled" key="submitted" class="text-center">
@@ -18,9 +18,10 @@
 <script>
 export default {
   props: {
-    disabled: { type: Boolean, default: false },
-    small:    { type: Boolean, default: false },
-    noShadow: { type: Boolean, default: false },
+    disabled:   { type: Boolean, default: false },
+    small:      { type: Boolean, default: false },
+    noShadow:   { type: Boolean, default: false },
+    processing: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -31,14 +32,15 @@ export default {
   methods: {
     submit() {
       // Prevent submit when disable or while submitting
-      if (this.disabled || this.submitting) {
-        return;
-      }
+      if (this.disabled || this.submitting) { return; }
 
       this.submitting = true;
       this.$emit('action');
       this.submitted = true;
-      setTimeout(this.reset, 3000);
+
+      if (! this.processing) {
+        setTimeout(this.reset, 3000);
+      }
     },
     reset() {
       this.submitted = false;
@@ -46,6 +48,13 @@ export default {
     },
     delay() {
       return setTimeout(() => {}, 1000);
+    }
+  },
+  watch: {
+    hold: function(value) {
+      if (value) { 
+        this.reset(); 
+      }
     }
   }
 }
@@ -99,6 +108,13 @@ input {
   }
   [data-icon] {
     color: black;
+  }
+
+  &.loading {
+    cursor: default;
+    &:hover {
+      background: $white;
+    }
   }
 }
 </style>

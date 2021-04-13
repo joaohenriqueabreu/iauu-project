@@ -102,6 +102,7 @@ import {
   faTrashAlt,
   faAsterisk,
   faKey,
+  faFileContract,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -265,6 +266,7 @@ library.add(
   faCcVisa,
   faCcMastercard,
   faCcAmex,
+  faFileContract,
 );
 
 Vue.component('icon', FontAwesomeIcon);

@@ -58,7 +58,7 @@ class PresentationController extends BaseController {
   }
 
   search(req, res, next) {
-    console.log('Searching proposal...');
+    console.log('Searching presentation...');
     const searchPresentationService = new SearchPresentationService(req.user);
     searchPresentationService.search(req.data.id)
       .then(() => { res.status(200).json(searchPresentationService.getPresentation()) })
@@ -120,17 +120,24 @@ class PresentationController extends BaseController {
 
     // Send separate request to create billing for billing service
     try {
-      await requestEndpointSvc.post('billing', { 
+      const billing = await requestEndpointSvc.post('billing', { 
         presentation: newPresentation.id,
-        artist: newPresentation.artist.id,
-        contractor: newPresentation.contractor.id
+        artist:       newPresentation.artist.id,
+        contractor:   newPresentation.contractor.id
       });
     } catch (error) {
       // TODO we should probably rollback presentation in case billing fails creating
       next(error);
     }
 
-    res.status(200).json(newPresentation);
+    try {
+      const updatePresentationSvc = new UpdatePresentationService(req.user, newPresentation);
+      await updatePresentationSvc.update({ billing_id: billing.id });
+      res.status(200).json(updatePresentationSvc.getPresentation());
+    } catch (error) {
+      // TODO we should probably rollback presentation in case billing fails creating
+      next(error);
+    }
   }
 
   rejectProposal(req, res, next) {

@@ -56,11 +56,6 @@ export const actions = {
     commit('set_artist', data);
     this.$toast.success('Perfil atualizado');
   },
-  async saveBankAccount({ commit }, bankAccount) {
-    const { data } = await this.$axios.post('artists/profile/payment/account', { bankAccount: bankAccount });
-    commit('set_artist', data);
-    this.$toast.success('Perfil atualizado');
-  },
   async loadProducts({ commit }) {
     const { data } = await this.$axios.get('artists/products');
     commit('set_products', data);

@@ -6,6 +6,7 @@ const GatewaySplitPaymentServiceBuilder = require('../builders/gatewaySplitPayme
 const { Billing } = require('src/models');
 const { Payment } = require('../../models/schemas');
 const { BadRequestException, ManualPaymentRequiredException, Exception } = require('../../exception');
+const RequestEndpointService = require('lib/services/request');
 
 module.exports = class PaymentService extends BaseService
 {
@@ -13,20 +14,27 @@ module.exports = class PaymentService extends BaseService
     constructor(user, id, paymentMethod, fee) {
       super(user);
 
-      this.id = id;
-      this.paymentMethod = paymentMethod;
-      this.fee = fee; // optional
+      this.id             = id;
+      this.paymentMethod  = paymentMethod;
+      this.fee            = fee; // optional
 
       this.splitPaymentService = (new GatewaySplitPaymentServiceBuilder(this.paymentMethod)).getService();
-      this.billing = {};
+
+      this.billing    = {};
+      this.artist     = {};
+      this.contractor = {}
     }
 
     async pay() {
       await this.searchBilling();
       this.ensureBillingWasFound()
-        .ensureBillingIsPayable()
-        .createPayment()
-        .assignPaymentParties()
+        .ensureBillingIsPayable();
+
+      await this.searchBillingParties();
+      this.ensurePartiesAreValid()
+        .filterRequiredInformation();
+
+      this.createPayment()
         .calculatePaymentAmounts();
 
       await this.chargeGatewayPayment();
@@ -42,7 +50,7 @@ module.exports = class PaymentService extends BaseService
     }
 
     async searchBilling() {
-      this.billing = await Billing.findById(this.id).populate('artist').populate('contractor');
+      this.billing = await Billing.findById(this.id);
       return this;
     }
 
@@ -78,28 +86,52 @@ module.exports = class PaymentService extends BaseService
       return this;
     }
 
+    async searchBillingParties() {
+      try {
+        let [artist, contractor] = await Promise.all([
+          this.requestEndpointSvc.get(`/artists/${this.billing.artist.id}`),
+          this.requestEndpointSvc.get(`/contractors/${this.billing.contractor.id}`)
+        ]);
+
+        this.artist     = artist;
+        this.contractor = contractor;
+      } catch (error) {
+        throw new BadRequestException('Artist or Contractor provided not found');
+      }
+      
+      return this;
+    }
+
+    ensurePartiesAreValid() {
+      if (this.artist == null || this.contractor == null) {
+        throw new BadRequestException('Artist or Contractor provided not found');
+      }
+
+      // TODO Other validations for requesting payment
+
+      return this;
+    }
+
+    filterRequiredInformation() {
+
+    }
+
     createPayment() {
-      this.payment = new Payment();
+      this.payment        = new Payment();
       this.payment.method = this.paymentMethod;
       return this;
     }
 
-    assignPaymentParties() {
-      this.payment.to = this.billing.artist;
-      this.payment.from = this.billing.contractor;
-      return this;
-    }
-
     calculatePaymentAmounts() {
-      this.payment.fee = this.billing.fee;
-      this.payment.amount = this.billing.amount_due;
+      this.payment.fee        = this.billing.fee;
+      this.payment.amount     = this.billing.amount_due;
       this.payment.net_amount = this.billing.amount_due * (1 - this.billing.fee);
       
       return this;
     }
 
     async chargeGatewayPayment() {
-      this.payment.transaction = await this.splitPaymentService.charge(this.payment);
+      this.payment.transaction = await this.splitPaymentService.charge(this.payment, this.contractor, this.artist);
       return this;
     }
 

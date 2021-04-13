@@ -1,8 +1,8 @@
-const config = require('../env');
-const { Schema, model }  = require('mongoose');
-const moment = require('moment');
-const BaseRepository = require('./repositories/base');
-const baseSchemaOptions = require('./schemas/options');
+const config                            = require('../env');
+const { Schema, model }                 = require('mongoose');
+const moment                            = require('moment');
+const BaseRepository                    = require('./repositories/base');
+const baseSchemaOptions                 = require('./schemas/options');
 const { PresentationData, BillingData } = require('../config/data');
 
 const proposalSchema = require('./schemas/proposal').schema;
@@ -13,10 +13,10 @@ const defaultFee = config.payment.ourFee || 0.12;
 
 const presentationSchema = new Schema({
   contractor: { type: Schema.Types.ObjectId, ref: 'Contractor' },
-  artist: { type: Schema.Types.ObjectId, ref: 'Artist' },
-  billing: { type: Schema.Types.ObjectId, ref: 'Billing' },
-  fee: { type: Number, required: true, default: defaultFee, max: 1 },
-  address: addressSchema,
+  artist:     { type: Schema.Types.ObjectId, ref: 'Artist' },
+  billing_id: { type: String },
+  fee:        { type: Number, required: true, default: defaultFee, max: 1 },
+  address:    addressSchema,
 
   /**
    * Proposal   - Proposal stage
@@ -27,17 +27,17 @@ const presentationSchema = new Schema({
    * Disputed   - Presentation disputed
    */
 
-  status: { type: String, enum: PresentationData.PRESENTATION_STATUS, required: true, default: PresentationData.PRESENTATION_STATUS_PROPOSAL },
+  status:         { type: String, enum: PresentationData.PRESENTATION_STATUS, required: true, default: PresentationData.PRESENTATION_STATUS_PROPOSAL },
   confirm_status: [String],
-  timeslot: timeslotSchema,
-  proposal: proposalSchema,
+  timeslot:       timeslotSchema,
+  proposal:       proposalSchema,
   checklist: [{
-    name: { type: String },
-    completed: { type: String },
+    name:         { type: String },
+    completed:    { type: String },
     completed_at: { type: Date },
   }],
-  price: { type: Number },
-  duration: { type: String }
+  price:          { type: Number },
+  duration:       { type: String }
 }, { ...baseSchemaOptions })
 
 class Presentation extends BaseRepository {
@@ -122,11 +122,11 @@ class Presentation extends BaseRepository {
   }
 
   get was_confirmed_by_contractor() {
-    return this.is_contracted && this.confirm_status.includes('contractor');
+    return this.is_completed || (this.is_contracted && this.confirm_status.includes('contractor'));
   }
 
   get was_confirmed_by_artist() {
-    return this.is_contracted && this.confirm_status.includes('artist');
+    return this.is_completed || (this.is_contracted && this.confirm_status.includes('artist'));
   }
 }
 

@@ -1,7 +1,7 @@
 // const db = require('../../data/db')
 const { Schema, model } = require('mongoose');
 const baseSchemaOptions = require('./options');
-const BaseRepository = require('../base');
+const BaseRepository    = require('../base');
 
 const instalmentSchema = new Schema({
     num:        { type: Number, require: true, default: 0 },
@@ -9,11 +9,15 @@ const instalmentSchema = new Schema({
     is_upfront: { type: Boolean, default: false },
     due_at:     { type: Date, required: true },
     amount:     { type: Number, required: true },
-    status:     { type: String, enum: ['pending', 'paid'] },
+    status:     { type: String, enum: ['pending', 'paid'], default: 'pending' },
     notes:      { type: String }
 }, baseSchemaOptions)
  
-class Instalment extends BaseRepository { }
+class Instalment extends BaseRepository { 
+    get is_paid() {
+      return this.status === 'paid';
+    }
+}
 
 instalmentSchema.loadClass(Instalment);
 module.exports = model('Instalment', instalmentSchema);

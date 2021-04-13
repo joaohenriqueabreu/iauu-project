@@ -34,7 +34,7 @@ module.exports = class ArtistService extends BaseService
     }
 
     async searchArtistWithUsers() {
-      console.log('Searching for artist...');
+      console.log('Searching for artist with members...');
       this.artist = await Artist.findById(this.id).populate({ path: 'users', select: 'name email photo' });
       return this;
     }

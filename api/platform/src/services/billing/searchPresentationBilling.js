@@ -18,7 +18,7 @@ module.exports = class SearchPresentationBillingService extends BaseService {
   }
 
   async searchBillingFromPresentation() {
-    this.billing = await Billing.findOne({ presentation: this.presentationId });
+    this.billing = await Billing.findOne({ presentation_id: this.presentationId });
     return this;
   }
 

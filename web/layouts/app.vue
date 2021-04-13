@@ -4,26 +4,27 @@
       <aside :class="minimized ? 'mini' : 'full'">
         <side-menu @minimize="minimize"></side-menu>
       </aside>
-        <div class="app">
-          <header class="d-flex justify-content-end">
-            <top-menu :scroll-height="scrollHeight"></top-menu>
-          </header>
-          <scrollbar @ps-scroll-y="handleScroll">
-            <main>
-              <alert></alert>
-              <nuxt />
-            </main>
-          </scrollbar>
-        </div>
+      <div class="app">
+        <header class="d-flex justify-content-end">
+          <top-menu :scroll-height="scrollHeight"></top-menu>
+        </header>
+        <scrollbar @ps-scroll-y="handleScroll">
+          <main>
+            <alert></alert>
+            <nuxt />
+          </main>
+        </scrollbar>
+      </div>
       <feedback v-if="showFeedback"></feedback>
     </client-only>
+    <portal-target name="modal" multiple></portal-target>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import TopMenu from '@/components/menu/top'
-import SideMenu from '@/components/menu/side'
+import { mapState } from 'vuex';
+import TopMenu from '@/components/menu/top';
+import SideMenu from '@/components/menu/side';
 
 export default {
   components: {
@@ -59,56 +60,68 @@ export default {
 .content {
   height: 100%;
   @include desktop {
-    display: flex;
-    flex-direction: row;
+    display:          flex;
+    flex-direction:   row;
   }
 
   .app {
-    width: 100%;
+    width:            100%;
+    position:         relative;
     header {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100%;
-      z-index: $above;
-      height: 10vh;
-      background: transparent;
-      padding-right: 1vw;
+      position:       fixed;
+      top:            0;
+      right:          0;
+      width:          100%;
+      z-index:        $above;
+      height:         10vh;
+      background:     transparent;
+      padding-right:  1vw;
     }
 
     main {
-      position: relative;  
-      margin: 10vh 2vw 20vh 2vw;
-      z-index: $base;
-      transition: $transition;
-      max-height: 90vw;
+      position:       relative;  
+      margin:         10vh 2vw 20vh 2vw;
+      z-index:        $base;
+      transition:     $transition;
+      max-height:     90vw;
+      width:          85vw;
     }
   }
 
   aside {
-    background: $layer1;
-    position: relative;
-    z-index: $secondLayer;
-    transition: $transition;    
+    background:       $layer1;
+    position:         relative;
+    z-index:          $secondLayer;
+    transition:       $transition;    
 
     @include desktop {
-      &.mini { width: 7vw; }
-      &.full { width: 15vw; }
+      &.mini {
+        width:        7vw; 
+      }
+      &.full { 
+        width:        15vw; 
+      }
 
-      display: flex;
+      display:        flex;
       flex-direction: column;
-      min-height: 100%;
+      height:         100vh;
     }
 
     @include mobile {
-      position: fixed;
-      bottom: 0;
+      position:       fixed;
+      bottom:         0;
 
-      display: flex;
+      display:        flex;
       flex-direction: row;
-      width: 100vw;
-      height: 10vh;
+      width:          100vw;
+      height:         10vh;
     }
   }
 }
+
+// .modal-portal {
+//   @extend .vertical, .center, .middle;
+//   position: absolute;
+//   top: 50%;
+// }
 </style>

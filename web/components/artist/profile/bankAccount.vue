@@ -20,13 +20,16 @@
       <form-masked v-model="$v.newBankAccount.document.$model" icon="id-card" placeholder="CPF/CNPJ" mask="document"></form-masked>
       <form-validation :active="$v.newBankAccount.document.$error">Número de documento inválido (formato deve ser CPF ou CNPJ) de acordo com o titular da conta</form-validation>
       <form-input v-model="$v.newBankAccount.legal_name.$model" placeholder="Nome do titular da conta" icon="signature"></form-input>
-      <form-validation :active="$v.newBankAccount.legal_name.$error">O nome do titular não pode estar vazio (máximo 30 caractéres)</form-validation>
+      <form-validation :active="$v.newBankAccount.legal_name.$error" class="mb-4">O nome do titular não pode estar vazio (máximo 30 caractéres)</form-validation>
+      <form-button :disabled="$v.newBankAccount.$invalid" @action="saveArtistBankAccount">Salvar dados bancários</form-button>
     </div>
-    <div v-else>
-      <div class="api row">
-        <div class="col-sm-3"></div>
-        <div v-if="hasConnectedBankAccount" class="col-sm-3 connected">Contactado com sistema de pagamentos!</div>
-        <div v-if="!hasConnectedBankAccount || hasFailedConnectingToGateway" class="col-sm-3 error">Tivemos um problema ao conectar sua conta ao sistema de pagamentos. Favor entrar em contato</div>
+    <div v-else class="api">
+      <div class="mb-4">
+        <div v-if="hasConnectedBankAccount" class="horizontal middle">
+          <h4><icon icon="check"></icon></h4>
+          <h6>Contactado com sistema de pagamentos!</h6>
+        </div>
+        <div v-if="!hasConnectedBankAccount || hasFailedConnectingToGateway" class="error">Tivemos um problema ao conectar sua conta ao sistema de pagamentos. Favor entrar em contato</div>
       </div>
       <div class="bank-container">
         <div>Banco: {{ connectedAccount.bank.institution }} </div>
@@ -41,32 +44,34 @@
 import { mapState, mapActions } from 'vuex';
 import { mapFields } from 'vuex-map-fields';
 import { required, minLength, maxLength, alphaNum, helpers } from 'vuelidate/lib/validators';
+
 const bankAccountNumber = helpers.regex('bankAccountNumber', /^\d+-\d{1}$/);
 export default {
   data() {
     return {
-      banks: [],
       newBankAccount: {
-        institution: '',
-        agency: '',
-        number: '',
-        document: '',
-        legal_name: ''
+        institution:  '',
+        agency:       '',
+        number:       '',
+        document:     '',
+        legal_name:   ''
       }
     }
   },
   validations: {
     newBankAccount: {
-      institution: { required },
-      agency: { alphaNum, required, maxLength: maxLength(5) },
-      number: { required, bankAccountNumber },
-      document: { required, minLength: minLength(14) },
-      legal_name: { required, maxLength: maxLength(30) }
+      institution:  { required },
+      agency:       { alphaNum, required, maxLength: maxLength(5) },
+      number:       { required, bankAccountNumber },
+      document:     { required, minLength: minLength(14) },
+      legal_name:   { required, maxLength: maxLength(30) }
     }
   },
   async created() {
-    const { data } = await this.$axios.get('data/banks');
-    this.banks = data;
+    await Promise.all([
+      this.loadBanks(),
+      this.loadAccount()
+    ]);
   },
   mounted() {
     // Initialize artist account if it's the first setup
@@ -78,8 +83,9 @@ export default {
     }
   },
   computed: {
-    ...mapState({ artist: (state) => state.artist.artist }),
-    ...mapFields('artist', {connectedAccount: 'artist.account'}),
+    ...mapState({ banks: (state) => state.billing.banks }),
+    ...mapState({ account: (state) => state.billing.account }),
+    ...mapFields('billing', { connectedAccount: 'account' }),
     hasConnectedBankAccount() {
       return ! this.$empty(this.connectedAccount) && ! this.$empty(this.connectedAccount.bank) && ! this.$empty(this.connectedAccount.gateway);
     },
@@ -87,7 +93,7 @@ export default {
       return ! this.$empty(this.connectedAccount) && ! this.$empty(this.connectedAccount.bank) && this.$empty(this.connectedAccount.gateway);
     },
     banksOptions() {
-      return this.$collection.map(this.banks, (bank) => {
+      return this.$array.map(this.banks, (bank) => {
         return { value: bank.code, display: `${bank.code} - ${bank.name}` };
       });
     },
@@ -95,11 +101,18 @@ export default {
       return ! this.$empty(this.connectedAccount.bank) ? `***${this.connectedAccount.bank.number.substr(3,3)}***` : '';
     }
   },
-  watch: {
-    '$v.$invalid': function (invalid) {
-      this.$emit('bankAccountChanged', !invalid, this.newBankAccount);
+    methods: {
+    ...mapActions('billing', ['loadBanks', 'loadAccount', 'saveBankAccount']),  
+    async saveArtistBankAccount() {
+      try {
+        await this.saveBankAccount(this.newBankAccount);
+        this.$toast.success('Conta bancária conectada com sistema de pagamentos');
+      } catch (error) {
+        console.log(error);
+        this.$toast.error('Tivemos um problema ao conectar sua conta bancária com nosso sistema de pagamento. Por favor revise os dados ou entre em contato com a nossa equipe');
+      }
     }
-  }
+  },
 }
 </script>
 
@@ -114,11 +127,14 @@ export default {
   font-size: $small;
   color: $layer3;
   font-weight: $bold;
-  max-width: 250px;
-  margin-bottom: 2 * $space;
+
+  h4, h6 {
+    color: $white;
+  }
 
   .connected {
-    background: $green;
+    height: 100%;
+    border: 2px solid $green;
     color: $white;
     border-radius: $edges;
     padding: $space;
@@ -136,5 +152,7 @@ export default {
   max-width: 250px;
   border-radius: $edges;
   padding: 2 * $space;
+  color: $white;
+  font-size: $large;
 }
 </style>

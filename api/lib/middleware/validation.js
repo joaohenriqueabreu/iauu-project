@@ -1,4 +1,3 @@
-const atob                = require('atob');
 const validateRequest     = require('joi');
 const BadRequestException = require('../exception/bad');
 
@@ -124,12 +123,6 @@ const id = (req, res, next) => {
 
   return validate(req.params, req, next, schema);
 }
-
-// Should be used only by id validator
-// const decodeId = (req, res, next) => {
-//   req.data.id = atob(req.data.id);
-//   next();
-// }
 
 // Raw query and body parsing to data
 const query = (req, res, next) => {
@@ -270,6 +263,14 @@ const billing = (req, res, next) => {
   return validate(req.body, req, next, schema)
 }
 
+const instalments = (req, res, next) => {
+  const schema = validateRequest.object({
+    instalments: validateRequest.array().required(),
+  });
+
+  return validate(req.body, req, next, schema);
+}
+
 module.exports = { 
   id,
   query,
@@ -299,4 +300,5 @@ module.exports = {
   filters,
   feedback,
   billing,
+  instalments,
  }

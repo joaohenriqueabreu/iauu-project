@@ -13,13 +13,15 @@ Vue.use(VueFilters, {
 });
 
 // Custom filters
-const dateFilter = (value) => { return moment(value).format('DD/MM/YYYY'); }
-const dateNotEmptyFilter = (value) => { return value != null ? moment(value).format('DD/MM/YYYY') : '-'; }
-const longDateFilter = (value) => { return moment(value).format('LL'); }
-const datetimeFilter = (value) => { return moment(value).format('DD/MM/YYYY HH:mm'); }
-const timeFilter = (value) => { return moment(value).format('HH:mm'); }
-const timeAgoFilter = (value) => { return moment(value).fromNow(); }
-const longTimeFilter = (time) => {
+const yesNoFilter         = (value) => { return value ? 'Sim' : 'Não'; }
+const notEmptyString      = (value) => { return value != null && value.length > 0 ? value : '-'; }
+const dateFilter          = (value) => { return moment(value).format('DD/MM/YYYY'); }
+const dateNotEmptyFilter  = (value) => { return value != null ? moment(value).format('DD/MM/YYYY') : '-'; }
+const longDateFilter      = (value) => { return moment(value).format('LL'); }
+const datetimeFilter      = (value) => { return moment(value).format('DD/MM/YYYY HH:mm'); }
+const timeFilter          = (value) => { return moment(value).format('HH:mm'); }
+const timeAgoFilter       = (value) => { return moment(value).fromNow(); }
+const longTimeFilter      = (time) => {
   if (time === undefined || time === null) { return '-'; }
   if (typeof time === 'number') { return `${time} horas${time > 1 ? 's' : ''}`; } // raw value
   const parts = time.split(':');
@@ -148,28 +150,30 @@ Object.byString = function(o, s) {
 }
 
 // Registering custom filters
-Vue.filter('date', dateFilter);
-Vue.filter('dateNotEmpty', dateNotEmptyFilter);
-Vue.filter('longDate', longDateFilter);
-Vue.filter('datetime', datetimeFilter);
-Vue.filter('time', timeFilter);
-Vue.filter('oneDecimal', oneDecimal);
-Vue.filter('twoDecimals', twoDecimals);
-Vue.filter('timeAgo', timeAgoFilter);
-Vue.filter('longTime', longTimeFilter);
-Vue.filter('nl2br', nl2br);
-Vue.filter('translate', translate);
-Vue.filter('shortMoney', shortMoney);
+Vue.filter('yesNo',           yesNoFilter);
+Vue.filter('notEmptyString',  notEmptyString);
+Vue.filter('date',            dateFilter);
+Vue.filter('dateNotEmpty',    dateNotEmptyFilter);
+Vue.filter('longDate',        longDateFilter);
+Vue.filter('datetime',        datetimeFilter);
+Vue.filter('time',            timeFilter);
+Vue.filter('oneDecimal',      oneDecimal);
+Vue.filter('twoDecimals',     twoDecimals);
+Vue.filter('timeAgo',         timeAgoFilter);
+Vue.filter('longTime',        longTimeFilter);
+Vue.filter('nl2br',           nl2br);
+Vue.filter('translate',       translate);
+Vue.filter('shortMoney',      shortMoney);
 
 export default ({ app }, inject) => {
   inject('array', _);
-  inject('collection', collection);
-  inject('math', math);
-  inject('object', { clone });
-  inject('moment', moment);
-  inject('csv', { download: downloadCsv, convert: convertToCsv });
-  inject('copyToClipboard', copyToClipboard);
-  inject('date', { convertTimeToNumber });
-  inject('linkPreview', { linkPreview });
-  inject('string', { nl2br });
+  inject('collection',        collection);
+  inject('math',              math);
+  inject('object',            { clone });
+  inject('moment',            moment);
+  inject('csv',               { download: downloadCsv, convert: convertToCsv });
+  inject('copyToClipboard',   copyToClipboard);
+  inject('date',              { convertTimeToNumber });
+  inject('linkPreview',       { linkPreview });
+  inject('string',            { nl2br });
 }

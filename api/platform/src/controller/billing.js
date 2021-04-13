@@ -1,14 +1,36 @@
 
 const BaseController = require('./base');
-const { SaveArtistAccountService, SaveBillingService, SearchPresentationBillingService, PaymentService, PayInstalmentService } = require('../services/billing');
+const { 
+  SearchArtistAccountService, 
+  SaveArtistAccountService, 
+  SaveBillingService, 
+  SearchPresentationBillingService, 
+  PaymentService, 
+  PayInstalmentService,
+  UpdateInstalmentsService,
+} = require('../services/billing');
 
 class BillingController extends BaseController {
+  async searchArtistAccount(req, res, next) {
+    console.log('Searching artist account...');
+    const searchArtistAccount = new SearchArtistAccountService();
+    try {
+      await searchArtistAccount
+        .shouldNotFailIfNotFound()
+        .search(req.user.role_id);
+
+      res.status(200).json(searchArtistAccount.getAccount());
+    } catch (error) {
+      next(error);
+    }
+  }
+  
   async saveBankAccount(req, res, next) {
     console.log('Saving bank account...');
     const saveArtistAccountSvc = new SaveArtistAccountService(req.user);
     try {
       await saveArtistAccountSvc.save(req.data.bankAccount);
-      res.status(200).json(saveArtistAccountSvc.getArtist());
+      res.status(200).json(saveArtistAccountSvc.getAccount());
     } catch (error) {
       next(error);
     }
@@ -36,8 +58,15 @@ class BillingController extends BaseController {
     }
   }
 
-  async updateInstallments(req, res, next) {
-
+  async updateInstalments(req, res, next) {
+    console.log('Updating instalments...');
+    const updateInstalmentsSvc = new UpdateInstalmentsService(req.data.id);
+    try {
+      await updateInstalmentsSvc.update(req.data.instalments);
+      res.status(200).json(updateInstalmentsSvc.getBilling());
+    } catch (error) {
+      next(error);
+    }
   }
 
   async chargePayment(req, res, next) {

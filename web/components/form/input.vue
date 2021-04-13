@@ -10,11 +10,12 @@
         :placeholder="placeholder"
         :disabled="disabled"
         :class="transparent ? 'transparent' : ''"
+        :min="min" 
         @input="afterInput"
         @blur="afterBlur"
         @keyup.enter.prevent="afterEnter"
       />
-      <icon v-if="!noIcon" :icon="iconHelper"></icon>
+      <icon v-if="!noIcon && !$empty(iconHelper)" :icon="iconHelper"></icon>
     </div>
   </div>
 </template>
@@ -25,34 +26,36 @@ import VueFilters from 'vue2-filters';
 export default {
   filters: {
     getFilter(value, type) {
-      if (type === 'numeric') {
-        return VueFilters.Number(value);
-      }
-
+      if (type === 'numeric') { return VueFilters.Number(value); }
       return value;
     }
   },
   props: {
-    default: { type: [String, Number, Boolean], default: null },
-    model: { type: Object, default: () => {} },
-    prop: { type: String, default: '' },
-    name: { type: String, default: '' },
-    label: { type: String, default: '' },
-    labelClass: { type: String, default: '' },
-    placeholder: { type: String, default: '' },
-    disabled: { type: Boolean, default: false },
-    icon: { type: String, default: null },
-    noIcon: { type: Boolean, default: false },
-    value: { type: [String, Number, Boolean], default: null },
-    required: { type: Boolean, default: false },
-    transparent: { type: Boolean, default: false }
+    default:      { type: [String, Number, Boolean], default: null },
+    model:        { type: Object, default: () => {} },
+    prop:         { type: String, default: '' },
+    name:         { type: String, default: '' },
+    label:        { type: String, default: '' },
+    labelClass:   { type: String, default: '' },
+    placeholder:  { type: String, default: '' },
+    disabled:     { type: Boolean, default: false },
+    icon:         { type: String, default: null },
+    noIcon:       { type: Boolean, default: false },
+    value:        { type: [String, Number, Boolean], default: null },
+    required:     { type: Boolean, default: false },
+    transparent:  { type: Boolean, default: false },
   },
   computed: {
     type() {
       return 'text';
     },
     iconHelper() {
-      return !this.$empty(this.icon) ? this.icon : 'search';
+      // return !this.$empty(this.icon) ? this.icon : null;
+      return this.icon;
+    },
+    min() {
+      // used for date form inputs
+      return '';
     }
   },
   methods: {

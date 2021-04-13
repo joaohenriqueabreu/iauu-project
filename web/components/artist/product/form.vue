@@ -136,10 +136,10 @@ export default {
   },
   validations: {
     product: {
-      name: { required },
-      price: { required, numeric, minValue: minValue(1) },
+      name:     { required },
+      price:    { required, numeric, minValue: minValue(1) },
       duration: { required, minTime },
-      items: { required, minLength: minLength(1) }
+      items:    { required, minLength: minLength(1) }
     }
   },
   created() {

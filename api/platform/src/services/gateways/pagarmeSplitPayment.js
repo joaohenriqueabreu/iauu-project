@@ -34,8 +34,10 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     this.paymentDocument = '';
   }
 
-  async charge(payment) {
-    this.payment = payment;
+  async charge(payment, from, to) {
+    this.payment  = payment;
+    this.from     = from;
+    this.to       = to;
 
     await this.connectApi();
     this.ensurePaymentMethodIsValid()
@@ -78,11 +80,11 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
       throw new Exception('Payment amount cannot be zero.');
     }
 
-    if (! this.payment.to instanceof Artist) {
+    if (! this.to instanceof Artist) {
       throw new Exception('Invalid payment recipient provided');
     }
 
-    if (this.payment.to.account.gateway.id === undefined) {
+    if (this.to.account.gateway.id === undefined) {
       throw new ManualPaymentRequiredException('Artist has not connected to pagar.me account');
     }
 
@@ -93,12 +95,12 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
     this.pagarmePaymentMethod.type = PAGARME_PAYMENT_METHOD_MAP[this.paymentMethod.type];
 
     // Pagar.me só aceita 'números' como CPF
-    this.paymentDocument = DocumentHelper.formatDocument(this.payment.to.document, false);
+    this.paymentDocument = DocumentHelper.formatDocument(this.to.document, false);
 
     if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_CREDIT_CARD) {
       this.pagarmePaymentMethod.extraParams = {
-        async: true, // Required for anti-fraud analysis
-        card_hash: this.paymentMethod.hash
+        async:      true, // Required for anti-fraud analysis
+        card_hash:  this.paymentMethod.hash
       }
 
       return this;
@@ -106,8 +108,8 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
 
     if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_BOLETO) {
       this.pagarmePaymentMethod.extraParams = {
-        async: false,
-        capture: true,
+        async:    false,
+        capture:  true,
       }
 
       return this;
@@ -115,8 +117,8 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
 
     if (this.pagarmePaymentMethod.type === PagarmeData.PAYMENT_METHOD_TYPE_PIX) {
       this.pagarmePaymentMethod.extraParams = {
-        async: false,
-        capture: true,
+        async:    false,
+        capture:  true,
         pix_expiration_date: moment().add(7, 'days').format('YYYY-MM-DD').toString(),
         // TODO Check how this value is displayed for user
         pix_additional_fields: [{
@@ -135,15 +137,15 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
   buildTransactionObject() {
     this.pagarmeTransactionRequestData = {
       payment_method: this.pagarmePaymentMethod.type,
-      async: this.shouldRunApiInAsyncMode,
-      amount: PagarmeSplitPaymentService.convertAmountToPagarmeFormat(this.payment.amount),
-      installments: 1,
-      postback_url: config.url.api + `/payments/${this.payment.id}/status/update`,
-      customer: this.getPaymentCustomerInfo(),
-      billing: this.getPaymentBillingInfo(),
-      items: this.getPaymentItemsInfo(),
-      split_rules: this.getPaymentSplitRules(),
-      metadata: this.getPaymentMetadataInfo()
+      async:          this.shouldRunApiInAsyncMode,
+      amount:         PagarmeSplitPaymentService.convertAmountToPagarmeFormat(this.payment.amount),
+      installments:   1,
+      postback_url:   config.url.api + `/payments/${this.payment.id}/status/update`,
+      customer:       this.getPaymentCustomerInfo(),
+      billing:        this.getPaymentBillingInfo(),
+      items:          this.getPaymentItemsInfo(),
+      split_rules:    this.getPaymentSplitRules(),
+      metadata:       this.getPaymentMetadataInfo()
     }
 
     // Add additional params (like card_hash or pix data)
@@ -165,47 +167,47 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
 
     return [
       { // Artist
-        recipient_id: this.payment.to.account.gateway.id,
-        amount: artistFee,
-        liable: true, 
-        charge_processing_fee: true, // Processing fee should be charged to the artist
+        recipient_id:           this.to.account.gateway.id,
+        amount:                 artistFee,
+        liable:                 true, 
+        charge_processing_fee:  true, // Processing fee should be charged to the artist
       },
       { // Our Fee
-        recipient_id: config.payment.gateway.recipientId,
-        amount: ourFee,
-        liable: true, 
-        charge_processing_fee: false,
+        recipient_id:           config.payment.gateway.recipientId,
+        amount:                 ourFee,
+        liable:                 true, 
+        charge_processing_fee:  false,
       }
     ]
   }
 
   getPaymentCustomerInfo() {
     return {
-      external_id: this.payment.to.id,
-      name: this.payment.to.name,
-      type: PagarmeData.PAGARME_RECIPIENT_TYPE_INDIVIDUAL,
-      country: 'br',
-      email: this.payment.to.email,
-      documents: [{
-        type: 'cpf',
+      external_id:  this.to.id,
+      name:         this.to.name,
+      type:         PagarmeData.PAGARME_RECIPIENT_TYPE_INDIVIDUAL,
+      country:      'br',
+      email:        this.to.email,
+      documents:    [{
+        type:   'cpf',
         number: this.paymentDocument
       }],
-      phone_numbers: [this.payment.to.unformatted_phone],
-      birthday: this.payment.to.birthday
+      phone_numbers:  [this.to.unformatted_phone],
+      birthday:       this.to.birthday
     }
   }
 
   getPaymentBillingInfo() {
     return {
-      name: this.payment.from.name,
+      name:             this.from.name,
       address: {
-        country: this.payment.from.address.short_country.toLowerCase(),
-        street: this.payment.from.address.street,
-        street_number: this.payment.from.address.number || '01',
-        state: this.payment.from.address.short_state.toLowerCase(),
-        city: this.payment.from.address.city,
-        neighborhood: this.payment.from.address.neighborhood,
-        zipcode: this.payment.from.address.unformatted_zipcode
+        country:        this.from.address.short_country.toLowerCase(),
+        street:         this.from.address.street,
+        street_number:  this.from.address.number || '01',
+        state:          this.from.address.short_state.toLowerCase(),
+        city:           this.from.address.city,
+        neighborhood:   this.from.address.neighborhood,
+        zipcode:        this.from.address.unformatted_zipcode
       }
     }
   }
@@ -217,11 +219,11 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
 
   getPaymentItemsInfo() {
     return [{
-        id: '1',
-        title: 'R2D2',
+        id:         '1',
+        title:      'R2D2',
         unit_price: 300,
-        quantity: 1,
-        tangible: false
+        quantity:   1,
+        tangible:   false
       }];
   }
 

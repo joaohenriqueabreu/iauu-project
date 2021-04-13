@@ -11,6 +11,7 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateAc
     if (artist === undefined) { throw new Exception('Must provide Artist information for creating recipient.'); }
 
     this.artist = artist;
+    console.log(artist);
     this.pagarmeCreateBankAccountSvc = new PagarmeCreateBankAccountService();
     
     this.pagarmeBankAccount = {};
@@ -20,7 +21,6 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateAc
   async create(bankAccountData) {
     this.bankAccount = bankAccountData;
 
-    this.ensureUserIsValid();
     await this.createGatewayBankAccount();
     this.ensurePagarmeBankAccountIsValid()
       .initCreateRecipientService()
@@ -28,14 +28,6 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateAc
 
     await this.createGatewayRecipient();
     return this.pagarmeRecipient;
-  }
-
-  ensureUserIsValid() {
-    if (! this.artist instanceof Artist) {
-      throw new BadRequestException('Only artists can connect bank accounts');
-    }
-
-    return this;
   }
 
   ensurePagarmeBankAccountIsValid() {
@@ -56,9 +48,6 @@ module.exports = class PagarmeCreateAccountService extends VendorGatewayCreateAc
   assignValidRecipientData() {
     // Pagar.me requires that the document provided to create recipient to be the same as the one provided to create the bank account
     this.artist.document = this.bankAccount.document;
-
-    // If artist has no company mail, use manager's
-    this.artist.email = this.artist.email !== undefined ? this.artist.email : this.artist.manager.email;
     return this;
   }
 

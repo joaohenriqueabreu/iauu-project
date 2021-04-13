@@ -55,8 +55,6 @@
       <footer>
         <div class="half-width" v-if="statsTab">
           <form-button v-if="!bankAccountTab" @action="saveProfile">Salvar</form-button>
-          <!-- Special handling for bank account -->
-          <form-button v-else :disabled="!validBankAccount" @action="saveArtistBankAccount">Salvar dados bancários</form-button>
         </div>
       </footer>
     </form>
@@ -156,7 +154,7 @@ export default {
     console.log(process.env.paymentsEnabled);
   },
   methods: {
-    ...mapActions('artist', ['saveProfile', 'saveBankAccount']),
+    ...mapActions('artist', ['saveProfile']),
     uploadBG() {
       this.$refs.bgUploader.upload();
     },
@@ -186,18 +184,6 @@ export default {
         await this.saveProfile();
       } catch (error) {
         this.$toast.error('Tivemos um problema ao salvar o perfil');
-      }
-    },
-    async saveArtistBankAccount() {
-      if (this.validBankAccount) {
-        try {
-          await this.saveBankAccount(this.bankAccount);
-          this.$toast.success('Conta bancária conectada com sistema de pagamentos');
-        } catch (error) {
-          this.$toast.error('Tivemos um problema ao conectar sua conta bancária com nosso sistema de pagamento. Por favor revise os dados ou entre em contato com a nossa equipe');
-        }
-      } else {
-        this.$toast.error('Favor preencher todos os dados bancários');
       }
     }
   }

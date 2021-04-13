@@ -78,7 +78,7 @@ export default {
     return {
       card: {
         number: '',
-        name: '',
+        name:   '',
         expiry: '',
         cvc:    '',
       },

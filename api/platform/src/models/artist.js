@@ -8,7 +8,6 @@ const { v4: uid } = require('uuid');
 const addressSchema = require('./schemas/address').schema;
 const productsSchema = require('./schemas/product').schema;
 const timeslotSchema = require('./schemas/timeslot').schema;
-const bankAccountSchema = require('./schemas/bankAccount').schema;
 
 const artistSchema = new Schema({
   users : [{
@@ -64,10 +63,6 @@ const artistSchema = new Schema({
     }
   },
   address: addressSchema,
-  account: {
-    bank: bankAccountSchema,
-    gateway: { type: Object } // This information is returned and formatted by vendor gateway API
-  },  
   rating: { type: Number },
   has_closed_first_presentation: { type: Boolean, default: false }
 }, { ...baseSchemaOptions });
@@ -78,19 +73,8 @@ class Artist extends BaseRepository {
     return this.feedbacks.length;
   }
 
-  get city_location() {
-    if (this.address == null) { return ''; }
-    return `${this.address.city}, ${this.address.state}`;
-  }
-
   get manager() {
     return this.users[0];
-  }
-
-  // Used for payment
-  get unformatted_phone() {
-    if (this.phone == null) { return ''; }
-    return '+' + this.phone.replace(/[^a-zA-Z0-9 ]/g, '');
   }
 }
 

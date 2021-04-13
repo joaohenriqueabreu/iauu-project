@@ -1,7 +1,6 @@
 const ArtistService = require('./base');
-const BadRequestException = require('../../exception/bad');
 
-module.exports = class SearchArtistProfileService extends ArtistService
+module.exports = class SearchArtistService extends ArtistService
 {
     constructor(user) {
       super(user);
@@ -11,7 +10,7 @@ module.exports = class SearchArtistProfileService extends ArtistService
       // need to override base with provided data (not the role_id from the user, but the one looking up)      
       this.id = id;
       await this.searchArtist();
-      await this.ensureArtistWasFound();
+      this.ensureArtistWasFound();
       return this
     }
 }

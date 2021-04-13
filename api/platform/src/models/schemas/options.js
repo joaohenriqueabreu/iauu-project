@@ -1,9 +1,6 @@
-const btoa = require('btoa');
-
 const hideSensitiveData = (doc, model, options) => {
   // Send id instead of _id
-  model.id          = model._id.toHexString();
-  model.display_id  = btoa(model._id);
+  model.id = model._id.toHexString();
 
   // Remove id and version
   delete model.__v; 

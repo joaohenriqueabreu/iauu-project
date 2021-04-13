@@ -130,7 +130,7 @@ h6 {
 
 .mainmenu {
   transition: $transition;
-  padding-right: 4 * $space;
+  // padding-right: 4 * $space;
 }
 
 .navbar {

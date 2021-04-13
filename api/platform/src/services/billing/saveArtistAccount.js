@@ -1,16 +1,19 @@
-const _ = require('lodash');
-const GatewayCreateAccountServiceBuilder = require('../builders/gatewayCreateAccountServiceBuilder');
-const SaveArtistProfileService = require('../artist/saveProfile');
-const { BadRequestException, Exception } = require('../../exception');
+const _                                   = require('lodash');
+const RequestEndpointService              = require('lib/services/request');
+const GatewayCreateAccountServiceBuilder  = require('../builders/gatewayCreateAccountServiceBuilder');
 const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
-const { Artist } = require('../../models');
+const BaseService                         = require('../base');
+const { BadRequestException }             = require('../../exception');
+const { ArtistAccount }                   = require('../../models');
 
-module.exports = class SaveArtistAccountService extends SaveArtistProfileService
+module.exports = class SaveArtistAccountService extends BaseService
 {
-    /** @param { VendorGatewayCreateAccountInterface } createGatewayAccountSvc */
+  /** @param { VendorGatewayCreateAccountInterface } createGatewayAccountSvc */
     constructor(user) {
-      // sending empty profile data - will be handled later when calling public interface
-      super(user, {profile: {}});
+      super(user);
+
+      this.id = user.role_id;
+      this.requestEndpointSvc = new RequestEndpointService();
     }
 
     async save(bankAccountData) {
@@ -18,18 +21,40 @@ module.exports = class SaveArtistAccountService extends SaveArtistProfileService
       this.ensureBankAccountIsValid();
 
       await this.searchArtist();
-      this.ensureArtistWasFound();
+      this.ensureArtistCanSaveAccount();
 
       this.ensureArtistCanConnectBankAccount()
         .parseBankAccountData()
         .assignArtistBankAccount();
-      await this.saveArtist();
 
-      this.initGatewayCreateAccountService();
+      await this.saveArtist();
+      this.initCreateAccountService();
       await this.createArtistGatewayAccount();
       this.assignArtistGatewayAccount();
       await this.saveArtist();
       this.sendConnectedAccountMail();
+      return this;
+    }
+
+    async searchArtist() {
+      console.log('Searching for artist...');
+      this.artist = await ArtistAccount.findOne({ source_id: this.id });
+
+      // Create artist if not found
+      if (ArtistAccount.notFound(this.artist) || !this.artist instanceof ArtistAccount) {
+        let artistData  = await this.requestEndpointSvc.get(`artists/${this.id}`);
+        console.log(artistData);
+        this.artist     = new ArtistAccount({ source_id: this.id,  ...artistData});
+      }
+
+      return this;
+    }
+
+    ensureArtistCanSaveAccount() {
+      if (this.artist.email === undefined) {
+        throw new BadRequestException('Artist missing required information');
+      }
+
       return this;
     }
 
@@ -55,11 +80,19 @@ module.exports = class SaveArtistAccountService extends SaveArtistProfileService
       return this;
     }
 
+    async saveArtist() {
+      await this.artist.save();
+      console.log('Artist saved...');
+
+      return this;
+    }
+
     ensureArtistCanConnectBankAccount() {
       return this;
     }
 
-    initGatewayCreateAccountService() {
+    // Cannot init from constructor as it requires artist info
+    initCreateAccountService() {
       this.createGatewayAccountSvc = (new GatewayCreateAccountServiceBuilder(this.artist)).getService();
       return this;
     }
@@ -77,5 +110,9 @@ module.exports = class SaveArtistAccountService extends SaveArtistProfileService
 
     sendConnectedAccountMail() {
       return this;
+    }
+
+    getAccount() {
+      return this.artist.account;
     }
 }

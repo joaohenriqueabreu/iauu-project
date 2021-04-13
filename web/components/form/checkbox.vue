@@ -1,12 +1,6 @@
 <template>
   <div class="horizontal middle">
-    <input
-      ref="checkbox"
-      type="checkbox"
-      :checked="checked"
-      class="clickable mr-2"
-      @change="$emit('change', $event.target.checked)"
-    />
+    <input ref="checkbox" type="checkbox" :checked="checked" class="clickable mr-2" @change="$emit('change', $event.target.checked)"/>
     <span @click="click">
       <icon v-if="checked" icon="check"></icon>
     </span>

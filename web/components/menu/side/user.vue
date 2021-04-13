@@ -91,6 +91,7 @@ export default {
         width: 100%;
       }
     }
+
     div {
       display: flex;
       flex-direction: row;

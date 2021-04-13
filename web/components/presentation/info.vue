@@ -33,16 +33,15 @@ export default {
   data() {
     return {
       PRESENTATION_STATUS_LABELS_MAP: {
-        'proposal': 'Proposta',
-        'accepted': 'Contratada',
-        'completed': 'Realizada', 
-        'paid': 'Fechada' 
+        'proposal':   'Proposta',
+        'accepted':   'Contratada',
+        'completed':  'Realizada', 
+        'paid':       'Fechada' 
       }
     }
   },
   computed: {
     presentationStatusLabel() {
-      console.log(this.presentation.status);
       return this.PRESENTATION_STATUS_LABELS_MAP[this.presentation.status];
     },
     presentationDate() {

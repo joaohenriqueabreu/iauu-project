@@ -30,12 +30,12 @@ module.exports = class RequestEndpointService {
 
   async get(endpoint) {
     // const response = await this.http.get(`${this.baseUrl}${endpoint}`);
-    const response = await this.http.get(endpoint);
-    return response;
+    const { data } = await this.http.get(endpoint);
+    return data;
   }
 
-  async post(endpoint, data) {
-    const response = await this.http.post(endpoint, data);
-    return response;
+  async post(endpoint, requestData) {
+    const { data } = await this.http.post(endpoint, requestData);
+    return data;
   }
 }

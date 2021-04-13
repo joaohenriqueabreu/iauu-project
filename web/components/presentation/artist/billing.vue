@@ -9,22 +9,7 @@
           </div>
         </div>
         <div class="col-12 col-md-6">
-          <overlay edges v-if="billing.has_amount_due">
-            <template v-slot:default>
-              <div class="total">
-                <h4>Pago</h4>
-                <small class="mb-2">Valores pagos ou em processamento</small>
-                <h4 class="text-right mb-2">{{ billing.total_paid | currency }}</h4>
-                <progress-bar :complete="billing.total_paid / billing.total_amount * 100"></progress-bar>
-              </div>
-            </template>
-            <template v-slot:hover>
-              <div class="full-fill horizontal middle center" @click="openPaymentModal(billing.amount_due)">
-                <h4>Pagar {{ billing.amount_due | currency }}</h4>
-              </div>
-            </template>
-          </overlay>
-          <div class="total" v-else>
+          <div class="total">
             <h4>Pago</h4>
             <small class="mb-2">Valores pagos ou em processamento</small>
             <h4 class="text-right mb-3">{{ billing.total_paid | currency }}</h4>
@@ -32,18 +17,16 @@
           </div>
         </div>
       </div>
-      <div class="mb-5" v-if="billing.has_amount_to_allocate">
-        <hr>
-        <h4 class="mb-3 text-center">Escolher forma de pagamento</h4>
-        <form-button no-shadow class="half-width mb-4" @action="openPaymentModal(billing.amount_due)">Pagar saldo em aberto <u class="ml-2">{{ billing.amount_unallocated | currency }}</u></form-button>
-        <hr>
-      </div>
       <div class="mb-5">
-        <h4 class="mb-4">Parcelas</h4>
+        <h4 class="mb-4">Formas de pagamento <icon icon="plus" class="clickable brand-hover" @click="openCreateInstalmentModal"></icon></h4>
         <instalments-table :billing="billing" v-if="!$empty(billing.instalments)"></instalments-table>
         <div v-else>
-          <h6>Nenhuma parcela cadastrada.</h6>
-          <small>Caso tenha negociado uma forma de pagamento da apresentação, entre em contato com o artista e peça para que ele cadastre as parcelas em seu painel, ou entre em contato com a nossa equipe de relacionamento.</small>
+          <div class="mb-2">
+            <small>Nenhuma forma de pagamento cadastrada. Pagamento a vista.</small>
+          </div>
+          <h6 class="brand-hover clickable" @click="openCreateInstalmentModal">
+            <u>Cadastrar Forma de Pagamento</u>
+          </h6>
         </div>
       </div>
       <div class="mb-5">
@@ -64,17 +47,9 @@
         <h1>{{ presentation.price | currency }}</h1>
       </div>
     </div>
-    <modal ref="payment" small>
-      <template v-slot:header><h4>Pagar apresentação</h4></template>
+    <modal ref="instalments" small>
       <template v-slot:main>
-        <payment-manager :billing="billing" :amount-to-pay="amountToPay"></payment-manager>
-      </template>
-      <template v-slot:footer>
-        <div class="horizontal middle center">
-          <nuxt-link to="/terms" target="_blank" class="text-center">
-            Em caso de dúvidas, clique aqui para revisar nossa política de pagamentos, privacidade de dados, taxas e fluxo de pagamentos.
-          </nuxt-link>
-        </div>
+        <instalment-manager :billing="billing" @saved="closeInstalmentsModal"></instalment-manager>
       </template>
     </modal>
   </div>
@@ -83,13 +58,16 @@
 <script>
 /** @requires presentation state to be loaded */
 import { mapState, mapActions } from 'vuex';
-import PaymentManager           from '@/components/billing/paymentManager';
-import InstalmentsTable         from '@/components/billing/instalmentsTable';
-import PaymentsTable            from '@/components/billing/paymentsTable';
+
+import InstalmentManager  from '@/components/billing/instalmentManager';
+import PaymentManager     from '@/components/billing/paymentManager';
+import InstalmentsTable   from '@/components/billing/instalmentsTable';
+import PaymentsTable      from '@/components/billing/paymentsTable';
 
 export default {
   components: {
     PaymentManager,
+    InstalmentManager,
     InstalmentsTable,
     PaymentsTable
   },
@@ -110,6 +88,12 @@ export default {
   }, 
   methods: {
     ...mapActions('billing', ['loadPresentationBilling']),
+    openCreateInstalmentModal() {
+      this.$refs.instalments.open();
+    },
+    closeInstalmentsModal() {
+      this.$refs.instalments.close();
+    },
     openPaymentModal(amountToPay) {
       this.amountToPay = amountToPay;
       this.$refs.payment.open();

@@ -13,8 +13,8 @@
           <h6 class="cat-badge mr-4">{{ artist.category.name }}</h6>
           <price-range short :range="artist.proposal.price_range"></price-range>
         </div>
-        <div v-if="!$utils.empty(artist.address)" class="mb-4">
-          <small>{{ artist.city_location }}</small>
+        <div v-if="!$empty(artist.address)" class="mb-4">
+          <small>{{ artist.address.short_display }}</small>
         </div>
         <div class="horizontal middle">
           <span v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="sub-badge">

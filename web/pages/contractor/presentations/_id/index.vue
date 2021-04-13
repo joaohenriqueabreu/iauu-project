@@ -1,92 +1,28 @@
-<template>
-  <div v-if="!$empty(presentation)">
-    <tabs :items="presentationTabs" :default-tab="presentationStatusIndex">
-      <div class="mb-4 position-relative">
-        <presentation-info simple show-status :presentation="presentation" class="mb-5"></presentation-info>
-        <timeline
-          class="mb-4"
-          :steps="PRESENTATION_STATUS_TABS_MAP.length" 
-          :completed="presentationStatusIndexes" 
-          :current="presentationStatusIndex" 
-          :icons="presentationIcons"
-          :labels="presentationLabels">
-        </timeline>
-      </div>
-    </tabs>
-  </div>
-</template>
-
 <script>
-import _ from 'lodash'; // TODO use from global
-import { mapState } from 'vuex';
-import PresentationInfo from '@/components/presentation/info';
-import ProposalDetails from '@/components/presentation/contractor/proposal';
+import PresentationPage       from '@/components/presentation/page';
+import ProposalDetails        from '@/components/presentation/contractor/proposal';
 import PresentationProduction from '@/components/presentation/contractor/production';
-import PresentationFeedback from '@/components/presentation/contractor/feedback';
-import BillingDetails from '@/components/presentation/contractor/billing';
-// Map presentation status to tab index
+import PresentationFeedback   from '@/components/presentation/contractor/feedback';
+import BillingDetails         from '@/components/presentation/contractor/billing';
+
 export default {
-  components: {
-    PresentationInfo,
-  },
-  async asyncData({ app, store, route }) {
-    await store.dispatch('presentation/loadPresentation', route.params.id);
-  },
-  data() {
-    return { 
-      PRESENTATION_STATUS_TABS_MAP: [
-        'proposal', // Proposta
-        'accepted', // Contrato
-        null, // Produção
-        null, // Apresentação
-        'completed', // Faturamento
-        'paid' // Resumo
-      ],
-    }
-  },
+  extends: PresentationPage,
   computed: {
-    ...mapState({presentation: (state) => state.presentation.presentation }),
-    presentationTabs() {
+    wasConfirmedBy() {
+      return this.presentation.was_confirmed_by_artist;
+    },
+    presentationTabComponents() {
       return [
-        { title: 'Proposta', component: ProposalDetails },
-        { title: 'Contrato', component: ProposalDetails },
-        { title: 'Produção', component: PresentationProduction },
-        { title: 'Apresentação', component: PresentationFeedback },
-        { title: 'Faturamento', component: BillingDetails },
-        { title: 'Resumo', component: ProposalDetails },
+        { status: 'proposal',   icon: 'search-dollar',  title: 'Proposta',      component: ProposalDetails },
+        { status: 'accepted',   icon: 'signature',      title: 'Contrato',      component: ProposalDetails },
+        { status: null,         icon: 'tasks',          title: 'Produção',      component: PresentationProduction },
+        { status: null,         icon: 'music',          title: 'Apresentação',  component: PresentationFeedback },
+        { status: 'completed',  icon: 'credit-card',    title: 'Faturamento',   component: BillingDetails },
+        { status: 'paid',       icon: 'check',          title: 'Resumo',        component: ProposalDetails },
       ]
     },
-    presentationIcons() {
-      return [
-        'search-dollar', 'signature', 'tasks', 'music', 'credit-card', 'check'
-      ];
-    },
-    presentationLabels() {
-      return this.$collection.map(this.presentationTabs, 'title');
-    },
-    presentationDt() {
-      return this.moment(this.presentation.display_start_dt).format('DD/MM HH:mm') + ' - ' +
-        this.moment(this.presentation.display_end_dt).format('HH:mm');
-    },
-    presentationStatusIndexes() {
-      return _.range(this.presentationStatusIndex);
-    },
-    presentationStatusIndex() {
-      if (this.presentation.is_completed || 
-        (this.presentation.is_contracted && this.presentation.is_presentation_past && this.presentation.was_confirmed_by_contractor)) {
-        return 4; // Index of "Faturamento"
-      }
-
-      if (this.presentation.is_contracted && 
-        (this.presentation.is_presentation_close || this.presentation.is_presentation_today || this.presentation.is_presentation_past)) {
-        return 3; // Index of "Apresentação"
-      }
-
-      return this.$array.indexOf(this.PRESENTATION_STATUS_TABS_MAP, this.presentation.status);
-    }
+    customPresentationDayIndex()  { return 3; },
+    customBillingIndex()          { return 4; },
   }
 }
 </script>
-
-<style>
-</style>

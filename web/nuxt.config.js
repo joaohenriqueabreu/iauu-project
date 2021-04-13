@@ -121,6 +121,7 @@ export default {
     '@nuxtjs/style-resources',
     '@nuxtjs/sentry',
     '@nuxtjs/toast',
+    'portal-vue/nuxt',
   ],
   axios: {
     baseURL: '/api/v1/'

@@ -20,8 +20,9 @@ class ContractorController extends BaseController {
     }
   }
 
-  async fetchContractor(req, res, next) {
+  async searchContractor(req, res, next) {
     try {
+      // TODO move to service
       console.log(`Fetching contractor ${req.data.id}`);
       const contractor = await Contractor.findById(req.data.id);
       if (!contractor instanceof Contractor) { throw new BadRequestException('Contractor does not exist'); }

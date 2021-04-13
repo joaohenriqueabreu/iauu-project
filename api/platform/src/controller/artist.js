@@ -22,13 +22,13 @@ class ArtistController extends BaseController {
     }
   }
 
-  async fetchArtist(req, res, next) {
-    try {
-      console.log(`Fetching artist ${req.data.id}`);
-      const artist = await Artist.findById(req.data.id);
-      if (!artist instanceof Artist) { throw new BadRequestException('Artist does not exist'); }
+  async searchArtist(req, res, next) {
+    console.log('Requesting artist...');
 
-      res.status(200).json(artist);
+    const searchArtistSvc = new SearchArtistService(req.user);
+    try {
+      await searchArtistSvc.search(req.data.id);
+      res.status(200).json(searchArtistSvc.getArtist());
     } catch (error) {
       next(error);
     }
@@ -75,17 +75,6 @@ class ArtistController extends BaseController {
     try {
       await saveProfileService.save();
       res.status(200).json(saveProfileService.getArtist());
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async saveBankAccount(req, res, next) {
-    console.log('Saving bank account...');
-    const saveArtistAccountSvc = new SaveArtistAccountService(req.user);
-    try {
-      await saveArtistAccountSvc.save(req.data.bankAccount);
-      res.status(200).json(saveArtistAccountSvc.getArtist());
     } catch (error) {
       next(error);
     }
