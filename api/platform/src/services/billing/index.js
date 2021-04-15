@@ -6,6 +6,7 @@ const SaveArtistAccountService            = require('./saveArtistAccount');
 const UpdatePaymentStatusService          = require('./updatePaymentStatus');
 const SearchPresentationBillingService    = require('./searchPresentationBilling');
 const UpdateInstalmentsService            = require('./updateInstalments');
+const ManualBillingPaymentService         = require('./manualPayment');
 
 module.exports = { 
   SearchArtistAccountService,
@@ -15,5 +16,6 @@ module.exports = {
   SaveArtistAccountService, 
   UpdatePaymentStatusService, 
   SearchPresentationBillingService,
-  UpdateInstalmentsService
+  UpdateInstalmentsService,
+  ManualBillingPaymentService,
 };

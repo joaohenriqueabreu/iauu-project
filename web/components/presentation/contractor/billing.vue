@@ -35,12 +35,15 @@
       <div class="mb-5" v-if="billing.has_amount_to_allocate">
         <hr>
         <h4 class="mb-3 text-center">Escolher forma de pagamento</h4>
-        <form-button no-shadow class="half-width mb-4" @action="openPaymentModal(billing.amount_due)">Pagar saldo em aberto <u class="ml-2">{{ billing.amount_unallocated | currency }}</u></form-button>
+        <form-button no-shadow class="half-width mb-4" @action="openPaymentModal(billing.amount_due)">Pagar saldo em aberto <u class="ml-2">{{ billing.amount_due | currency }}</u></form-button>
         <hr>
       </div>
       <div class="mb-5">
-        <h4 class="mb-4">Parcelas</h4>
-        <instalments-table :billing="billing" v-if="!$empty(billing.instalments)"></instalments-table>
+        <div class="mb-4">
+          <h4>Parcelas</h4>
+          <small>Clique em uma parcela em aberto para realizar o pagamento.</small>
+        </div>
+        <instalments-table :billing="billing" v-if="!$empty(billing.instalments)" @selected="openPayInstalmentModal"></instalments-table>
         <div v-else>
           <h6>Nenhuma parcela cadastrada.</h6>
           <small>Caso tenha negociado uma forma de pagamento da apresentação, entre em contato com o artista e peça para que ele cadastre as parcelas em seu painel, ou entre em contato com a nossa equipe de relacionamento.</small>
@@ -67,7 +70,7 @@
     <modal ref="payment" small>
       <template v-slot:header><h4>Pagar apresentação</h4></template>
       <template v-slot:main>
-        <payment-manager :billing="billing" :amount-to-pay="amountToPay"></payment-manager>
+        <payment-manager :billing="billing" :instalment="selectedInstalment" :amount-to-pay="amountToPay"></payment-manager>
       </template>
       <template v-slot:footer>
         <div class="horizontal middle center">
@@ -95,7 +98,8 @@ export default {
   },
   data() {
     return {
-      amountToPay: { type: Number, default: 0 },
+      amountToPay:        0,
+      selectedInstalment: null
     }
   },
   computed: {
@@ -110,8 +114,17 @@ export default {
   }, 
   methods: {
     ...mapActions('billing', ['loadPresentationBilling']),
+    openPayInstalmentModal(instalment) {
+      this.selectedInstalment = instalment;
+      this.$refs.payment.open();
+    },
+    closeInstalmentModal() {
+      this.selectedInstalment = null;
+      this.$refs.instalment.close();
+    },
     openPaymentModal(amountToPay) {
-      this.amountToPay = amountToPay;
+      this.selectedInstalment = null;
+      this.amountToPay        = amountToPay;
       this.$refs.payment.open();
     },
   }

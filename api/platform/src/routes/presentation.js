@@ -57,4 +57,11 @@ api.put('/:id',
   presentationController.editPresentation
 );
 
+api.post('/:id/status/:status', 
+  authorizationMiddleware.app, 
+  validationMiddleware.id, 
+  validationMiddleware.status, 
+  presentationController.updatePresentationStatus
+);
+
 module.exports = api;

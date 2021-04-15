@@ -140,7 +140,7 @@ module.exports = class PagarmeSplitPaymentService extends VendorGatewayInterface
       async:          this.shouldRunApiInAsyncMode,
       amount:         PagarmeSplitPaymentService.convertAmountToPagarmeFormat(this.payment.amount),
       installments:   1,
-      postback_url:   config.url.api + `/payments/${this.payment.id}/status/update`,
+      postback_url:   config.url.api + `/billing/payments/${this.payment.id}/status/update`,
       customer:       this.getPaymentCustomerInfo(),
       billing:        this.getPaymentBillingInfo(),
       items:          this.getPaymentItemsInfo(),

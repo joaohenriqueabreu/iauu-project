@@ -8,7 +8,7 @@ const { BillingData }   = require('../config/data');
 
 const billingSchema = new Schema({
 // TODO move to own presentation / artist / contractor models for billing micro-service
-  artist:           { type: Schema.Types.ObjectId, ref: 'ArtistAccount', required: true },
+  artist_account:   { type: Schema.Types.ObjectId, ref: 'ArtistAccount', required: true },
   presentation_id:  { type: String, required: true },
   contractor_id:    { type: String, required: true },
 
@@ -19,6 +19,16 @@ const billingSchema = new Schema({
   payments:         [paymentSchema]
 }, { ...baseSchemaOptions });
 
+// TODO think of a way of populating instalment here or in payment schema (currently doing at frontend)
+// billingSchema.post('findOne', function(billing) {
+//   console.log('running post billing found');
+//   billing.payments.forEach((payment) => {
+//     payment.instalment = payment.instalment_id != null
+//       ? null 
+//       : _.find(billing.instalments, (instalment) => instalment.id === payment.instalment_id);
+//   });
+// });
+
 class Billing extends BaseRepository { 
   get is_fully_paid() {
     return this.total_paid >= this.total_amount;
@@ -28,9 +38,9 @@ class Billing extends BaseRepository {
     return this.status === BillingData.PENDING_STATUS;
   }
 
-  get installments() {
-    return this.payments.length;
-  }
+  // get installments() {
+  //   return this.payments.length;
+  // }
 
   // Sum of instalments
   get amount_allocated() {
@@ -55,7 +65,7 @@ class Billing extends BaseRepository {
 
   get total_paid() {
     return _.reduce(this.payments, (total, payment) => {
-      total += (! payment.is_failed ? payment.amount : 0);
+      total += (! payment.is_failed && ! payment.is_overdue ? payment.amount : 0);
       return total;
     }, 0);
   }

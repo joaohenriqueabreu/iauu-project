@@ -2,14 +2,16 @@
 export default {
   methods: {
     async initiatePayment() {
-      const payload = {
+      let payload = {
         billingId:      this.billing.id,
-        paymentMethod:  this.paymentMethodPayload,
+        paymentMethod:  this.paymentMethodPayload
       }
 
       if (!this.$empty(this.instalment)) {
           payload = {...payload, ...{ instalmentId: this.instalment.id }};
       }
+
+      console.log(payload);
 
       try {
           await this.chargePayment(payload);

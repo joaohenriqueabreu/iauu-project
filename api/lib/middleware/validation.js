@@ -111,7 +111,7 @@ const social2 = (req, res, next) => {
   const schema = validateRequest.object({
     token: validateRequest.string().required(),
     provider: validateRequest.string().required()
-  })
+  });
 
   return validate(req.body, req, next, schema);
 }
@@ -119,8 +119,15 @@ const social2 = (req, res, next) => {
 const id = (req, res, next) => {
   const schema = validateRequest.object({
     id: validateRequest.string().required()    
-  })
+  });
 
+  return validate(req.params, req, next, schema);
+}
+
+const status = (req, res, next) => {
+  const schema = validateRequest.object({
+    status: validateRequest.string().required()
+  });
   return validate(req.params, req, next, schema);
 }
 
@@ -166,7 +173,7 @@ const bankAccount = (req, res, next) => {
 
 const payment = (req, res, next) => {
   const schema = validateRequest.object({
-    method: validateRequest.object().required(),
+    method:     validateRequest.object().required(),
     instalment: validateRequest.string().optional(),
   });
 
@@ -276,6 +283,7 @@ module.exports = {
   query,
   body,
   slug,
+  status,
   token,
   social,
   social2,

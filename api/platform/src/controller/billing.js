@@ -1,6 +1,6 @@
 
 const BaseController = require('./base');
-const { 
+const {
   SearchArtistAccountService, 
   SaveArtistAccountService, 
   SaveBillingService, 
@@ -71,9 +71,9 @@ class BillingController extends BaseController {
 
   async chargePayment(req, res, next) {
     console.log('Paying presentation...');
-    
-    const payBillingSvc = req.data.instalment !== undefined
-      ? new PayInstalmentService(req.user, req.data.instalment, req.data.method, req.data.fee)
+
+    const payBillingSvc = req.data.instalment != null
+      ? new PayInstalmentService(req.user, req.data.id, req.data.method, req.data.fee, req.data.instalment)
       : new PaymentService(req.user, req.data.id, req.data.method, req.data.fee);
 
     try {

@@ -3,10 +3,11 @@ import Vue from 'vue'
 import { getField, updateField } from 'vuex-map-fields'
 
 export const state = () => ({
-  statistics: {},
-  user: {},
-  users: [],
-  presentations: []
+  statistics:     {},
+  user:           {},
+  users:          [],
+  presentations:  [],
+  billings:       []
 })
 
 export const mutations = {
@@ -28,6 +29,9 @@ export const mutations = {
   },
   set_presentations(state, data) {
     Vue.set(state, 'presentations', data);
+  },
+  set_billings(state, data) {
+    Vue.set(state, 'billings', data);
   }
 }
 
@@ -55,6 +59,10 @@ export const actions = {
   async loadPresentations({ commit }) {
     const { data } = await this.$axios.get('admin/presentations');
     commit('set_presentations', data);
+  },
+  async loadBillings({ commit }) {
+    const { data } = await this.$axios.get('admin/billings');
+    commit('set_billings', data);
   },
   async searchUsers({ commit }, term) {
     const { data } = await this.$axios.get('admin/users', { params: { search: term } });

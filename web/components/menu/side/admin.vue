@@ -13,6 +13,10 @@
         <icon icon="music"></icon>
         <span v-show="!minimized">Apresentações</span>
       </nuxt-link>
+      <nuxt-link to="/admin/billings" :class="{ routed: routed('billings') }">
+        <icon icon="dollar-sign"></icon>
+        <span v-show="!minimized">Pagamentos</span>
+      </nuxt-link>
       <nuxt-link to="/admin/referrals" :class="{ routed: routed('referrals') }">
         <icon icon="bullhorn"></icon>
         <span v-show="!minimized">Renda Passiva</span>

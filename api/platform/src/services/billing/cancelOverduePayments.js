@@ -1,8 +1,8 @@
-const _ = require('lodash');
-const moment = require('moment');
+const _               = require('lodash');
+const moment          = require('moment');
 const { PaymentData } = require('../../config/data');
-const { Billing } = require('../../models');
-const ScriptService = require('../script');
+const { Billing }     = require('../../models');
+const ScriptService   = require('../script');
 
 module.exports = class CancelOverduePaymentsScriptService extends ScriptService {
   constructor() {

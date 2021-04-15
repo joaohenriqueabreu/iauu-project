@@ -9,7 +9,7 @@
       </div>
       <div v-else class="full-height vertical middle center mb-5" key="barcode">
         <div class="mb-4">
-          <p>Também enviamos o boleto para seu email. <b>Validade {{ payment.due_at | date }}</b></p>
+          <p>Também enviamos o boleto para seu email. <b>Vence em {{ payment.due_at | date }}</b></p>
         </div>
         <a :href="payment.charge_url" target="_blank">
           <img :src="$images('boleto-minuature.png')" class="mini" width="150" height="200">

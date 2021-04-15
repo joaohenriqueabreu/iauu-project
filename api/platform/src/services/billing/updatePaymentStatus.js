@@ -1,41 +1,40 @@
 const _ = require('lodash');
 const GatewayCallbackServiceBuilder = require('../builders/gatewayCallbackServiceBuilder');
-const { Presentation } = require('../../models');
-const { Billing, Payment } = require('../../models/schemas');
-const { PaymentData, BillingData, PresentationData } = require('../../config/data');
+const { Billing } = require('../../models');
+const { Payment } = require('../../models/schemas');
+const { BillingData } = require('../../config/data');
 const { FailedChargingPaymentMethodException, BadRequestException, Exception } = require('../../exception');
-const PresentationService = require('../presentation/base');
+const SaveBillingService = require('./saveBilling');
 
-module.exports = class UpdatePaymentStatusService extends PresentationService
+module.exports = class UpdatePaymentStatusService extends SaveBillingService
 {
     /** @param { VendorGatewayCallbackInterface } vendorGatewayCallbackService */
-    constructor(data) {
-      super(data);
+    constructor(id) {
+      super(id);
 
-      if (data.id === undefined || data.transaction === undefined) { 
-        throw new BadRequestException('Missing required info'); 
-      }
-
-      this.id = data.id;
-      this.transaction = data.transaction;
+      this.id      = id;
 
       this.payment = {};
-      this.presentation = {};
+      this.billing = {};
     }
 
-    async update() {
+    async update(transaction) {
+      this.transaction = transaction;
+
       try {
-        await this.searchPresentationFromPayment();
-        this.ensurePresentationWasFound()
-          .ensurePresentationCanBeUpdated()
+        await this.searchBillingFromPayment();
+        this.ensureBillingWasFound()
+          .ensureBillingCanBeUpdated()
           .retrieveTargetPayment()
           .ensurePaymentWasFound()
           .createServiceFromPayment()
           .updatePaymentState()
           .updateBillingState();
   
-        await this.savePresentation();
-        this.sendStatusUpdateMail();
+        await this.saveBilling();
+        this.updatePresentationState()
+          .sendStatusUpdateMail();
+
         return this;
 
       } catch (error) {
@@ -45,28 +44,34 @@ module.exports = class UpdatePaymentStatusService extends PresentationService
       }
     }
 
-    async searchPresentationFromPayment() {
-      this.presentation = await Presentation.findOne({ 'billing.payments.id': this.id })
-        .populate({ path: 'billing', populate: { path: 'payments' }});
+    async searchBillingFromPayment() {
+      this.billing = await Billing.findOne({ 'payments.id': this.id });
+      return this;
+    }
+
+    ensureBillingWasFound() {
+      if (Billing.notFound(this.billing)) { 
+        throw new BadRequestException('Invalid payment provided');
+      }
 
       return this;
     }
 
-    ensurePresentationCanBeUpdated() {
-      if (this.presentation.billing.status.includes([BillingData.COMPLETED_STATUS])) {
-        throw new Exception('Presentation already paid');
+    ensureBillingCanBeUpdated() {
+      if (this.billing.is_fully_paid) {
+        throw new Exception('Billing already paid');
       }
 
       return this;
     }
 
     retrieveTargetPayment() {
-      this.payment = _.find(this.presentation.billing.payments, (payment) => payment.id = this.id);
+      this.payment = _.find(this.billing.payments, (payment) => payment.id = this.id);
       return this;
     }
 
     ensurePaymentWasFound() {
-      if (this.payment === undefined || ! this.payment instanceof Payment) {
+      if (Payment.notFound(this.payment)) {
         throw new BadRequestException('Failed retrieving payment data');
       }
 
@@ -81,7 +86,7 @@ module.exports = class UpdatePaymentStatusService extends PresentationService
     updatePaymentState() {
       this.payment = this.vendorGatewayCallbackService.update(this.transaction);
 
-      if (this.payment.status === PaymentData.PAYMENT_STATUS_FAILED) {
+      if (this.payment.is_failed) {
         throw new FailedChargingPaymentMethodException();
       }
 
@@ -89,12 +94,20 @@ module.exports = class UpdatePaymentStatusService extends PresentationService
     }
 
     updateBillingState() {
-      this.presentation.billing.total_paid += this.payment.net_amount;
+      this.billing.total_paid += this.payment.net_amount;
 
-      if (this.presentation.billing.is_fully_paid) {
-        this.presentation.billing.status = BillingData.COMPLETED_STATUS
+      if (this.billing.is_fully_paid) {
+        this.billing.status = BillingData.COMPLETED_STATUS;
       }
 
+      return this;
+    }
+
+    updatePresentationState() {
+      if (! this.billing.is_fully_paid) { return this; }
+
+      // no need to await
+      this.requestEndpointSvc.post(`/presentations/${this.billing.presentation_id}/status/paid`);
       return this;
     }
 

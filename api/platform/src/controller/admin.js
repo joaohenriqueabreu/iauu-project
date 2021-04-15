@@ -1,18 +1,21 @@
 'use strict';
 
-const BaseController = require('./base');
-const UserService = require('../services/admin/user');
-const UsersStatsService = require('../services/admin/usersStats');
-const PresentationsStatsService = require('../services/admin/presentationsStats');
-const SearchUsersService = require('../services/admin/searchUsers');
-const UserStatsService = require('../services/admin/userStats');
-const BlockUserService = require('../services/admin/blockUser');
-const ActivateUserService = require('../services/admin/activateUser');
-const VerifyUserService = require('../services/auth/verifyUser');
-const LoginAsUserService = require('../services/auth/loginAsUser');
+const BaseController                      = require('./base');
+const UserService                         = require('../services/admin/user');
+const UsersStatsService                   = require('../services/admin/usersStats');
+const PresentationsStatsService           = require('../services/admin/presentationsStats');
+const SearchUsersService                  = require('../services/admin/searchUsers');
+const UserStatsService                    = require('../services/admin/userStats');
+const BlockUserService                    = require('../services/admin/blockUser');
+const ActivateUserService                 = require('../services/admin/activateUser');
+const VerifyUserService                   = require('../services/auth/verifyUser');
+const LoginAsUserService                  = require('../services/auth/loginAsUser');
+const ManualBillingPaymentService         = require('../services/billing/manualPayment');
 
-const SearchPresentationsService = require('../services/admin/searchPresentations');
-const CalculateAppUsersStatisticsService = require('../services/statistics/calculateAppUserStatistics');
+// TODO move to correspondent services
+const SearchPresentationsService          = require('../services/admin/searchPresentations');
+const SearchBillingsService               = require('../services/billing/searchBillings');
+const CalculateAppUsersStatisticsService  = require('../services/statistics/calculateAppUserStatistics');
 
 class AdminController extends BaseController {
   calculateUsersStatistics(req, res, next) {    
@@ -115,6 +118,29 @@ class AdminController extends BaseController {
     searchPresentationsService.search()
       .then(() => { res.status(200).json(searchPresentationsService.getPresentations()) })
       .catch((error) => next(error));
+  }
+
+  async getBillings(req, res, next) {
+    console.log('Searching for all billings');
+    const searchBillingsSvc = new SearchBillingsService(req.data);
+    try {
+      await searchBillingsSvc.search();
+      res.status(200).json(searchBillingsSvc.getBillings());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async manuallyPayBilling(req, res, next) {
+    console.log('Manually paying billing');
+
+    const manualBillingPaymentSvc = new ManualBillingPaymentService(req.id);
+    try {
+      await manualBillingPaymentSvc.pay(req.payment);
+      res.status(200).json(manualBillingPaymentSvc.getBilling());
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

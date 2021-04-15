@@ -1,7 +1,7 @@
-// const db = require('../../data/db')
-const { Schema, model } = require('mongoose');
-const baseSchemaOptions = require('./options');
-const BaseRepository    = require('../base');
+const moment              = require('moment');
+const { Schema, model }   = require('mongoose');
+const baseSchemaOptions   = require('./options');
+const { BaseRepository }  = require('../repositories');
 
 const instalmentSchema = new Schema({
     num:        { type: Number, require: true, default: 0 },
@@ -16,6 +16,10 @@ const instalmentSchema = new Schema({
 class Instalment extends BaseRepository { 
     get is_paid() {
       return this.status === 'paid';
+    }
+
+    get is_delayed() {
+      return moment(this.due_at).diff(moment(), 'days') < 0;
     }
 }
 

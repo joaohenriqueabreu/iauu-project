@@ -1,22 +1,23 @@
 'use strict';
 
-const BaseController = require('./base');
-const SearchProposalsService = require('../services/presentation/searchProposals');
-const SearchPresentationsService = require('../services/presentation/searchPresentations');
-const SearchPresentationService = require('../services/presentation/searchPresentation');
-const SendProposalService = require('../services/presentation/sendProposal');
-const SelectTimeslotService = require('../services/presentation/selectTimeslot');
-const AcceptProposalService = require('../services/presentation/acceptProposal');
-const RejectProposalService = require('../services/presentation/rejectProposal');
-const SendCounterOfferService = require('../services/presentation/sendCounterOffer');
-const AcceptCounterOfferService = require('../services/presentation/acceptCounterOffer');
-const RejectCounterOfferService = require('../services/presentation/rejectCounterOffer');
-const CompletePresentationService = require('../services/presentation/completePresentation');
-const CancelPresentationService = require('../services/presentation/cancelPresentation');
-const ManagePresentationChecklistService = require('../services/presentation/manageChecklist');
-const RequestEndpointService = require('lib/services/request');
-const { Presentation } = require('../models');
-const { BadRequestException } = require('../exception');
+const BaseController                      = require('./base');
+const SearchProposalsService              = require('../services/presentation/searchProposals');
+const SearchPresentationsService          = require('../services/presentation/searchPresentations');
+const SearchPresentationService           = require('../services/presentation/searchPresentation');
+const SendProposalService                 = require('../services/presentation/sendProposal');
+const SelectTimeslotService               = require('../services/presentation/selectTimeslot');
+const AcceptProposalService               = require('../services/presentation/acceptProposal');
+const RejectProposalService               = require('../services/presentation/rejectProposal');
+const SendCounterOfferService             = require('../services/presentation/sendCounterOffer');
+const AcceptCounterOfferService           = require('../services/presentation/acceptCounterOffer');
+const RejectCounterOfferService           = require('../services/presentation/rejectCounterOffer');
+const CompletePresentationService         = require('../services/presentation/completePresentation');
+const CancelPresentationService           = require('../services/presentation/cancelPresentation');
+const ManagePresentationChecklistService  = require('../services/presentation/manageChecklist');
+const UpdatePresentationStatusService     = require('../services/presentation/updatePresentationStatus');
+const RequestEndpointService              = require('lib/services/request');
+const { Presentation }                    = require('../models');
+const { BadRequestException }             = require('../exception');
 
 class PresentationController extends BaseController {
   async validatePresentation(req, res, next) {
@@ -171,6 +172,17 @@ class PresentationController extends BaseController {
     try {
       await manageChecklistSvc.update(req.data);
       res.status(200).json(manageChecklistSvc.getPresentation());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updatePresentationStatus(req, res, next) {
+    console.log('Updating presentation status...');
+    const updatePresentationStatusSvc = new UpdatePresentationStatusService(req.data.id);
+    try {
+      await updatePresentationStatusSvc.update(req.data.status);
+      res.status(200).json(updatePresentationStatusSvc.getPresentation());
     } catch (error) {
       next(error);
     }

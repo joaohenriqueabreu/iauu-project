@@ -1,4 +1,6 @@
-const config = require('../../env');
+const moment            = require('moment');
+const _                 = require('lodash');
+const config            = require('../../env');
 const { Schema, model } = require('mongoose');
 const BaseRepository    = require('../repositories/base');
 const { PaymentData }   = require('../../config/data');
@@ -11,7 +13,7 @@ const paymentSchema = new Schema({
   fee:            { type: Number, required: true, default: config.payment.ourFee },
   status:         { type: String, enum: PaymentData.PAYMENT_STATUS, required: true, default: PaymentData.PAYMENT_STATUS_PENDING },
   failed_reason:  { type: String },
-  instalment:     { type: Schema.Types.ObjectId, ref: 'Instalment' },
+  instalment_id:  { type: String },
   due_at:         { type: Date },
   paid_at:        { type: Date },
   notes:          { type: String },
@@ -49,13 +51,8 @@ class Payment extends BaseRepository {
       return this.due_at;
     }
 
-    if (this.method.type === PaymentData.PAYMENT_METHOD_TYPE_BOLETO) {
-      return this.transaction.boleto_expiration_date;
-    }
-
-    if (this.method.type === PaymentData.PAYMENT_METHOD_TYPE_PIX) {
-      return this.transaction.pix_expiration_date;
-    }
+    if (this.pay_with_boleto) { return this.transaction.boleto_expiration_date; }
+    if (this.pay_with_pix)    { return this.transaction.pix_expiration_date; }
 
     return '';
   }
@@ -70,6 +67,23 @@ class Payment extends BaseRepository {
 
   get is_paid() {
     return this.status === PaymentData.PAYMENT_STATUS_COMPLETED;
+  }
+
+  get pay_with_pix() {
+    return this.method.type === PaymentData.PAYMENT_METHOD_TYPE_PIX;
+  }
+
+  get pay_with_boleto() {
+    return this.method.type === PaymentData.PAYMENT_METHOD_TYPE_BOLETO;
+  }
+
+  get pay_with_cc() {
+    return this.method.type === PaymentData.PAYMENT_METHOD_TYPE_CREDIT_CARD;
+  }
+
+  get is_overdue() {
+    return this.status === PaymentData.PAYMENT_STATUS_OVERDUE || 
+      (this.is_pending && moment(this.due_at).diff(moment(), 'days') < 0);
   }
 }
 

@@ -1,2 +1,5 @@
-const Repository = require('./base');
-module.exports = { Repository };
+const BaseRepository = require('./base');
+
+module.exports = { 
+  BaseRepository 
+};

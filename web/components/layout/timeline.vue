@@ -51,8 +51,9 @@ export default {
 
 <style lang="scss" scoped>
 @mixin hover() {
-  &:hover {
-    color: $brand2;
+  &:hover, &:hover [data-icon] {
+    transition:   $transition;
+    color:        $brand2;
     border-color: $brand2;
   }
 }
@@ -72,7 +73,7 @@ export default {
   padding: $space;
 
   [data-icon] {
-    @include hover();
+    // @include hover();
     margin: $space;
   }
 

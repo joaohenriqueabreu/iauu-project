@@ -19,7 +19,7 @@
       </div>
       <div class="mb-5">
         <h4 class="mb-4">Formas de pagamento <icon icon="plus" class="clickable brand-hover" @click="openCreateInstalmentModal"></icon></h4>
-        <instalments-table :billing="billing" v-if="!$empty(billing.instalments)"></instalments-table>
+        <instalments-table :billing="billing" v-if="!$empty(billing.instalments)" @selected="openEditInstalmentModal"></instalments-table>
         <div v-else>
           <div class="mb-2">
             <small>Nenhuma forma de pagamento cadastrada. Pagamento a vista.</small>
@@ -49,7 +49,7 @@
     </div>
     <modal ref="instalments" small>
       <template v-slot:main>
-        <instalment-manager :billing="billing" @saved="closeInstalmentsModal"></instalment-manager>
+        <instalment-manager :billing="billing" :instalment="selectedInstalment" @saved="closeInstalmentsModal"></instalment-manager>
       </template>
     </modal>
   </div>
@@ -58,7 +58,6 @@
 <script>
 /** @requires presentation state to be loaded */
 import { mapState, mapActions } from 'vuex';
-
 import InstalmentManager  from '@/components/billing/instalmentManager';
 import PaymentManager     from '@/components/billing/paymentManager';
 import InstalmentsTable   from '@/components/billing/instalmentsTable';
@@ -73,7 +72,8 @@ export default {
   },
   data() {
     return {
-      amountToPay: { type: Number, default: 0 },
+      amountToPay:        0,
+      selectedInstalment: null
     }
   },
   computed: {
@@ -89,6 +89,11 @@ export default {
   methods: {
     ...mapActions('billing', ['loadPresentationBilling']),
     openCreateInstalmentModal() {
+      this.selectedInstalment = null;
+      this.$refs.instalments.open();
+    },
+    openEditInstalmentModal(instalment) {
+      this.selectedInstalment = instalment;
       this.$refs.instalments.open();
     },
     closeInstalmentsModal() {

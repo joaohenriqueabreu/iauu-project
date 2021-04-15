@@ -12,8 +12,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(instalment, index) in billing.instalments" :key="index" @click="openInstalmentModal(instalment)">
-          <td>{{ index + 1 }}</td>
+        <tr v-for="(instalment, index) in billing.instalments" :key="index" @click="$emit('selected', instalment)">
+          <td>{{ instalment.num}}</td>
           <td>{{ instalment.name | notEmptyString }}</td>
           <td>{{ instalment.is_upfront | yesNo }}</td>
           <td>{{ instalment.amount | currency }}</td>
@@ -22,20 +22,11 @@
         </tr>
       </tbody>
     </table>
-    <modal ref="instalment">
-      <template v-slot:main>
-        <instalment-manager :billing="billing" :instalment="selectedInstalment" @saved="closeInstalmentModal"></instalment-manager>
-      </template>
-    </modal>
   </div>
 </template>
 
 <script>
-import InstalmentManager from '@/components/billing/instalmentManager';
 export default {
-  components: {
-    InstalmentManager
-  },
   props: {
     billing: {}
   },
@@ -43,16 +34,6 @@ export default {
     return {
       selectedInstalment: {}
     }
-  },
-  methods: {
-    openInstalmentModal(instalment) {
-      this.selectedInstalment = instalment;
-      this.$refs.instalment.open();
-    },
-    closeInstalmentModal() {
-      this.selectedInstalment = {};
-      this.$refs.instalment.close();
-    },
   }
 }
 </script>
