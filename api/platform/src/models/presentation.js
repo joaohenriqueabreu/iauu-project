@@ -5,85 +5,41 @@ const BaseRepository                    = require('./repositories/base');
 const baseSchemaOptions                 = require('./schemas/options');
 const { PresentationData, BillingData } = require('../config/data');
 
-const proposalSchema = require('./schemas/proposal').schema;
-const addressSchema = require('./schemas/address').schema;
-const timeslotSchema = require('./schemas/timeslot').schema;
+const addressSchema                     = require('./schemas/address').schema;
+const timeslotSchema                    = require('./schemas/timeslot').schema;
+const defaultFee                        = config.payment.ourFee || 0.12;
 
-const defaultFee = config.payment.ourFee || 0.12;
+// TODO Temporary for migration, remove once it's done
+const proposalSchema = require('./proposal').schema;
 
 const presentationSchema = new Schema({
-  contractor: { type: Schema.Types.ObjectId, ref: 'Contractor' },
-  artist:     { type: Schema.Types.ObjectId, ref: 'Artist' },
-  billing_id: { type: String },
-  fee:        { type: Number, required: true, default: defaultFee, max: 1 },
-  address:    addressSchema,
-
-  /**
-   * Proposal   - Proposal stage
-   * Accepted   - Proposal accepted (pré-presentation)
-   * Completed  - Presentation completed
-   * Rejected   - Proposal rejected
-   * Cancelled  - Presentation cancelled
-   * Disputed   - Presentation disputed
-   */
-
+  contractor:     { type: Schema.Types.ObjectId, ref: 'Contractor' },
+  artist:         { type: Schema.Types.ObjectId, ref: 'Artist' },
+  artist_id:      { type: String, required: true },
+  contractor_id:  { type: String, required: true },
+  proposal:       { type: proposalSchema }, // TODO Temporary for migration, remove once it's done
+  proposal_id:    { type: String, required: true },
+  billing_id:     { type: String },
+  fee:            { type: Number, required: true, default: defaultFee, max: 1 },
+  duration:       { type: String, required: true },
+  price:          { type: Number, required: true },
+  address:        { type: addressSchema },
   status:         { type: String, enum: PresentationData.PRESENTATION_STATUS, required: true, default: PresentationData.PRESENTATION_STATUS_PROPOSAL },
   confirm_status: [String],
-  timeslot:       timeslotSchema,
-  proposal:       proposalSchema,
+  timeslot:       { type: timeslotSchema, required: true },
   checklist: [{
     name:         { type: String },
     completed:    { type: String },
     completed_at: { type: Date },
   }],
-  price:          { type: Number },
-  duration:       { type: String }
 }, { ...baseSchemaOptions })
 
 class Presentation extends BaseRepository {
-  get current_price() {
-    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
-      if (this.proposal.counter_offer !== undefined) {
-        return this.proposal.counter_offer.price;
-      }
-
-      return this.proposal.product.price;
-    }
-
-    return this.price;
-  }
-
-  get current_duration() {
-    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
-
-    }
-
-    return this.price;
-  }
-
-  get is_proposal() {
-    return this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL;
-  }
-
-  get is_rejected() {
-    return this.status === PresentationData.PRESENTATION_STATUS_REJECTED;
-  }
-
-  get is_contracted() {
-    return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED;
-  }
-
-  get is_completed() {
-    return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED;
-  }
-
-  get is_cancelled() {
-    return this.status === PresentationData.PRESENTATION_STATUS_CANCELLED;
-  }
-
-  get is_paid() {
-    return this.is_completed && this.billing !== undefined && this.billing.status === BillingData.COMPLETED_STATUS;
-  }
+  get is_rejected()   { return this.status === PresentationData.PRESENTATION_STATUS_REJECTED; }
+  get is_contracted() { return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED; }
+  get is_completed()  { return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED; }
+  get is_cancelled()  { return this.status === PresentationData.PRESENTATION_STATUS_CANCELLED; }
+  get is_paid()       { return this.is_completed && this.billing !== undefined && this.billing.status === BillingData.COMPLETED_STATUS; }
 
   get display_start_dt() {
     if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {

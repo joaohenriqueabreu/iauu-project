@@ -1,22 +1,23 @@
-const Artist = require('../../models/artist');
+const { Artist }    = require('../../models');
 const ArtistService = require('./base');
 
-module.exports = class SaveProfileService extends ArtistService
+module.exports = class SearchProductsService extends ArtistService
 {
-    constructor(user, data) {
-      super(user)
-      this.id = user.role_id
+    constructor(id) {
+      super();
+
+      this.id = id;
     }
 
     async search() {
-      await this.searchArtistWithProducts()
-      await this.ensureArtistWasFound()
-      return this
+      await this.searchArtistWithProducts();
+      this.ensureArtistWasFound();
+      return this;
     }
 
     async searchArtistWithProducts() {
-      console.log('Searching for products...')
-      this.artist = await Artist.findById(this.id).populate('products')
+      console.log('Searching for products...');
+      this.artist = await Artist.findById(this.id).populate('products');
       return this
     }
 }

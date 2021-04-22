@@ -23,17 +23,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-header {
-  position: fixed;
-  width: 100vw;
-  z-index: $moveToTop;
-  height: 10vh;
-  background: transparent;
-}
+  header {
+    position:       fixed;
+    width:          100vw;
+    padding-right:  2vw;
+    z-index:        $moveToTop;
+    height:         10vh;
+    background:     transparent;
+  }
 
-main {
-  min-height: 100vh;
-  // overflow:   scroll;
-  padding-top: 10vh;
-}
+  main {
+    min-height:     100vh;
+    padding-top:    10vh;
+    padding-right:  2vw;
+    width:          100%;
+  }
 </style>

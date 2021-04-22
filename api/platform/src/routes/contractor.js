@@ -5,8 +5,6 @@ const { authorizationMiddleware, validationMiddleware } = require('lib/middlewar
 
 api.get('/:id', authorizationMiddleware.app, validationMiddleware.id, contractorController.searchContractor);
 api.get('/:id/validate', authorizationMiddleware.app, validationMiddleware.id, contractorController.validateContractor);
-
-api.get('/artists/search', validationMiddleware.search, contractorController.searchArtists);
 api.get('/profile', authorizationMiddleware.authorize, authorizationMiddleware.contractor, contractorController.profile);
 api.put('/profile', authorizationMiddleware.authorize, authorizationMiddleware.contractor, validationMiddleware.profile, contractorController.updateProfile);
 

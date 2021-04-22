@@ -5,16 +5,15 @@
     </h5>
     <div v-if="!isCustomProduct && !hidePrice" class="horizontal center middle mb-4">
       <h3>
-        {{ presentation.proposal.product.price | currency }} para
-        {{ presentation.proposal.product.duration }} horas de apresentação
+        {{ presentation.product.price | currency }} para
+        {{ presentation.product.duration }} horas de apresentação
       </h3>
     </div>
     <div class="items">
       <h6 class="mb-4">
-        Itens <span v-if="presentation.status === 'proposal'">solicitados</span
-        ><span v-else>contratados</span>
+        Itens <span v-if="presentation.status === 'proposal'">solicitados</span><span v-else>contratados</span>
       </h6>
-      <div v-for="(item, index) in presentation.proposal.product.items" :key="index">
+      <div v-for="(item, index) in presentation.product.items" :key="index">
         {{ item }}
         <hr />
       </div>
@@ -26,17 +25,14 @@
 export default {
   props: {
     presentation: { type: Object, default: () => {} },
-    hidePrice: { type: Boolean, default: false }
+    hidePrice:    { type: Boolean, default: false }
   },
   computed: {
     selectedProduct() {
-      return this.isCustomProduct ? 'Personalizado' : this.presentation.proposal.product.name
+      return this.isCustomProduct ? 'Personalizado' : this.presentation.product.name;
     },
     isCustomProduct() {
-      return (
-        this.presentation.proposal.product.custom ||
-        this.presentation.proposal.product.name === 'custom'
-      )
+      return this.presentation.product.custom || this.presentation.product.name === 'custom';
     }
   }
 }

@@ -19,22 +19,19 @@
       ></calendar>
       <busy ref="busy" @save="saveBusyTimeslot"></busy>
       <div v-if="!$empty(presentation)">
-        <proposal
+        <proposal-details
           v-if="!$empty(presentation.proposal) && presentation.status === 'proposal'"
           ref="proposal"
           @accepted="handleAcceptProposal"
-          @rejected="handleRejectProposal"
-        ></proposal>
-        <presentation
-          v-if="
-            !$empty(presentation) &&
-              ['accepted', 'completed', 'cancelled'].includes(presentation.status)
-          "
+          @rejected="handleRejectProposal">
+        </proposal-details>
+        <!-- <presentation
+          v-if="!$empty(presentation) && ['accepted', 'completed', 'cancelled'].includes(presentation.status)"
           ref="presentation"
           :read-only="false"
           @confirmed="handleConfirmPresentation"
-          @cancelled="handleCancelPresentation"
-        ></presentation>
+          @cancelled="handleCancelPresentation">
+        </presentation> -->
       </div>
     </div>
     <div class="horizontal middle center text-right">
@@ -52,15 +49,14 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import Busy from '@/components/artist/schedule/busy'
-import Proposal from '@/components/presentation/artist/proposal'
-import Presentation from '@/components/presentation/artist/presentation'
-import PresentationsYearly from '@/components/artist/schedule/yearly'
+import { mapState, mapActions } from 'vuex';
+import Busy                     from '@/components/artist/schedule/busy';
+import ProposalDetails          from '@/components/proposal/artist/details';
+import PresentationsYearly      from '@/components/artist/schedule/yearly';
 export default {
   components: {
     Busy,
-    Proposal,
+    ProposalDetails,
     Presentation,
     PresentationsYearly
   },
@@ -120,7 +116,7 @@ export default {
       }
 
       if (type === 'event' && status === 'accepted') {
-        this.$refs.presentation.openModal()
+        this.$router.push({ path: `/artist/presentation${presentationId}`, target: '_blank' });
       }
     },
     async saveBusyTimeslot(timeslot) {
@@ -137,16 +133,6 @@ export default {
       this.$refs.calendar.refresh()
       this.$refs.proposal.closeModal()
       this.$toast.success('Proposta recusada com sucesso')
-    },
-    async handleConfirmPresentation(id) {
-      await this.loadMySchedule()
-      this.$refs.calendar.refresh()
-      this.$refs.presentation.closeModal()
-    },
-    async handleCancelPresentation(id) {
-      await this.loadMySchedule()
-      this.$refs.calendar.refresh()
-      this.$refs.presentation.closeModal()
     },
     haveEventsOnDate(date) {
       const indexOfEvent = this.$array.findIndex(this.timeslots, (timeslot) => {

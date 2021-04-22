@@ -1,8 +1,62 @@
+const config                 = require('lib/env');
+const { BadRequestException } = require('lib/exception');
 const RequestEndpointService = require('lib/services/request');
 
 module.exports = class BaseService {
-    constructor() {
+    constructor(user) {
+        this.user = user;
+
         this.requestNotificationEndpointSvc = new RequestEndpointService('notification');
         this.requestEndpointSvc             = new RequestEndpointService();
+
+        // Can be supressed by sched or migration scripts
+        this.supressMails                   = false;
+        this.supressNotifications           = false;
     }
+
+    ensureUserIsArtist() {
+        if (this.user.role.includes('artist')) { return this; }
+        throw new BadRequestException('User is not contractor');
+    }
+
+    ensureUserIsContractor() {
+      if (this.user.role.includes('contractor')) { return this; }
+      throw new BadRequestException('User is not contractor');
+    }
+
+    supressMails() {
+        this.supressMails = true;
+        return this;
+    }
+
+    supressNotifications() {
+        this.supressNotifications = true;
+        return this;
+    }
+
+    sendMail() {
+        if (this.supressMails || config.isTestEnv()) { return this; }
+        
+        // otherwise send mail
+        return this;
+    }
+
+    async sendNotification(to, from, message, type, target) {
+        if (this.supressNotifications || config.isTestEnv()) { return this; }
+
+        console.log('Sending notification...');
+        try {
+            await this.requestNotificationEndpointSvc.post('/', {
+                from:     from,
+                to:       to, 
+                message:  message, 
+                type:     type, 
+                target:   target,
+              });
+        } catch (error) {
+            console.log(error);
+        }
+  
+        return this;
+      }
 }

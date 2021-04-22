@@ -9,23 +9,26 @@ const UserFactory = require('./user');
 
 module.exports = class ArtistFactory extends BaseFactory {
   // TODO complete seeder
-  make() {
-    return new Artist({
-      id: faker.random.alphaNumeric(16),
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-      phone: faker.phone.phoneNumber('+55##9########'),
-      photo: faker.image.avatar(),
+  static make() {
+    return {
+      name:     faker.name.findName(),
+      email:    faker.internet.email(),
+      phone:    faker.phone.phoneNumber('+55##9########'),
+      photo:    faker.image.avatar(),
       document: '26268738888',
       category: {
         name: faker.lorem.word()
       },
       account: {
         gateway: {},
-        bank: (new BankAccountFactory()).getSeed(),
+        bank:   BankAccountFactory.manufacture(),
       },
-      address: (new AddressFactory()).getSeed(),
-      users: (new UserFactory()).getSeeds(1),
-    });
+      address:  AddressFactory.manufacture(),
+      users:    UserFactory.manufacture(),
+    };
+  }
+
+  static makeModel(seed) {
+    return new Artist(seed);
   }
 }

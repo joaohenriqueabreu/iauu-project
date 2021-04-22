@@ -84,7 +84,7 @@ export default {
   },
   async asyncData({ app, store }) {
     try {
-      await store.dispatch('artist/loadArtist')
+      await store.dispatch('artist/loadArtistPrivateProfile')
     } catch (error) {
       $sentry.captureException(error)
       error({ statusCode: 404, message: 'Perfil não encontrado' })

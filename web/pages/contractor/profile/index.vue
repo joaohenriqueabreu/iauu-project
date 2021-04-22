@@ -40,7 +40,7 @@ import GoogleLogin from '@/components/auth/google'
 export default {
   async asyncData({ app, store, error, $sentry }) {
     try {
-      await store.dispatch('contractor/loadContractor')
+      await store.dispatch('contractor/loadContractorProfile')
     } catch (e) {
       $sentry.captureException(e)
       error({ statusCode: 404, message: 'Perfil não encontrado' })

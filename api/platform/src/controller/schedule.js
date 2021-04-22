@@ -1,28 +1,32 @@
 'use strict'
 
-const BaseController = require('./base')
-const SearchScheduleService = require('../services/schedule/searchSchedule')
-const SearchPrivateScheduleService = require('../services/schedule/searchPrivateSchedule')
-const SaveTimeslotService = require('../services/schedule/saveTimeslot')
-const DeleteTimeslotService = require('../services/schedule/deleteTimeslot')
+const BaseController              = require('./base')
+const SearchPublicScheduleService = require('../services/schedule/searchSchedule')
+const SearchUserScheduleService   = require('../services/schedule/searchUserSchedule')
+const SaveTimeslotService         = require('../services/schedule/saveTimeslot')
+const DeleteTimeslotService       = require('../services/schedule/deleteTimeslot')
 
 class ScheduleController extends BaseController {
-  publicSearch(req, res, next) {
-    console.log('Requesting schedule...')
-
-    const searchScheduleService = new SearchScheduleService(req.user, req.data)
-    searchScheduleService.search(req.user, req.data)
-      .then(() => { res.status(200).json(searchScheduleService.getSchedule()) })
-      .catch((error) => next(error))
+  async publicSearch(req, res, next) {
+    console.log('Requesting schedule...');
+    const searchScheduleService = new SearchPublicScheduleService(req.data.id);
+    try {
+      await searchScheduleService.search(req.data);
+      res.status(200).json(searchScheduleService.getSchedule());
+    } catch (error) {
+      next(error);
+    }
   }
   
-  mySchedule(req, res, next) {
-    console.log('Requesting private schedule...')
-
-    const searchScheduleService = new SearchPrivateScheduleService(req.user, req.data)
-    searchScheduleService.search(req.user, req.data)
-      .then(() => { res.status(200).json(searchScheduleService.getSchedule()) })
-      .catch((error) => next(error))
+  async userSchedule(req, res, next) {
+    console.log('Requesting private schedule...');
+    const searchScheduleService = new SearchUserScheduleService(req.user.role_id);
+    try {
+      await searchScheduleService.search(req.data);
+      res.status(200).json(searchScheduleService.getSchedule());
+    } catch (error) {
+      next(error);
+    }
   }
 
   saveTimeslot(req, res, next) {

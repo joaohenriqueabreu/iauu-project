@@ -1,8 +1,10 @@
-const { errorHandlerMiddleware } = require('lib/middleware');
+const RequestEndpointService      = require('lib/services/request');
+const { BadRequestException }     = require('lib/exception');
+const { errorHandlerMiddleware }  = require('lib/middleware');
 
 module.exports = class Controller {  
   constructor() {
-
+    this.requestEndpointSvc = new RequestEndpointService();
   }
 
   handleRequest(handler) {

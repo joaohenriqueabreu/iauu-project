@@ -1,7 +1,6 @@
 const BaseSchemaOptions = require('./options');
 
 const Address = require('./address');
-const Proposal = require('./proposal');
 const Timeslot = require('./timeslot');
 const Product = require('./product');
 
@@ -12,8 +11,7 @@ const GatewayAccount = require('./gatewayAccount');
 
 module.exports = { 
   BaseSchemaOptions, 
-  Address, 
-  Proposal, 
+  Address,
   Timeslot, 
   Product,
   Payment,

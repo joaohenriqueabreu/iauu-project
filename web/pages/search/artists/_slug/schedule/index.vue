@@ -19,7 +19,7 @@
         <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn mb-4" :to="`/proposal/to/artist/${artist.id}`" >
           Enviar proposta
         </nuxt-link>
-        <nuxt-link v-if="!$auth.loggedIn" class="brand-btn mb-4" :to="`/search/artists/${artist.slug}/schedule`">
+        <nuxt-link v-if="!$auth.loggedIn" class="brand-btn mb-4" :to="`/login`">
           <h6>Cadastre-se para contratar esse artista</h6>
         </nuxt-link>
         <nuxt-link :to="`/search/artists/${artist.slug}`">
@@ -64,7 +64,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({ artist: (state) => state.contractor.artist }),
+    ...mapState({ artist: (state) => state.artist.artist }),
     ...mapState({ timeslots: (state) => state.schedule.timeslots })
   },
   methods: {

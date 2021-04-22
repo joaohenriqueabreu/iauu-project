@@ -27,35 +27,31 @@ export default {
     }
   },
   mounted() {
-    let length = 5
-    let index = 0
-    let hold = 10
-    const self = this
+    let length  = 5;
+    let index   = 0;
+    let hold    = 10;
+    const self = this;
+    
     self.placeholderInterval = setInterval(() => {
-      length++
+      length++;
       // reached end of phrase
       if (length >= self.content[index].length) {
         // hold a bit so user can read phrase
         if (hold === 0) {
           // reset length
-          hold = 10
-          length = 5
-          if (index === 3) {
-            index = 0
-          } else {
-            index++
-          }
-        } else {
-          hold--
+          hold    = 10;
+          length  = 5;
+          if (index === 3) { index = 0; } 
+          else { index++; }
+        } else { 
+          hold--; 
         }
       }
       self.placeholder = self.content[index].substring(0, length)
-    }, 100)
+    }, 100);
   },
   computed: {
-    ...mapFields('contractor', {
-      term: 'searchFilters.term'
-    })
+    ...mapFields('artist', { term: 'searchFilters.term' })
   }
 }
 </script>

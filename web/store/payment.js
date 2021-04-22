@@ -23,7 +23,7 @@ export const mutations = {
 
 export const actions = {
   async loadPayments({ commit }) {
-    const { data } = await this.$axios.get('payments')
+    const {data} = await this.$axios.get('payments')
     commit('set_payments', data.payments)
     commit('set_stats', data.stats)
   }

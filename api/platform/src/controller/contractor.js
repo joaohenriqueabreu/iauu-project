@@ -1,11 +1,10 @@
 'use strict';
 
-const BaseController = require('./base');
-const SearchArtistsService = require('../services/artist/searchArtists');
-const SearchContractorProfileService = require('../services/contractor/searchProfile');
-const SaveContractorProfileService = require('../services/contractor/saveProfile');
-const { Contractor } = require('../models');
-const { BadRequestException } = require('../exception');
+const BaseController                  = require('./base');
+const SearchContractorProfileService  = require('../services/contractor/searchProfile');
+const SaveContractorProfileService    = require('../services/contractor/saveProfile');
+const { Contractor }                  = require('../models');
+const { BadRequestException }         = require('../exception');
 
 class ContractorController extends BaseController {
   async validateContractor(req, res, next) {
@@ -31,15 +30,6 @@ class ContractorController extends BaseController {
     } catch (error) {
       next(error);
     }
-  }
-
-
-  searchArtists(req, res, next) {
-    console.log('Searching for artists...');
-    const searchArtistsService = new SearchArtistsService(req.user, req.data)
-    searchArtistsService.search()
-      .then(() => { res.status(200).json(searchArtistsService.getArtists()); })
-      .catch((error) => next(error));
   }
 
   profile(req, res, next) {

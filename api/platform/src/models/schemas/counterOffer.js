@@ -1,11 +1,11 @@
-const db = require('mongoose');
+const { Schema, model } = require('mongoose');
 const baseSchemaOptions = require('../schemas/options');
 
-const counterOfferSchema = new db.Schema({
-    price: { type: Number },
-    duration: { type: String },
-    status: { type: String, enum: ['void', 'pending', 'accepted', 'rejected'], default: 'void'},
-    notes: { type: String },
+const counterOfferSchema = new Schema({
+    price:      { type: Number },
+    duration:   { type: Number },
+    status:     { type: String, enum: ['void', 'pending', 'accepted', 'rejected'], default: 'void'},
+    notes:      { type: String },
 }, baseSchemaOptions);
  
-module.exports = db.model('CounterOffer', counterOfferSchema);
+module.exports = model('CounterOffer', counterOfferSchema);

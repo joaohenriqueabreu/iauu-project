@@ -54,13 +54,13 @@ export const mutations = {
 
 export const actions = {
   async loadProducts({ commit }) {
-    const { data } = await this.$axios.get('artist/products')
+    const {data} = await this.$axios.get('artist/products')
     commit('set_products', data)
     commit('init_items')
     commit('init_selection')
   },
   async saveProduct({ commit }, product) {
-    const { data } = await this.$axios.post('artist/products', { product })
+    const {data} = await this.$axios.post('artist/products', { product })
     commit('set_product', data)
   },
   async removeProduct({ commit }, id) {

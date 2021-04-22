@@ -2,9 +2,12 @@ const dotenv = require('dotenv');
 dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.testing' : '.env'});
 
 module.exports = {
-  env: process.env.NODE_ENV,
-  debug: false,
-  isProductionEnv: () => process.env.NODE_ENV === 'production',
+  env:    process.env.NODE_ENV,
+  debug:  false,
+  isTestEnv:        () => process.env.NODE_ENV === 'test',
+  isDevEnv:         () => process.env.NODE_ENV === 'development',
+  isProductionEnv:  () => process.env.NODE_ENV === 'production',
+  shouldDebug:      () => process.env.LOG_LEVEL === 'debug',
   format: {
     date:           'DD-MM-YYYY',
     dbDate:         'YYYY-MM-DD',

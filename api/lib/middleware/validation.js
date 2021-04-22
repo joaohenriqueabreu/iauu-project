@@ -219,7 +219,8 @@ const search = (req, res, next) => {
 const proposal = (req, res, next) => {
   const schema = validateRequest.object({
     proposal: validateRequest.object().required(),
-  })
+    artist:   validateRequest.string().required(),
+  });
 
   return validate(req.body, req, next, schema)
 }

@@ -6,7 +6,7 @@ const config = require('lib/env');
 
 // CORS bypass server config
 const corsHost = config.cors.host_ip || '0.0.0.0';
-const corsPort = config.cors.port || 999;
+const corsPort = config.cors.port || 9999;
 const cors_proxy = require('cors-anywhere');
 
 cors_proxy.createServer({

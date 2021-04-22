@@ -1,10 +1,11 @@
-const Exception = require('./exception');
-const BadRequestException = require('./bad');
-const ManualPaymentRequiredException = require('./manualPayment');
-const UnauthorizedException = require('./unauthorized');
+const Exception                             = require('./exception');
+const BadRequestException                   = require('./bad');
+const ManualPaymentRequiredException        = require('./manualPayment');
+const UnauthorizedException                 = require('./unauthorized');
 const InvalidPaymentMethodProvidedException = require('./invalidPaymentMethod');
-const FailedAPIConnectionException = require('./apiConnection');
-const FailedChargingPaymentMethodException = require('./chargePaymentMethod');
+const FailedAPIConnectionException          = require('./apiConnection');
+const FailedChargingPaymentMethodException  = require('./chargePaymentMethod');
+const InterfaceNotImplementedException      = require('./interfaceNotImplemented');
 
 
 module.exports = {
@@ -14,5 +15,6 @@ module.exports = {
   UnauthorizedException,
   InvalidPaymentMethodProvidedException,
   FailedAPIConnectionException,
-  FailedChargingPaymentMethodException
+  FailedChargingPaymentMethodException,
+  InterfaceNotImplementedException
 }

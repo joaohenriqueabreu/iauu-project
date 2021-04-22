@@ -23,11 +23,11 @@ export const mutations = {
 
 export const actions = {
   async loadUser({ commit }) {
-    const { data } = await this.$axios.get('users/profile')
+    const {data} = await this.$axios.get('users/profile')
     commit('set_user', data)
   },
   async saveProfile({ commit, state }) {
-    const { data } = await this.$axios.put('users/profile', { profile: state.user })
+    const {data} = await this.$axios.put('users/profile', { profile: state.user })
     commit('set_user', data)
   },
   async saveAddress({ commit, dispatch }, address) {
@@ -38,15 +38,15 @@ export const actions = {
     return this.$axios.post('register', credentials)
   },
   async verify({ commit }, verifyToken) {
-    const { data } = await this.$axios.post('verify', { token: verifyToken })
+    const {data} = await this.$axios.post('verify', { token: verifyToken })
     commit('set_token', data)
   },
   async resendVerify({ commit }, verifyToken) {
-    const { data } = await this.$axios.post('verify/resend', { token: verifyToken })
+    const {data} = await this.$axios.post('verify/resend', { token: verifyToken })
     commit('set_token', data)
   },
   async renewAuth({ commit }) {
-    const { data } = await this.$axios.get('users/renew')
+    const {data} = await this.$axios.get('users/renew')
     this.$auth.setUserToken(data.access_token)
   },
   release({ commit }) {
@@ -60,7 +60,7 @@ export const actions = {
     this.$axios.post('reset/forgot', { email })
   },
   async facebookLogin({ commit }, token) {
-    const { data } = await this.$axios.post('login/facebook', { token })
+    const {data} = await this.$axios.post('login/facebook', { token })
     commit('set_token', data)
   }
 }

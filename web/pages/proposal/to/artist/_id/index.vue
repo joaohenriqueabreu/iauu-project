@@ -27,7 +27,7 @@
       </div>
       <div class="col-8 horizontal center middle">
         &nbsp;
-        <timeline 
+        <timeline
           :steps="proposalStepComponents.length" 
           :completed="completedSteps" 
           :current="currentStep" 
@@ -57,29 +57,29 @@ export default {
   // Variables are passed by reference so it's ok.
   async asyncData({ app, store, route }) {
     // Required for all components
-    store.dispatch('contractor/initProposal');
-
-    // await store.dispatch('contractor/loadArtistPrivate', route.params.id)
+    store.dispatch('proposal/initProposal');
 
     // Required for dateStep
     await store.dispatch('schedule/loadSchedule', { id: route.params.id, year: 2020 });
 
     // if page was reloaded we will lose artist data, verify and reload if necessary
-    if (app.$utils.empty(store.state.contractor.artist)) {
-      await store.dispatch('contractor/loadArtistPrivate', route.params.id);
+    if (app.$utils.empty(store.state.artist)) {
+      await store.dispatch('artist/loadArtistPublicProfile', route.params.id);
     }
+
+    await store.dispatch('artist/loadProducts', route.params.id);
 
     // Initialize proposal
     // No need to setup the contractor, as we'll grab the user from the backend
-    store.dispatch('contractor/editProposal', {
+    store.dispatch('proposal/editProposal', {
       prop: 'artist',
-      value: store.state.contractor.artist
+      value: store.state.artist.artist
     });
 
     return {
-      proposal: store.state.contractor.proposal,
-      products: store.state.contractor.artist.products,
-      timeslots: store.state.schedule.timeslots
+      proposal:   store.state.proposal.proposal,
+      products:   store.state.artist.products,
+      timeslots:  store.state.schedule.timeslots
     }
   },
   data() {

@@ -1,21 +1,12 @@
 'use strict';
 
 const BaseController                      = require('./base');
-const SearchProposalsService              = require('../services/presentation/searchProposals');
 const SearchPresentationsService          = require('../services/presentation/searchPresentations');
 const SearchPresentationService           = require('../services/presentation/searchPresentation');
-const SendProposalService                 = require('../services/presentation/sendProposal');
-const SelectTimeslotService               = require('../services/presentation/selectTimeslot');
-const AcceptProposalService               = require('../services/presentation/acceptProposal');
-const RejectProposalService               = require('../services/presentation/rejectProposal');
-const SendCounterOfferService             = require('../services/presentation/sendCounterOffer');
-const AcceptCounterOfferService           = require('../services/presentation/acceptCounterOffer');
-const RejectCounterOfferService           = require('../services/presentation/rejectCounterOffer');
 const CompletePresentationService         = require('../services/presentation/completePresentation');
 const CancelPresentationService           = require('../services/presentation/cancelPresentation');
 const ManagePresentationChecklistService  = require('../services/presentation/manageChecklist');
 const UpdatePresentationStatusService     = require('../services/presentation/updatePresentationStatus');
-const RequestEndpointService              = require('lib/services/request');
 const { Presentation }                    = require('../models');
 const { BadRequestException }             = require('../exception');
 
@@ -42,79 +33,45 @@ class PresentationController extends BaseController {
     }
   }
 
-  searchProposals(req, res, next) {
-    console.log('Searching proposals...');
-    const searchProposalsService = new SearchProposalsService(req.user, req.data);
-    searchProposalsService.search()
-      .then(() => { res.status(200).json(searchProposalsService.getPresentations()) })
-      .catch((error) => next(error));
-  }
-
-  searchPresentations(req, res, next) {
+  async searchUserPresentations(req, res, next) {
     console.log('Searching presentations...');
-    const searchPresentationsService = new SearchPresentationsService(req.user, req.data);
-    searchPresentationsService.search()
-      .then(() => { res.status(200).json(searchPresentationsService.getPresentations()) })
-      .catch((error) => next(error));
+    const searchPresentationsSvc = new SearchPresentationsService();
+    try {
+      await searchPresentationsSvc.search(req.user.role_id, req.data);
+      res.status(200).json(searchPresentationsSvc.getPresentations());
+    } catch (error) {
+      next(error);
+    }
   }
 
-  search(req, res, next) {
+  async searchRolePresentations(req, res, next) {
+    console.log('Searching role presentations...');
+    const searchPresentationsSvc = new SearchPresentationsService();
+    try {
+      await searchPresentationsSvc.search(req.data.id);
+      res.status(200).json(searchPresentationsSvc.getPresentations());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async search(req, res, next) {
     console.log('Searching presentation...');
     const searchPresentationService = new SearchPresentationService(req.user);
-    searchPresentationService.search(req.data.id)
-      .then(() => { res.status(200).json(searchPresentationService.getPresentation()) })
-      .catch((error) => next(error));
-  }
-
-  sendProposal(req, res, next) {
-    console.log('Starting to save proposal...');
-    const sendProposalService = new SendProposalService(req.user, req.data);
-    sendProposalService.save()
-      .then(() => { res.status(200).json({}) })
-      .catch((error) => next(error));
-  }
-
-  selectTimeslot(req, res, next) {
-    console.log('Updating timeslot...');
-    const selectTimeslotService = new SelectTimeslotService(req.user, req.data);
-    selectTimeslotService.select()
-      .then(() => { res.status(200).json(selectTimeslotService.getPresentation()) })
-      .catch((error) => next(error));
-  }
-
-  sendCounterOffer(req, res, next) {
-    console.log('Updating timeslot...');
-    const sendCounterOfferService = new SendCounterOfferService(req.user, req.data);
-    sendCounterOfferService.send()
-      .then(() => { res.status(200).json(sendCounterOfferService.getPresentation()) })
-      .catch((error) => next(error));
-  }
-
-  acceptCounterOffer(req, res, next) {
-    console.log('Updating timeslot...');
-    const acceptCounterOfferService = new AcceptCounterOfferService(req.user, req.data);
-    acceptCounterOfferService.reply()
-      .then(() => { res.status(200).json(acceptCounterOfferService.getPresentation()) })
-      .catch((error) => next(error));
-  }
-
-  rejectCounterOffer(req, res, next) {
-    console.log('Updating timeslot...');
-    const rejectCounterOfferService = new RejectCounterOfferService(req.user, req.data);
-    rejectCounterOfferService.reply()
-      .then(() => { res.status(200).json(rejectCounterOfferService.getPresentation()) })
-      .catch((error) => next(error));
-  }
-
-  async acceptProposal(req, res, next) {
-    console.log('Accepting proposal...');
-    const acceptProposalService = new AcceptProposalService(req.user, req.data);
-    const requestEndpointSvc = new RequestEndpointService();
-    let newPresentation = {};
-    
     try {
-      await acceptProposalService.reply();
-      newPresentation = acceptProposalService.getPresentation();
+      await searchPresentationService.search(req.data.id);
+      res.status(200).json(searchPresentationService.getPresentation())
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createPresentation(req, res, next) {
+    console.log('Creating presentation from proposal...');
+    const createPresentationSvc = new CreatePresentationService();
+    try {
+      await createPresentationSvc.create(req.data.proposal);
+      const newPresentation = createPresentationSvc.getPresentation();
     } catch (error) {
       next(error);
     }
@@ -131,22 +88,7 @@ class PresentationController extends BaseController {
       next(error);
     }
 
-    try {
-      const updatePresentationSvc = new UpdatePresentationService(req.user, newPresentation);
-      await updatePresentationSvc.update({ billing_id: billing.id });
-      res.status(200).json(updatePresentationSvc.getPresentation());
-    } catch (error) {
-      // TODO we should probably rollback presentation in case billing fails creating
-      next(error);
-    }
-  }
-
-  rejectProposal(req, res, next) {
-    console.log('Rejecting proposal...');
-    const rejectProposalService = new RejectProposalService(req.user, req.data);
-    rejectProposalService.reply()
-      .then(() => { res.status(200).json(rejectProposalService.getPresentation()) })
-      .catch((error) => next(error));
+    res.status(200).json(newPresentation);
   }
 
   completePresentation(req, res, next) {
@@ -193,4 +135,4 @@ class PresentationController extends BaseController {
   }
 }
 
-module.exports = new PresentationController()
+module.exports = new PresentationController();

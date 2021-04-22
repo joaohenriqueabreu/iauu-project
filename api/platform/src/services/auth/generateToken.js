@@ -26,14 +26,18 @@ module.exports = class GenerateTokenService {
 
         const now = Math.floor(Date.now() / 1000);
         const payload = {
-            id:     user.id,
-            role:   [user.role], // Role must be an array for frontend $auth handle access scope
-            email:  user.email,
-            name:   user.name,
-            photo:  user.photo,
-            role_id: await user.getRoleId(),
-            admin_token: user.admin_token,
-            referral_token: user.referral.token,
+            id:                     user.id,
+            role:                   [user.role], // Role must be an array for frontend $auth handle access scope
+            main_role:              user.role, // Should be used by backend
+            is_artist:              user.is_artist,
+            is_contractor:          user.is_contractor,
+            is_admin:               user.is_admin,
+            email:                  user.email,
+            name:                   user.name,
+            photo:                  user.photo,
+            role_id:                await user.getRoleId(),
+            admin_token:            user.admin_token,
+            referral_token:         user.referral.token,
             requires_initial_setup: this.needsSetup(user),
             social: {
                 has_connected_with_facebook: user.social.facebook_id !== undefined,

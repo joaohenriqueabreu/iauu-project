@@ -1,18 +1,27 @@
 const faker = require('faker');
 
-const BaseFactory = require('./base');
+const BaseFactory     = require('./base');
 const TimeslotFactory = require('./timeslot');
-const ProductFactory = require('./product');
+const ProductFactory  = require('./product');
+const AddressFactory  = require('./address');
+const { Proposal } = require('../../src/models');
 
 module.exports = class ProposalFactory extends BaseFactory {
-  make() {
+  static make() {
+    const numOfTimeslots = faker.random.number(5) + 1;
     return {
-      title: faker.lorem.sentence(),
-      price: faker.random.number(1000000),
-      duration: faker.random.number(1000),
-      notes: faker.lorem.sentences(5),
-      timeslots: (new TimeslotFactory(faker.random.number(5))).getSeeds(),
-      product: (new ProductFactory()).getSeed()
+      title:      faker.lorem.sentence(),
+      status:     'proposal',
+      price:      faker.random.number(1000000),
+      duration:   faker.random.number(1000),
+      notes:      faker.lorem.sentences(5),
+      timeslots:  TimeslotFactory.manufacture(true, numOfTimeslots),
+      product:    ProductFactory.manufacture(),
+      address:    AddressFactory.manufacture(),
     };
+  }
+
+  static makeModel(seed) {
+    return new Proposal(seed);
   }
 }

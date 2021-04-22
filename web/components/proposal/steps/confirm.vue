@@ -12,24 +12,16 @@
           <icon icon="check-circle" class="m-0"></icon>
         </div>
         <h6 class="mb-4">
-          Prezados integrantes do(a) <u>{{ proposal.artist.name }}</u
-          >,
+          Prezados integrantes do(a) <u>{{ proposal.artist.name }}</u>,
         </h6>
         <p class="mb-5">
           Solicito orçamento
-          <span v-if="!$empty(proposal.product) && proposal.product.name !== 'custom'"
-            >do formato <b>{{ proposal.product.name }}</b></span
-          >
-          <span v-if="!$empty(proposal.title)"
-            >para o evento <u>{{ proposal.title }}</u></span
-          >
+          <span v-if="!$empty(proposal.product) && proposal.product.name !== 'custom'">
+            do formato <b>{{ proposal.product.name }}</b></span>
+          <span v-if="!$empty(proposal.title)">para o evento <u>{{ proposal.title }}</u></span>
           a ser realizado
-          <span v-if="!$empty(proposal.location)"
-            >na <u>{{ proposal.location.toString() }}</u></span
-          >
-          <span v-if="!$empty(proposal.timeslots)"
-            >em <u>{{ proposal.timeslots[0].start_dt | longDate }}</u></span
-          >
+          <span v-if="!$empty(proposal.location)">na <u>{{ proposal.location.toString() }}</u></span>
+          <span v-if="!$empty(proposal.timeslots)">em <u>{{ proposal.timeslots[0].start_dt | longDate }}</u></span>
         </p>
         <div class="vertical center">
           <h1><icon icon="signature"></icon></h1>
@@ -72,23 +64,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import Step from '@/components/proposal/steps/step'
+import { mapActions } from 'vuex';
+import Step           from '@/components/proposal/steps/step';
 export default {
   extends: Step,
   computed: {
     areAllStepsCompleted() {
-      return (
-        !this.$empty(this.completedSteps) && this.completedSteps.length >= this.steps.length - 1 // do not count confirm step
-      )
+      // do not count confirm step
+      return !this.$empty(this.completedSteps) && this.completedSteps.length >= this.steps.length - 1;
     }
   },
   methods: {
-    ...mapActions('contractor', ['sendProposal']),
+    ...mapActions('proposal', ['sendProposal']),
     async submitProposal() {
-      await this.sendProposal()
-      this.$toast.success('Proposta enviada com sucesso!')
-      this.$router.push('/')
+      await this.sendProposal();
+      this.$toast.success('Proposta enviada com sucesso!');
+      this.$router.push('/');
     }
   }
 }

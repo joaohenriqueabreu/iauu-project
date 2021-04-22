@@ -1,24 +1,16 @@
-const { Artist } = require('../../models')
-const BaseService = require('../base')
+const { Artist }  = require('../../models');
+const BaseService = require('../base');
 
 module.exports = class ArtistService extends BaseService
 {
-    constructor(data) {
-      super();
-
-      if (data === undefined) { return; }
-
-      this.id = data.role_id;
-      this.userId = data.id;
+    constructor(user) {
+      super(user);
       this.artist = {};
-    }
 
-    getArtist() {
-      return this.artist;
-    }
+      if (user === undefined) { return; }
 
-    getProducts() {
-      return this.artist.products;
+      this.id     = user.role_id;
+      this.userId = user.id;
     }
 
     async lookupMe() {
@@ -40,7 +32,7 @@ module.exports = class ArtistService extends BaseService
     }
 
     ensureArtistWasFound() {
-      if (Artist.notFound(this.artist) || !this.artist instanceof Artist) {
+      if (Artist.notFound(this.artist) || ! this.artist instanceof Artist) {
         throw new Error('Artist not found...');
       }
   
@@ -55,5 +47,13 @@ module.exports = class ArtistService extends BaseService
       }
       
       return this;
+    }
+
+    getArtist() {
+      return this.artist;
+    }
+
+    getProducts() {
+      return this.artist.products;
     }
 }

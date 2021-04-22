@@ -85,7 +85,7 @@ export default {
   },
   async asyncData({ app, store, error, $sentry }) {
     try {
-      await store.dispatch('artist/loadArtist');
+      await store.dispatch('artist/loadArtistPrivateProfile');
       const catResponse = await app.$axios.get('categories');
       const presentationTypesResponse = await app.$axios.get('presentations/types');
       const roleIdResponse = await app.$axios.get('/users/exchange');

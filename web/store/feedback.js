@@ -17,19 +17,19 @@ export const mutations = {
 
 export const actions = {
   async loadPresentationFeedback({ commit }, presentationId) {
-    const { data } = await this.$axios.get(`feedbacks/presentation/${presentationId}`);
+    const {data} = await this.$axios.get(`feedbacks/presentation/${presentationId}`);
     commit('set_feedback', data);
   },
   async loadArtistFeedbacks({ commit }, artistId) {
-    const { data } = await this.$axios.get(`feedbacks/artist/${artistId}`);
+    const {data} = await this.$axios.get(`feedbacks/artist/${artistId}`);
     commit('set_feedbacks', data);
   },
   async loadArtistRating({ commit }, artistId) {
-    const { data } = await this.$axios.get(`feedbacks/artist/${artistId}/rating`);
+    const {data} = await this.$axios.get(`feedbacks/artist/${artistId}/rating`);
     commit('set_rating', data);
   },
   async sendFeedback({ commit }, feedback) {
-    const { data } = await this.$axios.post(`feedbacks`, feedback);
+    const {data} = await this.$axios.post(`feedbacks`, feedback);
     commit('set_feedback', data);
   },
 }

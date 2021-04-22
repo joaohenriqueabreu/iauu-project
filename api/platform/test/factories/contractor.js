@@ -6,17 +6,21 @@ const AddressFactory = require('./address');
 
 module.exports = class ContractorFactory extends BaseFactory {
   // TODO complete seeder
-  make() {
-    return new Contractor({
-      name: faker.name.findName(),
-      photo: faker.image.avatar(),
+  static make() {
+    return {
+      name:   faker.name.findName(),
+      photo:  faker.image.avatar(),
       category: {
         name: faker.lorem.word()
       },
       account: {
-        gateway: (new GatewayAccountFactory()).getSeed()
+        gateway: GatewayAccountFactory.manufacture()
       },
-      address: (new AddressFactory()).getSeed(),
-    });
+      address: AddressFactory.manufacture(),
+    };
+  }
+
+  static makeModel(seed) {
+    return new Contractor(seed);
   }
 }

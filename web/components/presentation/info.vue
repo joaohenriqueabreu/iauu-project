@@ -6,7 +6,7 @@
     <h4>{{ presentationDate | date }}</h4>
     <div class="info">
       <div class="mb-3">
-        <h5 class="mb-0">{{ presentation.proposal.title }}</h5>
+        <h5 class="mb-0">{{ presentation.title }}</h5>
         <small>{{ getOtherParty }}</small>
       </div>
       <div class="horizontal">
@@ -27,8 +27,8 @@
 export default {
   props: {
     presentation: { type: Object, default: () => {} },
-    simple: { type: Boolean, default: false },
-    showStatus: { type: Boolean, default: false }
+    simple:       { type: Boolean, default: false },
+    showStatus:   { type: Boolean, default: false }
   },
   data() {
     return {
@@ -45,17 +45,14 @@ export default {
       return this.PRESENTATION_STATUS_LABELS_MAP[this.presentation.status];
     },
     presentationDate() {
-      if (!this.$empty(this.presentation.timeslot)) { return this.presentation.timeslot.start_dt }
-      if (this.presentation.is_proposal) { return this.presentation.proposal.timeslots[0].start_dt }
-
-      return ''
+      return this.presentation.timeslot.start_dt;
     },
     getOtherParty() {
       if (this.$auth.hasScope('artist')) {
-        return this.presentation.contractor.name
+        return this.presentation.contractor.name;
       }
 
-      return this.presentation.artist.name
+      return this.presentation.artist_name;
     }
   }
 }

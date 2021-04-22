@@ -87,14 +87,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import SearchResult from '@/components/artist/profile/searchResult';
+import { mapFields }            from 'vuex-map-fields';
+import SearchResult             from '@/components/artist/profile/searchResult';
 export default {
   components: {
     SearchResult
   },
   async asyncData({ store, app, query, $sentry, error }) {
-    const filters = store.state.contractor.searchFilters;
+    const filters = store.state.artist.searchFilters;
     if (!app.$empty(query)) {
       filters.term = query.term;
     }
@@ -107,7 +107,7 @@ export default {
     }
 
     try {
-      await store.dispatch('contractor/searchArtists', filters);
+      await store.dispatch('artist/searchArtists', filters);
     } catch (e) {
       $sentry.captureException(e);
       error({ statusCode: 404, message: 'Não foi possível realizar a pesquisa.' });
@@ -115,22 +115,22 @@ export default {
   },
   data() {
     return {
-      selectingFilter: false,
-      currentFilter: '',
+      selectingFilter:  false,
+      currentFilter:    '',
     }
   },
   computed: {
-    ...mapState({ artists: (state) => state.contractor.artists }),
-    ...mapFields('contractor', {
-      searchFilters: 'searchFilters',
-      term: 'searchFilters.term',
-      location: 'searchFilters.location',
-      price: 'searchFilters.price',
-      sort: 'searchFilters.sort'
+    ...mapState({ artists: (state) => state.artist.artists }),
+    ...mapFields('artist', {
+      searchFilters:  'searchFilters',
+      term:           'searchFilters.term',
+      location:       'searchFilters.location',
+      price:          'searchFilters.price',
+      sort:           'searchFilters.sort'
     })
   },
   methods: {
-    ...mapActions('contractor', ['loadArtist', 'searchArtists']),
+    ...mapActions('artist', ['loadArtistPublicProfile', 'searchArtists']),
     selectedArtist(artist) {
       this.$router.push(`/search/artists/${artist.slug}`);
     },

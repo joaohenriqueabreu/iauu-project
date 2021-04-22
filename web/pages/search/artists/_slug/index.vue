@@ -139,14 +139,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import ProductInfo from '@/components/artist/product/info';
-import ProductPreview from '@/components/artist/product/preview';
-import PresentationFeedback from '@/components/artist/profile/feedback';
-import InstagramGallery from '@/components/social/instagramGallery';
-import SpotifyPlayer from '@/components/social/spotifyPlayer';
+import ProductInfo              from '@/components/artist/product/info';
+import ProductPreview           from '@/components/artist/product/preview';
+import PresentationFeedback     from '@/components/artist/profile/feedback';
+import InstagramGallery         from '@/components/social/instagramGallery';
+import SpotifyPlayer            from '@/components/social/spotifyPlayer';
 export default {
   async asyncData({ store, route }) {
-    await store.dispatch('contractor/loadArtist', route.params.slug);
+    await store.dispatch('artist/loadArtistPublicProfile', route.params.slug);
   },
   components: {
     ProductInfo,
@@ -159,7 +159,7 @@ export default {
     await this.emitVisitEvent(this.$router.currentRoute);
   },
   computed: {
-    ...mapState({ artist: (state) => state.contractor.artist }),
+    ...mapState({ artist: (state) => state.artist.artist }),
     socialMedias() {
       return this.$array.slice(this.artist.social, 0, 4);
     },
@@ -281,6 +281,10 @@ div:not(.bg) {
   bottom: 0;
   height: 15vh;
   background: $layer1;
+}
+
+.container {
+  margin-bottom: 20vh;
 }
 
 .compensate {

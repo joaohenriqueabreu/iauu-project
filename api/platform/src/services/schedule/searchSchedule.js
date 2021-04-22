@@ -1,73 +1,74 @@
-const _ = require('lodash')
-const Artist = require('../../models/artist')
-const Presentation = require('../../models/presentation')
-const BaseService = require('../base')
-const BadRequestException = require('../../exception/bad')
-const presentation = require('../../models/presentation')
+const _                   = require('lodash')
+const BaseService         = require('../base');
+const BadRequestException = require('../../exception/bad');
 
 module.exports = class SearchScheduleService extends BaseService
 {
-    constructor(user, data) {
+    constructor(id) {
       super()
 
-      if (data === undefined || data.id === undefined) {
-        throw new BadRequestException('Target schedule id is required')
-      }
+      if (id === undefined) { throw new BadRequestException('Target schedule id is required'); }
 
-      this.id = data.id
-      this.artist = {}
+      this.id             = id
+      this.artist         = {}
 
-      this.year = data !== undefined && data.year !== undefined ? data.year : new Date().getFullYear()
-      this.schedule = []
-      this.presentations = []
+      this.schedule       = []
+      this.presentations  = []
     }
 
-    async search() {
-      await this.searchArtist()
-      await this.lookupPresentations()
-      await this.ensureArtistWasFound()
-      await this.populateYearSchedule(this.year)
-      await this.populateScheduleWithPresentations()
-      return this
+    async search(data) {
+      this.buildDateQuery(data);
+      await this.searchArtist();
+      this.ensureArtistWasFound();
+      await this.searchPresentations(); // For public schedule, only presentations are required
+      this.populateYearSchedule(this.year)
+        .populateScheduleWithPresentations();
+
+      return this;
+    }
+
+    buildDateQuery(data) {
+      this.year = data !== undefined && data.year !== undefined ? data.year : new Date().getFullYear();
+      // TODO additional query
+
+      return this;
     }
 
     async searchArtist() {
-      console.log('Searching for artist...')
-      this.artist = await Artist.findById(this.id)
-      return this
+      this.artist = await this.requestEndpointSvc.get(`/artists/${this.id}`);
+      return this;
     }
 
-    async lookupPresentations() {
-      console.log('Searching for artist presentations')
-      this.presentations = await Presentation.find({ artist: this.id, status: 'accepted' })
-      return this
+    async searchPresentations() {
+      this.presentations = await this.requestEndpointSvc.get(`/presentations/role/${this.id}?status=accepted`); 
+      return this;
     }
 
     ensureArtistWasFound() {
-      if (Artist.notFound(this.artist) || !this.artist instanceof Artist) {
-        throw new BadRequestException('Artist not found...')
+      if (this.artist == null) {
+        throw new BadRequestException('Artist not found...');
       }
   
-      console.log('Artist found...')
-      return this
+      return this;
     }
 
-    populateYearSchedule() {
+    populateYearSchedule() {      
       // do nothing for now
-      console.log(`Searching for ${this.year} schedule...`)
+      // TODO move this to query
+      console.log(`Searching for ${this.year} schedule...`);
       
-      this.schedule = [...this.schedule, ...this.artist.schedule]
-      return this
+      this.schedule = [...this.schedule, ...this.artist.schedule];
+      return this;
     }
 
     populateScheduleWithPresentations() {
-      const presentationTimeslots = _.map(this.presentations, 'timeslot')
+      const presentationTimeslots = _.map(this.presentations, 'timeslot');
 
-      this.schedule = [...this.schedule, ...presentationTimeslots]
-      return this
+      this.schedule = [...this.schedule, ...presentationTimeslots];
+      return this;
     }
 
     getSchedule() {
-      return this.schedule
+      return this.schedule;
     }
 }

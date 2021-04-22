@@ -7,23 +7,27 @@ const ArtistFactory = require('./artist');
 const PaymentMethodFactory = require('./paymentMethod');
 
 module.exports = class PaymentFactory extends BaseFactory {
-  make() {
+  static make() {
     const amount = faker.random.number(1000000);
     const fee = 0.12;
 
-    return new Payment({
+    return {
       // id: faker.random.alphaNumeric(16),
-      from: (new ContractorFactory()).getSeed(),
-      to: (new ArtistFactory()).getSeed(),
+      from:         ContractorFactory.manufacture(true),
+      to:           ArtistFactory.manufacture(true),
     
-      fee: fee,
-      amount: amount,
-      net_amount: amount * (1 - fee),
-      paid_amount: 0,
+      fee:          fee,
+      amount:       amount,
+      net_amount:   amount * (1 - fee),
+      paid_amount:  0,
       
-      status: 'pending',
-      notes: faker.lorem.sentences(3),
-      method: (new PaymentMethodFactory()).getSeed()
-    });
+      status:       'pending',
+      notes:        faker.lorem.sentences(3),
+      method:       PaymentMethodFactory.manufacture()
+    };
+  }
+
+  static makeModel(seed) {
+    return new Payment(seed);
   }
 }

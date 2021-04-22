@@ -1,102 +1,59 @@
-import Vue from 'vue'
-import { getField, updateField } from 'vuex-map-fields'
-import Artist from '@/models/artist'
-import Proposal from '@/models/proposal'
-import Contractor from '~/models/contractor'
+import Vue                        from 'vue';
+import { getField, updateField }  from 'vuex-map-fields';
+import Contractor                 from '@/models/contractor';
 
 export const state = () => ({
-  searchFilters: {
-    term: '',
-    location: '',
-    sort: '',
-    price: 0,
-  },
-  contractor: null,
-  artists: [],
-  artist: null,
-  proposal: {}
+  contractor:   {},
+  contractors:  [],
 })
 
 export const mutations = {
-  updateField,
-  set_contractor(state, data) {
-    state.contractor = new Contractor(data)
-  },
-  update_profile(state, { prop, data }) {
-    if (prop === undefined) {
-      return
+  updateField,  
+  set_contractor(state, data)           { state.contractor = data; },
+  set_contractors(state, data)          { state.contractors = data; },
+  add_contractor(state, data)           { state.contractors.push(data); },
+  update_profile(state, { prop, data }) { 
+    if (prop == null) {
+      return;
     }
 
-    const props = prop.split('.')
-    const field = props.pop()
-    let profile = state.contractor
+    const props = prop.split('.');
+    const field = props.pop();
+    let profile = state.contractor;
 
-    props.forEach((field) => {
-      profile = profile[field]
-    })
+    props.forEach((field) => { profile = profile[field] });
 
-    Vue.set(profile, field, data)
+    Vue.set(profile, field, data);
   },
-  set_artists(state, artistsData) {
-    state.artists = []
-    artistsData.forEach((artistData) => {
-      state.artists.push(new Artist(artistData))
-    })
-  },
-  set_artist(state, artistData) {
-    state.artist = new Artist(artistData)
-  },
-  remove_artist(state, id) {
-    Vue.delete(
-      state.artists,
-      this.$array.findIndex(state.artists, (artist) => artist.id === id)
-    )
-  },
-  init_proposal(state) {
-    state.proposal = new Proposal()
-  },
-  edit_proposal(state, { prop, value }) {
-    Vue.set(state.proposal, prop, value)
-  },
-  set_search_filters(state, filters) {
-    state.searchFilters = filters
-  }
 }
 
 export const actions = {
-  async searchArtists({ commit }, filters) {
-    console.log(filters)
-    const { data } = await this.$axios.get('contractors/artists/search', { params: filters })
-    commit('set_artists', data)
+  async reloadContractor({ commit, state }, id) {
+    // Otherwise get from API (first load)
+    const {data} = await this.$axios.get(`/contractors/${id}`);
+    commit('set_contractor', data);
+
+    // Append Contractor to "cache" so that we don't have to load it again soon
+    commit('add_contractor', data);
   },
-  async loadContractor({ commit }) {
-    const { data } = await this.$axios.get('contractors/profile')
-    commit('set_contractor', data)
+  async loadContractor({commit, dispatch}, id) {
+    // Try to get contractor from "cache"
+    const contractor = _.find((state.contractors), (existingContractor) => existingContractor.id === id);
+    if (contractor != null) { 
+      commit('set_contractor', contractor);
+      return;
+    }
+
+    await dispatch('reloadContractor', id);
   },
-  async saveProfile({ commit, state }) {
-    await this.$axios.put('contractors/profile', { profile: state.contractor })
-    this.$toast.success('Perfil atualizado com sucesso')
+  async loadContractorProfile({commit}) {
+    const {data} = await this.$axios.get('contractors/profile');
+    commit('set_contractor', data);
   },
-  async loadArtist({ commit }, slug) {
-    const { data } = await this.$axios.get(`artists/${slug}/public`)
-    commit('set_artist', data)
+  async saveProfile({commit, state}) {
+    const {data} = await this.$axios.put('contractors/profile', { profile: state.contractor });
+    commit('set_contractor', data);
   },
-  async loadArtistPrivate({ commit }, id) {
-    const { data } = await this.$axios.get(`artists/${id}/private`)
-    commit('set_artist', data)
-  },
-  initProposal({ commit }) {
-    commit('init_proposal')
-  },
-  editProposal({ commit }, data) {
-    commit('edit_proposal', data)
-  },
-  async sendProposal({ state, commit }) {
-    await this.$axios.post('presentations/proposal', { proposal: state.proposal })
-  },
-  setSearchFilters({ commit }, searchFilters) {
-    commit('set_search_filters', searchFilters)
-  }
 }
 
 export const getters = {

@@ -1,12 +1,13 @@
-const BaseController = require('./base');
-const PublicArtistProfileService = require('../services/artist/publicSearch');
-const SearchArtistService = require('../services/artist/searchArtist');
-const SearchArtistProfileService = require('../services/artist/searchProfile');
-const SaveArtistProfileService = require('../services/artist/saveProfile');
-const SaveProductService = require('../services/artist/saveProduct');
-const DeleteProductService = require('../services/artist/deleteProduct');
-const LookupProductsService = require('../services/artist/lookupProducts');
-const { Artist } = require('../models');
+const BaseController              = require('./base');
+const SearchArtistsService        = require('../services/artist/searchArtists');
+const PublicArtistProfileService  = require('../services/artist/publicSearch');
+const SearchArtistService         = require('../services/artist/searchArtist');
+const SearchArtistProfileService  = require('../services/artist/searchProfile');
+const SaveArtistProfileService    = require('../services/artist/saveProfile');
+const SaveProductService          = require('../services/artist/saveProduct');
+const DeleteProductService        = require('../services/artist/deleteProduct');
+const SearchProductsService       = require('../services/artist/searchProducts');
+const { Artist }                  = require('../models');
 
 
 class ArtistController extends BaseController {
@@ -17,6 +18,17 @@ class ArtistController extends BaseController {
       if (!exists) { throw new BadRequestException('Artist does not exist'); }
 
       res.status(200).json({});
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async searchArtists(req, res, next) {
+    console.log('Searching for artists...');
+    const searchArtistsService = new SearchArtistsService(req.user, req.data)
+    try {
+      await searchArtistsService.search();
+      res.status(200).json(searchArtistsService.getArtists());
     } catch (error) {
       next(error);
     }
@@ -82,9 +94,20 @@ class ArtistController extends BaseController {
 
   async products(req, res, next) {
     console.log('Looking up products...');
-    const lookupProductsService = new LookupProductsService(req.user, req.data);
+    const searchProductsService = new SearchProductsService(req.user.role_id);
     try {
-      await lookupProductsService.lookup();
+      await searchProductsService.search();
+      res.status(200).json(searchProductsService.getProducts());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async productsForProposal(req, res, next) {
+    console.log('Looking up products for proposal...');
+    const lookupProductsService = new SearchProductsService(req.data.id);
+    try {
+      await lookupProductsService.search();
       res.status(200).json(lookupProductsService.getProducts());
     } catch (error) {
       next(error);

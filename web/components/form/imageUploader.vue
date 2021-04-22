@@ -13,7 +13,7 @@
           </template>
         </overlay>
       </div>
-      <modal height="tiny" ref="fileUploader">
+      <modal tiny ref="fileUploader">
         <template v-slot:header>
           <h5>Enviar arquivo</h5>
         </template>

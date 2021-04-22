@@ -61,7 +61,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({ selectedProduct: (state) => state.contractor.proposal.product }),
+    ...mapState({ selectedProduct: (state) => state.proposal.proposal.product }),
     allItems() {
       const allItems = []
       this.products.forEach((product) => {
@@ -72,7 +72,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('contractor', ['editProposal']),
+    ...mapActions('proposal', ['editProposal']),
     chooseProduct(product) {
       this.editProposal({ prop: 'product', value: product })
       this.$emit('complete')

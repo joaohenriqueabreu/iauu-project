@@ -18,7 +18,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('contractor', ['editProposal'])
+    ...mapActions('proposal', ['editProposal'])
   }
 }
 </script>

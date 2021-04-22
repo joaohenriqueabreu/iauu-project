@@ -120,6 +120,7 @@ class AdminController extends BaseController {
       .catch((error) => next(error));
   }
 
+  /****** Billings actions *******/
   async getBillings(req, res, next) {
     console.log('Searching for all billings');
     const searchBillingsSvc = new SearchBillingsService(req.data);
