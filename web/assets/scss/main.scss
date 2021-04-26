@@ -195,8 +195,8 @@ a {
 
 .top-right {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top:      0px;
+  right:    0px;
 }
 
 .toasted-container {
@@ -280,10 +280,11 @@ a {
 }
 
 .boxed {
-  background: $layer5;
-  padding: 2 * $space;
-  border-radius: $edges;
-  width: 100%;
+  position:       relative;
+  background:     $layer5;
+  padding:        2 * $space;
+  border-radius:  $edges;
+  width:          100%;
 }
 
 .ps--active-x .ps__rail-x { display: none !important } // Hide annoying horizontal scrollbar

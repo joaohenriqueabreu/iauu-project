@@ -31,6 +31,17 @@ export default {
     margin-top: 0 !important;
   }
 }
+
+.VueCarousel-dot {
+  transition: $transition;
+  &:focus {
+    outline: none !important;
+  }
+  
+  &:hover {
+    background-color: $brandLayer !important;
+  }
+}
 </style>
 
 <style lang="scss" scoped>

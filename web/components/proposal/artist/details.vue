@@ -23,8 +23,18 @@
           </pick-timeslot>
         </div>
         <div class="mx-4 mb-4 vertical center middle">
-          <h3 class="mb-4">{{ proposal.title }}</h3>
+          <h3 class="cap mb-4">{{ proposal.title }}</h3>
           <span>{{ proposal.description }}</span>
+        </div>
+        <div class="boxed main mb-4">
+          <div class="row">
+            <div class="col horizontal middle center">
+              <icon icon="dollar-sign"></icon><h2>{{ proposal.current_price | twoDecimals }}</h2>
+            </div>
+            <div class="col horizontal middle center">
+              <icon icon="clock"></icon><h2>{{ proposal.duration }}</h2>
+            </div>
+          </div>
         </div>
         <div class="boxed mb-4" v-if="!$empty(proposal.address)">
           <presentation-address :presentation="proposal"></presentation-address>
@@ -33,39 +43,44 @@
           <counter-offer ref="counter" :proposal="proposal" @send="dispatchCounterOffer">
           </counter-offer>
         </div>
-        <div class="boxed">
+        <div class="boxed mb-4">
           <presentation-product ref="product" :presentation="proposal"></presentation-product>
         </div>
-        <div class="attachments">
+        <div class="attachments mb-4">
           <attachment v-for="(file, index) in proposal.files" :key="index" :file="file">
           </attachment>
+        </div>
+        <div class="boxed horizontal" v-if="!$empty(proposal.notes)">
+          <icon icon="edit"></icon><p>{{ proposal.notes }}</p>
         </div>
       </template>
       <!-- <template v-slot:external>
         <chat v-if="!$empty(proposal)" :proposal="proposal"></chat>
       </template> -->
       <template v-slot:footer>
-        <div class="error mb-2">
-          <div v-if="isCustomProduct && !hasCounterOffer">
-            {{ proposal.contractor.name }} solicitou um produto personalizado. Envie um
-            orçamento para depois confirmar a apresentação.
+        <div class="vertical middle center">
+          <div class="error mb-2">
+            <div v-if="isCustomProduct && !hasCounterOffer">
+              {{ proposal.contractor.name }} solicitou um produto personalizado. Envie um
+              orçamento para depois confirmar a apresentação.
+            </div>
+            <div v-if="hasCounterOffer && !hasAcceptedCounterOffer">
+              O contratante deve aceitar o orçamento para poder confirmar a apresentação
+            </div>
+            <div v-if="!proposal.has_selected_timeslot">
+              Selecione uma opção de data para o evento
+            </div>
+            <div v-if="isPresentationPast">
+              Data da apresentação expirada. Não é possível aceitar a proposta neste momento.
+            </div>
           </div>
-          <div v-if="hasCounterOffer && !hasAcceptedCounterOffer">
-            O contratante deve aceitar o orçamento para poder confirmar a apresentação
-          </div>
-          <div v-if="!hasSelectedTimeslot">
-            Selecione uma opção de data para o evento
-          </div>
-          <div v-if="hasSelectedTimeslot && isPresentationPast">
-            Data da apresentação expirada. Não é possível aceitar a proposta neste momento.
-          </div>
-        </div>
-        <div class="horizontal center middle full-height">
-          <div v-if="(!isCustomProduct || hasAcceptedCounterOffer) && hasSelectedTimeslot && ! isPresentationPast" class="mr-5">
-            <form-button @action="accept">Aceitar</form-button>
-          </div>
-          <div v-if="!isPresentationPast">
-            <h5 class="clickable" @click="reject">Recusar</h5>
+          <div class="horizontal center middle full-height">
+            <div v-if="(!isCustomProduct || hasAcceptedCounterOffer) && hasSelectedTimeslot && ! isPresentationPast" class="mr-5">
+              <form-button @action="accept">Aceitar</form-button>
+            </div>
+            <div v-if="!isPresentationPast">
+              <h5 class="clickable" @click="reject">Recusar</h5>
+            </div>
           </div>
         </div>
       </template>
@@ -106,29 +121,21 @@ export default {
   computed: {
     ...mapState({ proposal: (state) => state.proposal.proposal }),
     hasCounterOffer() {
-      return (
-        !this.$empty(this.proposal.counter_offer) &&
-        this.proposal.counter_offer.status !== 'void'
-      )
+      return !this.$empty(this.proposal.counter_offer) && this.proposal.counter_offer.status !== 'void';
     },
     hasAcceptedCounterOffer() {
-      return (
-        !this.$empty(this.proposal.counter_offer) &&
-        this.proposal.counter_offer.status === 'accepted'
-      )
+      return !this.$empty(this.proposal.counter_offer) && this.proposal.counter_offer.status === 'accepted';
     },
     hasSelectedTimeslot() {
-      return !this.$empty(this.proposal.timeslot)
+      return !this.$empty(this.proposal.selected_timeslot);
     },
     isPresentationPast() {
       // Do not allow accepting proposals in the past
-      return this.hasSelectedTimeslot && this.moment(this.proposal.timeslot.start_dt).isBefore(this.moment())
+      return this.proposal.has_selected_timeslot && 
+        this.moment(this.proposal.selected_timeslot.start_dt).isBefore(this.moment());
     },
     isCustomProduct() {
-      return (
-        this.proposal.product.custom ||
-        this.proposal.product.name === 'custom'
-      )
+      return this.proposal.product.custom || this.proposal.product.name === 'custom';
     }
   },
   methods: {
@@ -165,4 +172,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.boxed {
+  background: $layer3;
+  &.main {
+    background: $layer4;
+  }
+}
+</style>

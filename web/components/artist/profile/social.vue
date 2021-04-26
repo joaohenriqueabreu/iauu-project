@@ -71,10 +71,10 @@ export default {
       return !this.$empty(this.instagramUrl);
     },
     hasConnectedSpotify() {
-      return this.$collection.filter(this.social, (network) => network.includes('spotify')).length > 0;
+      return this.$array.filter(this.social, (network) => network.includes('spotify')).length > 0;
     },
     instagramUrl() {
-      const instagramUrl = this.$collection.filter(this.social, (network) => network.includes('instagram'));
+      const instagramUrl = this.$array.filter(this.social, (network) => network.includes('instagram'));
       if (!this.$empty(instagramUrl)) {
         return instagramUrl[0];
       }

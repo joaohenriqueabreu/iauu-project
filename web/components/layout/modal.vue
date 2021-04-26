@@ -23,7 +23,7 @@
             </main>
           </scrollbar>
           <footer>
-            <div :class="height" v-show="!hideFooter">
+            <div :class="modalHeight" v-show="!hideFooter">
               <slot name="footer"></slot>
             </div>
           </footer>
@@ -174,17 +174,19 @@ export default {
   }
 
   footer {
-    @extend .vertical, .middle;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    z-index: $above;
+    @extend     .vertical, .middle;
+    position:   absolute;
+    bottom:     0;
+    left:       0;
+    z-index:    $above;
     background: $layer2;
-    width: 100%;
+    width:      100%;
+    width:      100%;
+    min-height: 2vh;
 
-    // .tiny     { height: 5vh; }
-    // .small    { height: 7vh; }
-    // .regular  { height: 10vh; }
+    .tiny     { height: 5vh; }
+    .small    { height: 7vh; }
+    .regular  { height: 10vh; }
 
     padding: 0 4 * $space;
     z-index: auto;

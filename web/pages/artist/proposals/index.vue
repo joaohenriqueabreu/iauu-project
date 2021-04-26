@@ -2,7 +2,7 @@
   <div>
     <div class="vertical">
       <h6 class="mb-4">Últimas propostas</h6>
-      <div v-for="(proposal, index) in proposals" :key="index" @click="open(proposal.id)">
+      <div v-for="(proposal, id) in proposals" :key="id" @click="open(id)">
         <!-- Proposal summary can be represented as presentation -->
         <proposal-info :presentation="proposal"></proposal-info>
       </div>
@@ -23,7 +23,7 @@ export default {
     ProposalInfo
   },
   async mounted() {
-    // Not sure why, but this is not working (after getting artist and contractor from microservices) on ayncData
+    // Not sure why, but this is not working on ayncData(after getting artist and contractor from microservices)
     await this.loadProposals();
   },
   computed: {

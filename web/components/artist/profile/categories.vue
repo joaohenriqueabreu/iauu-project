@@ -81,7 +81,7 @@ export default {
       );
 
       this.categoryName = categoryName;
-      this.subCategoryOptions = this.$collection.orderBy(data, [], ['asc']);
+      this.subCategoryOptions = this.$array.orderBy(data, [], ['asc']);
     },
     categoryImg(item) {
       try {
@@ -104,7 +104,7 @@ export default {
         return;
       }
 
-      if (!this.$collection.includes(this.subCategories, subcategory)) {
+      if (!this.$array.includes(this.subCategories, subcategory)) {
         // Seems that vuex-map-fields does not support push operation, therefore we need to copy the array, transform and assign it as whole to the state
         let subcategories = this.$object.clone(this.subCategories);
         subcategories.push(subcategory);

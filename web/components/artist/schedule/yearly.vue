@@ -29,7 +29,7 @@ export default {
       return yearCalendar
     },
     timeslotsByMonth() {
-      return this.$collection.groupBy(this.timeslots, (timeslot) => {
+      return this.$array.groupBy(this.timeslots, (timeslot) => {
         return this.moment(timeslot.start_dt).format('MM/YY')
       })
     }
@@ -37,11 +37,11 @@ export default {
   methods: {
     hasProposal(index) {
       if (this.timeslotsByMonth[index] === undefined) { return false }
-      return this.$collection.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'proposal').length > 0
+      return this.$array.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'proposal').length > 0
     },
     hasPresentation(index) { 
       if (this.timeslotsByMonth[index] === undefined) { return false }
-      return this.$collection.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'accepted').length > 0
+      return this.$array.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'accepted').length > 0
     }
   }
 }

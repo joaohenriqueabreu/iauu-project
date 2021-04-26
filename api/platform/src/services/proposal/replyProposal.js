@@ -11,15 +11,16 @@ module.exports = class ReplyProposalService extends ProposalService
 
     async reply() {
       await this.searchProposal()
-      await this.ensureProposalWasFound()
-      await this.ensureIsPartyToProposal()
-      await this.populateProposal()
+      this.ensureProposalWasFound()
+        .ensureIsPartyToProposal()
+        .populateProposal();
       await this.saveProposal()
       return this
     }
 
     ensureIsPartyToProposal() {
-      if (this.user.role_id !== this.proposal.artist.id && this.user.role_id !== this.proposal.contractor.id) {
+      if (this.user.role_id !== this.proposal.artist_id && 
+        this.user.role_id !== this.proposal.contractor_id) {
         throw new UnauthorizedException('User is not party to proposal')
       }
 

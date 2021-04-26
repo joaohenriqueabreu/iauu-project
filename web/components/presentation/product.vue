@@ -3,12 +3,12 @@
     <h5 class="mb-4">
       Produto selecionado <u>{{ selectedProduct }}</u>
     </h5>
-    <div v-if="!isCustomProduct && !hidePrice" class="horizontal center middle mb-4">
+    <!-- <div v-if="!isCustomProduct && !hidePrice" class="horizontal center middle mb-4">
       <h3>
         {{ presentation.product.price | currency }} para
         {{ presentation.product.duration }} horas de apresentação
       </h3>
-    </div>
+    </div> -->
     <div class="items">
       <h6 class="mb-4">
         Itens <span v-if="presentation.status === 'proposal'">solicitados</span><span v-else>contratados</span>
@@ -44,9 +44,10 @@ export default {
 }
 
 .items {
-  padding: 2 * $space;
-  border-radius: $edges;
-  width: 100%;
-  background: $layer1;
+  padding:        2 * $space;
+  border-radius:  $edges;
+  width:          100%;
+  background:     transparent;
+  border:         2px solid $layer5;
 }
 </style>

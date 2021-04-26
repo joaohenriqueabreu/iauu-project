@@ -31,7 +31,7 @@ class Proposal extends BaseRepository {
     if (this.counter_offer != null) { return this.counter_offer.price; }
 		if (this.product != null) 			{ return this.product.price; }
 
-		return 0;
+		return this.price;
   }
 
   get is_open() {
@@ -40,6 +40,10 @@ class Proposal extends BaseRepository {
 
   get is_rejected() {
     return this.status === 'rejected';
+  }
+
+  get has_selected_timeslot() {
+    return this.selected_timeslot != null;
   }
 }
 

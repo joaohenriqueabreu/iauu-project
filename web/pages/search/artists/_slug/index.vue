@@ -173,7 +173,7 @@ export default {
       return this.$isClientSide && !this.$empty(this.instagramUrl);
     },
     instagramUrl() {
-      const instagramUrl = this.$collection.filter(this.artist.social, (social) => social.includes('instagram'));
+      const instagramUrl = this.$array.filter(this.artist.social, (social) => social.includes('instagram'));
       if (!this.$empty(instagramUrl)) {
         return instagramUrl[0];
       }
@@ -184,7 +184,7 @@ export default {
       return this.$isClientSide && !this.$empty(this.spotifyUrl);
     },
     spotifyUrl() {
-      const spotifyUrl = this.$collection.filter(this.artist.social, (social) => social.includes('spotify'));
+      const spotifyUrl = this.$array.filter(this.artist.social, (social) => social.includes('spotify'));
       if (!this.$empty(spotifyUrl)) {
         return spotifyUrl[0];
       }

@@ -53,7 +53,7 @@ export default {
       }
     },
     selectizeOptions() {
-      return this.$collection.map(this.options, (option) => {
+      return this.$array.map(this.options, (option) => {
         if (option.hasOwnProperty('value') && option.hasOwnProperty('display')) { return option; }
         return { value: option, display: option }
       })

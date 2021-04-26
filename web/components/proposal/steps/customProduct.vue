@@ -54,33 +54,32 @@ export default {
   },
   methods: {
     openModal() {
-      this.$refs.modal.open()
+      this.$refs.modal.open();
     },
     toggleItem(item) {
       if (!this.customItems.includes(item)) {
-        this.customItems.push(item)
-        return
+        this.customItems.push(item);
+        return;
       }
 
       // Use vue delete to trigger reactivity
-      this.$delete(this.customItems, this.customItems.indexOf(item))
+      this.$delete(this.customItems, this.customItems.indexOf(item));
     },
     isCustomItemSelected(item) {
-      return this.$collection.includes(this.customItems, item)
+      return this.$array.includes(this.customItems, item);
     },
     selectProduct() {
-      this.$emit(
-        'selected',
-        new Product({
+      this.$emit('selected', new Product({
           name: 'custom',
           description: this.notes,
           items: this.customItems
         })
-      )
-      this.$refs.modal.close()
+      );
+
+      this.$refs.modal.close();
     },
     cancel() {
-      this.$refs.modal.close()
+      this.$refs.modal.close();
     }
   }
 }

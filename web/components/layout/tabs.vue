@@ -36,10 +36,10 @@ export default {
   },
   computed: {
     tabHeaders() {
-      return this.$collection.map(this.items, 'title');
+      return this.$array.map(this.items, 'title');
     },
     tabComponents() {
-      return this.$collection.map(this.items, 'component');
+      return this.$array.map(this.items, 'component');
     },
     isFirstTabActive() { 
       return this.isActiveTab(0);

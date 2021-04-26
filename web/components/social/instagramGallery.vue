@@ -49,7 +49,7 @@ export default {
         const instagramFetchUrl = this.$config.socialConnect.getInstagramFetchEndpoint(this.username)
         const data = await this.$cors.fetch(instagramFetchUrl)
 
-        this.gallery = this.$collection.map(data.graphql.user.edge_owner_to_timeline_media.edges, (media) => media.node.display_url)
+        this.gallery = this.$array.map(data.graphql.user.edge_owner_to_timeline_media.edges, (media) => media.node.display_url)
       } catch (error) {
         this.$sentry.captureException(error)
       }

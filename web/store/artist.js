@@ -1,12 +1,12 @@
 /* eslint-disable */
-import Vue                        from 'vue';
-import _                          from 'lodash';
-import moment                     from 'moment';
-import { getField, updateField }  from 'vuex-map-fields';
+import Vue                      from 'vue';
+import _                        from 'lodash';
+import moment                   from 'moment';
+import {getField, updateField}  from 'vuex-map-fields';
 
 export const state = () => ({
   artist:       {},
-  artists:      [],
+  artists:      {},
   product:      {},
   products:     [],
   statistics:   {},
@@ -23,7 +23,7 @@ export const mutations = {
   set_artist(state, artistData) {
     state.artist = { ...artistData };
   },
-  update_profile(state, { prop, data }) {
+  update_profile(state, {prop, data}) {
     if (prop === undefined) { return; }
 
     const props = prop.split('.');
@@ -34,7 +34,7 @@ export const mutations = {
     Vue.set(profile, field, data);
   },
   set_products(state, data) { state.products = data; }, // Vue.set(state, 'products', data); },
-  set_product(state, data)  { state.product = data; },
+  set_product(state, data)  { state.product  = data; },
   remove_product(state, id) {
     Vue.delete(
       state.products,
@@ -42,15 +42,19 @@ export const mutations = {
     );
   },
   set_statistics(state, statistics)   { state.statistics = statistics; },
-  set_artists(state, data)            { state.artists = data; },
-  add_artist(state, data)             { state.artists.push(data); },
+  set_artists(state, data)            { state.artists = _.keyBy(data, 'id'); },
+  add_artist(state, data)             { Vue.set(state.artists, data.id, data); },
   set_artist(state, data)             { state.artist = data; },
   remove_artist(state, id)            { Vue.delete(state.artists, this.$array.findIndex(state.artists, (artist) => artist.id === id)); },
-  set_search_filters(state, filters)  { state.searchFilters = filters; }
+  set_search_filters(state, filters)  { state.searchFilters = filters; },
+  reset_artist()                      { state.artist = {}},
 }
 
 export const actions = {
-  async reloadArtist({ commit, state }, id) {
+  resetArtist({commit}) {
+    commit('reset_artist');
+  },
+  async reloadArtist({commit, state}, id) {
     // Otherwise get from API (first load)
     const {data} = await this.$axios.get(`/artists/${id}`);
     commit('set_artist', data);
@@ -85,33 +89,33 @@ export const actions = {
     const {data} = await this.$axios.get(`/artists/${id}/products`);
     commit('set_products', data);
   },
-  async saveProduct({ commit }, product) {
-    const {data} = await this.$axios.post('/artists/products', { product });
+  async saveProduct({commit}, product) {
+    const {data} = await this.$axios.post('/artists/products', {product});
     commit('set_products', data);
   },
-  async removeProduct({ commit }, { id }) {
+  async removeProduct({commit}, {id}) {
     const {data} = await this.$axios.delete(`/artists/products/${id}`);
     commit('set_products', data);
   },
-  async calculateStatistics({ commit }, filters) {
+  async calculateStatistics({commit}, filters) {
     if (filters === undefined) {
-      filters = { start: moment().startOf('year').toISOString(), end: moment().toISOString() };
+      filters = {start: moment().startOf('year').toISOString(), end: moment().toISOString()};
     }
 
-    const {data} = await this.$axios.get('/artists/statistics', { params: { start: filters.start, end: filters.end }});
+    const {data} = await this.$axios.get('/artists/statistics', {params: {start: filters.start, end: filters.end}});
     commit('set_statistics', data);
   },
 
   /** Contractor facing actions */  
-  async searchArtists({ commit }, filters) {
-    const {data} = await this.$axios.get('/artists/search', { params: filters });
+  async searchArtists({commit}, filters) {
+    const {data} = await this.$axios.get('/artists/search', {params: filters});
     commit('set_artists', data);
   },
-  async loadArtistPublicProfile({ commit }, slug) {
+  async loadArtistPublicProfile({commit}, slug) {
     const {data} = await this.$axios.get(`artists/${slug}/public`);
     commit('set_artist', data);
   },
-  setSearchFilters({ commit }, searchFilters) {
+  setSearchFilters({commit}, searchFilters) {
     commit('set_search_filters', searchFilters);
   }
 }

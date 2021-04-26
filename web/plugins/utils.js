@@ -1,5 +1,6 @@
-import plural from 'pluralize-ptbr';
-import Model from '../models/model';
+import plural   from 'pluralize-ptbr';
+import Model    from '../models/model';
+import Product  from '../models/product';
 
 const utils = {
   pluralize: (value, count) => {
@@ -12,8 +13,9 @@ const utils = {
       return true;
     }
 
-    if (variable instanceof Model) {
-      return variable.id === 0 || variable.id === null;
+    // custom products don't have an id (not ideal to be here - needs to be generic) TODO move to other place
+    if (variable instanceof Model && !variable instanceof Product) {
+      return variable.id == 0 || variable.id == null;
     }
 
     if (typeof variable === 'number') {

@@ -45,7 +45,7 @@ export default {
         return;
       }
 
-      if (!this.$collection.includes(this.presentationTypes, presentationType)) {
+      if (!this.$array.includes(this.presentationTypes, presentationType)) {
         // Seems that vuex-map-fields does not support push operation, therefore we need to copy the array, transform and assign it as whole to the state
         let presentationTypes = this.$object.clone(this.presentationTypes);
         presentationTypes.push(presentationType);

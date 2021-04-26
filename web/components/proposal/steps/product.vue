@@ -3,7 +3,7 @@
     <div class="mb-5 vertical">
       <h6 class="mb-2">Escolha o produto do artista que você deseja contratar</h6>
     </div>
-    <carousel class="full-height" :navigation-enabled="true">
+    <carousel class="full-height mb-4" :navigation-enabled="true">
       <slide v-for="(product, index) in products" :key="index" class="mr-5">
         <overlay>
           <template v-slot:default>
@@ -28,23 +28,43 @@
           </template>
         </overlay>
       </slide>
-      <slide>
-        <div class="custom-product" @click="openCustomProductModal">
-          <h3>Personalize sua apresentação</h3>
-        </div>
-      </slide>
-      <slide></slide>
     </carousel>
+    <div v-if="$empty(proposal.product)" class="clickable brand-hover">
+      <h4 @click="openCustomProductModal">
+        <u>Ou clique aqui personalize sua apresentação.</u>
+      </h4>
+    </div>
+    <div v-else>
+      <div class="boxed">
+        <div class="top-right pt-3 brand-hover clickable">
+          <icon icon="times"></icon>
+        </div>
+        <h4 class="mb-4">Produto selecionado</h4>
+        <h6 class="mb-4">{{ productName }}</h6>
+        <div v-if="!isCustomProduct">
+          <div class="horizontal middle center my-4 d-flex justify-content-between">
+            <div>
+              <h4>{{ proposal.product.price | currency }}</h4>
+            </div>
+            <div>
+              <h4 class="horizontal">
+                <icon icon="clock" class="mr-"></icon>{{ proposal.product.duration }} horas
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <product-preview ref="preview" @selected="chooseProduct"></product-preview>
     <custom-product ref="custom" :all-items="allItems" @selected="chooseProduct"></custom-product>
   </div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import Step from '@/components/proposal/steps/step'
-import ProductInfo from '@/components/artist/product/info'
-import ProductPreview from '@/components/artist/product/preview'
-import CustomProduct from '@/components/proposal/steps/customProduct'
+import Step                     from '@/components/proposal/steps/step'
+import ProductInfo              from '@/components/artist/product/info'
+import ProductPreview           from '@/components/artist/product/preview'
+import CustomProduct            from '@/components/proposal/steps/customProduct'
 export default {
   components: {
     ProductInfo,
@@ -65,27 +85,34 @@ export default {
     allItems() {
       const allItems = []
       this.products.forEach((product) => {
-        allItems.push(product.items)
+        allItems.push(product.items);
       })
 
-      return this.$array.uniq(this.$array.flatten(allItems))
+      return this.$array.uniq(this.$array.flatten(allItems));
+    },
+    isCustomProduct() {
+      return this.proposal.product.name === 'custom';
+    },
+    productName() {      
+      if (this.isCustomProduct) { return 'Personalizado. Valor e duração da apresentação serão negociados com o artista.'; }
+      return this.proposal.product.name;
     }
   },
   methods: {
     ...mapActions('proposal', ['editProposal']),
     chooseProduct(product) {
-      this.editProposal({ prop: 'product', value: product })
-      this.$emit('complete')
-      this.$emit('next')
+      this.editProposal({prop: 'product', value: product});
+      this.$emit('complete');
+      this.$emit('next');
     },
     notItems(productItems) {
-      return this.$array.difference(this.allItems, productItems)
+      return this.$array.difference(this.allItems, productItems);
     },
     openCustomProductModal() {
-      this.$refs.custom.openModal()
+      this.$refs.custom.openModal();
     },
     openPreviewModal(product) {
-      this.$refs.preview.openModal(product, this.notItems(product.items))
+      this.$refs.preview.openModal(product, this.notItems(product.items));
     }
   }
 }

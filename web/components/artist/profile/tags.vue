@@ -45,7 +45,7 @@ export default {
 
       const tags = this.$object.clone(this.artist.tags)
 
-      if (!this.$collection.includes(tags, this.searchTag)) {
+      if (!this.$array.includes(tags, this.searchTag)) {
         tags.push(this.searchTag)
         this.updateProfile({ prop: 'tags', data: tags })
         this.searchTag = ''

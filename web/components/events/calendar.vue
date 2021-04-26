@@ -70,23 +70,23 @@ export default {
     },
     busyDates() {
       const self = this
-      const busyTimeslots = this.$collection.filter(
+      const busyTimeslots = this.$array.filter(
         this.timeslots,
         (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot)
       )
 
-      return this.$collection.map(busyTimeslots, 'start_dt')
+      return this.$array.map(busyTimeslots, 'start_dt')
     },
     unavailableTimeslots() {
       const self = this
-      return this.$collection.filter(
+      return this.$array.filter(
         this.timeslots,
         (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot)
       )
     },
     availableTimeslots() {
       const self = this
-      return this.$collection.filter(
+      return this.$array.filter(
         this.timeslots,
         (timeslot) => !self.$empty(timeslot) && !self.isUnavailable(timeslot)
       )
@@ -166,7 +166,7 @@ export default {
       this.fullcalendarApi.getEventById(eventId).remove()
     },
     removeEventFromTimeslot(timeslotId) {
-      const event = this.$collection.find(this.fullcalendarApi.getEvents(), (event) => {
+      const event = this.$array.find(this.fullcalendarApi.getEvents(), (event) => {
         return event.extendedProps.id === timeslotId
       })
 

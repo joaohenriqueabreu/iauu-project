@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     proposedTimeslots() {
-      return this.$collection.filter(
+      return this.$array.filter(
         this.timeslots,
         (timeslot) =>
           timeslot.type === 'event' && timeslot.id.startsWith(PROPOSED_TIMESLOT_ID_PREFIX)
