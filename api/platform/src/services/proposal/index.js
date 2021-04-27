@@ -1,3 +1,4 @@
+const ProposalService           = require('./base');
 const SearchProposalService     = require('./searchProposal');
 const SearchProposalsService    = require('./searchProposals');
 const SendProposalService       = require('./sendProposal');
@@ -9,6 +10,7 @@ const AcceptCounterOfferService = require('./acceptCounterOffer');
 const RejectCounterOfferService = require('./rejectCounterOffer');
 
 module.exports = {
+  ProposalService,
   SearchProposalService,
   SearchProposalsService,
   SendProposalService,

@@ -11,3 +11,17 @@ https://github.com/sinonjs/sinon
 
 [2021-02-19] When mocking Mongoose Schemas you cannot instatiate non-model schemas
 [2021-02-19] Dumped faker to version 5.4.0 in order to use more recent fns
+
+## Company standards
+### Web
+- `v-if` always comes first when declared:
+
+```
+// Yes
+<div v-if="proposals.length > 0" class="boxed">
+
+// No
+<div class="boxed" v-if="proposals.length > 0">
+```
+
+- v-for first or second

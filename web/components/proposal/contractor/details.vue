@@ -3,12 +3,11 @@
     <modal ref="modal">
       <template v-slot:header>
         <div class="horizontal d-flex justify-content-between">
-          <div v-if="!$empty(proposal.contractor)" class="horizontal middle">
-            <avatar v-if="!$empty(proposal.contractor.photo)" :src="proposal.contractor.photo" :username="proposal.contractor.name">
+          <div v-if="!$empty(proposal.artist)" class="horizontal middle">
+            <avatar class="mr-3" v-if="!$empty(proposal.artist.photo)" :src="proposal.artist.photo" :username="proposal.artist.name">
             </avatar>
             <div class="vertical middle">
-              <h5>{{ proposal.contractor.name }}</h5>
-              <h6>Enviou-lhe uma proposta</h6>
+              <h6>Voce enviou uma proposta para {{ proposal.artist.name }}</h6>
             </div>
           </div>
           <div class="d-flex align-items-end">
@@ -17,29 +16,28 @@
         </div>
       </template>
       <template v-slot:main>
-        <div class="mb-4">
-          <pick-timeslot :default="proposal.selected_timeslot" :timeslots="proposal.timeslots" @selected="selectedTimeslot">
-          </pick-timeslot>
-        </div>
         <div class="mx-4 mb-4 vertical center middle">
           <h3 class="cap mb-4">{{ proposal.title }}</h3>
           <span>{{ proposal.description }}</span>
         </div>
-        <div class="boxed main mb-4" v-if="!proposal.has_custom_product">
-          <div class="row">
-            <div class="col horizontal middle center">
-              <icon icon="dollar-sign"></icon><h2>{{ proposal.current_price | twoDecimals }}</h2>
-            </div>
-            <div class="col horizontal middle center">
-              <icon icon="clock"></icon><h2>{{ proposal.duration }}</h2>
-            </div>
-          </div>
+        <div v-if="!proposal.has_custom_product" class="boxed p-4 main mb-4 text-center">
+          <h3>
+            <icon icon="dollar-sign"></icon>{{ proposal.current_price | twoDecimals }}
+            para <icon icon="clock"></icon>{{ proposal.duration }} {{ 'hora' | pluralize(proposal.duration) }}
+            de apresentacao
+          </h3>
         </div>
-        <div class="boxed mb-4" v-if="!$empty(proposal.address)">
+        <div v-if="!$empty(proposal.address)" class="boxed p-4 mb-4">
           <presentation-address :presentation="proposal"></presentation-address>
         </div>
+        <div v-if="proposal.has_selected_timeslot" class="boxed p-4 mb-4">
+          <h6><icon icon="calendar-alt"></icon> O evento foi confirmado para {{ proposal.selected_timeslot.start_dt | date }}</h6>
+        </div>
+        <div v-else class="boxed p-4 mb-4">
+          <proposal-timeslots :proposal="proposal"></proposal-timeslots>
+        </div>
         <div v-if="proposal.has_custom_product">
-          <counter-offer ref="counter" :proposal="proposal" @sent="counterOfferSent"></counter-offer>
+          <reply-counter-offer :proposal="proposal" @replied="counterOfferReplied"></reply-counter-offer>
         </div>
         <div class="boxed mb-4">
           <presentation-product ref="product" :presentation="proposal"></presentation-product>
@@ -56,19 +54,18 @@
         <chat v-if="!$empty(proposal)" :proposal="proposal"></chat>
       </template> -->
       <template v-slot:footer>
-        <div class="vertical middle center">
-          <div class="error mb-2">
+        <div class="vertical middle center text-center">
+          <div class="error mb-4">
             <div v-if="proposal.has_custom_product && !proposal.has_counter_offer">
-              {{ proposal.contractor.name }} solicitou um produto personalizado. Envie um
-              orçamento para depois confirmar a apresentação.
+              Aguardando orçamento do artista.
             </div>
-            <div v-if="proposal.has_counter_offer && !proposal.has_accepted_counter_offer">
-              O contratante deve aceitar o orçamento para poder confirmar a apresentação
+            <div v-else-if="proposal.has_counter_offer && !proposal.has_accepted_counter_offer">
+              Revise e responda o orçamento enviado pelo artist.
             </div>
-            <div v-if="!proposal.has_selected_timeslot">
-              Selecione uma opção de data para o evento
+            <div v-else-if="!proposal.has_selected_timeslot">
+              Aguardando escolha de data da apresentção pelo artista.
             </div>
-            <div v-if="isProposalPast">
+            <div v-else-if="isProposalPast">
               Data da apresentação expirada. Não é possível aceitar a proposta neste momento.
             </div>
           </div>
@@ -77,7 +74,7 @@
               <form-button @action="accept">Aceitar</form-button>
             </div>
             <div v-if="!isProposalPast">
-              <h5 class="clickable" @click="reject">Recusar</h5>
+              <h5 class="clickable brand-hover" @click="reject">Cancelar</h5>
             </div>
           </div>
         </div>
@@ -90,20 +87,20 @@
 import { mapState, mapActions } from 'vuex';
 import PresentationAddress      from '@/components/presentation/address';
 import PickTimeslot             from '@/components/presentation/timeslot';
+import ProposalTimeslots        from '@/components/proposal/timeslots';
 import PresentationDate         from '@/components/presentation/date';
 import PresentationProduct      from '@/components/presentation/product';
-import PresentationPrice        from '@/components/presentation/price';
-import CounterOffer             from '@/components/proposal/counterOffer';
+import ReplyCounterOffer        from '@/components/proposal/replyCounterOffer';
 // import Chat                     from '@/components/layout/chat';
 
 export default {
   components: {
     PickTimeslot,
+    ProposalTimeslots,
     PresentationAddress,
     PresentationDate,
     PresentationProduct,
-    PresentationPrice,
-    CounterOffer,
+    ReplyCounterOffer,
     // Chat
   },
   async mounted() {
@@ -138,7 +135,8 @@ export default {
       'acceptProposal',
       'rejectProposal',
       'selectTimeslot',
-      'sendCounterOffer'
+      'sendCounterOffer',
+      'editProposal',
     ]),
     openModal() {
       return this.$refs.modal.open();
@@ -158,7 +156,7 @@ export default {
       await this.rejectProposal(this.proposal.id);
       this.$emit('rejected', this.proposal.id);
     },
-    async counterOfferSent(counterOffer) {
+    async counterOfferReplied() {
       this.$refs.modal.close();
     }
   }
@@ -171,8 +169,8 @@ export default {
   &.main {
     .col {
       background: transparent;
-      border:     2px solid $layer5;
+      // border:     2px solid $layer5;
     }
-  }  
+  }
 }
 </style>

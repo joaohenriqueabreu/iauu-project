@@ -1,11 +1,12 @@
-import Vue from 'vue';
-import _ from 'lodash';
-import collection from 'lodash/collection';
-import math from 'lodash/math';
-import clone from 'lodash/cloneDeep';
-import moment from 'moment';
-import VueFilters from 'vue2-filters';
-import dictionary from '../static/data/dictionary';
+import Vue          from 'vue';
+import _            from 'lodash';
+import collection   from 'lodash/collection';
+import math         from 'lodash/math';
+import clone        from 'lodash/cloneDeep';
+import moment       from 'moment';
+import VueFilters   from 'vue2-filters';
+import VuePluralize from 'vue-pluralize';
+import dictionary   from '../static/data/dictionary';
 
 Vue.use(VueFilters, {
   number: { thousandsSeparator: '.', decimalSeparator: ',' },
@@ -22,8 +23,8 @@ const datetimeFilter      = (value) => { return moment(value).format('DD/MM/YYYY
 const timeFilter          = (value) => { return moment(value).format('HH:mm'); }
 const timeAgoFilter       = (value) => { return moment(value).fromNow(); }
 const longTimeFilter      = (time) => {
-  if (time === undefined || time === null) { return '-'; }
-  if (typeof time === 'number') { return `${time} horas${time > 1 ? 's' : ''}`; } // raw value
+  if (time == null) { return '-'; }
+  if (typeof time === 'number') { return `${time} hora${time > 1 ? 's' : ''}`; } // raw value
   const parts = time.split(':');
   return `${parts[0]} hora${parts[0] > 1 ? 's' : ''} ${parts[1] > 0 ? parts[1] + ' mins' : ''}`;
 }
@@ -79,7 +80,7 @@ const convertTimeToNumber = (time) => {
   if (typeof time !== 'string') { return 0 } // non strng representation
   if (time.indexOf(':') === -1) { return 0 } // not well formatted
 
-  console.log(time)
+
   const parts = time.split(':')
   return parts[0] * 60 + parts[1]
 }
@@ -111,7 +112,7 @@ const translate = (str, path)  => {
   } catch {
     return str;
   }
-}
+};
 
 const decimalsMap  = {order: 1, symbol: ''};
 const thousandsMap = {order: 1000, symbol: 'k'};
@@ -148,6 +149,9 @@ Object.byString = function(o, s) {
   }
   return o;
 }
+
+// Registering package filters
+Vue.use(VuePluralize);
 
 // Registering custom filters
 Vue.filter('yesNo',           yesNoFilter);

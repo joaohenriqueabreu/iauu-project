@@ -22,8 +22,8 @@
               <slot name="main"></slot>
             </main>
           </scrollbar>
-          <footer>
-            <div :class="modalHeight" v-show="!hideFooter">
+          <footer v-show="!hideFooter">
+            <div :class="footerCustomHeight">
               <slot name="footer"></slot>
             </div>
           </footer>
@@ -43,9 +43,11 @@ export default {
   props: {
     height:       { type: String, default: 'regular' },
     headerHeight: { type: String, default: null },
+    footerHeight: { type: String, default: null },
     noPad:        { type: Boolean, default: false },
 
     // Or provide heights as params
+    single:       { type: Boolean, default: false },
     tiny:         { type: Boolean, default: false },
     small:        { type: Boolean, default: false },
     regular:      { type: Boolean, default: true },
@@ -56,7 +58,12 @@ export default {
       if (!this.$empty(this.headerHeight)) { return this.headerHeight }
       return this.modalHeight;
     },
+    footerCustomHeight() {
+      if (!this.$empty(this.footerHeight)) { return this.footerHeight }
+      return this.modalHeight;
+    },
     modalHeight() {
+      if (this.single)  { return 'single'; }
       if (this.small)   { return 'small'; }
       if (this.tiny)    { return 'tiny'; }
       if (this.regular) { return 'regular'; }
@@ -114,15 +121,16 @@ export default {
     padding: 0;
   }
 
+  &.single  { height: 20vh; }
   &.tiny    { height: 50vh; }
   &.small   { height: 70vh; }
   &.regular { height: 85vh; }
 
   header {
     // @extend .vertical, .middle, .center;
-    .tiny     { height: 5vh; }
-    .small    { height: 7vh; }
-    .regular  { height: 10vh; }
+    .tiny, .single  { height: 5vh; }
+    .small          { height: 7vh; }
+    .regular        { height: 10vh; }
 
     width:      100%;
     min-height: 2vh;
@@ -184,9 +192,9 @@ export default {
     width:      100%;
     min-height: 2vh;
 
-    .tiny     { height: 5vh; }
-    .small    { height: 7vh; }
-    .regular  { height: 10vh; }
+    .tiny, .single  { height: 5vh; }
+    .small          { height: 7vh; }
+    .regular        { height: 10vh; }
 
     padding: 0 4 * $space;
     z-index: auto;

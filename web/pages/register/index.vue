@@ -5,11 +5,11 @@
       <form v-if="!$empty($v)">
         <h5 class="mb-4">Cadastre já!</h5>
         <form-input v-model="$v.credentials.name.$model" placeholder="Nome completo" icon="user"></form-input>
-        <form-validation :active="$v.credentials.name.$error">O nome não pode estar vazio</form-validation>
+        <form-validation :error="$v.credentials.name.$error">O nome não pode estar vazio</form-validation>
         <form-email v-model="$v.credentials.email.$model" placeholder="Entre com seu email"></form-email>
-        <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
+        <form-validation :error="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
         <form-password v-model="$v.credentials.password.$model" placeholder="Crie uma senha para acessar a plataforma"></form-password>
-        <form-validation :active="$v.credentials.password.$error">
+        <form-validation :error="$v.credentials.password.$error">
           Senha deve ser composta de: 
           <ul>
             <li>Pelo menos 8 caracteres;</li>
@@ -21,7 +21,7 @@
         </form-validation>
         <small class="px-4">Mínimo 8 caracteres, combinação de números, letras e caracteres especiais</small>
         <form-password v-model="$v.credentials.passwordConfirmation.$model" placeholder="Confirme sua senha"></form-password>
-        <form-validation :active="$v.credentials.passwordConfirmation.$error">Confirmação deve ser igual a senha</form-validation>
+        <form-validation :error="$v.credentials.passwordConfirmation.$error">Confirmação deve ser igual a senha</form-validation>
         <form-checkbox v-model="credentials.accept_terms" class="my-4">
           Li e estou de acordo com os
           <u><nuxt-link class="ml-2" to="terms">Termos de Uso da plataforma</nuxt-link></u>

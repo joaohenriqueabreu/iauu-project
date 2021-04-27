@@ -1,5 +1,6 @@
 const BaseController = require('./base');
-const { 
+const {
+  ProposalService,
   SearchProposalService, 
   SearchProposalsService, 
   SendProposalService, 
@@ -11,7 +12,7 @@ const {
   RejectCounterOfferService,
 } = require('../services/proposal');
 
-class PresentationController extends BaseController {
+class ProposalController extends BaseController {
   async searchUserProposals(req, res, next) {
     console.log('Searching user proposals...');
     const searchProposalsService = new SearchProposalsService();
@@ -47,9 +48,9 @@ class PresentationController extends BaseController {
 
   async editProposal(req, res, next) {
     console.log('Updating proposal...');
-    const updateProposalService = new ProposalService(req.data.id);
+    const updateProposalService = new ProposalService(req.user, req.data.id);
     try {
-      await updateProposalService.update(req.data.proposal);
+      await updateProposalService.update(req.data);
       res.status(200).json(updateProposalService.getProposal());
     } catch (error) {
       next(error);
@@ -79,10 +80,10 @@ class PresentationController extends BaseController {
   }
 
   async sendCounterOffer(req, res, next) {
-    console.log('Updating timeslot...');
-    const sendCounterOfferService = new SendCounterOfferService(req.user, req.data);
+    console.log('Sending counter offer...');
+    const sendCounterOfferService = new SendCounterOfferService(req.user, req.data.id);
     try {
-      await sendCounterOfferService.send();
+      await sendCounterOfferService.send(req.data.counterOffer);
       res.status(200).json(sendCounterOfferService.getProposal());
     } catch(error) {
       next(error);
@@ -90,10 +91,10 @@ class PresentationController extends BaseController {
   }
 
   async acceptCounterOffer(req, res, next) {
-    console.log('Updating timeslot...');
-    const acceptCounterOfferService = new AcceptCounterOfferService(req.user, req.data);
+    console.log('Accepting counter offer...');
+    const acceptCounterOfferService = new AcceptCounterOfferService(req.user);
     try {
-      await acceptCounterOfferService.reply();
+      await acceptCounterOfferService.reply(req.data.id);
       res.status(200).json(acceptCounterOfferService.getProposal());
     } catch(error) {
       next(error);
@@ -101,10 +102,10 @@ class PresentationController extends BaseController {
   }
 
   async rejectCounterOffer(req, res, next) {
-    console.log('Updating timeslot...');
-    const rejectCounterOfferService = new RejectCounterOfferService(req.user, req.data);
+    console.log('Rejecting counter offer...');
+    const rejectCounterOfferService = new RejectCounterOfferService(req.user);
     try {
-      await rejectCounterOfferService.reply();
+      await rejectCounterOfferService.reply(req.data.id);
       res.status(200).json(rejectCounterOfferService.getProposal());
     } catch(error) {
       next(error);
@@ -145,4 +146,4 @@ class PresentationController extends BaseController {
   }
 }
 
-module.exports = new PresentationController();
+module.exports = new ProposalController();

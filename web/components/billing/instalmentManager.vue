@@ -18,8 +18,8 @@
         <form-money class="col-4" v-model="$v.targetInstalment.amount.$model" placeholder="Valor da parcela (R$)"></form-money>
         <form-date class="col-4" v-model="$v.targetInstalment.due_at.$model" placeholder="Vencimento da parcela"></form-date>
       </div>
-      <form-validation :active="$v.targetInstalment.amount.$error">Valor da parcela inválido. Entre com um valor até {{ billing.amount_unallocated | currency }} (total disponível para alocação)</form-validation>
-      <form-validation :active="$v.targetInstalment.due_at.$error">Forneça uma data de vencimento da parcela futura e válida (Mínimo de 3 dias a partir da data de hoje)</form-validation>
+      <form-validation :error="$v.targetInstalment.amount.$error">Valor da parcela inválido. Entre com um valor até {{ billing.amount_unallocated | currency }} (total disponível para alocação)</form-validation>
+      <form-validation :error="$v.targetInstalment.due_at.$error">Forneça uma data de vencimento da parcela futura e válida (Mínimo de 3 dias a partir da data de hoje)</form-validation>
     </div>
     <div>
       <form-textarea v-model="targetInstalment.notes" placeholder="Notas sobre a parcela"></form-textarea>

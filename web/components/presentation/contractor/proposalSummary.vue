@@ -183,11 +183,4 @@ export default {
     color: $brandLayer;
   }
 }
-
-.accepted-counter-offer {
-  color: $layer1;
-  background: $brandLayer;
-  border-radius: $edges;
-  padding: 2 * $space;
-}
 </style>

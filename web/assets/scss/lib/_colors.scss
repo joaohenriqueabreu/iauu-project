@@ -25,3 +25,17 @@ $whiteAlt: rgba(250, 240, 240, 0.8);
 
 $proposalTimeslot: rgb(249, 195, 34);
 $presentationTimeslot: rgb(100, 200, 100);
+
+$colors: (
+  "white":    $white,
+  "brand":    $brandLayer,
+  "success":  $success, 
+  "info":     $info, 
+  "error":    $error, 
+  "warning":  $warning, 
+  "layer-1":  $layer1, 
+  "layer-2":  $layer2, 
+  "layer-3":  $layer3, 
+  "layer-4":  $layer4, 
+  "layer-5":  $layer5
+);

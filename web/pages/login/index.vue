@@ -6,9 +6,9 @@
         <form>
           <h5 class="mb-4">Entre</h5>
           <form-email v-model="$v.credentials.email.$model"></form-email>
-          <form-validation :active="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
+          <form-validation :error="$v.credentials.email.$error">Por favor entre com um email válido</form-validation>
           <form-password v-model="$v.credentials.password.$model"></form-password>
-          <form-validation :active="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
+          <form-validation :error="$v.credentials.password.$error">Senha não pode estar vazia</form-validation>
           <div class="mb-2"></div>
           <div class="forgot-password" @click="openForgotPasswordModal">
             <span>Esqueceu sua senha?</span>
@@ -29,7 +29,7 @@
             <div class="vertical middle center">
               <span>Entre com o seu email para solicitar uma nova senha</span>
               <form-email v-model="forgotPasswordForEmail" class="full-width px-5"></form-email>
-              <form-validation :active="$utils.empty(forgotPasswordForEmail)">
+              <form-validation :error="$utils.empty(forgotPasswordForEmail)">
                 Entre com um email válido
               </form-validation>
             </div>

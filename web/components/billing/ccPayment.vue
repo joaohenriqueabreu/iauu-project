@@ -26,9 +26,9 @@
               <form-masked mask="cvc" v-model="$v.card.cvc.$model" placeholder="CVC (XXX)" icon="lock" @focus="isTypingCVC=true" @blur="isTypingCVC=false"></form-masked>
             </div>
             <div class="col-12">
-              <form-validation :active="$v.card.name.$error" class="mb-2">Por favor entre com o nome conforme escrito no cartão</form-validation>
-              <form-validation :active="$v.card.expiry.$error" class="mb-2">Por favor entre com um data de expiração válida (verifique se seu cartão não está vencido ou com expiração próxima)</form-validation>
-              <form-validation :active="$v.card.cvc.$error">Por favor entre com um CVC válido <br>(Número de 3 digitos localizado na parte traseira do cartão)</form-validation>
+              <form-validation :error="$v.card.name.$error" class="mb-2">Por favor entre com o nome conforme escrito no cartão</form-validation>
+              <form-validation :error="$v.card.expiry.$error" class="mb-2">Por favor entre com um data de expiração válida (verifique se seu cartão não está vencido ou com expiração próxima)</form-validation>
+              <form-validation :error="$v.card.cvc.$error">Por favor entre com um CVC válido <br>(Número de 3 digitos localizado na parte traseira do cartão)</form-validation>
             </div>
           </div>
           <div>

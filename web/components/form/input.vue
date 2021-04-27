@@ -41,7 +41,7 @@ export default {
     disabled:     { type: Boolean, default: false },
     icon:         { type: String, default: null },
     noIcon:       { type: Boolean, default: false },
-    value:        { type: [String, Number, Boolean], default: null },
+    value:        { type: [String, Number, Boolean, Date], default: null },
     required:     { type: Boolean, default: false },
     transparent:  { type: Boolean, default: false },
   },

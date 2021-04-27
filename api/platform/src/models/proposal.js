@@ -45,6 +45,23 @@ class Proposal extends BaseRepository {
   get has_selected_timeslot() {
     return this.selected_timeslot != null;
   }
+
+  get has_counter_offer() {
+    return this.counter_offer != null;
+  }
+
+  get has_accepted_counter_offer() {
+    return this.has_counter_offer && this.counter_offer.status === 'accepted';
+  }
+
+  get has_rejected_counter_offer() {
+    return this.rejected_counter_offers.length > 0 && this.counter_offer == null;
+  }
+
+  get has_custom_product() {
+    return this.product != null && 
+      (this.product.custom || this.product.name === 'custom');
+  }
 }
 
 proposalSchema.loadClass(Proposal);

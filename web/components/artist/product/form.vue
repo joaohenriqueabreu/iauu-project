@@ -8,7 +8,7 @@
       <template v-slot:main>
         <div class="new-product-form vertical p-4" v-if="!$empty($v)">
           <form-input v-model="$v.product.name.$model" label="Título"></form-input>
-          <form-validation :active="$v.product.name.$error" class="mb-4">O nome do formato não pode estar vazio</form-validation>
+          <form-validation :error="$v.product.name.$error" class="mb-4">O nome do formato não pode estar vazio</form-validation>
           <form-textarea
             v-model="product.description"
             label="Descrição"
@@ -18,19 +18,19 @@
             <div class="vertical middle center col-sm-6">
               <h6 class="mr-3">Preço para Contratar</h6>
               <form-money v-model="$v.product.price.$model" class="mr-2" placeholder="100,00"></form-money>
-              <form-validation :active="$v.product.price.$error" class="mb-4">Entre com um preço válido</form-validation>
+              <form-validation :error="$v.product.price.$error" class="mb-4">Entre com um preço válido</form-validation>
             </div>
             <div class="vertical middle center col-sm-6">
               <h6 class="mr-3">Duração da Apresentação</h6>
               <form-time ref="duration" v-model="$v.product.duration.$model" icon="clock" placeholder="4:00"></form-time>
-              <form-validation :active="$v.product.duration.$error" class="mb-4">Entre com uma duração válida</form-validation>
+              <form-validation :error="$v.product.duration.$error" class="mb-4">Entre com uma duração válida</form-validation>
             </div>
           </div>
           <div class="vertical middle mb-5">
             <div class="mb-5">
               <h6 class="mb-2">Adicionar items</h6>
               <small>Liste aqui os itens deste formato</small>
-              <form-validation :active="$v.product.items.$invalid" class="mb-4">Adicione ao menos 1 item</form-validation>
+              <form-validation :error="$v.product.items.$invalid" class="mb-4">Adicione ao menos 1 item</form-validation>
               <div class="horizontal middle justify-content-between mb-2">
                 <form-input v-model="newItem" class="full-width" icon="list-ol" placeholder="Iluminação, Apresentação, Fogos de Artifício, etc..." @enter="addItem"></form-input>
                 <icon icon="plus" class="ml-5 clickable" @click="addItem"></icon>

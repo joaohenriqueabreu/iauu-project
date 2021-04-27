@@ -5,18 +5,31 @@ const { UnauthorizedException } = require('lib/exception');
 
 module.exports = class ProposalService extends BaseService
 {
-    constructor(user) {
+    constructor(user, id) {
       super(user);
 
+      this.id       = id;
       this.proposal = {};
     }
 
-    async searchProposal() {
-      this.proposal = await Proposal.findById(this.id)
-        .populate({ path: 'contractor', populate: { path: 'user' }})
-        .populate({ path: 'artist',  populate: { path: 'user' }});
+    async update(data) {
+      this.proposalData = data;
 
-      return this
+      await this.searchProposal();
+      this.ensureProposalWasFound()
+        .ensureUserIsPartyToProposal()
+        .populateProposal();
+
+      await this.saveProposal();
+      return this;
+    }
+
+    async searchProposal() {
+      this.proposal = await Proposal.findById(this.id);
+        // .populate({ path: 'contractor', populate: { path: 'user' }})
+        // .populate({ path: 'artist',  populate: { path: 'user' }});
+
+      return this;
     }
 
     ensureProposalWasFound() {
@@ -31,6 +44,18 @@ module.exports = class ProposalService extends BaseService
     ensureUserIsPartyToProposal() {
       if (this.user.role_id !== this.proposal.artist_id && this.user.role_id !== this.proposal.contractor_id) {
         throw new UnauthorizedException('This user cannot interact with proposal');
+      }
+
+      return this;
+    }
+
+    populateProposal() {
+      // Delete id from data so it does not attempt to change proposal's
+      delete(this.proposalData.id);
+
+      // TODO maybe move this to BaseModel (some kind of edit function)
+      for (const prop in this.proposalData) {
+        this.proposal[prop] = this.proposalData[prop];
       }
 
       return this;

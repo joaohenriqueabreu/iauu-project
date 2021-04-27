@@ -11,16 +11,16 @@
     
     <div v-if="!hasConnectedBankAccount || hasFailedConnectingToGateway" class="container">
       <form-select v-model="$v.newBankAccount.institution.$model" :options="banksOptions" placeholder="Selecione a instituição financeira (número do banco)" auto-open :allow-input="false" class="mb-4"></form-select>
-      <form-validation :active="$v.newBankAccount.institution.$error">Por favor escolha uma instituição financeira</form-validation>
+      <form-validation :error="$v.newBankAccount.institution.$error">Por favor escolha uma instituição financeira</form-validation>
       <div class="mb-2"></div>
       <form-input v-model="$v.newBankAccount.agency.$model" placeholder="Agência" icon="university"></form-input>
-      <form-validation :active="$v.newBankAccount.agency.$error">Número da agência inválido (somente letras ou números - máximo 5 caractéres)</form-validation>
+      <form-validation :error="$v.newBankAccount.agency.$error">Número da agência inválido (somente letras ou números - máximo 5 caractéres)</form-validation>
       <form-input v-model="$v.newBankAccount.number.$model" placeholder="Número da conta (com dígito)" icon="user-circle"></form-input>
-      <form-validation :active="$v.newBankAccount.number.$error">Número da conta inválida (formato deve ser "número" - "digito")</form-validation>
+      <form-validation :error="$v.newBankAccount.number.$error">Número da conta inválida (formato deve ser "número" - "digito")</form-validation>
       <form-masked v-model="$v.newBankAccount.document.$model" icon="id-card" placeholder="CPF/CNPJ" mask="document"></form-masked>
-      <form-validation :active="$v.newBankAccount.document.$error">Número de documento inválido (formato deve ser CPF ou CNPJ) de acordo com o titular da conta</form-validation>
+      <form-validation :error="$v.newBankAccount.document.$error">Número de documento inválido (formato deve ser CPF ou CNPJ) de acordo com o titular da conta</form-validation>
       <form-input v-model="$v.newBankAccount.legal_name.$model" placeholder="Nome do titular da conta" icon="signature"></form-input>
-      <form-validation :active="$v.newBankAccount.legal_name.$error" class="mb-4">O nome do titular não pode estar vazio (máximo 30 caractéres)</form-validation>
+      <form-validation :error="$v.newBankAccount.legal_name.$error" class="mb-4">O nome do titular não pode estar vazio (máximo 30 caractéres)</form-validation>
       <form-button :disabled="$v.newBankAccount.$invalid" @action="saveArtistBankAccount">Salvar dados bancários</form-button>
     </div>
     <div v-else class="api">

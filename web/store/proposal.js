@@ -2,6 +2,10 @@ import Vue                        from 'vue';
 import _                          from 'lodash';
 import { getField, updateField }  from 'vuex-map-fields';
 
+// Should not be in state
+let cachedArtist      = {};
+let cachedContractor  = {};
+
 export const state = () => ({
   proposal:  {},
   proposals: {},
@@ -23,13 +27,16 @@ export const actions = {
   editProposal({commit}, data) {
     commit('edit_proposal', data);
   },
+  resetProposal({commit}) {
+    commit('reset_proposal');
+  },
   // Force reload proposal (after operations where we don't want cached values - potentially have been changed)
-  async reloadProposal({commit, rootState}, id) {
+  async loadProposal({commit, rootState}, id) {
     // Otherwise get from API (first load)
     const {data} = await this.$axios.get(`/proposals/${id}`);       
     await dispatch('setProposal', data);
   },
-  async loadProposal({commit, state, dispatch}, id) {
+  async getProposal({commit, state, dispatch}, id) {
     // Try to get proposal from "cache"
     const proposal = state.proposals[id];
     if (proposal != null) { 
@@ -37,11 +44,11 @@ export const actions = {
       return;
     }
 
-    await dispatch('reloadProposal', id);
+    await dispatch('loadProposal', id);
   },
   async setProposal({commit, dispatch, rootState}, data) {
     await Promise.all([
-      dispatch('artist/loadArtist',         data.artist_id, {root: true}),
+      dispatch('artist/loadArtist',         data.artist_id,     {root: true}),
       dispatch('contractor/loadContractor', data.contractor_id, {root: true})
     ]);
 
@@ -51,27 +58,36 @@ export const actions = {
     // Append proposal to "cache" so that we don't have to load it again soon
     commit('add_proposal', proposal);
   },
-  async loadProposals({commit, dispatch, rootState}) {
+  async loadProposals({dispatch}) {
     const proposals = await this.$axios.get('/proposals');
 
     // Retain existing artist and contractor (if any)
-    const artist      = rootState.artist.artist;
-    const contractor  = rootState.contractor.contractor;
+    dispatch('cacheProposalParties');
     
     // Get artist and contractor data
     await _.forEach(proposals.data, async (proposal) => {
+      // Load artist and contractor info
       await dispatch('setProposal', proposal);
+      dispatch('resetProposal');
     });
 
+    dispatch('resetCachedParties');
+  },
+  cacheProposalParties({rootState}) {
+    cachedArtist      = rootState.artist.artist;
+    cachedContractor  = rootState.contractor.contractor;
+  },
+  resetCachedParties({dispatch}) {
+    // This action should only be used locally by this store (not externally)
     // Revert back cached artist and contractors
-    if (artist.id != null) { 
-      dispatch('artist/loadArtist', artist.id, {root: true});
+    if (cachedArtist.id != null) { 
+      dispatch('artist/loadArtist', cachedArtist.id, {root: true});
     } else {
       dispatch('artist/resetArtist', '', {root: true});
     }
 
-    if (contractor .id!= null) { 
-      dispatch('contractor/loadContractor', contractor.id, {root: true}); 
+    if (cachedContractor.id != null) { 
+      dispatch('contractor/loadContractor', cachedContractor.id, {root: true}); 
     } else {
       dispatch('contractor/resetContractor', '', {root: true});
     }
@@ -88,7 +104,7 @@ export const actions = {
     dispatch('setProposal', data);
   },
   async acceptCounterOffer({state, dispatch}) {
-    const {data} = await this.$axios.put(`/proposals/${state.proposal.id}/proposal/counterOffer`);
+    const {data} = await this.$axios.put(`/proposals/${state.proposal.id}/counterOffer`);
     dispatch('setProposal', data);
   },
   async rejectCounterOffer({state, dispatch}) {
@@ -103,6 +119,10 @@ export const actions = {
     await this.$axios.delete(`/proposals/${id}`);
     commit('reset_proposal');
   },
+  async editProposal({dispatch, state}, proposal) {
+    const {data} = await this.$axios.put(`/proposals/${state.proposal.id}`, proposal);
+    dispatch('setProposal', data);
+  }
 }
 
 export const getters = {

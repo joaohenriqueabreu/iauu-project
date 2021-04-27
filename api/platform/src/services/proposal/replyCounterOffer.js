@@ -5,13 +5,13 @@ const Proposal            = require('../../models/proposal');
 
 module.exports = class ReplyCounterOfferService extends ProposalService
 {
-    constructor(user, id) {
-      super(user)
-      
-      this.id = id;
+    constructor(user) {
+      super(user);
     }
 
-    async reply() {
+    async reply(id) {
+      this.id = id;
+
       await this.searchProposal();
       this.ensureProposalWasFound()
         .ensureProposal()

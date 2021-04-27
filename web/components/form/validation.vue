@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="active" class="error">
+    <div v-if="error" class="error">
       <slot></slot>
     </div>
   </div>
@@ -51,7 +51,7 @@ export default {
     // minTime: { type: Number, default: undefined },
     // sameAs: null, // any
 
-    active: { type: Boolean, default: false },
+    error: { type: Boolean, default: false },
   },
   // validations() {
   //   const rules = { value: {}};
