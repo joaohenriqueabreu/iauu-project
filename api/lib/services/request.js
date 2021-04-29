@@ -1,5 +1,6 @@
-const axios = require('axios').default;
-const config = require('../env');
+const axios                   = require('axios').default;
+const jwt                     = require('jwt-simple');
+const config                  = require('../env');
 const { BadRequestException } = require('../exception');
 
 module.exports = class RequestEndpointService {
@@ -8,7 +9,7 @@ module.exports = class RequestEndpointService {
 
     this.http = axios.create({
       baseURL: `http://localhost:${requestPort}`,
-      headers: {'Authorization' : `Bearer ${config.auth.app_secret}`}
+      headers: { 'Authorization' : `Bearer ${jwt.encode(service || 'app', config.auth.secret)}` }
     });
   }
 

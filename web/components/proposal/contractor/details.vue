@@ -36,7 +36,7 @@
         <div v-else class="boxed p-4 mb-4">
           <proposal-timeslots :proposal="proposal"></proposal-timeslots>
         </div>
-        <div v-if="proposal.has_custom_product">
+        <div v-if="proposal.has_counter_offer">
           <reply-counter-offer :proposal="proposal" @replied="counterOfferReplied"></reply-counter-offer>
         </div>
         <div class="boxed mb-4">
@@ -70,12 +70,10 @@
             </div>
           </div>
           <div class="horizontal center middle full-height">
-            <div v-if="(!proposal.has_custom_product || proposal.has_accepted_counter_offer) && proposal.has_selected_timeslot && ! isProposalPast" class="mr-5">
-              <form-button @action="accept">Aceitar</form-button>
-            </div>
             <div v-if="!isProposalPast">
-              <h5 class="clickable brand-hover" @click="reject">Cancelar</h5>
+              <h5 class="clickable brand-hover" @click="$refs.cancelProposal.show()">Cancelar</h5>
             </div>
+            <confirm-dialog yes-no ref="cancelProposal" message="Deseja cancelar esta proposta?" @confirmed="cancel"></confirm-dialog>
           </div>
         </div>
       </template>
@@ -152,7 +150,7 @@ export default {
       await this.acceptProposal(this.proposal.id);
       this.$emit('accepted', this.proposal.id);
     },
-    async reject() {
+    async cancel() {
       await this.rejectProposal(this.proposal.id);
       this.$emit('rejected', this.proposal.id);
     },

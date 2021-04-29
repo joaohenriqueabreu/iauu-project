@@ -1,6 +1,7 @@
-const config                 = require('lib/env');
+const config                 	= require('lib/env');
 const { BadRequestException } = require('lib/exception');
-const RequestEndpointService = require('lib/services/request');
+const RequestEndpointService 	= require('lib/services/request');
+const { EventPublisher }			= require('lib/events');
 
 module.exports = class BaseService {
     constructor(user) {
@@ -42,21 +43,32 @@ module.exports = class BaseService {
     }
 
     async sendNotification(to, from, message, type, target) {
-        if (this.supressNotifications || config.isTestEnv()) { return this; }
+			if (this.supressNotifications || config.isTestEnv()) { return this; }
 
-        console.log('Sending notification...');
-        try {
-            await this.requestNotificationEndpointSvc.post('/', {
-                from:     from,
-                to:       to, 
-                message:  message, 
-                type:     type, 
-                target:   target,
-              });
-        } catch (error) {
-            console.log(error);
-        }
-  
-        return this;
-      }
+			console.log('Sending notification...');
+			try {
+				await this.requestNotificationEndpointSvc.post('/', {
+					from:     from,
+					to:       to, 
+					message:  message, 
+					type:     type, 
+					target:   target,
+				});
+			} catch (error) {
+				console.log(error);
+			}
+
+			return this;
+    }
+
+    async emitEvent(event, data) {
+			const eventPublisher = new EventPublisher(event);
+			
+			try {
+				await eventPublisher.publish(data);
+			} catch (error) {
+				// do something
+				console.log(error);
+			}
+    }
 }

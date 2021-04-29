@@ -1,7 +1,7 @@
-const config = require('../../env');
-const jwt = require('jwt-simple');
-const faker = require('faker');
-const crypto = require('crypto');
+const config 	= require('../../env');
+const jwt 		= require('jwt-simple');
+const faker 	= require('faker');
+const crypto 	= require('crypto');
 
 const { User, Artist, Contractor } = require('../../models');
 

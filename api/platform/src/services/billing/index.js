@@ -7,8 +7,10 @@ const UpdatePaymentStatusService          = require('./updatePaymentStatus');
 const SearchPresentationBillingService    = require('./searchPresentationBilling');
 const UpdateInstalmentsService            = require('./updateInstalments');
 const ManualBillingPaymentService         = require('./manualPayment');
+const CreateBillingService                = require(`./createBilling`);
 
-module.exports = { 
+module.exports = {
+  CreateBillingService,
   SearchArtistAccountService,
   PaymentService, 
   PayInstalmentService, 

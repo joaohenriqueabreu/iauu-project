@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import LandingNav from '@/components/menu/landing'
+import { mapState } from 'vuex';
+import LandingNav   from '@/components/menu/landing';
 export default {
   components: {
     'landing-nav': LandingNav
@@ -27,11 +27,12 @@ export default {
 
 <style lang="scss" scoped>
 header {
-  position: fixed;
-  width: 100vw;
-  z-index: $moveToTop;
-  height: 10vh;
-  background: $layer1;
+  position:       fixed;
+  width:          100vw;
+  z-index:        $moveToTop;
+  height:         10vh;
+  background:     $layer1;
+  padding-right:  2vw;
 }
 
 main {
@@ -41,9 +42,9 @@ main {
 }
 
 footer {
-  position: relative;
-  bottom: 0;
-  height: 20vh;
+  position:   relative;
+  bottom:     0;
+  height:     20vh;
   background: $layer1;
 }
 </style>

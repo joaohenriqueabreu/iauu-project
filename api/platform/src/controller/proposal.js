@@ -114,24 +114,26 @@ class ProposalController extends BaseController {
 
   async acceptProposal(req, res, next) {
     console.log('Accepting proposal...');
-    const acceptProposalService = new AcceptProposalService(req.user, req.data);
-    const requestEndpointSvc    = new RequestEndpointService();
+    const acceptProposalService = new AcceptProposalService(req.user, req.data.id);
     
-    try {
-      await acceptProposalService.reply();
-      const proposal = acceptProposalService.getProposal();
-    } catch (error) {
-      next(error);
-    }
+    // try {
+    //   await acceptProposalService.reply();
+    //   res.status(200).json(acceptProposalService.getProposal());
+    // } catch (error) {
+    //   next(error);
+    // }
 
-    try {
-      const presentation = await requestEndpointSvc.post('presentation', proposal);
-    } catch(error) {
-      // TODO we should probably rollback accepting proposal here
-      next(error);
-    }
+    // TODO testing code
+    await acceptProposalService.emitEvent();
+    res.status(200).json(acceptProposalService.getProposal());
 
-    res.status(200).json(proposal);
+    // emitting event from service
+    // try {
+    //   const presentation = await requestEndpointSvc.post('presentation', proposal);
+    // } catch(error) {
+    //   // TODO we should probably rollback accepting proposal here
+    //   next(error);
+    // }
   }
 
   async rejectProposal(req, res, next) {

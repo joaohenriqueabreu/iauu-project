@@ -7,6 +7,7 @@ const CompletePresentationService         = require('../services/presentation/co
 const CancelPresentationService           = require('../services/presentation/cancelPresentation');
 const ManagePresentationChecklistService  = require('../services/presentation/manageChecklist');
 const UpdatePresentationStatusService     = require('../services/presentation/updatePresentationStatus');
+// const CreatePresentationService           = require('../services/presentation/createPresentation');
 const { Presentation }                    = require('../models');
 const { BadRequestException }             = require('../exception');
 
@@ -66,30 +67,30 @@ class PresentationController extends BaseController {
     }
   }
 
-  async createPresentation(req, res, next) {
-    console.log('Creating presentation from proposal...');
-    const createPresentationSvc = new CreatePresentationService();
-    try {
-      await createPresentationSvc.create(req.data.proposal);
-      const newPresentation = createPresentationSvc.getPresentation();
-    } catch (error) {
-      next(error);
-    }
+  // async createPresentation(req, res, next) {
+  //   console.log('Creating presentation from proposal...');
+  //   const createPresentationSvc = new CreatePresentationService();
+  //   try {
+  //     await createPresentationSvc.create(req.data.proposal);
+  //     const newPresentation = createPresentationSvc.getPresentation();
+  //   } catch (error) {
+  //     next(error);
+  //   }
 
-    // Send separate request to create billing for billing service
-    try {
-      const billing = await requestEndpointSvc.post('billing', { 
-        presentation: newPresentation.id,
-        artist:       newPresentation.artist.id,
-        contractor:   newPresentation.contractor.id
-      });
-    } catch (error) {
-      // TODO we should probably rollback presentation in case billing fails creating
-      next(error);
-    }
+  //   // Send separate request to create billing for billing service
+  //   try {
+  //     const billing = await requestEndpointSvc.post('billing', { 
+  //       presentation: newPresentation.id,
+  //       artist:       newPresentation.artist.id,
+  //       contractor:   newPresentation.contractor.id
+  //     });
+  //   } catch (error) {
+  //     // TODO we should probably rollback presentation in case billing fails creating
+  //     next(error);
+  //   }
 
-    res.status(200).json(newPresentation);
-  }
+  //   res.status(200).json(newPresentation);
+  // }
 
   completePresentation(req, res, next) {
     console.log('Confirming presentation...');

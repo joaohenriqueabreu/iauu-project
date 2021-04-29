@@ -2,7 +2,7 @@
   <div>
     <div class="menu-items">
       <nuxt-link to="/admin/dashboard">
-        <h6>Dashboard</h6>
+        <h5>Dashboard</h5>
       </nuxt-link>
     </div>
   </div>

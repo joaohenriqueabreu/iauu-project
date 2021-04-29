@@ -2,13 +2,16 @@
   <div>
     <div class="menu-items">
       <nuxt-link to="/search">
-        <h6>Procurar artistas</h6>
+        <h5>Procurar artistas</h5>
+      </nuxt-link>
+      <nuxt-link to="/contractor/proposals">
+        <h5>Propostas</h5>
       </nuxt-link>
       <nuxt-link to="/contractor/presentations">
-        <h6>Apresentações</h6>
+        <h5>Apresentações</h5>
       </nuxt-link>
       <nuxt-link to="/referral">
-        <h6>Renda passiva</h6>
+        <h5>Renda passiva</h5>
       </nuxt-link>
     </div>
   </div>
@@ -20,3 +23,6 @@ export default {
   extends: UserMenu
 }
 </script>
+
+<style lang="scss" scoped>
+</style>

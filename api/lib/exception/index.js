@@ -6,6 +6,7 @@ const InvalidPaymentMethodProvidedException = require('./invalidPaymentMethod');
 const FailedAPIConnectionException          = require('./apiConnection');
 const FailedChargingPaymentMethodException  = require('./chargePaymentMethod');
 const InterfaceNotImplementedException      = require('./interfaceNotImplemented');
+const EventBrokerException                  = require('./eventBrokerException');
 
 
 module.exports = {
@@ -16,5 +17,6 @@ module.exports = {
   InvalidPaymentMethodProvidedException,
   FailedAPIConnectionException,
   FailedChargingPaymentMethodException,
-  InterfaceNotImplementedException
+  InterfaceNotImplementedException,
+  EventBrokerException
 }

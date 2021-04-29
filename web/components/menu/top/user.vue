@@ -1,7 +1,7 @@
 <style lang="scss">
 .menu-items {
-  h6 {
-    margin-bottom: 2 * $space;
+  h5 {
+    padding: 2 * $space;
   }
 
   // @include desktop {

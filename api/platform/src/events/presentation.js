@@ -1,0 +1,15 @@
+const { EVENTS, EventConsumer }     = require('lib/events');
+const { CreatePresentationService } = require('../services/presentation');
+
+const proposalAcceptedConsumer  = new EventConsumer(EVENTS.PROPOSAL_ACCEPTED_EVENT);
+const createPresentationSvc     = new CreatePresentationService();
+
+const startEventConsumers = function () {
+  Promise.all([
+    proposalAcceptedConsumer.consume(createPresentationSvc.create)
+  ]);
+}
+
+module.exports = {
+  startPresentationEventConsumers: startEventConsumers
+}

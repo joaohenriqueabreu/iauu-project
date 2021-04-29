@@ -2,22 +2,22 @@
   <div>
     <div class="menu-items">
       <nuxt-link to="/artist/schedule">
-        <h6>Agenda</h6>
+        <h5>Agenda</h5>
       </nuxt-link>
       <nuxt-link to="/artist/incorporate">
-        <h6>Venda mais shows</h6>
+        <h5>Venda mais shows</h5>
       </nuxt-link>
       <nuxt-link to="/artist/products">
-        <h6>Formatos de apresentação</h6>
+        <h5>Formatos de apresentação</h5>
       </nuxt-link>
       <nuxt-link to="/referral">
-        <h6>Renda passiva</h6>
+        <h5>Renda passiva</h5>
       </nuxt-link>
       <nuxt-link to="/artist/profile">
-        <h6>Gerenciar banda</h6>
+        <h5>Gerenciar banda</h5>
       </nuxt-link>
       <nuxt-link to="/artist/reports">
-        <h6>Relatórios</h6>
+        <h5>Relatórios</h5>
       </nuxt-link>
     </div>
   </div>

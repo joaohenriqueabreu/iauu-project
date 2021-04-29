@@ -5,6 +5,7 @@ const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGateway
 const BaseService                         = require('../base');
 const { BadRequestException }             = require('../../exception');
 const { ArtistAccount }                   = require('../../models');
+const { DataRequestService } = require('lib/services');
 
 module.exports = class SaveArtistAccountService extends BaseService
 {
@@ -13,7 +14,6 @@ module.exports = class SaveArtistAccountService extends BaseService
       super(user);
 
       this.id = user.role_id;
-      this.requestEndpointSvc = new RequestEndpointService();
     }
 
     async save(bankAccountData) {
@@ -42,8 +42,7 @@ module.exports = class SaveArtistAccountService extends BaseService
 
       // Create artist if not found
       if (ArtistAccount.notFound(this.artist) || !this.artist instanceof ArtistAccount) {
-        let artistData  = await this.requestEndpointSvc.get(`artists/${this.id}`);
-        console.log(artistData);
+        let artistData  = DataRequestService.getArtist(this.id);
         this.artist     = new ArtistAccount({ source_id: this.id,  ...artistData});
       }
 

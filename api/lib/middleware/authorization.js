@@ -1,5 +1,5 @@
-const config = require('../env');
-const jwt = require('express-jwt');
+const config  = require('../env');
+const jwt     = require('express-jwt');
 
 const authorize = jwt({ secret: config.auth.secret, algorithms: ['HS256'] });
 

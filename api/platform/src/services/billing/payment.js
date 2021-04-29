@@ -1,12 +1,12 @@
-const _ = require('lodash');
-const moment = require('moment');
-const config = require('lib/env');
-const BaseService = require('../base');
+const _                       = require('lodash');
+const moment                  = require('moment');
+const config                  = require('lib/env');
+const BaseService             = require('../base');
+const { Billing }             = require('src/models');
+const { Payment }             = require('../../models/schemas');
+const { DataRequestService }  = require('lib/services');
 const GatewaySplitPaymentServiceBuilder = require('../builders/gatewaySplitPaymentServiceBuilder');
-const { Billing } = require('src/models');
-const { Payment } = require('../../models/schemas');
 const { BadRequestException, ManualPaymentRequiredException, Exception } = require('../../exception');
-const RequestEndpointService = require('lib/services/request');
 
 module.exports = class PaymentService extends BaseService
 {
@@ -67,7 +67,7 @@ module.exports = class PaymentService extends BaseService
       this.artistAccount  = this.billing.artist_account;
 
       try {
-        this.contractor = await this.requestEndpointSvc.get(`/contractors/${this.billing.contractor_id}`)
+        this.contractor = await DataRequestService.getContractor(this.billing.contractor_id);
       } catch (error) {
         console.log(error);
         throw new BadRequestException('Contractor not found');

@@ -4,12 +4,16 @@
       <h4 class="brand-hover clickable" @click="openModal"><u>Enviar orçamento para o organizador do evento</u></h4>
     </div>
     <div v-else class="vertical middle center offer m-4" :class="counterOffer.status">
-      <h5 class="mb-3">
-        <span v-if="!proposal.has_accepted_counter_offer">Orçamento enviado <u>{{ counterOfferStatusText }}</u></span>
+      <h5 v-if="!proposal.has_accepted_counter_offer" class="mb-3">
+        Orçamento enviado <u>{{ counterOfferStatusText }}</u>
       </h5>
+      <div v-else class="mb-3">
+        <h5 class="mb-2 horizontal center">{{ proposal.contractor.name }} <span class="color-success mx-2"><h5>aprovou</h5></span> o orçamento!</h5>
+        <small>Clique em <u>aceitar</u> para confirmar a realização da apresentação</small>
+      </div>      
       <div class="horizontal">
-        <h6 class="mr-2">{{ counterOffer.price | currency }} para {{ counterOffer.duration | longTime }} de apresentação </h6>
-        <h5 v-if="!proposal.has_accepted_counter_offer" class="mx-2 clickable brandHover" @click="openModal">
+        <h5 class="mr-2">{{ counterOffer.price | currency }} para {{ counterOffer.duration | longTime }} de apresentação </h5>
+        <h5 v-if="!proposal.has_accepted_counter_offer" class="mx-2 clickable brand-hover" @click="openModal">
           <icon icon="edit"></icon>
         </h5>
       </div>
@@ -19,7 +23,7 @@
         <h6>Orçamento de apresentação</h6>
       </template>
       <template v-slot:main>
-        <div class="vertical middle center full-width">
+        <div class="vertical middle center full-width mb-4">
           <h6>Envie o valor e duração (em horas) de sua apresentação para avaliação pelo contratante</h6>
           <div class="row full-width">
             <div class="col">
@@ -37,10 +41,11 @@
             </div>
           </div>
         </div>
+        <rejected-offers v-if="proposal.has_rejected_counter_offers" :proposal="proposal"></rejected-offers>
       </template>
       <template v-slot:footer>
         <div v-if="$v.$invalid" class="error">Complete a contra proposta para enviá-la ao organizador do evento</div>
-        <div class="vertical center middle">
+        <div class="vertical center middle full-height">
           <form-button v-if="!$v.$invalid" @action="send" class="mb-4">Enviar</form-button>
           <h6 class="clickable" @click="cancel">Cancelar</h6>
         </div>
@@ -52,10 +57,11 @@
 <script>
 import { mapActions } from 'vuex';
 import { required, minValue, numeric } from 'vuelidate/lib/validators';
-// function minTime(value) {
-//   return this.$date.convertTimeToNumber(value) >= this.$config.minDurationInMinutes;
-// }
+import RejectedOffers from '@/components/proposal/rejectedOffers';
 export default {
+  components: {
+    RejectedOffers
+  },
   validations: {
     counterOffer: {
       price:    { required, numeric, minValue: minValue(1) },
@@ -121,9 +127,8 @@ export default {
 .offer {
   padding: 2 * $space;
   &.accepted {
-    background: $brandLayer;
-    color: $layer1;
-    border-radius: $edges;
+    color:          $white;
+    border-radius:  $edges;
   }
 }
 </style>

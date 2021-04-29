@@ -24,7 +24,7 @@
         {{ proposal.counter_offer.duration }} horas de apresentação <span class="color-success"><h5>aprovado!</h5></span>
       </h5>
     </div>
-    <modal tiny ref="counter">
+    <modal small ref="counter">
       <template v-slot:header>
         Negociar proposta
       </template>
@@ -34,9 +34,10 @@
             Orçamento de {{ proposal.counter_offer.price | currency }} para
             {{ proposal.counter_offer.duration }} horas de apresentação
           </h4>
-          <p v-if="!$empty(proposal.counter_offer.notes)">
+          <p v-if="!$empty(proposal.counter_offer.notes)" class="mb-4">
             {{ proposal.counter_offer.notes }}
           </p>
+          <rejected-offers v-if="proposal.has_rejected_counter_offers" :proposal="proposal"></rejected-offers>
         </div>
       </template>
       <template v-slot:footer>
@@ -50,10 +51,14 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import { mapActions } from 'vuex';
+import RejectedOffers from '@/components/proposal/rejectedOffers';
 export default {
   props: {
     proposal: {}
+  },
+  components: {
+    RejectedOffers
   },
   computed: {
     lastCounterOfferRejected() {

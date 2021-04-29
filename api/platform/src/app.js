@@ -55,3 +55,9 @@ let expressPort = config.http.port || 4444;
 app.listen(expressPort, () => {
   console.log(`Express server listening on port: ${expressPort}`);
 });
+
+// TODO move to top
+const { startEventConsumers } = require('./events');
+
+// Start event consumers
+startEventConsumers();

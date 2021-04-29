@@ -1,16 +1,7 @@
 const api = require('express').Router();
 
 const billingController = require('../controller/billing');
-const { authorizationMiddleware, validationMiddleware, dataMiddleware } = require('lib/middleware');
-
-api.post('/', 
-  authorizationMiddleware.app,
-  validationMiddleware.billing,
-  dataMiddleware.fetchPresentation,
-  dataMiddleware.fetchArtist,
-  dataMiddleware.fetchContractor,
-  billingController.createBilling
-);
+const { authorizationMiddleware, validationMiddleware } = require('lib/middleware');
 
 api.get('/account',         authorizationMiddleware.authorize, authorizationMiddleware.artist,      billingController.searchArtistAccount);
 api.put('/:id/instalments', authorizationMiddleware.authorize, authorizationMiddleware.artist,      validationMiddleware.id,          validationMiddleware.instalments, billingController.updateInstalments);

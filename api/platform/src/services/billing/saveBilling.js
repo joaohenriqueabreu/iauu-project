@@ -1,7 +1,6 @@
 const moment                      = require('moment');
 const BaseService                 = require('../base');
 const { Billing }                 = require('../../models');
-const RequestEndpointService      = require('lib/services/request');
 const { BadRequestException }     = require('../../exception');
 const SearchArtistAccountService  = require('./searchArtistAccount');
 

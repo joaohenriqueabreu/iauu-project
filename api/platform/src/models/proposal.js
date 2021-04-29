@@ -1,4 +1,5 @@
 const { Schema, model }       = require('mongoose');
+const { isEmpty }             = require('lib/utils');
 
 const BaseRepository          = require('./repositories/base');
 const baseSchemaOptions 	    = require('./schemas/options');
@@ -8,22 +9,21 @@ const productSchema      	    = require('./schemas/product').schema;
 const counterOfferSchema 	    = require('./schemas/counterOffer').schema;
 
 const RequestEndpointService  = require('lib/services/request');
-const requestEndpointSvc      = new RequestEndpointService();
 
 const proposalSchema = new Schema({
-		artist_id: 			          { type: String, required: true },
-		contractor_id:	          { type: String, required: true },
-    title: 					          { type: String, required: true },
-    status:                   { type: String, enum: ['proposal', 'accepted', 'rejected'] }, // TODO move to data consts
-    price: 					          { type: Number, default: 0 },
-    duration: 			          { type: Number, default: 0 },
-    selected_timeslot:        { type: timeslotSchema },
-    timeslots: 			          { type: [timeslotSchema], validate: timeslots => Array.isArray(timeslots) && timeslots.length > 0 },
-    product: 				          { type: productSchema, required: true },
-    address: 				          { type: addressSchema, required: true },
-    notes: 					          { type: String },
-    counter_offer: 	          { type: counterOfferSchema },
-    rejected_counter_offers:  { type: [counterOfferSchema] },
+		artist_id: 			          {type: String, required: true},
+		contractor_id:	          {type: String, required: true},
+    title: 					          {type: String, required: true},
+    status:                   {type: String, enum: ['proposal', 'accepted', 'rejected']}, // TODO move to data consts
+    price: 					          {type: Number, default: 0},
+    duration: 			          {type: Number, default: 0},
+    selected_timeslot:        {type: timeslotSchema},
+    timeslots: 			          {type: [timeslotSchema], validate: timeslots => Array.isArray(timeslots) && timeslots.length > 0},
+    product: 				          {type: productSchema, required: true},
+    address: 				          {type: addressSchema, required: true},
+    notes: 					          {type: String},
+    counter_offer: 	          {type: counterOfferSchema},
+    rejected_counter_offers:  {type: [counterOfferSchema]},
 }, baseSchemaOptions);
 
 class Proposal extends BaseRepository {
@@ -47,15 +47,19 @@ class Proposal extends BaseRepository {
   }
 
   get has_counter_offer() {
-    return this.counter_offer != null;
+    return !isEmpty(this.counter_offer);
   }
 
   get has_accepted_counter_offer() {
     return this.has_counter_offer && this.counter_offer.status === 'accepted';
   }
 
+  get has_rejected_counter_offers() {
+    return this.rejected_counter_offers.length > 0;
+  }
+
   get has_rejected_counter_offer() {
-    return this.rejected_counter_offers.length > 0 && this.counter_offer == null;
+    return !this.has_counter_offer && this.has_rejected_counter_offers;
   }
 
   get has_custom_product() {

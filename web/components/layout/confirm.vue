@@ -4,7 +4,8 @@
 <script>
 export default {
   props: {
-    message: { type: String, default: false }
+    message: { type: String, default: '' },
+    yesNo:   { type: Boolean, default: false },
   },
   methods: {
     show() {
@@ -13,8 +14,8 @@ export default {
         duration:       null,
         containerClass: 'confirmDialog',
         action: [
-          { text: 'Confirmar',  onClick: (e, toastObject) => { self.$emit('confirmed'); toastObject.goAway(0); }},
-          { text: 'Cancelar',   onClick: (e, toastObject) => { self.$emit('cancelled'); toastObject.goAway(0); }}
+          { text: this.yesNo ? 'Sim' : 'Confirmar',  onClick: (e, toastObject) => { self.$emit('confirmed'); toastObject.goAway(0); }},
+          { text: this.yesNo ? 'Não' : 'Cancelar',   onClick: (e, toastObject) => { self.$emit('cancelled'); toastObject.goAway(0); }}
         ]
       });
     },
@@ -35,6 +36,7 @@ export default {
   a {
     transition: $transition !important;
     color:      $layer1 !important;
+    font-size:  $large !important;
     &:hover {
       transition:       $transition !important;
       color:            $layer5 !important;

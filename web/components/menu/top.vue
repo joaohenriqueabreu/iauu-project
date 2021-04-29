@@ -24,13 +24,13 @@
             <artist-menu v-if="$auth.hasScope('artist')"></artist-menu>
             <contractor-menu v-if="$auth.hasScope('contractor')"></contractor-menu>
             <nuxt-link to="/user/profile">
-              <h6>Perfil</h6>
+              <h5>Perfil</h5>
             </nuxt-link>
             <nuxt-link to="/user/notifications">
-              <h6>Notificações</h6>
+              <h5>Notificações</h5>
             </nuxt-link>
             <nuxt-link to="/logout">
-              <h6>Sair</h6>
+              <h5>Sair</h5>
             </nuxt-link>
           </div>
         </div>
@@ -110,10 +110,9 @@ small {
   font-weight: $bold;
 }
 
-h6 {
+h5 {
   font-weight: $bold;
-  margin-bottom: 2 * $space;
-  margin-right: 5 * $space;
+  padding: 2 * $space;
 }
 
 .guest {

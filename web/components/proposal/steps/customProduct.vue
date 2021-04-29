@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import Product from '@/models/product'
+import Product from '@/models/product';
 export default {
   props: {
     allItems: { type: Array, default: () => {} }
@@ -70,9 +70,10 @@ export default {
     },
     selectProduct() {
       this.$emit('selected', new Product({
-          name: 'custom',
-          description: this.notes,
-          items: this.customItems
+          name:         'custom',
+          custom:       true,
+          description:  this.notes,
+          items:        this.customItems
         })
       );
 

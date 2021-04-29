@@ -23,7 +23,7 @@
         </div>
         <div class="mx-4 mb-4 vertical center middle">
           <h3 class="cap mb-4">{{ proposal.title }}</h3>
-          <span>{{ proposal.description }}</span>
+          <p>{{ proposal.notes }}</p>
         </div>
         <div class="boxed main mb-4" v-if="!proposal.has_custom_product">
           <div class="row">
@@ -51,12 +51,13 @@
         <div class="boxed horizontal" v-if="!$empty(proposal.notes)">
           <icon icon="edit"></icon><p>{{ proposal.notes }}</p>
         </div>
+        <div class="spacer"></div>
       </template>
       <!-- <template v-slot:external>
         <chat v-if="!$empty(proposal)" :proposal="proposal"></chat>
       </template> -->
       <template v-slot:footer>
-        <div class="vertical middle center">
+        <div class="vertical middle center full-height">
           <div class="error mb-2">
             <div v-if="proposal.has_custom_product && !proposal.has_counter_offer">
               {{ proposal.contractor.name }} solicitou um produto personalizado. Envie um
@@ -152,7 +153,8 @@ export default {
     },
     async accept() {
       await this.acceptProposal(this.proposal.id);
-      this.$emit('accepted', this.proposal.id);
+      this.$toast.success('Parabens!! Sua apresentação foi confirmada com sucesso!');
+      this.$router.push('/artist/presentations');
     },
     async reject() {
       await this.rejectProposal(this.proposal.id);
@@ -174,5 +176,9 @@ export default {
       border:     2px solid $layer5;
     }
   }  
+}
+
+.spacer {
+  padding-bottom: 10vh;
 }
 </style>

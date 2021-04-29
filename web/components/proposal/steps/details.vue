@@ -8,7 +8,7 @@
       </form-input>
       <form-location street :default="proposal.address" placeholder="Onde será o evento?" @selected="changeAddress">
       </form-location>
-      <form-textarea v-model="description" class="mb-2" :rows="3" placeholder="Conte mais sobre o seu evento">
+      <form-textarea v-model="notes" class="mb-2" :rows="3" placeholder="Conte mais sobre o seu evento">
       </form-textarea>
       <!-- No documents for now -->
       <!-- <div class="vertical mb-5">
@@ -33,10 +33,10 @@ export default {
   extends: Step,
   data() {
     return {
-      title:        '',
-      address:     new Location(),
-      description:  '',
-      documents:    []
+      title:      '',
+      address:    new Location(),
+      notes:      '',
+      documents:  []
     }
   },
   computed: {
@@ -45,11 +45,11 @@ export default {
     }
   },
   watch: {
-    title(title)              { this.editProposal({ prop: 'title',        value: title }); },
-    address(address)          { this.editProposal({ prop: 'address',      value: address }); },
-    description(description)  { this.editProposal({ prop: 'description',  value: description }); },
-    documents(documents)      { this.editProposal({ prop: 'documents',    value: documents }); },
-    validForm(valid) {
+    title(title)          { this.editProposal({ prop: 'title',      value: title }); },
+    address(address)      { this.editProposal({ prop: 'address',    value: address }); },
+    notes(notes)          { this.editProposal({ prop: 'notes',      value: notes }); },
+    documents(documents)  { this.editProposal({ prop: 'documents',  value: documents }); },
+    validForm(valid)      {
       if (valid) {
         this.$emit('complete');
         return;
@@ -61,7 +61,7 @@ export default {
   mounted() {
     this.title        = this.proposal.title;
     this.address      = this.proposal.address;
-    this.description  = this.proposal.description;
+    this.notes  = this.proposal.notes;
     this.documents    = this.proposal.documents;
   },
   methods: {

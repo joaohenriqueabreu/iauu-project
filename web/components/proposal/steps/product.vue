@@ -60,11 +60,11 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import Step                     from '@/components/proposal/steps/step'
-import ProductInfo              from '@/components/artist/product/info'
-import ProductPreview           from '@/components/artist/product/preview'
-import CustomProduct            from '@/components/proposal/steps/customProduct'
+import { mapState, mapActions } from 'vuex';
+import Step                     from '@/components/proposal/steps/step';
+import ProductInfo              from '@/components/artist/product/info';
+import ProductPreview           from '@/components/artist/product/preview';
+import CustomProduct            from '@/components/proposal/steps/customProduct';
 export default {
   components: {
     ProductInfo,

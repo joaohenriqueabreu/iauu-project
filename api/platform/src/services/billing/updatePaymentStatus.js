@@ -1,8 +1,9 @@
-const _ = require('lodash');
+const _                             = require('lodash');
 const GatewayCallbackServiceBuilder = require('../builders/gatewayCallbackServiceBuilder');
-const { Billing } = require('../../models');
-const { Payment } = require('../../models/schemas');
-const { BillingData } = require('../../config/data');
+const { Billing }                   = require('../../models');
+const { Payment }                   = require('../../models/schemas');
+const { BillingData }               = require('../../config/data');
+const { EVENTS }                    = require('lib/events');
 const { FailedChargingPaymentMethodException, BadRequestException, Exception } = require('../../exception');
 const SaveBillingService = require('./saveBilling');
 
@@ -107,7 +108,7 @@ module.exports = class UpdatePaymentStatusService extends SaveBillingService
       if (! this.billing.is_fully_paid) { return this; }
 
       // no need to await
-      this.requestEndpointSvc.post(`/presentations/${this.billing.presentation_id}/status/paid`);
+      this.emitEvent(EVENTS.BILLING_PAID_EVENT, this.billing);      
       return this;
     }
 

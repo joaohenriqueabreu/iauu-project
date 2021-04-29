@@ -8,7 +8,6 @@ api.get('/role/:id',            authorizationMiddleware.app,        validationMi
 api.get('/types',               presentationController.getTypes);
 api.get('/',                    authorizationMiddleware.authorize,  presentationController.searchUserPresentations);
 api.get('/:id',                 authorizationMiddleware.authorize,  validationMiddleware.id,        presentationController.search);
-api.post('/',                   authorizationMiddleware.app,        validationMiddleware.proposal,  presentationController.createPresentation);
 api.put('/:id/complete',        authorizationMiddleware.authorize,  validationMiddleware.id,        presentationController.completePresentation);
 api.delete('/:id',              authorizationMiddleware.authorize,  validationMiddleware.id,        presentationController.cancelPresentation);
 
