@@ -8,7 +8,6 @@ export const state = () => ({
   artist:       {},
   artists:      {},
   product:      {},
-  products:     [],
   statistics:   {},
   searchFilters: {
     term:     '',
@@ -33,12 +32,11 @@ export const mutations = {
     props.forEach((field) => { profile = profile[field]; })
     Vue.set(profile, field, data);
   },
-  set_products(state, data) { state.products = data; }, // Vue.set(state, 'products', data); },
-  set_product(state, data)  { state.product  = data; },
+  set_product(state, data)  { state.product = data; },
   remove_product(state, id) {
     Vue.delete(
-      state.products,
-      this.$array.findIndex(state.products, (product) => product.id === id)
+      state.artist.products,
+      this.$array.findIndex(state.artist.products, (product) => product.id === id)
     );
   },
   set_statistics(state, statistics)   { state.statistics = statistics; },
@@ -47,80 +45,79 @@ export const mutations = {
   set_artist(state, data)             { state.artist = data; },
   remove_artist(state, id)            { Vue.delete(state.artists, this.$array.findIndex(state.artists, (artist) => artist.id === id)); },
   set_search_filters(state, filters)  { state.searchFilters = filters; },
-  reset_artist()                      { state.artist = {}},
+  reset_artist(state)                 { state.artist = {}},
 }
 
 export const actions = {
-  resetArtist({commit}) {
-    commit('reset_artist');
-  },
-  async reloadArtist({commit, state}, id) {
-    // Otherwise get from API (first load)
-    const {data} = await this.$axios.get(`/artists/${id}`);
+  async setArtist({ commit, state }, data) {    
     commit('set_artist', data);
 
     // Append Artist to "cache" so that we don't have to load it again soon
     commit('add_artist', data);
   },
-  async loadArtist({commit, dispatch}, id) {
+  async loadArtist({ commit, state, dispatch }, id) {
+    commit('reset_artist');
+
     // Try to get artist from "cache"
-    const artist = _.find((state.artists), (existingArtist) => existingArtist.id === id);
-    if (artist != null) { 
-      commit('set_artist', artist);
-      return;
+    let artist = state.artists[id];
+    if (artist == null) {
+      const { data } = await this.$axios.get(`/artists/${id}`);
+      artist = data;      
     }
 
-    await dispatch('reloadArtist', id);
+    dispatch('setArtist', artist);
   },
-  async loadArtistPrivateProfile({commit}) {
-    const {data} = await this.$axios.get('/artists/profile');
+  async loadArtistPrivateProfile({ commit }) {
+    const { data } = await this.$axios.get('/artists/profile');
+
+    // do not append this data to cache - we might not want to share all of this with other users
     commit('set_artist', data);
   },
-  async loadArtistPublicProfile({commit}, id) {
-    const {data} = await this.$axios.get(`/artists/${id}/public`);
-    commit('set_artist', data);
+  async loadArtistPublicProfile({ dispatch }, id) {
+    const { data } = await this.$axios.get(`/artists/${id}/public`);
+    dispatch('setArtist', data);
   },
-  async saveProfile({commit, state}) {
-    const {data} = await this.$axios.put('/artists/profile', {profile: state.artist});
-    commit('set_artist', data);
-    this.$toast.success('Perfil atualizado');
+  async saveProfile({ dispatch, state}) {
+    const { data } = await this.$axios.put('/artists/profile', { profile: state.artist });
+    dispatch('setArtist', data);
   },
-  async loadProducts({commit}, id) {
-    const {data} = await this.$axios.get(`/artists/${id}/products`);
-    commit('set_products', data);
+  async loadProducts({ dispatch }, id) {
+    const { data } = await this.$axios.get(`/artists/${id}/products`);
+    dispatch('setArtist', data);
   },
-  async saveProduct({commit}, product) {
-    const {data} = await this.$axios.post('/artists/products', {product});
-    commit('set_products', data);
+  async saveProduct({ dispatch }, product) {
+    const { data } = await this.$axios.post('/artists/products', { product });
+    dispatch('setArtist', data);
   },
-  async removeProduct({commit}, {id}) {
-    const {data} = await this.$axios.delete(`/artists/products/${id}`);
-    commit('set_products', data);
+  async removeProduct({ dispatch }, {id}) {
+    const { data } = await this.$axios.delete(`/artists/products/${id}`);
+    dispatch('setArtist', data);
   },
-  async calculateStatistics({commit}, filters) {
+  async calculateStatistics({ commit }, filters) {
     if (filters === undefined) {
       filters = {start: moment().startOf('year').toISOString(), end: moment().toISOString()};
     }
 
-    const {data} = await this.$axios.get('/artists/statistics', {params: {start: filters.start, end: filters.end}});
+    const { data } = await this.$axios.get('/artists/statistics', { params: { start: filters.start, end: filters.end }});
     commit('set_statistics', data);
   },
 
   /** Contractor facing actions */  
-  async searchArtists({commit}, filters) {
-    const {data} = await this.$axios.get('/artists/search', {params: filters});
+  async searchArtists({ commit }, filters) {
+    const { data } = await this.$axios.get('/artists/search', { params: filters });
     commit('set_artists', data);
   },
-  async loadArtistPublicProfile({commit}, slug) {
-    const {data} = await this.$axios.get(`artists/${slug}/public`);
+  async loadArtistPublicProfile({ commit }, slug) {
+    const { data } = await this.$axios.get(`artists/${slug}/public`);
     commit('set_artist', data);
   },
-  setSearchFilters({commit}, searchFilters) {
+  setSearchFilters({ commit }, searchFilters) {
     commit('set_search_filters', searchFilters);
   }
 }
 
 export const getters = {
-  getField
+  getField,
+  products: (state) => state.artist.products,
 }
 /* eslint-disable */

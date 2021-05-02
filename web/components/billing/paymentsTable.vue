@@ -19,8 +19,8 @@
           <td :class="payment.is_failed ? 'failed' : ''">{{ payment.status | translate('billing.payment.status') }}</td>
           <td>{{ payment.amount | currency }}</td>
           <td>{{ payment.paid_amount | currency }}</td>
-          <td>{{ payment.due_at | date }}</td>
-          <td v-if="!$empty(payment.paid_at)">{{ payment.paid_at | date }}</td>
+          <td>{{ payment.due_dt | date }}</td>
+          <td v-if="!$empty(payment.paid_dt)">{{ payment.paid_dt | date }}</td>
           <td v-else>-</td>
         </tr>
       </tbody>

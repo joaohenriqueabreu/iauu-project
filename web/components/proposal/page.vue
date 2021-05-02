@@ -28,9 +28,9 @@ export default {
     ...mapState({proposal:  (state) => state.proposal.proposal})
   },
   methods: {
-    ...mapActions('proposal', ['loadProposals', 'getProposal']),
+    ...mapActions('proposal', ['loadProposals', 'loadProposal']),
     async open(id) {
-      await this.getProposal(id);
+      await this.loadProposal(id);
       this.$refs.proposal.openModal();
     }
   }

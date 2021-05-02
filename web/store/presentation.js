@@ -1,48 +1,75 @@
-import _ from 'lodash'
-import { getField, updateField } from 'vuex-map-fields'
+import Vue  from 'vue';
+import _    from 'lodash';
+import { getField, updateField } from 'vuex-map-fields';
 
 export const state = () => ({
   presentation: {},
-  presentations: []
+  presentations: {},
 })
 
 export const mutations = {
   updateField,
-  set_presentation(state, data) {
-    state.presentation = data
-  },
-  set_presentations(state, data) {
-    state.presentations = data
-  },
-  reset_presentation(state) {
-    state.presentation = {}
-  }
+  set_presentation(state, data)   { state.presentation = data; },
+  set_presentations(state, data)  { state.presentations = data; },
+  add_presentation(state, data)   { Vue.set(state.presentations, data.id, data); },
+  reset_presentation(state)       { state.presentation = {}; }
 }
 
 export const actions = {
-  async loadPresentations({ commit }) {
-    const {data} = await this.$axios.get('presentations')
-    commit('set_presentations', data)
+  async setPresentation({ commit, dispatch, rootState }, data) {
+    await Promise.all([
+      dispatch('proposal/loadProposal',     data.proposal_id,   { root: true }),
+      dispatch('artist/loadArtist',         data.artist_id,     { root: true }),
+      dispatch('contractor/loadContractor', data.contractor_id, { root: true })
+    ]);
+
+    const presentation = {
+      ...data,
+      proposal: rootState.proposal.proposal,
+      artist: rootState.artist.artist, 
+      contractor: rootState.contractor.contractor,
+    };
+
+    commit('set_presentation', presentation);
+
+    // Append presentation to "cache" so that we don't have to load it again soon
+    commit('add_presentation', presentation);
   },
-  async loadPresentation({ commit }, id) {
-    const {data} = await this.$axios.get(`presentations/${id}`)
-    commit('set_presentation', data)
+  async loadPresentation({ commit, state, dispatch }, id) {
+    commit('reset_presentation');
+
+    // Try to get presentation from "cache"
+    let presentation = state.presentations[id];
+    if (presentation == null) {
+      const { data } = await this.$axios.get(`/presentations/${id}`);
+      presentation = data;
+    }
+
+    await dispatch('setPresentation', presentation);
   },
-  async confirmPresentation({ commit }, id) {
-    const {data} = await this.$axios.put(`presentations/${id}/complete`)
-    commit('set_presentation', data)
+  async loadPresentations({ commit, dispatch }) {
+    commit('reset_presentation');
+    const { data } = await this.$axios.get('/presentations');
+    
+    // Get artist and contractor data
+    await _.forEach(data, async (presentation) => {
+      // Load proposal, artist and contractor info
+      await dispatch('setPresentation', presentation);
+      commit('reset_presentation');
+    });
   },
-  async cancelPresentation({ commit }, id) {
-    const {data} = await this.$axios.delete(`presentations/${id}`)
-    commit('set_presentation', data)
+  async confirmPresentation({ dispatch }, id) {
+    const { data } = await this.$axios.put(`presentations/${id}/complete`);
+    dispatch('setPresentation', data);
   },
-  async editPresentation({ commit, state }) {
-    const {data} = await this.$axios.put(`presentations/${state.presentation.id}`, state.presentation);
-    commit('set_presentation', data);
+  async cancelPresentation({ dispatch }, id) {
+    const { data } = await this.$axios.delete(`presentations/${id}`);
+    dispatch('setPresentation', data);
   },
-  resetPresentation({ commit }) {
-    commit('reset_presentation')
-  }
+  async editPresentation({ dispatch, state }) {
+    const { data } = await this.$axios.put(`presentations/${state.presentation.id}`, state.presentation);
+    dispatch('setPresentation', data);
+  },
 }
 
 export const getters = {

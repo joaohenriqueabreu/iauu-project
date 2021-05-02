@@ -3,6 +3,7 @@ const { EventConsumerService }  = require('lib/events');
 const BadRequestException       = require('../../exception/bad');
 const { Presentation }          = require('../../models');
 const { EVENTS }                = require('lib/events');
+const { PresentationData } = require('../../config/data');
 
 module.exports = class CreatePresentationService extends EventConsumerService
 {
@@ -13,9 +14,10 @@ module.exports = class CreatePresentationService extends EventConsumerService
   }
 
   async create(proposal) {
-    this.proposal = proposal;
-    this.populatePresentation();
-    await savePresentation();
+    this.proposal = super.cleanup(proposal);
+    this.populatePresentation()
+      .setPresentationStatus();
+    await this.savePresentation();
 
     this.emitEvent(EVENTS.PRESENTATION_CREATED_EVENT, this.presentation);
   }
@@ -25,7 +27,13 @@ module.exports = class CreatePresentationService extends EventConsumerService
     this.presentation = new Presentation(this.proposal);
 
     // special handling
-    this.presentation.timeslot = this.proposal.selected_timeslot;
+    this.presentation.timeslot    = this.proposal.selected_timeslot;
+    this.presentation.proposal_id = this.proposal.id;
+    return this;
+  }
+
+  setPresentationStatus() {
+    this.presentation.status = PresentationData.PRESENTATION_STATUS_ACCEPTED;
     return this;
   }
 

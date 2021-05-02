@@ -8,6 +8,6 @@ module.exports = class Proposal extends Model {
         this.description    = faker.lorem.paragraphs(5);
         this.start_dt       = faker.date.recent();
         this.end_at         = faker.date.recent();
-        this.created_at     = faker.date.recent();                        
+        this.create_dt     = faker.date.recent();                        
     }
 }

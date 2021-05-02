@@ -7,7 +7,7 @@ const instalmentSchema = new Schema({
     num:        { type: Number, require: true, default: 0 },
     name:       { type: String, default: null }, // i.e.: "Entrada"
     is_upfront: { type: Boolean, default: false },
-    due_at:     { type: Date, required: true },
+    due_dt:     { type: Date, required: true },
     amount:     { type: Number, required: true },
     status:     { type: String, enum: ['pending', 'paid'], default: 'pending' },
     notes:      { type: String }
@@ -19,7 +19,7 @@ class Instalment extends BaseRepository {
     }
 
     get is_delayed() {
-      return moment(this.due_at).diff(moment(), 'days') < 0;
+      return moment(this.due_dt).diff(moment(), 'days') < 0;
     }
 }
 

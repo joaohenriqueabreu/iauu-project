@@ -20,9 +20,9 @@
         </template>
       </modal>
     </div>
-    <div v-else>
-      <div v-for="(timeslot, index) in proposal.timeslots" :key="index" class="timeslots">
-        <span class="timeslot">{{ timeslot.start_dt | datetime }}</span>
+    <div v-else class="timeslots">
+      <div v-for="(timeslot, index) in proposal.timeslots" :key="index">
+        <span class="timeslot" :class="{ selected: isTimeslotSelected(timeslot) }">{{ timeslot.start_dt | datetime }}</span>
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@ const future = (date) => {
 
 export default {
   props: {
-    readOnly: {type: Boolean, default: false},
+    readOnly: { type: Boolean, default: false },
     proposal: {}
   },
   data() {
@@ -74,6 +74,9 @@ export default {
       this.$delete(timeslots, index);
       await this.editProposal({timeslots});
       this.$toast.success('Data removida com sucesso');
+    },
+    isTimeslotSelected(timeslot) {
+      return this.proposal.has_selected_timeslot && timeslot.start_dt === this.proposal.selected_timeslot.start_dt
     }
   }
 }
@@ -92,6 +95,12 @@ export default {
     background:       $layer5;
     padding:          $space;
     margin-right:     2 * $space;
+
+    &.selected {
+      background:     $brandLayer;
+      color:          $layer1;
+      font-weight:    $bold;
+    }
   }  
 }
 </style>

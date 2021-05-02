@@ -7,7 +7,7 @@
           <h6><icon class="mr-4" icon="bell"></icon> {{ notification.message }}</h6>
         </div>
         <div class="d-flex justify-content-end">
-          <small>{{ notification.created_at | timeAgo }}</small>
+          <small>{{ notification.create_dt | timeAgo }}</small>
         </div>
       </div>
     </div>

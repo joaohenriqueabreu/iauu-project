@@ -133,7 +133,7 @@ module.exports = class PaymentService extends BaseService
     }
 
     updatePaymentDueDt() {
-      this.payment.due_at = moment(this.payment.transaction_due_at).format(config.format.dbDate);
+      this.payment.due_dt = moment(this.payment.transaction_due_dt).format(config.format.dbDate);
       return this;
     }
 

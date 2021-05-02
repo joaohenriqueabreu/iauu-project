@@ -13,22 +13,30 @@ module.exports = class CreateBillingService extends EventConsumerService
       this.searchArtistAccountSvc = new SearchArtistAccountService();
     }
 
-    async save(presentationData) {
+    async save(presentation) {
+      await this.buildBillingData(presentation);
+      await this.searchArtistAccount();
+      this.populateBilling();
+      await this.saveBilling();
+      return this;
+    }
+
+    async buildBillingData(presentation) {
       console.log('Requesting additional data for service...');
+
+      // Eventhough we only their ids fetch artist and contractor so we make sure they are valid
+      // TODO investigate if this is really necessary
       const [artist, contractor] = await Promise.all([
-        DataRequestService.getArtist(presentationData.artist_id),
-        DataRequestService.getContractor(presentationData.contractor_id),
+        DataRequestService.getArtist(presentation.artist_id),
+        DataRequestService.getContractor(presentation.contractor_id),
       ]);
       
       this.billingData = {
-        ...{presentation: presentationData},
-        ...{artist: artist},
-        ...{contractor: contractor},
+        ...{ presentation: presentation },
+        ...{ artist:       artist },
+        ...{ contractor:   contractor },
       };
 
-      await this.searchArtist();
-      this.populateBilling();
-      await this.saveBilling();
       return this;
     }
 
@@ -45,21 +53,9 @@ module.exports = class CreateBillingService extends EventConsumerService
       return this;
     }
 
-    async searchArtist() {
+    async searchArtistAccount() {
       await this.searchArtistAccountSvc.search(this.billingData.artist.id);
-      this.artist = this.searchArtistAccountSvc.getArtist();
-      
-      // TODO when migrating to micro-service Fetch or create a (billing) artist model if one doesn't exist
-      // this.artist = await Artist.findById(this.billingData.artist.id);
-
-      // if (! this.artist instanceof Artist) {
-      //   throw new BadRequestException('Invlid Artist provided');
-      // }
-
-      // if (!this.artist instanceof Artist) { 
-      //   await (new CreateArtistService()).save();
-      // }
-
+      this.artistAccount = this.searchArtistAccountSvc.getArtistAccount();
       return this;
     }
 
@@ -69,18 +65,9 @@ module.exports = class CreateBillingService extends EventConsumerService
       this.billing.total_amount     = this.billingData.presentation.price;
       this.billing.fee              = this.billingData.presentation.fee;
 
-      this.billing.artist           = this.artist.id;
+      this.billing.artist_account   = this.artistAccount.id;
       this.billing.presentation_id  = this.billingData.presentation.id;
       this.billing.contractor_id    = this.billingData.contractor.id;
-
-      // this.billing.presentation = {
-      //   id: this.billingData.presentation.id,
-      //   title: this.billingData.presentation.proposal.title,
-      //   presentation_dt: this.billingData.presentation.timeslot.start_dt
-      // }
-
-      // this.billing.contractor = { id: this.billingData.contractor.id }
-
       return this;
     }
 

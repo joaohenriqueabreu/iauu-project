@@ -1,7 +1,7 @@
 <template>
   <div class="text-center">
     <div class="mb-4">
-      <p>Também enviamos o código para seu email. <b :class="payment.is_overdue ? 'error': ''">Vence em {{ payment.due_at | date }}</b></p>
+      <p>Também enviamos o código para seu email. <b :class="payment.is_overdue ? 'error': ''">Vence em {{ payment.due_dt | date }}</b></p>
     </div>
     <vue-qrcode :value="payment.payment_code"></vue-qrcode>
   </div>

@@ -28,18 +28,18 @@ export const mutations = {
 }
 
 export const actions = {
-  resetContractor({commit}) {
+  resetContractor({ commit }) {
     commit('reset_contractor');
   },
-  async reloadContractor({commit}, id) {
+  async reloadContractor({ commit }, id) {
     // Otherwise get from API (first load)
-    const {data} = await this.$axios.get(`/contractors/${id}`);
+    const { data } = await this.$axios.get(`/contractors/${id}`);
     commit('set_contractor', data);
 
     // Append Contractor to "cache" so that we don't have to load it again soon
     commit('add_contractor', data);
   },
-  async loadContractor({commit, state, dispatch}, id) {
+  async loadContractor({ commit, state, dispatch}, id) {
     // Try to get contractor from "cache"
     // const contractor = _.find((state.contractors), (existingContractor) => existingContractor.id === id);
     const contractor = state.contractors[id];
@@ -50,12 +50,12 @@ export const actions = {
 
     await dispatch('reloadContractor', id);
   },
-  async loadContractorProfile({commit}) {
-    const {data} = await this.$axios.get('contractors/profile');
+  async loadContractorProfile({ commit }) {
+    const { data } = await this.$axios.get('contractors/profile');
     commit('set_contractor', data);
   },
-  async saveProfile({commit, state}) {
-    const {data} = await this.$axios.put('contractors/profile', {profile: state.contractor});
+  async saveProfile({ commit, state}) {
+    const { data } = await this.$axios.put('contractors/profile', {profile: state.contractor});
     commit('set_contractor', data);
   },
 }

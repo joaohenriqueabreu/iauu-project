@@ -24,7 +24,7 @@ module.exports = class CancelOverduePaymentsScriptService extends ScriptService 
     console.log('Searching for billings with overdue payments');
     this.billingsWithOverduePayments = await Billing.find({
       'payments.status': PaymentData.PAYMENT_STATUS_PENDING, 
-      'payments.due_at': { $lte: moment().format('YYYY-MM-DD') }
+      'payments.due_dt': { $lte: moment().format('YYYY-MM-DD') }
     });
 
     console.log(`Found ${this.getNumOfOverduePayments()} overdue payments`);
@@ -41,11 +41,11 @@ module.exports = class CancelOverduePaymentsScriptService extends ScriptService 
   async updatePaymentStatus() {
     _.forEach(this.billingsWithOverduePayments, async (billing) => {
       _.forEach(billing.payments, payment => {
-        if (payment.status !== PaymentData.PAYMENT_STATUS_PENDING || moment(payment.due_at).diff(moment()) > 0) {
+        if (payment.status !== PaymentData.PAYMENT_STATUS_PENDING || moment(payment.due_dt).diff(moment()) > 0) {
           return;
         }
 
-        console.log(`Setting ${payment.id} of ${payment.amount} due ${moment(payment.due_at).format('YYYY-MM-DD')} as overdue`);
+        console.log(`Setting ${payment.id} of ${payment.amount} due ${moment(payment.due_dt).format('YYYY-MM-DD')} as overdue`);
         payment.status        = PaymentData.PAYMENT_STATUS_OVERDUE;
         payment.failed_reason = PaymentData.PAYMENT_FAILED_REASON_OVERDUE;
       });

@@ -71,7 +71,7 @@ a {
 }
 
 hr {
-  width: 100%; // required to show
+  width:      100%; // required to show
   border-top: 1px solid $layer5;
   &.light {
     border-top-color: $brand;
@@ -287,6 +287,12 @@ a {
   padding:        2 * $space;
   border-radius:  $edges;
   width:          100%;
+
+  &.border {
+    background:     none;
+    border:         2px solid $layer5;
+    border-radius:  $edges;
+  }
 }
 
 .ps--active-x .ps__rail-x { display: none !important } // Hide annoying horizontal scrollbar

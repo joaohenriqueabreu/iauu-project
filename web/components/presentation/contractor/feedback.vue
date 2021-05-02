@@ -21,7 +21,7 @@
         <presentation-feedback :presentation="presentation"></presentation-feedback>
       </div>
       <div v-else class="mb-5 vertical center middle">
-        <h6><b>Seu feedback foi registrado em {{ feedback.created_dt | date }}. Obrigado!</b></h6>
+        <h6><b>Seu feedback foi registrado em {{ feedback.create_dt | date }}. Obrigado!</b></h6>
       </div>
     </div>
     <div class="box mb-5">

@@ -37,7 +37,7 @@ module.exports = class SearchUnreadNotificationsService extends BaseService
     filterUnreadNotifications() {
       this.notifications = _.orderBy(
         _.filter(this.user.notifications, (notification) => !notification.read),
-        ['created_at'],
+        ['create_dt'],
         ['desc']
       );
  

@@ -58,7 +58,7 @@
       </template> -->
       <template v-slot:footer>
         <div class="vertical middle center full-height">
-          <div class="error mb-2">
+          <div class="vertical middle center full-height error mb-2">
             <div v-if="proposal.has_custom_product && !proposal.has_counter_offer">
               {{ proposal.contractor.name }} solicitou um produto personalizado. Envie um
               orçamento para depois confirmar a apresentação.

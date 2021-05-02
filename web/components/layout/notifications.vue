@@ -16,7 +16,7 @@
             <div @click="readNotification(notification)">
               <h6>{{ notification.message }}</h6>
               <div class="d-flex justify-content-end">
-                <small>{{ notification.created_at | timeAgo }}</small>
+                <small>{{ notification.create_dt | timeAgo }}</small>
               </div>
               <hr/>
             </div>

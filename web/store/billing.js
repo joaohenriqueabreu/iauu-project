@@ -32,29 +32,29 @@ export const mutations = {
 }
 
 export const actions = {
-  async loadBanks({commit}) {
-    const {data} = await this.$axios.get('/data/banks');
+  async loadBanks({ commit }) {
+    const { data } = await this.$axios.get('/data/banks');
     commit('set_banks', data);
   },
-  async loadAccount({commit}) {
-    const {data} = await this.$axios.get('/billing/account');
+  async loadAccount({ commit }) {
+    const { data } = await this.$axios.get('/billing/account');
     commit('set_account', data);
   },
   async loadPresentationBilling({ commit }, presentationId) {
-    const {data} = await this.$axios.get(`/billing/presentation/${presentationId}`);
+    const { data } = await this.$axios.get(`/billing/presentation/${presentationId}`);
     commit('set_billing', data);
   },
   async saveBankAccount({ commit }, bankAccount) {
-    const {data} = await this.$axios.post('billing/account', { bankAccount: bankAccount });
+    const { data } = await this.$axios.post('billing/account', { bankAccount: bankAccount });
     commit('set_account', data);
   },
   async chargePayment({ commit }, { billingId, instalmentId, paymentMethod }) {
-    const {data} = await this.$axios.put(`/billing/${billingId}/pay`, { instalment: instalmentId, method: paymentMethod });
+    const { data } = await this.$axios.put(`/billing/${billingId}/pay`, { instalment: instalmentId, method: paymentMethod });
     commit('set_billing', data.billing);
     commit('set_payment', data.payment);
   },
   async saveInstalments({ commit }, { billingId, instalments }) {
-    const {data} = await this.$axios.put(`/billing/${billingId}/instalments`, { instalments: instalments });
+    const { data } = await this.$axios.put(`/billing/${billingId}/instalments`, { instalments: instalments });
     commit('set_billing', data);
   },
   resetPayment({ commit }) {

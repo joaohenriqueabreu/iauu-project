@@ -8,7 +8,7 @@
       <div v-else>
         <h4 class="mb-2">Total a pagar para parcela #{{ instalment.num }}</h4>
         <h6 class="mb-2" v-if="!$empty(instalment.name)">{{ instalment.name }}</h6>
-        <h6 :class="instalment.is_delayed ? 'error' : ''">Vence em {{ instalment.due_at | date }}</h6>
+        <h6 :class="instalment.is_delayed ? 'error' : ''">Vence em {{ instalment.due_dt | date }}</h6>
         <h3>{{ instalment.amount | currency }}</h3>
       </div>
     </div>

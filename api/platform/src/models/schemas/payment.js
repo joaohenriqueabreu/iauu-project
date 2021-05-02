@@ -14,8 +14,8 @@ const paymentSchema = new Schema({
   status:         { type: String, enum: PaymentData.PAYMENT_STATUS, required: true, default: PaymentData.PAYMENT_STATUS_PENDING },
   failed_reason:  { type: String },
   instalment_id:  { type: String },
-  due_at:         { type: Date },
-  paid_at:        { type: Date },
+  due_dt:         { type: Date },
+  paid_dt:        { type: Date },
   notes:          { type: String },
   method:         { type: Object, default: null }, // TODO fix this for own payment method - should be transalated by callback interface
   transaction: {type: Object, default: null }, // Store response callback data from vendor gateway (can be any format - depends on the vendor gateway)
@@ -46,9 +46,9 @@ class Payment extends BaseRepository {
     return '';
   }
 
-  get transaction_due_at() {
-    if (this.due_at != null) { 
-      return this.due_at;
+  get transaction_due_dt() {
+    if (this.due_dt != null) { 
+      return this.due_dt;
     }
 
     if (this.pay_with_boleto) { return this.transaction.boleto_expiration_date; }
@@ -83,7 +83,7 @@ class Payment extends BaseRepository {
 
   get is_overdue() {
     return this.status === PaymentData.PAYMENT_STATUS_OVERDUE || 
-      (this.is_pending && moment(this.due_at).diff(moment(), 'days') < 0);
+      (this.is_pending && moment(this.due_dt).diff(moment(), 'days') < 0);
   }
 }
 

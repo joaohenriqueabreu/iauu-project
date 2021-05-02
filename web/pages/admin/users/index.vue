@@ -65,7 +65,7 @@
             <span class="mr-2">{{ user.name }}</span>
           </td>
           <td>{{ user.email }}</td>
-          <td>{{ user.created_at | date }}</td>
+          <td>{{ user.create_dt | date }}</td>
         </tr>
       </tbody>
     </table>

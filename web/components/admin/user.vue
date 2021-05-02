@@ -27,7 +27,7 @@
         <div>Email</div>
         <h6 class="mb-4">{{ user.email }}</h6>
         <div>Admissão</div>
-        <h6 class="mb-4">{{ user.created_at | date }}</h6>
+        <h6 class="mb-4">{{ user.create_dt | date }}</h6>
         <div class="mb-4">
           <div>Último Login</div>
           <h6 v-if="!$empty(user.last_logged_in_at)" class="mb-4">

@@ -16,13 +16,14 @@ export default {
   components: {
     PresentationInfo
   },
-  async asyncData({ store, app }) {
-    store.dispatch('presentation/resetPresentation')
-    await store.dispatch('presentation/loadPresentations')
+  async mounted() {
+    await this.loadPresentations();
   },
   computed: {
     ...mapState({ presentations: (state) => state.presentation.presentations }),
-    ...mapState({ presentationState: (state) => state.presentation.presentation })
+  },
+  methods: {
+    ...mapActions('presentation' , ['loadPresentations'])
   }
 }
 </script>

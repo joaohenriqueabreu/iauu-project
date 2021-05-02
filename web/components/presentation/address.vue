@@ -1,5 +1,5 @@
 <template>
-  <div class="boxed horizontal middle">
+  <div class="horizontal middle">
     <icon icon="map-marker-alt"></icon>
     <a :href="encodedMapsLocation" target="_blank">
       <h6>{{ presentation.address.display }}</h6>

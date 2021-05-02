@@ -20,11 +20,12 @@ const presentationSchema = new Schema({
   proposal:       { type: proposalSchema }, // TODO Temporary for migration, remove once it's done
   proposal_id:    { type: String, required: true },
   billing_id:     { type: String },
+  title:          { type: String, required: true },
   fee:            { type: Number, required: true, default: defaultFee, max: 1 },
   duration:       { type: String, required: true },
   price:          { type: Number, required: true },
   address:        { type: addressSchema },
-  status:         { type: String, enum: PresentationData.PRESENTATION_STATUS, required: true, default: PresentationData.PRESENTATION_STATUS_PROPOSAL },
+  status:         { type: String, enum: PresentationData.PRESENTATION_STATUS, required: true, default: PresentationData.PRESENTATION_STATUS_ACCEPTED },
   confirm_status: [String],
   timeslot:       { type: timeslotSchema, required: true },
   checklist: [{
@@ -42,18 +43,10 @@ class Presentation extends BaseRepository {
   get is_paid()       { return this.is_completed && this.billing !== undefined && this.billing.status === BillingData.COMPLETED_STATUS; }
 
   get display_start_dt() {
-    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
-      return this.proposal.timeslots[0].start_dt;
-    }
-
     return this.timeslot.start_dt;
   }
 
   get display_end_dt() {
-    if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) {
-      return this.proposal.timeslots[0].end_dt;
-    }
-
     return this.timeslot.end_dt;
   }
 

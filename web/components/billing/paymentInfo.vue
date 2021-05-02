@@ -56,19 +56,19 @@
       <hr class="light">
       <div class="d-flex justify-content-between mb-3">
         <h4>Criado em</h4>
-        <h4>{{ payment.created_at | date }}</h4>
+        <h4>{{ payment.create_dt | date }}</h4>
       </div>
       <div class="d-flex justify-content-between mb-3">
         <h4>Data Vencimento</h4>
-        <h4>{{ payment.due_at | date }}</h4>
+        <h4>{{ payment.due_dt | date }}</h4>
       </div>
       <div class="d-flex justify-content-between mb-3">
         <h4>Última atualização</h4>
-        <h4>{{ payment.updated_at | date }}</h4>
+        <h4>{{ payment.update_dt | date }}</h4>
       </div>
       <div class="d-flex justify-content-between">
         <h4>Data Pagamento</h4>
-        <h4>{{ payment.paid_at | date }}</h4>
+        <h4>{{ payment.paid_dt | date }}</h4>
       </div>
     </div>
   </div>

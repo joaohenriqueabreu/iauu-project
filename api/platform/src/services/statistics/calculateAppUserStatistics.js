@@ -25,13 +25,13 @@ module.exports = class CalculateAppUsersStatisticsService extends CalculateStati
     }
 
     async calculateVisits() {
-      const count = await Statistic.countDocuments({ type: 'visit', created_at: { $gte: this.filters.start, $lte: this.filters.end }});
-      const lastMon = await Statistic.countDocuments({ type: 'visit', created_at: { $gte: this.filters.diffPeriods.lastMon.start, $lte: this.filters.diffPeriods.lastMon.end }});
-      const prevMon = await Statistic.countDocuments({ type: 'visit', created_at: { $gte: this.filters.diffPeriods.prevMon.start, $lte: this.filters.diffPeriods.prevMon.end }});
+      const count = await Statistic.countDocuments({ type: 'visit', create_dt: { $gte: this.filters.start, $lte: this.filters.end }});
+      const lastMon = await Statistic.countDocuments({ type: 'visit', create_dt: { $gte: this.filters.diffPeriods.lastMon.start, $lte: this.filters.diffPeriods.lastMon.end }});
+      const prevMon = await Statistic.countDocuments({ type: 'visit', create_dt: { $gte: this.filters.diffPeriods.prevMon.start, $lte: this.filters.diffPeriods.prevMon.end }});
       const data = await Statistic.aggregate([
         { $match: { type: 'visit' }},
         { $group: { 
-          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
+          _id: { year: { $year: '$create_dt' } , month: { $month: '$create_dt' }, index: { $dateToString: { format: '%Y-%m', date: '$create_dt' }}}, 
           value: { $sum: 1 }
         }},
         { $sort: { _id: 1 }}
@@ -43,13 +43,13 @@ module.exports = class CalculateAppUsersStatisticsService extends CalculateStati
     }
 
     async calculateUsers() {
-      const count = await User.countDocuments({ created_at: { $gte: this.filters.start, $lte: this.filters.end }});
-      const lastMon = await User.countDocuments({ created_at: { $gte: this.filters.diffPeriods.lastMon.start, $lte: this.filters.diffPeriods.lastMon.end }});
-      const prevMon = await User.countDocuments({ created_at: { $gte: this.filters.diffPeriods.prevMon.start, $lte: this.filters.diffPeriods.prevMon.end }});
+      const count = await User.countDocuments({ create_dt: { $gte: this.filters.start, $lte: this.filters.end }});
+      const lastMon = await User.countDocuments({ create_dt: { $gte: this.filters.diffPeriods.lastMon.start, $lte: this.filters.diffPeriods.lastMon.end }});
+      const prevMon = await User.countDocuments({ create_dt: { $gte: this.filters.diffPeriods.prevMon.start, $lte: this.filters.diffPeriods.prevMon.end }});
 
       const data = await User.aggregate([
         { $group: { 
-          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
+          _id: { year: { $year: '$create_dt' } , month: { $month: '$create_dt' }, index: { $dateToString: { format: '%Y-%m', date: '$create_dt' }}}, 
           value: { $sum: 1 }
         }},
         { $sort: { _id: 1 }}
@@ -70,7 +70,7 @@ module.exports = class CalculateAppUsersStatisticsService extends CalculateStati
     async calculateYearlySignups() {
       const data = await User.aggregate([
         { $group: { 
-          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
+          _id: { year: { $year: '$create_dt' } , month: { $month: '$create_dt' }, index: { $dateToString: { format: '%Y-%m', date: '$create_dt' }}}, 
           count: { $sum: 1 },
         }},
         { $sort: { _id: 1 }}

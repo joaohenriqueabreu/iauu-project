@@ -97,7 +97,7 @@ class ArtistController extends BaseController {
     const searchProductsService = new SearchProductsService(req.user.role_id);
     try {
       await searchProductsService.search();
-      res.status(200).json(searchProductsService.getProducts());
+      res.status(200).json(searchProductsService.getArtist());
     } catch (error) {
       next(error);
     }
@@ -105,10 +105,10 @@ class ArtistController extends BaseController {
 
   async productsForProposal(req, res, next) {
     console.log('Looking up products for proposal...');
-    const lookupProductsService = new SearchProductsService(req.data.id);
+    const searchProductsService = new SearchProductsService(req.data.id);
     try {
-      await lookupProductsService.search();
-      res.status(200).json(lookupProductsService.getProducts());
+      await searchProductsService.search();
+      res.status(200).json(searchProductsService.getArtist());
     } catch (error) {
       next(error);
     }
@@ -119,7 +119,7 @@ class ArtistController extends BaseController {
     const saveProductService = new SaveProductService(req.user, req.data);
     try {
       await saveProductService.save();
-      res.status(200).json(saveProductService.getProducts());
+      res.status(200).json(saveProductService.getArtist());
     } catch (error) {
       next(error);
     }
@@ -129,7 +129,7 @@ class ArtistController extends BaseController {
     const deleteProductService = new DeleteProductService(req.user, req.data);
     try {
       await deleteProductService.delete();
-      res.status(200).json(deleteProductService.getProducts());
+      res.status(200).json(deleteProductService.getArtist());
     } catch (error) {
       next(error);
     }

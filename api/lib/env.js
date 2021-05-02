@@ -31,6 +31,10 @@ module.exports = {
     dbport:         encodeURIComponent(process.env.DB_PORT),
     connectionType: process.env.DB_CONNECTION_TYPE,
   },
+  broker: {
+    host:           process.env.RABBITMQ_HOST,
+    port:           process.env.RABBITMQ_PORT,
+  },
   mail: {
     host:           process.env.SMTP_HOST,
     port:           process.env.SMTP_PORT,

@@ -20,7 +20,7 @@ module.exports = class SearchUsersService extends BaseService
 
     async searchUsers() {
       const searchTermCondition = this.term !== undefined ? { $text: { $search: this.term } } : {}
-      this.users = await User.find({ role: { $nin: ['admin'] }, ...searchTermCondition}).sort('-created_at')
+      this.users = await User.find({ role: { $nin: ['admin'] }, ...searchTermCondition}).sort('-create_dt')
       return this
     }
 

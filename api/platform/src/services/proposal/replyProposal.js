@@ -5,7 +5,7 @@ const { EVENTS }      = require('lib/events');
 module.exports = class ReplyProposalService extends ProposalService
 {
     constructor(user, id) {
-      super(user, id)
+      super(user, id);
     }
 
     async reply() {
@@ -20,7 +20,6 @@ module.exports = class ReplyProposalService extends ProposalService
     }
 
     async emitEvent() {
-      await this.searchProposal();
       super.emitEvent(EVENTS.PROPOSAL_ACCEPTED_EVENT, this.proposal);
       return this;
     }

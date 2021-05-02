@@ -8,7 +8,7 @@ const hideSensitiveData = (doc, model, options) => {
 }
  
 module.exports = {
-  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+  timestamps: { createdAt: 'create_dt', updatedAt: 'update_dt' },
   toObject: { virtuals: true, transform: hideSensitiveData },
   toJSON: { virtuals: true, transform: hideSensitiveData }
 }

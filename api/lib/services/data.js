@@ -39,7 +39,7 @@ module.exports = class DataRequestService {
     try {
       const response = await requestEndpointSvc.get(`/${api}/${id}`);
       console.log(`Valid ${api}...`);
-      return response.data;
+      return response;
     } catch (error) {
       console.log(error);
       throw new InvalidDataRequestException(`Invalid ${api} provided`);

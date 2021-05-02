@@ -6,7 +6,7 @@ const createPresentationSvc     = new CreatePresentationService();
 
 const startEventConsumers = function () {
   Promise.all([
-    proposalAcceptedConsumer.consume(createPresentationSvc.create)
+    proposalAcceptedConsumer.consume(function (proposal) { createPresentationSvc.create(proposal) })
   ]);
 }
 

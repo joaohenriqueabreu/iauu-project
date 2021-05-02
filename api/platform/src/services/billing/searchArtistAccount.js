@@ -6,7 +6,7 @@ module.exports = class SearchArtistAccountService extends SearchService {
   constructor() {
     super();
 
-    this.artist = {};
+    this.artistAccount = {};
   }
   async search(id) {
     this.id = id;
@@ -16,25 +16,25 @@ module.exports = class SearchArtistAccountService extends SearchService {
   }
 
   async searchArtistAccount() {
-    this.artist = await ArtistAccount.findOne({ source_id: this.id });
+    this.artistAccount = await ArtistAccount.findOne({ source_id: this.id });
     return this;
   }
 
   ensureArtistAccountWasFound() {
-    if (this.shouldFailWhenNotFound && (!this.artist instanceof ArtistAccount || ArtistAccount.notFound(this.artist))) {
+    if (this.shouldFailWhenNotFound && (!this.artistAccount instanceof ArtistAccount || ArtistAccount.notFound(this.artistAccount))) {
       throw new BadRequestException('Artist Account not found');
     }
 
     return this;
   }
 
-  getArtist() {
-    return this.artist;
+  getArtistAccount() {
+    return this.artistAccount;
   }
 
   getAccount() {
-    return this.artist != null
-      ? this.artist.protected_account_data
+    return this.artistAccount != null
+      ? this.artistAccount.protected_account_data
       : {};
   }
 }

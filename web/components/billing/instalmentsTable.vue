@@ -17,7 +17,7 @@
           <td>{{ instalment.name | notEmptyString }}</td>
           <td>{{ instalment.is_upfront | yesNo }}</td>
           <td>{{ instalment.amount | currency }}</td>
-          <td>{{ instalment.due_at | date }}</td>
+          <td>{{ instalment.due_dt | date }}</td>
           <td>{{ instalment.status | translate('billing.instalments.status') }}</td>
         </tr>
       </tbody>

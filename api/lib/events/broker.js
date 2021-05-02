@@ -3,7 +3,7 @@ const config                    = require('../env');
 const { EventBrokerException }  = require('../exception');
 
 async function connect(){
-  const conn = await amqp.connect('amqp://localhost');
+  const conn = await amqp.connect(`amqp://${config.broker.host}:${config.broker.port}`);
   return conn.createChannel();
 }
 

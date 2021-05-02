@@ -66,13 +66,13 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
 
     async calculateVisits() {
       const artistRoute = `/search/artists/${this.artist.slug}`;
-      const count = await Statistic.countDocuments({ type: 'visit', route: artistRoute, created_at: { $gte: this.filters.start, $lte: this.filters.end }});
-      const lastMon = await Statistic.countDocuments({ type: 'visit', route: artistRoute, created_at: { $gte: this.filters.diffPeriods.lastMon.start, $lte: this.filters.diffPeriods.lastMon.end }});
-      const prevMon = await Statistic.countDocuments({ type: 'visit', route: artistRoute, created_at: { $gte: this.filters.diffPeriods.prevMon.start, $lte: this.filters.diffPeriods.prevMon.end }});
+      const count = await Statistic.countDocuments({ type: 'visit', route: artistRoute, create_dt: { $gte: this.filters.start, $lte: this.filters.end }});
+      const lastMon = await Statistic.countDocuments({ type: 'visit', route: artistRoute, create_dt: { $gte: this.filters.diffPeriods.lastMon.start, $lte: this.filters.diffPeriods.lastMon.end }});
+      const prevMon = await Statistic.countDocuments({ type: 'visit', route: artistRoute, create_dt: { $gte: this.filters.diffPeriods.prevMon.start, $lte: this.filters.diffPeriods.prevMon.end }});
       const data = await Statistic.aggregate([
         { $match: { type: 'visit', route: artistRoute }},
         { $group: { 
-          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
+          _id: { year: { $year: '$create_dt' } , month: { $month: '$create_dt' }, index: { $dateToString: { format: '%Y-%m', date: '$create_dt' }}}, 
           value: { $sum: 1 }
         }},
         { $sort: { _id: 1 }}
@@ -88,9 +88,9 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
     }
 
     async loadPresentations() {
-      const presentations = await Presentation.find({ artist: this.artist.id, created_at: { $gte: this.filters.start, $lte: this.filters.end }});
-      const lastMon = _.filter(presentations, (presentations) => moment(presentations.created_at).isBetween(this.filters.diffPeriods.lastMon.start, this.filters.diffPeriods.lastMon.end));
-      const prevMon = _.filter(presentations, (presentations) => moment(presentations.created_at).isBetween(this.filters.diffPeriods.prevMon.start, this.filters.diffPeriods.prevMon.end));
+      const presentations = await Presentation.find({ artist: this.artist.id, create_dt: { $gte: this.filters.start, $lte: this.filters.end }});
+      const lastMon = _.filter(presentations, (presentations) => moment(presentations.create_dt).isBetween(this.filters.diffPeriods.lastMon.start, this.filters.diffPeriods.lastMon.end));
+      const prevMon = _.filter(presentations, (presentations) => moment(presentations.create_dt).isBetween(this.filters.diffPeriods.prevMon.start, this.filters.diffPeriods.prevMon.end));
 
       this.presentations = {
         all: presentations,
@@ -172,7 +172,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
         { $match: { _id: this.artist._id }},
         { $unwind: '$feedbacks' },
         { $group: { 
-          _id: { year: { $year: '$feedbacks.created_at' } , month: { $month: '$feedbacks.created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$feedbacks.created_at' }}}, 
+          _id: { year: { $year: '$feedbacks.create_dt' } , month: { $month: '$feedbacks.create_dt' }, index: { $dateToString: { format: '%Y-%m', date: '$feedbacks.create_dt' }}}, 
           avg: { $avg: '$feedbacks.rating' },
         }},
         { $sort: { _id: 1 }}
@@ -208,7 +208,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
       const data = await Presentation.aggregate([
         { $match: { artist: this.artist._id }},
         { $group: { 
-          _id: { year: { $year: '$proposal.created_at' } , month: { $month: '$proposal.created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$proposal.created_at' }}}, 
+          _id: { year: { $year: '$proposal.create_dt' } , month: { $month: '$proposal.create_dt' }, index: { $dateToString: { format: '%Y-%m', date: '$proposal.create_dt' }}}, 
           count: { $sum: 1 },
           sum: { $sum: '$proposal.price' }
         }},
@@ -225,7 +225,7 @@ module.exports = class CalculateStatisticsService extends CalculateStatisticServ
       const data = await Presentation.aggregate([
         { $match: { artist: this.artist._id, status: { $nin: ['proposal', 'rejected'] }}},
         { $group: { 
-          _id: { year: { $year: '$created_at' } , month: { $month: '$created_at' }, index: { $dateToString: { format: '%Y-%m', date: '$created_at' }}}, 
+          _id: { year: { $year: '$create_dt' } , month: { $month: '$create_dt' }, index: { $dateToString: { format: '%Y-%m', date: '$create_dt' }}}, 
           count: { $sum: 1 },
           sum: { $sum: '$price' }
         }},

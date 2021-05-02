@@ -24,15 +24,15 @@ export const mutations = {
 
 export const actions = {
   async loadSchedule({ commit }, { id, year }) {
-    const {data} = await this.$axios.get(`schedules/public/${id}`, { params: { year } })
+    const { data } = await this.$axios.get(`schedules/public/${id}`, { params: { year } })
     commit('set_schedule', data)
   },
   async loadMySchedule({ commit }, query) {
-    const {data} = await this.$axios.get('schedules/my', { params: query })
+    const { data } = await this.$axios.get('schedules/my', { params: query })
     commit('set_schedule', data)
   },
   async saveTimeslot({ commit }, timeslot) {
-    const {data} = await this.$axios.post('schedules', { timeslot })
+    const { data } = await this.$axios.post('schedules', { timeslot })
     commit('append_timeslot', data)
   },
   appendTimeslot({ commit }, timeslotData) {

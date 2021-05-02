@@ -11,4 +11,10 @@ module.exports = class EventConsumerService {
       console.log(error);
     }
   }
+
+  cleanup(data) {
+    delete(data.create_dt);
+    delete(data.update_dt);    
+    return data;
+  }
 }

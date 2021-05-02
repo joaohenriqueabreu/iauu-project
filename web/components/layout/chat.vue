@@ -43,7 +43,7 @@
           <h6 v-if="message.author !== 'me'" class="mb-2">{{ message.author }}</h6>
           <span class="mb-2">{{ message.data.text }}</span>
           <span class="d-flex justify-content-end full-width message-date">{{
-            message.created_at | datetime
+            message.create_dt | datetime
           }}</span>
         </div>
       </template>

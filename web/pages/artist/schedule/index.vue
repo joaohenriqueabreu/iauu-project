@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     ...mapActions('presentation', [
-      'getProposal',
+      'loadProposal',
       'loadPresentation',
       'acceptProposal',
       'rejectProposal',

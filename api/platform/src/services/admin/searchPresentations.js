@@ -23,7 +23,7 @@ module.exports = class SearchPresentationsService extends BaseService
       this.presentations = await Presentation.find(searchTermCondition)
         .populate({ path: 'contractor', populate: { path: 'user' }})
         .populate({ path: 'artist',  populate: { path: 'user' }})
-        .sort('-created_at')
+        .sort('-create_dt')
       return this
     }
 

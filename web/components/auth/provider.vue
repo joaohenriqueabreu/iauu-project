@@ -23,7 +23,7 @@ export default {
     const { data } = await this.$axios.post(`login/${this.network}`, { token: accessToken });
     this.$toast.success('Login verificado com sucesso!')
 
-    this.$auth.setToken('local', `Bearer ${data}`);
+    this.$auth.setToken('local', `Bearer ${ data }`);
     await this.$auth.setStrategy('local');
     await this.$auth.fetchUser();
   }

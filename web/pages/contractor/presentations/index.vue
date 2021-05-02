@@ -62,7 +62,6 @@ export default {
     PresentationInfo
   },
   async asyncData({ store, app }) {
-    store.dispatch('presentation/resetPresentation');
     await store.dispatch('presentation/loadPresentations');
   },
   computed: {
