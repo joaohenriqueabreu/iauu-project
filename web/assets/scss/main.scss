@@ -291,7 +291,11 @@ a {
   &.border {
     background:     none;
     border:         2px solid $layer5;
-    border-radius:  $edges;
+  }
+
+  &.shadow {
+    background:     none;
+  box-shadow:       $lightShadow !important;
   }
 }
 

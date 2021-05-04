@@ -1,7 +1,7 @@
 <template>
   <nav :class="{ filled: scrolled }" class="navbar d-flex justify-content-end">
     <div class="mainmenu vertical">
-      <div v-if="$auth.loggedIn" class="horizontal mt-2">
+      <div v-if="$auth.loggedIn" class="horizontal mt-2 mr-4">
         <!-- <notifications></notifications> -->
         <div class="dropdown" data-test="top-menu">
           <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

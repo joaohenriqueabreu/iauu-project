@@ -115,7 +115,7 @@ class AuthController extends BaseController {
 
   validate(req, res, next) {
     console.log('Request authorized...');
-    console.log('Looking up user...');
+    console.log('Searching user...');
 
     const validateUserService = new ValidateUserService(req.user.id);
 

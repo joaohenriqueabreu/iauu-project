@@ -18,7 +18,7 @@
         </div>
         <div class="horizontal middle">
           <span v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="sub-badge">
-            {{ subcategory }}
+            {{ subcategory | capitalize }}
           </span>
         </div>
       </div>

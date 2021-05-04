@@ -45,22 +45,18 @@
 </template>
 
 <script>
-// import Proposal from '@/models/proposal'
-import DateStep from '@/components/proposal/steps/date';
-import ProductStep from '@/components/proposal/steps/product';
-// import DocsStep from '@/components/proposal/steps/docsStep'
-import DetailsStep from '@/components/proposal/steps/details';
-import ConfirmStep from '@/components/proposal/steps/confirm';
+import DateStep     from '@/components/proposal/steps/date';
+import ProductStep  from '@/components/proposal/steps/product';
+import DetailsStep  from '@/components/proposal/steps/details';
+import ConfirmStep  from '@/components/proposal/steps/confirm';
 export default {
   layout: 'guest',
   // Load all required data for components (they get re-rendered everytime we switch components)
   // Variables are passed by reference so it's ok.
   async asyncData({ app, store, route }) {
-    // Required for all components
-    store.dispatch('proposal/initProposal');
-
     // Required for dateStep
-    await store.dispatch('schedule/loadSchedule', { id: route.params.id, year: 2020 });
+    const today = new Date();
+    await store.dispatch('schedule/loadSchedule', { id: route.params.id, year: today.getFullYear(), month: today.getMonth() });
 
     // if page was reloaded we will lose artist data, verify and reload if necessary
     if (app.$utils.empty(store.state.artist)) {
@@ -68,17 +64,11 @@ export default {
     }
 
     await store.dispatch('artist/loadProducts', route.params.id);
-
-    // Initialize proposal
-    // No need to setup the contractor, as we'll grab the user from the backend
-    store.dispatch('proposal/editProposal', {
-      prop: 'artist',
-      value: store.state.artist.artist
-    });
+    await store.dispatch('proposal/initProposal', route.params.id);
 
     return {
       proposal:   store.state.proposal.proposal,
-      products:   store.state.artist.products,
+      products:   store.state.artist.artist.products,
       timeslots:  store.state.schedule.timeslots
     }
   },

@@ -2,10 +2,10 @@
 import { mapActions } from 'vuex'
 export default {
   props: {
-    value: { type: Object, default: () => {} },
-    steps: { type: Array, default: () => {} },
+    value:          { type: Object, default: () => {} },
+    steps:          { type: Array, default: () => {} },
     completedSteps: { type: Array, default: () => {} },
-    proposal: { type: Object, default: () => {} }
+    proposal:       { type: Object, default: () => {} }
   },
   computed: {
     // ...mapState({ proposal: (state) => state..proposal }),

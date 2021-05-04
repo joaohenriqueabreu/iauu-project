@@ -15,7 +15,7 @@ const contractorSchema = new Schema({
   name: { type: String},
   photo: { type: String },
   phone: { type: String }, 
-  address: {type: addressSchema},
+  address: { type: addressSchema},
 }, { ...baseSchemaOptions });
 
 class Contractor extends BaseRepository {

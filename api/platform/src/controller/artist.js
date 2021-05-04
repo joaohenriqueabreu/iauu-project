@@ -93,7 +93,7 @@ class ArtistController extends BaseController {
   }
 
   async products(req, res, next) {
-    console.log('Looking up products...');
+    console.log('Searching artist products...');
     const searchProductsService = new SearchProductsService(req.user.role_id);
     try {
       await searchProductsService.search();
@@ -104,7 +104,7 @@ class ArtistController extends BaseController {
   }
 
   async productsForProposal(req, res, next) {
-    console.log('Looking up products for proposal...');
+    console.log('Searching products for proposal...');
     const searchProductsService = new SearchProductsService(req.data.id);
     try {
       await searchProductsService.search();

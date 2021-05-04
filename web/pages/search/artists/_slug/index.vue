@@ -16,7 +16,7 @@
     </div>
     <div v-if="!$utils.empty(artist.category.subcategories)" class="horizontal center middle mb-4">
       <div v-for="(subcategory, index) in artist.category.subcategories" :key="index" class="badge">
-        <h6 class="mb-0">{{ subcategory }}</h6>
+        <h6 class="mb-0">{{ subcategory | capitalize }}</h6>
       </div>
     </div>
     <div class="horizontal center middle half-width mb-5">
@@ -28,7 +28,7 @@
     </div>
     <div class="stats mb-5" v-if="!$empty(artist.stats)">
       <div v-for="(stat, statName) in artist.stats" :key="statName" class="stat">
-        <div class="vertical center mb-3">
+        <div v-if="!$empty(statName)" class="vertical center mb-3">
           <h2 class="mr-2 mb-0 order-1">{{ stat | number('0a') }}</h2>
           <h6 class="hide-desktop order-0"><icon :icon="$dictionary.artist.stats.icon[statName]"></icon></h6>
           <h5 class="hide-mobile">{{ $utils.pluralize($dictionary.artist.stats.label[statName], stat) }}</h5>

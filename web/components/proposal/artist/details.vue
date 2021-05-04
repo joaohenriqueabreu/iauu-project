@@ -25,16 +25,10 @@
           <h3 class="cap mb-4">{{ proposal.title }}</h3>
           <p>{{ proposal.notes }}</p>
         </div>
-        <div class="boxed main mb-4" v-if="!proposal.has_custom_product">
-          <div class="row">
-            <div class="col horizontal middle center">
-              <icon icon="dollar-sign"></icon><h2>{{ proposal.current_price | twoDecimals }}</h2>
-            </div>
-            <div class="col horizontal middle center">
-              <icon icon="clock"></icon><h2>{{ proposal.duration }}</h2>
-            </div>
-          </div>
-        </div>
+        <div v-if="!proposal.has_custom_product" class="horizontal text-center mb-5">
+          <h3 class="boxed shadow bg-layer-3 p-5 ml-1 mr-5"><icon icon="dollar-sign"></icon>{{ proposal.current_price | twoDecimals }}</h3>
+          <h3 class="boxed shadow p-5 mr-1"><icon icon="clock"></icon>{{ proposal.duration }} {{ 'hora' | pluralize(proposal.duration) }}</h3>
+        </div>        
         <div class="boxed mb-4" v-if="!$empty(proposal.address)">
           <presentation-address :presentation="proposal"></presentation-address>
         </div>
@@ -48,9 +42,6 @@
           <attachment v-for="(file, index) in proposal.files" :key="index" :file="file">
           </attachment>
         </div>
-        <div class="boxed horizontal" v-if="!$empty(proposal.notes)">
-          <icon icon="edit"></icon><p>{{ proposal.notes }}</p>
-        </div>
         <div class="spacer"></div>
       </template>
       <!-- <template v-slot:external>
@@ -58,7 +49,7 @@
       </template> -->
       <template v-slot:footer>
         <div class="vertical middle center full-height">
-          <div class="vertical middle center full-height error mb-2">
+          <div v-if="hasPendingAction" class="error mb-2">
             <div v-if="proposal.has_custom_product && !proposal.has_counter_offer">
               {{ proposal.contractor.name }} solicitou um produto personalizado. Envie um
               orçamento para depois confirmar a apresentação.
@@ -124,6 +115,12 @@ export default {
     },
     hasSelectedTimeslot() {
       return !this.$empty(this.proposal.selected_timeslot);
+    },
+    hasPendingAction() {
+      return (this.proposal.has_custom_product && !this.proposal.has_counter_offer) ||
+        (this.proposal.has_counter_offer && !this.proposal.has_accepted_counter_offer) ||
+        (!this.proposal.has_selected_timeslot) ||
+        (this.isProposalPast);
     },
     isProposalPast() {
       // Do not allow accepting proposals in the past

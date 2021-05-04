@@ -4,7 +4,7 @@
       <div>
         <h5>Enviar proposta?</h5>
         <small v-if="areAllStepsCompleted">
-          O artista irá respondê-lo em breve. Qualquer problema entre em contato conosco.
+          O artista irá respondê-lo em breve. Qualquer duvida entre em contato conosco.
         </small>
       </div>
       <div class="review">

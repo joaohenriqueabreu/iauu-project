@@ -8,22 +8,21 @@ const timeslotSchema 			    = require('./schemas/timeslot').schema;
 const productSchema      	    = require('./schemas/product').schema;
 const counterOfferSchema 	    = require('./schemas/counterOffer').schema;
 
-const RequestEndpointService  = require('lib/services/request');
-
 const proposalSchema = new Schema({
-		artist_id: 			          {type: String, required: true},
-		contractor_id:	          {type: String, required: true},
-    title: 					          {type: String, required: true},
-    status:                   {type: String, enum: ['proposal', 'accepted', 'rejected']}, // TODO move to data consts
-    price: 					          {type: Number, default: 0},
-    duration: 			          {type: Number, default: 0},
-    selected_timeslot:        {type: timeslotSchema},
-    timeslots: 			          {type: [timeslotSchema], validate: timeslots => Array.isArray(timeslots) && timeslots.length > 0},
-    product: 				          {type: productSchema, required: true},
-    address: 				          {type: addressSchema, required: true},
-    notes: 					          {type: String},
-    counter_offer: 	          {type: counterOfferSchema},
-    rejected_counter_offers:  {type: [counterOfferSchema]},
+		artist_id: 			          { type: String, required: true },
+		contractor_id:	          { type: String, required: true },
+    title: 					          { type: String, required: true },
+    status:                   { type: String, enum: ['proposal', 'accepted', 'rejected'] }, // TODO move to data consts
+    price: 					          { type: Number, default: 0 },
+    duration: 			          { type: Number, default: 0 },
+    selected_timeslot:        { type: timeslotSchema },
+    timeslots: 			          { type: [timeslotSchema], validate: timeslots => Array.isArray(timeslots) && timeslots.length >  0},
+    product: 				          { type: productSchema, required: true },
+    address: 				          { type: addressSchema, required: true },
+    notes: 					          { type: String },
+    instalments:              { type: Number, default: 1 },
+    counter_offer: 	          { type: counterOfferSchema },
+    rejected_counter_offers:  { type: [counterOfferSchema] },
 }, baseSchemaOptions);
 
 class Proposal extends BaseRepository {

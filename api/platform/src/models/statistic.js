@@ -6,7 +6,7 @@ const statisticSchema = new Schema({
   type: { type: String, enum: ['visit'], required: true },
   route: { type: String, required: true },
   ip: { type: String, required: true },
-  metadata: {type: Object },
+  metadata: { type: Object },
 }, { ...baseSchemaOptions });
 
 class Statistic extends BaseRepository {

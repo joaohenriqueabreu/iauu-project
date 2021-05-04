@@ -6,19 +6,20 @@
         v-if="!$utils.empty(product.medias)"
         :per-page="2"
         :navigation-enabled="true"
-        :pagination-enabled="false"
-      >
+        :pagination-enabled="false">
         <slide
           v-for="(media, index) in product.medias"
           :key="index"
           class="clickable media-preview"
-          @slideclick="openMedia(media)"
-        >
+          @slideclick="openMedia(media)">
           <media-viewer :media="media"></media-viewer>
         </slide>
       </carousel>
       <div class="vertical middle center mb-4">
         <h2 class="mb-4">{{ product.name }}</h2>
+        <div v-if="!product.custom" class="mb-4">
+          <h5>{{ product.price | currency }} para {{ product.duration }} horas de apresentacao</h5>
+        </div>
         <p class="px-4">{{ product.description }}</p>
       </div>
       <div v-if="!$utils.empty(product.items)" class="px-5 mb-4">
@@ -31,13 +32,10 @@
           </span>
         </div>
       </div>
-      <div v-if="!$utils.empty(notItems)" class="px-5">
+      <div v-if="!$utils.empty(notIncludedItems)" class="px-5">
         <h5 class="mb-2">O que não está incluido neste formato?</h5>
-        <small
-          >Oferecemos estes itens em outros produtos. Selecione um formato mais completo se desejar
-          contratar.</small
-        >
-        <div v-for="(item, index) in notItems" :key="index" class="not-items">
+        <small>Oferecemos estes itens em outros produtos. Selecione um formato mais completo se desejar contratar.</small>
+        <div v-for="(item, index) in notIncludedItems" :key="index" class="not-items">
           <hr />
           <span>
             <icon icon="check" class="mr-2"></icon>
@@ -69,12 +67,13 @@
 <script>
 export default {
   props: {
-    readOnly: { type: Boolean, default: false }
+    readOnly: { type: Boolean, default: false },
+    artist:   { type: Object, default: () => {}},
   },
   data() {
     return {
       product: {},
-      notItems: []
+      notIncludedItems: []
     }
   },
   computed: {
@@ -88,14 +87,19 @@ export default {
     openMedia(media) {
       window.open(media.url, '_blank')
     },
-    openModal(product, notItems) {
-      if (this.$utils.empty(product)) {
-        return
-      }
-      this.product = product
-      this.notItems = notItems
+    openModal(product) {
+      if (this.$empty(product)) { return; }
 
-      this.$refs.modal.open()
+      const artistProductItems = this.$array.uniq(this.$array.flatten(this.$array.map(this.artist.products, 'items')));
+
+      this.product = product;
+      console.log(product.items);
+      console.log(artistProductItems);
+
+      this.notIncludedItems = this.$array.difference(product.items, artistProductItems);
+      console.log(this.notIncludedItems);
+
+      this.$refs.modal.open();
     },
     selectProduct() {
       this.$emit('selected', this.product)

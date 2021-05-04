@@ -56,7 +56,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('proposal', ['editProposal']),
+    ...mapActions('proposal', ['updateProposal']),
     openModal() {
       this.newTimeslot      = new Timeslot();
       this.newTimeslot.type = 'event';
@@ -65,14 +65,14 @@ export default {
     async addTimeslot() {
       const timeslots = this.$object.clone(this.proposal.timeslots);
       timeslots.push(this.newTimeslot);
-      await this.editProposal({timeslots});
+      await this.updateProposal({timeslots});
       this.$toast.success('Data adicionada com sucesso');
       this.$refs.modal.close();
     },
     async removeTimeslot(index) {
       const timeslots = this.$object.clone(this.proposal.timeslots);
       this.$delete(timeslots, index);
-      await this.editProposal({timeslots});
+      await this.updateProposal({timeslots});
       this.$toast.success('Data removida com sucesso');
     },
     isTimeslotSelected(timeslot) {

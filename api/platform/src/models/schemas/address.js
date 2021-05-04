@@ -4,13 +4,13 @@ const Coordinates = require('./coordinates');
 const baseSchemaOptions = require('../schemas/options');
 
 const addressSchema = new db.Schema({
-    street: {type: String},
-    number: {type: String},
-    neighboorhood: {type: String},
-    city: {type: String},
-    state: {type: String},
-    country: {type: String},
-    zipcode: {type: String},
+    street: { type: String},
+    number: { type: String},
+    neighboorhood: { type: String},
+    city: { type: String},
+    state: { type: String},
+    country: { type: String},
+    zipcode: { type: String},
     location: { type: Coordinates }, 
 }, baseSchemaOptions);
 

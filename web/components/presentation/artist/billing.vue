@@ -22,7 +22,7 @@
         <instalments-table :billing="billing" v-if="!$empty(billing.instalments)" @selected="openEditInstalmentModal"></instalments-table>
         <div v-else>
           <div class="mb-2">
-            <small>Nenhuma forma de pagamento cadastrada. Pagamento a vista.</small>
+            <small>Nenhuma forma de pagamento cadastrada. Neste caso, o pagamento devera ser realizado a vista. Caso tenha negociado uma forma de pagamento com o artista, por favor cadastre aqui as parcelas.</small>
           </div>
           <h6 class="brand-hover clickable" @click="openCreateInstalmentModal">
             <u>Cadastrar Forma de Pagamento</u>
@@ -34,9 +34,6 @@
         <payments-table :billing="billing" v-if="!$empty(billing.payments)"></payments-table>
         <div v-else>
           <h6 class="mb-3">Nenhum pagamento realizado</h6>
-          <h6 v-if="canPay" class="brand-hover clickable" @click="openPaymentModal">
-            <u>Pagar apresentação</u>
-          </h6>
         </div>
       </div>
     </div>
@@ -79,9 +76,6 @@ export default {
   computed: {
     ...mapState({ presentation: (state) => state.presentation.presentation }),
     ...mapState({ billing: (state) => state.billing.billing }),
-    canPay() {
-      return this.presentation.is_completed || (this.presentation.is_contracted && !this.presentation.is_past);
-    }
   },
   async created() {
     await this.loadPresentationBilling(this.$route.params.id);

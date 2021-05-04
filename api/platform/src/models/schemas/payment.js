@@ -18,7 +18,7 @@ const paymentSchema = new Schema({
   paid_dt:        { type: Date },
   notes:          { type: String },
   method:         { type: Object, default: null }, // TODO fix this for own payment method - should be transalated by callback interface
-  transaction: {type: Object, default: null }, // Store response callback data from vendor gateway (can be any format - depends on the vendor gateway)
+  transaction: { type: Object, default: null }, // Store response callback data from vendor gateway (can be any format - depends on the vendor gateway)
 }, { ...baseSchemaOptions })
 
 class Payment extends BaseRepository { 

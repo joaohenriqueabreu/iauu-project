@@ -13,31 +13,38 @@ export const state = () => ({
 
 export const mutations = {
   updateField,
-  edit_proposal(state,        { prop, value }) { Vue.set(state.proposal, prop, value); },
-  set_proposal(state, data)   { state.proposal  = data; },
-  set_proposals(state, data)  { state.proposals = _.keyBy(data, 'id'); },
-  add_proposal(state, data)   { Vue.set(state.proposals, data.id, data); },
-  reset_proposal(state)       { state.proposal  = {}; }
+  edit_proposal(state, { prop, value }) { Vue.set(state.proposal, prop, value); },
+  set_proposal(state, data)             { state.proposal  = data; },
+  set_proposals(state, data)            { state.proposals = _.keyBy(data, 'id'); },
+  add_proposal(state, data)             { Vue.set(state.proposals, data.id, data); },
+  reset_proposal(state)                 { state.proposal  = {}; }
 }
 
 export const actions = {
-  initProposal({ commit }) {
+  async initProposal({ dispatch, commit }, artist_id) {
     commit('reset_proposal');
+
+    await dispatch('setProposal', { artist_id });
   },
   editProposal({ commit }, data) {
     commit('edit_proposal', data);
   },
   async setProposal({ commit, dispatch, rootState }, data) {
-    await Promise.all([
-      dispatch('artist/loadArtist',         data.artist_id,     { root: true }),
-      dispatch('contractor/loadContractor', data.contractor_id, { root: true })
-    ]);
+    if (data.artist_id != null) {
+      await dispatch('artist/loadArtist', data.artist_id, { root: true });
+    }
+
+    if (data.contractor_id != null) {
+      await dispatch('contractor/loadContractor', data.contractor_id, { root: true });
+    }    
 
     const proposal = {...data, artist: rootState.artist.artist, contractor: rootState.contractor.contractor};
     commit('set_proposal', proposal);
 
-    // Append proposal to "cache" so that we don't have to load it again soon
-    commit('add_proposal', proposal);
+    // Append proposal to "cache" so that we don't have to load it again soon (don't add if it's new proposal)
+    if (proposal.id != null) {
+      commit('add_proposal', proposal);
+    }
   },
   async loadProposal({ commit, state, dispatch }, id) {
     commit('reset_proposal');
@@ -89,9 +96,12 @@ export const actions = {
     await this.$axios.delete(`/proposals/${id}`);
     commit('reset_proposal');
   },
-  async editProposal({ dispatch, state }, proposal) {
+  async updateProposal({ dispatch, state }, proposal) {
     const { data } = await this.$axios.put(`/proposals/${state.proposal.id}`, proposal);
     dispatch('setProposal', data);
+  },
+  editProposal({ commit }, data) {
+    commit('edit_proposal', data);
   }
 }
 
