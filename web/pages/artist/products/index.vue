@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <div>
     <div class="horizontal middle d-flex clickable mb-5" @click="newProduct">
@@ -11,43 +10,34 @@
       <carousel :per-page="2" :navigation-enabled="true">
         <slide v-for="(product, index) in products" :key="index">
           <div class="product mr-4">
-            <product-info :product="product" :not-items="notItems(product.items)" class="full-height" @edit="editProduct" @copy="copyProduct" @preview="openPreviewModal" @uploadPhoto="openUploadPhotoModal">
-            </product-info>
+            <product-manager :product="product" @edit="editProduct" @copy="copyProduct" @preview="openPreviewModal" @uploadPhoto="openUploadPhotoModal" class="full-height">
+            </product-manager>
           </div>
         </slide>
-        <!-- Always add an additional slide -->
-        <slide></slide>
       </carousel>
     </div>
-    <!-- Image Uploader should be for each product, but as per carousel behaviour (transform: translate) its position: fixed gets broken, therefore we need to move it out from the carousel and do some special handling for it -->
-    <image-uploader ref="photoUploader" @uploaded="setPhoto"></image-uploader>
-    <product-form ref="productForm" @save="save" @remove="removeProduct"></product-form>
-    <product-preview ref="preview"></product-preview>
+    <product-form ref="productForm"></product-form>
+    <product-preview ref="preview" :artist="artist"></product-preview>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-
-import ProductForm from '@/components/artist/product/form'
-import ProductInfo from '@/components/artist/product/info'
-import ProductPreview from '@/components/artist/product/preview'
+import { mapState, mapActions } from 'vuex';
+import ProductForm              from '@/components/artist/product/form';
+import ProductManager              from '@/components/artist/product/manager';
+import ProductPreview           from '@/components/artist/product/preview';
 export default {
   components: {
     ProductForm,
-    ProductInfo,
+    ProductManager,
     ProductPreview
   },
   async asyncData({ store, app }) {
-    await store.dispatch('artist/loadProducts')
+    await store.dispatch('artist/loadMyProducts');
   },
   computed: {
-    ...mapState({ products: (state) => state.artist.products })
-  },
-  mounted() {
-    const items = []
-    this.products.forEach((product) => items.push(product.items))
-    this.productItems = this.$array.uniq(this.$array.flatten(items))
+    ...mapState({ artist: (state) => state.artist.artist }),
+    ...mapState({ products: (state) => state.artist.artist.products })
   },
   data() {
     return {
@@ -56,7 +46,7 @@ export default {
   },
   methods: {
     ...mapActions('protected', ['renewAuth']),
-    ...mapActions('artist', ['loadProducts', 'saveProduct', 'removeProduct']),
+    ...mapActions('artist', ['loadProducts']),
     newProduct() {
       this.$refs.productForm.newProduct()
     },
@@ -80,31 +70,11 @@ export default {
     openPreviewModal(product) {
       this.$refs.preview.openModal(product)
     },
-    async setPhoto(url) {
-      const product = this.$object.clone(this.selectedProduct)
-      product.photo = url
-      await this.saveProduct(product)
-    },
     async save(product) {
-      await this.saveProduct(product)
-      await this.renewAuth() // Remove product setup notification
-      this.$toast.success('Produto salvo')
+      await this.saveProduct(product);
+      await this.renewAuth(); // Remove product setup notification
+      this.$toast.success('Produto salvo');
     },
-    async remove(productId) {
-      await this.removeProduct(productId)
-      this.$nextTick(function() {
-        this.$refs.confirm.close()
-      })
-    },
-    notItems(items) {
-      // this.$array.uniq(this.$array.flatten(arrs))
-      const allItems = []
-      this.products.forEach((product) => {
-        allItems.push(product.items)
-      })
-
-      return this.$array.difference(this.$array.uniq(this.$array.flatten(allItems)), items)
-    }
   }
 }
 </script>
@@ -163,4 +133,3 @@ button {
   width: 40vw;
 }
 </style>
-/* eslint-enable */

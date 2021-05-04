@@ -22,38 +22,37 @@
         </div>
         <p class="px-4">{{ product.description }}</p>
       </div>
-      <div v-if="!$utils.empty(product.items)" class="px-5 mb-4">
+      <div v-if="!$empty(product.items)" class="px-5 mb-5">
         <h5>O que está incluido neste formato?</h5>
         <div v-for="(item, index) in product.items" :key="index">
           <hr />
           <span>
             <icon icon="check" class="mr-2"></icon>
-            {{ item }}
+            <b>{{ item }}</b>
           </span>
         </div>
       </div>
-      <div v-if="!$utils.empty(notIncludedItems)" class="px-5">
+      <div v-if="!$empty(notIncludedItems)" class="px-5">
         <h5 class="mb-2">O que não está incluido neste formato?</h5>
         <small>Oferecemos estes itens em outros produtos. Selecione um formato mais completo se desejar contratar.</small>
         <div v-for="(item, index) in notIncludedItems" :key="index" class="not-items">
           <hr />
           <span>
-            <icon icon="check" class="mr-2"></icon>
-            {{ item }}
+            <icon icon="times" class="mr-2"></icon>
+            <b>{{ item }}</b>
           </span>
         </div>
       </div>
       <div class="mb-5">&nbsp;</div>
     </template>
-    <template v-slot:footer v-if="!readOnly">
-      <div class="horizontal middle center my-4 d-flex justify-content-between">
+    <template v-slot:footer v-if="proposal">
+      <div class="horizontal middle center full-height d-flex justify-content-between">
         <div>
           <h4>{{ product.price | currency }}</h4>
         </div>
         <div>
           <h4 class="horizontal">
-            <icon icon="clock" class="mr-"></icon>
-            {{ product.duration }} horas
+            <icon icon="clock" class="mr-"></icon>{{ product.duration }} horas
           </h4>
         </div>
         <div>
@@ -67,12 +66,13 @@
 <script>
 export default {
   props: {
+    proposal: { type: Boolean, default: false },
     readOnly: { type: Boolean, default: false },
     artist:   { type: Object, default: () => {}},
   },
   data() {
     return {
-      product: {},
+      product:          {},
       notIncludedItems: []
     }
   },
@@ -85,25 +85,18 @@ export default {
   },
   methods: {
     openMedia(media) {
-      window.open(media.url, '_blank')
+      window.open(media.url, '_blank');
     },
     openModal(product) {
       if (this.$empty(product)) { return; }
 
-      const artistProductItems = this.$array.uniq(this.$array.flatten(this.$array.map(this.artist.products, 'items')));
-
-      this.product = product;
-      console.log(product.items);
-      console.log(artistProductItems);
-
-      this.notIncludedItems = this.$array.difference(product.items, artistProductItems);
-      console.log(this.notIncludedItems);
-
+      this.product          = product;
+      this.notIncludedItems = this.$array.difference(this.artist.product_items, this.product.items);
       this.$refs.modal.open();
     },
     selectProduct() {
-      this.$emit('selected', this.product)
-      this.$refs.modal.close()
+      this.$emit('selected', this.product);
+      this.$refs.modal.close();
     }
   }
 }

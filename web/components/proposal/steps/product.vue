@@ -1,20 +1,14 @@
 <template>
   <div>
     <div class="mb-5 vertical">
-      <h6 class="mb-2">Escolha o produto do artista que você deseja contratar</h6>
+      <h6 class="mb-2">Escolha o formato de apresentação que você deseja contratar</h6>
     </div>
-    <carousel class="full-height mb-4" :navigation-enabled="true">
-      <slide v-for="(product, index) in products" :key="index" class="mr-5">
+    <carousel class="full-height mb-4 row" :navigation-enabled="true">
+      <slide v-for="(product, index) in products" :key="index" class="mb-2 col-6">
         <overlay>
           <template v-slot:default>
             <div :class="{ selected: product === selectedProduct }">
-              <product-info
-                :ref="`info_${product.id}`"
-                :product="product"
-                :not-items="notItems(product.items)"
-                read-only
-                @selected="chooseProduct(product)"
-              ></product-info>
+              <product-manager :ref="`info_${product.id}`" :product="product" read-only @selected="chooseProduct(product)"></product-manager>
             </div>
           </template>
           <template v-slot:hover>
@@ -34,9 +28,10 @@
         <u>Ou clique aqui personalize sua apresentação.</u>
       </h4>
     </div>
-    <div v-else>
-      <div class="boxed">
-        <div class="top-right pt-3 brand-hover clickable">
+    <!-- TOOD investigate why is overflowing -->
+    <div v-else class="half-width mt-5">
+      <div class="boxed border mx-5">
+        <div class="top-right pt-3 brand-hover clickable" @click="unselectProduct">
           <icon icon="times"></icon>
         </div>
         <h4 class="mb-4">Produto selecionado</h4>
@@ -55,19 +50,19 @@
         </div>
       </div>
     </div>
-    <product-preview ref="preview" @selected="chooseProduct"></product-preview>
-    <custom-product ref="custom" :all-items="allItems" @selected="chooseProduct"></custom-product>
+    <product-preview ref="preview" proposal :artist="proposal.artist" @selected="chooseProduct"></product-preview>
+    <custom-product ref="custom" :artist="proposal.artist" @selected="chooseProduct"></custom-product>
   </div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
 import Step                     from '@/components/proposal/steps/step';
-import ProductInfo              from '@/components/artist/product/info';
+import ProductManager              from '@/components/artist/product/manager';
 import ProductPreview           from '@/components/artist/product/preview';
 import CustomProduct            from '@/components/proposal/steps/customProduct';
 export default {
   components: {
-    ProductInfo,
+    ProductManager,
     ProductPreview,
     CustomProduct
   },
@@ -82,14 +77,6 @@ export default {
   },
   computed: {
     ...mapState({ selectedProduct: (state) => state.proposal.proposal.product }),
-    allItems() {
-      const allItems = []
-      this.products.forEach((product) => {
-        allItems.push(product.items);
-      })
-
-      return this.$array.uniq(this.$array.flatten(allItems));
-    },
     isCustomProduct() {
       return this.proposal.product.name === 'custom';
     },
@@ -105,88 +92,24 @@ export default {
       this.$emit('complete');
       this.$emit('next');
     },
-    notItems(productItems) {
-      return this.$array.difference(this.allItems, productItems);
-    },
     openCustomProductModal() {
       this.$refs.custom.openModal();
     },
     openPreviewModal(product) {
-      this.$refs.preview.openModal(product, this.notItems(product.items));
+      this.$refs.preview.openModal(product);
+    },
+    unselectProduct() {
+      this.editProposal({ prop: 'product', value: null });
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-// .product-container {
-//   @extend .horizontal;
-//   width: 100%;
-//   margin-bottom: 4 * $space;
-//   background: $layer4;
-//   img,
-//   .video {
-//     height: 100%;
-//     width: 50%;
-//     padding: 0;
-
-//     iframe {
-//       width: 100%;
-//       height: 100%;
-//     }
-//   }
-
-//   div {
-//     position: relative;
-//     padding: 2 * $space;
-//     width: 100%;
-
-//     h5 {
-//       position: absolute;
-//       bottom: 0;
-//       right: 0;
-//       padding: 2 * $space;
-//     }
-//   }
-
-//   cursor: pointer;
-//   box-shadow: none;
-//   transition: $transition;
-
-//   &:hover {
-//     box-shadow: $shadow;
-//     transition: $transition;
-//   }
-//   // margin: 4 * $space;
-// }
-
-// .products-container {
-//   @include desktop {
-//     display: flex;
-//     flex-direction: row;
-//     // width: 80vw;
-//     overflow-y: hidden;
-//   }
-
-//   @include mobile {
-//     display: flex;
-//     flex-direction: column;
-//     width: 100%;
-//   }
-// }
-
-// .custom-product {
-//   @extend .clickable;
-//   transition: $transition;
-
-//   &:hover {
-//     transition: $transition;
-//     color: $brandLayer;
-//   }
-// }
 
 .selected {
-  border: 20px solid $brandLayer;
+  box-shadow: none !important;
+  border:     5px solid $brandLayer;
 }
 
 .custom-product {

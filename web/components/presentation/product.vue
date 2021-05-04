@@ -3,16 +3,14 @@
     <h5 class="mb-4">
       Produto selecionado <u @click="openPreviewModal" class="clickable brand-hover">{{ selectedProduct }}</u>
     </h5>
-    <div class="items" v-if="!$empty(presentation.product.items)">
-      <h6 class="mb-4">
-        Itens <span v-if="presentation.status === 'proposal'">solicitados</span><span v-else>contratados</span>
-      </h6>
-      <div v-for="(item, index) in presentation.product.items" :key="index">
-        <div class="horizontal"><icon icon="check"></icon>{{ item }}</div>
-        <hr v-if="index < presentation.product.items.length - 1" />
-      </div>
+    <div class="horizontal one-line mb-4" v-if="!$empty(presentation.product.items)">      
+      <icon icon="check"></icon>Itens 
+      <span v-if="presentation.status === 'proposal'" class="mx-2">solicitados</span><span v-else class="mx-2">contratados</span>
+      <span v-for="(item, index) in presentation.product.items" :key="index" class="mr-2">
+        <b>{{ item }}</b>,
+      </span>
     </div>
-    <product-preview read-only :artist="presentation.artist" ref="preview"></product-preview>
+    <product-preview :artist="presentation.artist" ref="preview"></product-preview>
   </div>
 </template>
 

@@ -81,6 +81,10 @@ export const actions = {
     const { data } = await this.$axios.put('/artists/profile', { profile: state.artist });
     dispatch('setArtist', data);
   },
+  async loadMyProducts({ dispatch }) {
+    const { data } = await this.$axios.get(`/artists/products`);
+    dispatch('setArtist', data);
+  },
   async loadProducts({ dispatch }, id) {
     const { data } = await this.$axios.get(`/artists/${id}/products`);
     dispatch('setArtist', data);
@@ -89,7 +93,7 @@ export const actions = {
     const { data } = await this.$axios.post('/artists/products', { product });
     dispatch('setArtist', data);
   },
-  async removeProduct({ dispatch }, {id}) {
+  async removeProduct({ dispatch }, id) {
     const { data } = await this.$axios.delete(`/artists/products/${id}`);
     dispatch('setArtist', data);
   },

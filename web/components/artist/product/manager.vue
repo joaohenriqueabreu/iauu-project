@@ -1,21 +1,23 @@
-/* eslint-disable */
 <template>
   <div class="full-height" :class="readOnly ? 'clickable' : ''" @click="readOnlyPreview">
-    <div class="info full-height">
-      <div class="media" :class="!readOnly ? 'clickable' : ''" :style="{ 'background-image': `url(${$images(productPhoto)})` }" @click="uploadPhoto">
-      </div>
+    <div class="info full-height">              
+      <image-uploader ref="productPhoto" @uploaded="uploadPhoto">
+        <div class="media" :class="!readOnly ? 'clickable' : ''" :style="{'background-image': `url(${$images(productPhoto)})`}">
+        </div>
+      </image-uploader>
       <div class="product">
         <div v-if="!readOnly" class="copy clickable" @click="copyProduct">
           <h4 class="brand-hover"><icon icon="copy"></icon></h4>
         </div>
-        <div v-if="!readOnly" class="title" @click="editProduct">
-          <h2 class="cap mb-2">{{ product.name }}</h2>
-          <icon icon="edit" class="ml-4"></icon>
+        <div v-if="!readOnly" class="title my-4" @click="editProduct">
+          <h2 class="cap one-line brand-hover">
+            <icon icon="edit" class="mr-2"></icon>{{ product.name }}
+          </h2>
         </div>
         <div v-else>
-          <h2 class="cap mb-2">{{ product.name }}</h2>
+          <h2 class="cap mb-2 one-line">{{ product.name }}</h2>
         </div>
-        <div class="horizontal middle mb-3" v-if="!hidePrice">
+        <div v-if="!hidePrice" class="horizontal middle mb-3">
           <span class="mr-4">
             <b>{{ product.price | currency }}</b>
           </span>
@@ -24,79 +26,66 @@
             {{ product.duration | longTime }}
           </span>
         </div>
-        <div v-if="!readOnly" class="description one-line">
+        <div v-if="!readOnly" class="description one-line mb-3">
           {{ product.description }}
         </div>
-        <div class="items mb-5">
-          <div v-for="(item, index) in product.items" :key="`item_${index}`">
-            <hr />
-            <span class="one-line">
-              <icon icon="check" class="mr-2"></icon>
-              {{ item }}
-            </span>
-          </div>
-          <div v-for="(item, index) in notItems" :key="`not_${index}`" class="items not-items">
-            <hr />
-            <span class="one-line">
-              <icon icon="check" class="mr-2"></icon>
-              {{ item }}
-            </span>
-          </div>
+        <div class="one-line mb-5">
+          <icon icon="check"></icon>Itens inclusos no formato
+          <span v-for="(item, index) in product.items" :key="`item_${index}`" class="mr-2">
+            <b>{{ item }}</b><span v-if="index < $array.lastIndexOf(product.items)">,</span>
+          </span>
         </div>
         <div v-if="!readOnly" class="vertical middle center">
           <form-button class="mb-3" @action="editProduct">Modificar</form-button>
           <h6 class="clickable" @click="previewProduct">Preview</h6>
         </div>
-        <!-- <div v-else class="vertical middle center"> -->
-        <!-- <form-button class="mb-3" @action="$emit('selected', product)">Selecionar</form-button> -->
-        <!-- <h6 class="clickable" @click="openPreviewModal">Ver mais</h6> -->
-        <!-- </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
 export default {
   props: {
-    product: { type: Object, default: () => {} },
-    readOnly: { type: Boolean, default: false },
-    hidePrice: { type: Boolean, default: false },
-    notItems: { type: Array, default: () => {} }
+    product:    { type: Object, default: () => {} },
+    readOnly:   { type: Boolean, default: false },
+    hidePrice:  { type: Boolean, default: false },
   },
   computed: {
     productPhoto() {
       return !this.$utils.empty(this.product.photo)
         ? this.product.photo
-        : this.$config.defaultBGImgUrl
+        : this.$config.defaultBGImgUrl;
     }
   },
   methods: {
     ...mapActions('artist', ['saveProduct']),
     editProduct() {
-      this.$emit('edit', this.product)
+      this.$emit('edit', this.product);
     },
     previewProduct() {
-      this.$emit('preview', this.product)
+      this.$emit('preview', this.product);
     },
     readOnlyPreview() {
-      if (!this.readOnly) { return }
-      this.$emit('preview', this.product)
+      if (!this.readOnly) { return; }
+      this.$emit('preview', this.product);
     },
-    copyProduct() {
-      const product = this.$object.clone(this.product)
-      product.id = null
-      product.name = `Cópia de ${product.name}`
-      this.$emit('copy', product)
+    async copyProduct() {
+      const product = this.$object.clone(this.product);
+      product.id    = null;
+      product.name  = `Cópia de ${product.name}`;
+      await this.saveProduct(product);
+      this.$toast.success('Produto copiado');
     },
-    removeProduct() {
-      this.$emit('remove', this.product.id)
-    },
-    uploadPhoto() {
+    async uploadPhoto(url) {
       // Don't allow uploading photo if contractor is viewing product
-      if (this.readOnly) { return }
-      this.$emit('uploadPhoto', this.product)
+      if (this.readOnly) { return; }
+
+      const product = this.$object.clone(this.product);
+      product.photo = url;
+      await this.saveProduct(product);
+      this.$toast.success('Foto adicionada ao produto');
     }
   }
 }
@@ -206,4 +195,3 @@ h6 {
   padding: 0;
 }
 </style>
-/* eslint-enable */

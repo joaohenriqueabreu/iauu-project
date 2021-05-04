@@ -70,6 +70,11 @@ export default {
       this.$refs.modal.close();
     },
     async removeTimeslot(index) {
+      if (this.proposal.timeslots.length === 1) { 
+        this.$toast.error('Apresentação deve possuir pelo menos 1 opção de data'); 
+        return;
+      }
+
       const timeslots = this.$object.clone(this.proposal.timeslots);
       this.$delete(timeslots, index);
       await this.updateProposal({timeslots});

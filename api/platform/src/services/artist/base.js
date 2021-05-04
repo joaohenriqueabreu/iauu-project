@@ -13,12 +13,6 @@ module.exports = class ArtistService extends BaseService
       this.userId = user.id;
     }
 
-    async lookupMe() {
-      console.log('Searching for artist from user...');
-      this.artist = await Artist.findOne({ user: this.userId }).populate('users');
-      return this;
-    }
-
     async searchArtist() {
       console.log('Searching for artist...');
       this.artist = await Artist.findById(this.id);

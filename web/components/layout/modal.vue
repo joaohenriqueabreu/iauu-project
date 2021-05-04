@@ -1,11 +1,7 @@
 <template>
   <div>
     <portal to="modal">
-    <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">      
-      <!-- TODO This is breaking artist profile page, not showing scrollbar - investigate -->
-      <!-- @before-open="disableBodyScroll"
-      @before-close="enableBodyScroll" -->
-
+    <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">            
       <!-- Portal is used to render component code outside its definition (modal is rendered outside app div so it can take 100% width) -->
         <div class="modal-content" :class="[modalHeight, noPad ? 'no-pad' : '']">
           <header>
@@ -21,6 +17,7 @@
               <div v-if="hideHeader" class="mb-4">&nbsp;</div>
               <slot name="main"></slot>
             </main>
+            <div v-show="!hideFooter" class="compensate-footer">&nbsp;</div>
           </scrollbar>
           <footer v-show="!hideFooter">
             <div :class="footerCustomHeight">
@@ -217,5 +214,10 @@ export default {
       color: $layer3;
     }
   }
+
+  .compensate-footer {
+    min-height: 15vh;
+  }
+
 }
 </style>

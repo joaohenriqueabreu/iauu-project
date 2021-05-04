@@ -14,14 +14,4 @@ export default class Product extends Model {
 
     this.assign(product)
   }
-
-  static notItems(items, products) {
-    // this.$array.uniq(this.$array.flatten(arrs))
-    const allItems = []
-    products.forEach((product) => {
-      allItems.push(product.items)
-    })
-
-    return this.$array.difference(this.$array.uniq(this.$array.flatten(allItems)), items)
-  }
 }

@@ -85,7 +85,7 @@
         <carousel :per-page="3" :navigation-enabled="true" class="row d-flex align-items-stretch">
           <slide v-for="(product, index) in artist.products" :key="index" class="col-12 col-sm-4">
             <div class="full-height mr-4">
-              <product-info hide-price read-only @preview="openPreviewModal(product)" :product="product" class="full-height"></product-info>
+              <product-manager hide-price read-only @preview="openPreviewModal(product)" :product="product" class="full-height"></product-manager>
             </div>
           </slide>
           <slide></slide>
@@ -139,7 +139,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import ProductInfo              from '@/components/artist/product/info';
+import ProductManager              from '@/components/artist/product/manager';
 import ProductPreview           from '@/components/artist/product/preview';
 import PresentationFeedback     from '@/components/artist/profile/feedback';
 import InstagramGallery         from '@/components/social/instagramGallery';
@@ -149,7 +149,7 @@ export default {
     await store.dispatch('artist/loadArtistPublicProfile', route.params.slug);
   },
   components: {
-    ProductInfo,
+    ProductManager,
     ProductPreview,
     PresentationFeedback,
     InstagramGallery,

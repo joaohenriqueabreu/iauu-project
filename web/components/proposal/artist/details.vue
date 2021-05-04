@@ -26,7 +26,7 @@
           <p>{{ proposal.notes }}</p>
         </div>
         <div v-if="!proposal.has_custom_product" class="horizontal text-center mb-5">
-          <h3 class="boxed shadow bg-layer-3 p-5 ml-1 mr-5"><icon icon="dollar-sign"></icon>{{ proposal.current_price | twoDecimals }}</h3>
+          <h3 class="boxed shadow p-5 ml-1 mr-5"><icon icon="dollar-sign"></icon>{{ proposal.current_price | twoDecimals }}</h3>
           <h3 class="boxed shadow p-5 mr-1"><icon icon="clock"></icon>{{ proposal.duration }} {{ 'hora' | pluralize(proposal.duration) }}</h3>
         </div>        
         <div class="boxed mb-4" v-if="!$empty(proposal.address)">

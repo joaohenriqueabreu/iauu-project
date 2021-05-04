@@ -44,7 +44,7 @@ const HUMAN_READABLE_FILESIZE = 1
 const MAX_ALLOWED_FILESIZE = 1048576
 export default {
   props: {
-    rounded: { type: Boolean, default: false },
+    rounded:    { type: Boolean, default: false },
     resolution: { type: String, default: 'avatar' }
   },
   data() {
@@ -66,31 +66,31 @@ export default {
   },
   methods: {
     openUploadModal() {
-      this.$refs.fileUploader.open()
+      this.$refs.fileUploader.open();
     },
     preview(event) {
       if (this.$empty(event.target.files)) { return }
 
-      const file = event.target.files[0]
-      this.uploadedFile = file
-      this.previewUrl = URL.createObjectURL(file)
-      this.validateFile()
+      const file        = event.target.files[0];
+      this.uploadedFile = file;
+      this.previewUrl   = URL.createObjectURL(file);
+      this.validateFile();
     },
     validateFile() {
-      this.maxFileSizeError = this.uploadedFile.filesize > MAX_ALLOWED_FILESIZE
-      this.invalidFileTypeError = !this.uploadedFile.type.includes('image/')
+      this.maxFileSizeError     = this.uploadedFile.filesize > MAX_ALLOWED_FILESIZE;
+      this.invalidFileTypeError = !this.uploadedFile.type.includes('image/');
     },
     async upload() {
-      let formData = new FormData()
-      formData.append("image", this.uploadedFile)
+      let formData = new FormData();
+      formData.append("image", this.uploadedFile);
 
       try {
-        const { data } = await this.$axios.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
-        this.$emit('uploaded', data)
-        this.$refs.fileUploader.close()
+        const { data } = await this.$axios.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' }});
+        this.$emit('uploaded', data);
+        this.$refs.fileUploader.close();
       } catch (error) {
-        console.log(error)
-        this.$toast.error('Tivemos um problema ao fazer upload do arquivo.')
+        console.log(error);
+        this.$toast.error('Tivemos um problema ao fazer upload do arquivo.');
       }
     },
   }

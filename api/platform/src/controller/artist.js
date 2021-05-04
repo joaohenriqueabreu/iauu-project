@@ -126,9 +126,9 @@ class ArtistController extends BaseController {
   }
 
   async deleteProduct(req, res, next) {
-    const deleteProductService = new DeleteProductService(req.user, req.data);
+    const deleteProductService = new DeleteProductService(req.user);
     try {
-      await deleteProductService.delete();
+      await deleteProductService.delete(req.data.id);
       res.status(200).json(deleteProductService.getArtist());
     } catch (error) {
       next(error);

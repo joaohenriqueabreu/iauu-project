@@ -183,15 +183,16 @@ a {
 
 .brand-btn {
   padding: 2 * $space 4 * $space;
-  background: $brand;
-  transition: $transition;
-  border-radius: $rounded;
-  box-shadow: $shadow;
-  color: $layer1;
+  background:     $brand;
+  transition:     $transition;
+  border-radius:  $rounded;
+  box-shadow:     $shadow;
+  color:          $layer1;
 
   &:hover {
     transition: $transition;
     background: $brandLayer;
+    color:      $layer1 !important;
   }
 }
 
@@ -206,6 +207,10 @@ a {
   .toasted {
     padding: 2 * $space;
     background: $brand;
+  }
+
+  .full {
+    max-width: 90vw;
   }
 }
 
@@ -303,5 +308,10 @@ a {
 
 @each $name, $color in $colors {
   .color-#{$name} { color: $color; }
-  .bg-#{$name}    { background: $color; }
+  .bg-#{$name}    { background: $color !important; }
+}
+
+// TODO should not need this
+.fix-bounds {
+  width: 90vw;
 }

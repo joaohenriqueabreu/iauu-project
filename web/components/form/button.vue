@@ -100,12 +100,19 @@ input {
   &:active {
     outline: none;
   }
+  
+  &:hover {
+    transition: $transition;
+    background: $brandLayer;
+    color:      $layer1 !important;
+  }
 
   &:hover:not(.disabled) {
     transition: $transition;
     background: transparentize($brandLayer, 0.1);
     box-shadow: $higherShadow;
   }
+
   [data-icon] {
     color: black;
   }

@@ -10,10 +10,10 @@
         <h6 class="mr-2"><icon icon="calendar-alt"></icon> Datas sugeridas</h6>
         <proposal-timeslots read-only :proposal="proposal"></proposal-timeslots>
       </div>
-      <div class="mb-4">
+      <div class="mb-5">
         <presentation-address :presentation="proposal"></presentation-address>
       </div>
-      <div>
+      <div class="boxed border">
         <presentation-product :presentation="proposal"></presentation-product>
       </div>
       <div v-if="proposal.has_custom_product" class="boxed border">

@@ -2,22 +2,18 @@ const _ = require('lodash');
 const ArtistService = require('./base');
 const BadRequestException = require('../../exception/bad');
 
-module.exports = class SaveProductService extends ArtistService
+module.exports = class DeleteProductService extends ArtistService
 {
-    constructor(user, data) {
+    constructor(user) {
       super(user);
-
-      if (data === undefined) {
-        throw new BadRequestException('Data is required');
-      }
-
-      this.productId = data.id
     }
 
-    async delete() {
-      await this.lookupMe();
-      await this.ensureArtistWasFound();
-      await this.ensureProductExists();
+    async delete(id) {
+      this.productId = id;
+
+      await this.searchArtist();
+      this.ensureArtistWasFound()
+        .ensureProductExists();
       await this.deleteProduct();
       await this.saveArtist();
       return this;
@@ -25,7 +21,7 @@ module.exports = class SaveProductService extends ArtistService
 
     ensureProductExists() {
       console.log('Checking if product exists...');
-      const self = this;
+      const self  = this;
       const index = _.findIndex(this.artist.products, (product) => product.id === self.productId);
 
       if (index === -1) {
