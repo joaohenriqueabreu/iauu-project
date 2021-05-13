@@ -4,19 +4,15 @@ const BadRequestException = require('../../exception/bad')
 
 module.exports = class SaveContractorProfileService extends ContractorService
 {
-    constructor(user, data) {
-      super(user)
-
-      if (data === undefined) {
-        throw new BadRequestException('Data is required')
-      }
-
-      this.data = data.profile
-      this.userData = {}
+    constructor(user) {
+      super(user);
+      this.userData = {};
     }
 
-    async save() {
-      await this.lookupContractor()
+    async save(profile) {
+      this.data = profile;
+
+      await this.searchContractor()
       this.ensureContractorWasFound()
         .sanitizeData()
         .populateModel()
@@ -45,10 +41,10 @@ module.exports = class SaveContractorProfileService extends ContractorService
 
     populateModel() {
       for (let prop in this.data) {
-        this.contractor[prop] = this.data[prop]
+        this.contractor[prop] = this.data[prop];
       }
 
-      console.log('Contractor ready to save...')
+      console.log('Contractor ready to save...');
       return this
     }
 }

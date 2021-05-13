@@ -7,14 +7,14 @@ module.exports = class PresentationService extends BaseService
     constructor(user, data) {
       super(user);
 
-      this.user = user;
+      this.user         = user;
       this.presentation = {};
     }
 
     async searchPresentation() {
-      this.presentation = await Presentation.findById(this.id)
-        .populate({ path: 'contractor', populate: { path: 'user' }})
-        .populate({ path: 'artist',  populate: { path: 'user' }});
+      this.presentation = await Presentation.findById(this.id);
+        // .populate({ path: 'contractor', populate: { path: 'user' }})
+        // .populate({ path: 'artist',  populate: { path: 'user' }});
 
       return this
     }

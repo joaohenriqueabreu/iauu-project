@@ -23,45 +23,45 @@ export const mutations = {
 
 export const actions = {
   async loadUser({ commit }) {
-    const { data } = await this.$axios.get('users/profile')
-    commit('set_user', data)
+    const { data } = await this.$axios.get('users/profile');
+    commit('set_user', data);
   },
   async saveProfile({ commit, state }) {
-    const { data } = await this.$axios.put('users/profile', { profile: state.user })
-    commit('set_user', data)
+    const { data } = await this.$axios.put('users/profile', { profile: state.user });
+    commit('set_user', data);
   },
   async saveAddress({ commit, dispatch }, address) {
     commit('update_user', { address });
     await dispatch('saveProfile');
   },
   register({ commit }, credentials) {
-    return this.$axios.post('register', credentials)
+    return this.$axios.post('register', credentials);
   },
   async verify({ commit }, verifyToken) {
-    const { data } = await this.$axios.post('verify', { token: verifyToken })
-    commit('set_token', data)
+    const { data } = await this.$axios.post('verify', { token: verifyToken });
+    commit('set_token', data);
   },
   async resendVerify({ commit }, verifyToken) {
-    const { data } = await this.$axios.post('verify/resend', { token: verifyToken })
-    commit('set_token', data)
+    const { data } = await this.$axios.post('verify/resend', { token: verifyToken });
+    commit('set_token', data);
   },
   async renewAuth({ commit }) {
-    const { data } = await this.$axios.get('users/renew')
-    this.$auth.setUserToken(data.access_token)
+    const { data } = await this.$axios.get('users/renew');
+    this.$auth.setUserToken(data.access_token);
   },
   release({ commit }) {
     // No need to hold token as $auth handles it
-    commit('release_token')
+    commit('release_token');
   },
   async resetPassword({ commit }, credentials) {
-    await this.$axios.post('reset/password', credentials)
+    await this.$axios.post('reset/password', credentials);
   },
   forgotPassword({ commit }, email) {
-    this.$axios.post('reset/forgot', { email })
+    this.$axios.post('reset/forgot', { email });
   },
   async facebookLogin({ commit }, token) {
-    const { data } = await this.$axios.post('login/facebook', { token })
-    commit('set_token', data)
+    const { data } = await this.$axios.post('login/facebook', { token });
+    commit('set_token', data);
   }
 }
 

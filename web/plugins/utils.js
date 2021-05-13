@@ -44,6 +44,10 @@ const utils = {
 
     return false;
   },
+  clearFormat: (str) => {
+    if (str == null) { return str; }
+    return str.replace(/[^a-zA-Z0-9]/g, '');
+  },
   isMobile: () => {
     if (
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -64,7 +68,7 @@ const utils = {
 
 export default ({ app }, inject) => {
   // We use empty a lot, so inject it separately too
-  inject('empty', utils.empty);
-  inject('mobile', utils.isMobile);
-  inject('utils', utils);
+  inject('empty',   utils.empty);
+  inject('mobile',  utils.isMobile);
+  inject('utils',   utils);
 }

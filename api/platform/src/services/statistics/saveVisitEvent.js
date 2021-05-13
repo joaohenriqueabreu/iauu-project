@@ -6,7 +6,6 @@ module.exports = class SendFeedbackService extends  BaseService
 {
     constructor(data) {
       super(null, data);
-      console.log(data);
       this.route = data.route;
       this.ip = data.ip;
       this.statistic = {};

@@ -31,10 +31,10 @@
         <hr>
       </div>
     </div>
-    <div class="box mb-5">
+    <div class="box mb-5" v-if="!presentation.is_presentation_past">
       <h3>Checklist</h3>
       <small>Clique para marcar a tarefa como completa</small>
-      <div v-if="!presentation.is_presentation_today && !presentation.is_presentation_past">
+      <div v-if="!presentation.is_presentation_today">
         <form-input 
           v-model="newChecklistItem" 
           transparent 

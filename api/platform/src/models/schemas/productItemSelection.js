@@ -1,8 +1,7 @@
-// const db = require('../../data/db')
-const db = require('mongoose')
+const { Schmea }        = require('mongoose')
 const baseSchemaOptions = require('../schemas/options')
 
-module.exports = new db.Schema({
+module.exports = new Schema({
     product: { type: String },
     item: { type: String },
 }, baseSchemaOptions);

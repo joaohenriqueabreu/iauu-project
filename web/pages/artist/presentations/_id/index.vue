@@ -1,8 +1,10 @@
 <script>
 import PresentationPage       from '@/components/presentation/page';
 import ProposalSummary        from '@/components/proposal/summary';
-import PresentationFeedback   from '@/components/presentation/artist/feedback';
+import PresentationContract   from '@/components/presentation/contract';
+import PresentationDay        from '@/components/presentation/artist/day';
 import BillingDetails         from '@/components/presentation/artist/billing';
+import PresentationStats      from '@/components/presentation/stats';
 
 export default {
   extends: PresentationPage,
@@ -13,10 +15,10 @@ export default {
     presentationTabComponents() {
       return [
         { status: 'proposal',   icon: 'phone',          title: 'Proposta',      component: ProposalSummary },
-        { status: 'accepted',   icon: 'file-contract',  title: 'Contrato',      component: ProposalSummary },
-        { status: null,         icon: 'guitar',         title: 'Apresentação',  component: PresentationFeedback },
+        { status: 'accepted',   icon: 'file-contract',  title: 'Contrato',      component: PresentationContract },
+        { status: null,         icon: 'guitar',         title: 'Apresentação',  component: PresentationDay },
         { status: 'completed',  icon: 'dollar-sign',    title: 'Faturamento',   component: BillingDetails },
-        { status: 'paid',       icon: 'search',         title: 'Resumo',        component: ProposalSummary },
+        { status: 'paid',       icon: 'search',         title: 'Resumo',        component: PresentationStats },
       ]
     },
     customPresentationDayIndex()  { return 2; },

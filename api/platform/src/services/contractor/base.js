@@ -14,7 +14,7 @@ module.exports = class ContractorService extends BaseService
       return this.contractor
     }
 
-    async lookupContractor() {
+    async searchContractor() {
       console.log('Searching for contractor...')
       this.contractor = await Contractor.findById(this.id).populate('users')
       return this

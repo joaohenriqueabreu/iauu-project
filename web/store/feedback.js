@@ -11,7 +11,7 @@ export const state = () => ({
 export const mutations = {
   updateField,
   set_feedback(state, feedback) { state.feedback = feedback; },
-  set_feedbacks(state, feedbacks) { state.feedback = feedbacks; },
+  set_feedbacks(state, feedbacks) { state.feedbacks = feedbacks; },
   set_rating(state, rating) { state.feedback = rating; },
 }
 

@@ -7,17 +7,15 @@ const { PresentationData, BillingData } = require('../config/data');
 
 const addressSchema                     = require('./schemas/address').schema;
 const timeslotSchema                    = require('./schemas/timeslot').schema;
-const defaultFee                        = config.payment.ourFee || 0.12;
+const documentSchema                    = require('./schemas/document').schema;
 
-// TODO Temporary for migration, remove once it's done
-const proposalSchema = require('./proposal').schema;
+const defaultFee                        = config.payment.ourFee || 0.12;
 
 const presentationSchema = new Schema({
   contractor:     { type: Schema.Types.ObjectId, ref: 'Contractor' },
   artist:         { type: Schema.Types.ObjectId, ref: 'Artist' },
   artist_id:      { type: String, required: true },
   contractor_id:  { type: String, required: true },
-  proposal:       { type: proposalSchema }, // TODO Temporary for migration, remove once it's done
   proposal_id:    { type: String, required: true },
   billing_id:     { type: String },
   title:          { type: String, required: true },
@@ -33,6 +31,7 @@ const presentationSchema = new Schema({
     completed:    { type: String },
     completed_at: { type: Date },
   }],
+  documents:      [{ type: documentSchema, default: [] }],
 }, { ...baseSchemaOptions })
 
 class Presentation extends BaseRepository {

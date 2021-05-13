@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: process.env.NODE_ENV === 'test' ? '.env.testing' : '.env'});
+dotenv.config({ path: __dirname + '/' + (process.env.NODE_ENV === 'test' ? '.env.testing' : '.env') });
 
 module.exports = {
   env:    process.env.NODE_ENV,
@@ -8,6 +8,10 @@ module.exports = {
   isDevEnv:         () => process.env.NODE_ENV === 'development',
   isProductionEnv:  () => process.env.NODE_ENV === 'production',
   shouldDebug:      () => process.env.LOG_LEVEL === 'debug',
+  business: {
+    name: 'Iauu',
+    fullName: 'Iauu Music Business',
+  },
   format: {
     date:           'DD-MM-YYYY',
     dbDate:         'YYYY-MM-DD',
@@ -16,7 +20,12 @@ module.exports = {
     port:           process.env.HTTP_PORT
   },
   socket: {
-    port:           process.env.SOCKET_PORT
+    chat: {
+      port:         process.env.SOCKET_CHAT_PORT
+    },
+    notifications: {
+      port:         process.env.SOCKET_NOTIFICATIONS_PORT
+    }
   },
   cors: {
     host_ip:        process.env.HOST,

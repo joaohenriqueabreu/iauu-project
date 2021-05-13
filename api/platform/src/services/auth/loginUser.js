@@ -1,27 +1,23 @@
-const AuthService   = require('./auth');
-const User          = require('../../models/user');
+const AuthService           = require('./auth');
+const User                  = require('../../models/user');
 const UnauthorizedException = require('../../exception/unauthorized');
-const GenerateTokenService = require('./generateToken');
+const GenerateTokenService  = require('./generateToken');
 
 module.exports = class AuthenticateUserService extends AuthService
 {
-    constructor(email, password) {
-      super();
-      this.email = email;
-      this.password = password;
+    constructor() {
+      super();      
     }
 
-    async login() {
-      await this.lookupUser({ email: this.email })
+    async login(email, password) {
+      this.email    = email;
+      this.password = password;
+
+      await this.searchUserFromCredentials({ email: this.email })
       await this.validateLogin();
       await this.generateAccessToken();
       this.generateAdminToken().renewLastLogin();
       await this.saveUser();
-      return this;
-    }
-
-    async searchUser() {
-      this.user = await User.findById(this.id).populate('artist').populate('contractor');
       return this;
     }
 

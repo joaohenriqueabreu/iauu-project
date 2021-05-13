@@ -1,21 +1,17 @@
 const { Schema, model } = require('mongoose');
-const BaseRepository = require('./repositories/base');
+const BaseRepository    = require('./repositories/base');
 
 const baseSchemaOptions = require('./schemas/options');
-const addressSchema = require('./schemas/address').schema;
-const bankAccountSchema = require('./schemas/bankAccount').schema;
-const gatewayAccountSchema = require('./schemas/gatewayAccount').schema;
+const addressSchema     = require('./schemas/address').schema;
 
 const contractorSchema = new Schema({
-  users: [{
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }],
-
-  name: { type: String},
-  photo: { type: String },
-  phone: { type: String }, 
-  address: { type: addressSchema},
+  users:    [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  name:     { type: String },
+  photo:    { type: String },
+  phone:    { type: String },
+  email:    { type: String },
+  document: { type: String },
+  address:  { type: addressSchema},
 }, { ...baseSchemaOptions });
 
 class Contractor extends BaseRepository {
@@ -27,6 +23,30 @@ class Contractor extends BaseRepository {
 
   get manager() {
     return this.users[0];
+  }
+
+  get company_phone() {
+    if (this.phone != null)   { return this.phone; }
+    if (this.manager != null) { return this.manager.phone; }
+    return '';    
+  }
+
+  get company_email() {
+    if (this.email != null)   { return this.email; }
+    if (this.manager != null) { return this.manager.email; }
+    return '';
+  }
+
+  get company_document() {
+    if (this.document != null)  { return this.document; }
+    if (this.manager != null)   { return this.manager.document; }
+    return '';
+  }
+
+  get company_address() {
+    if (this.address != null) { return this.address.display; }
+    if (this.manager != null) { return this.manager.address.display; }
+    return '';
   }
 }
 

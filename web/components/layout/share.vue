@@ -12,7 +12,7 @@
 <script>
 import VueGoodshareFacebook from "vue-goodshare/src/providers/Facebook.vue"
 import VueGoodshareWhatsapp from "vue-goodshare/src/providers/WhatsApp.vue"
-import VueGoodshareTwitter from "vue-goodshare/src/providers/Twitter.vue"
+import VueGoodshareTwitter  from "vue-goodshare/src/providers/Twitter.vue"
 export default {
   components: {
     VueGoodshareFacebook,

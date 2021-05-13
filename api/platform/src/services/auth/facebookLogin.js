@@ -19,8 +19,8 @@ module.exports = class FacebookLoginService extends SocialLoginService {
     return data
   }
 
-  async lookupUserFromSocial() {
-    await this.lookupUser({
+  async searchUserFromSocial() {
+    await this.searchUserFromCredentials({
       $or: [{ 'social.facebook_id': this.socialData.id }, { email: this.socialData.email }],
     })
 

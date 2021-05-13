@@ -8,7 +8,7 @@ module.exports = class ValidateUserService extends AuthService
     }
 
     async refresh() {
-      await this.lookupUserById(this.id)
+      await this.searchUserById(this.id)
       await this.generateUserPayload();
       return this;
     }

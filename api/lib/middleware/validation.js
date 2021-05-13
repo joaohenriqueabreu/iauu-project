@@ -142,9 +142,33 @@ const body = (req, res, next) => {
   next();
 }
 
-const files = (req, res, next) => {
+const file = (req, res, next) => {
+  const schema = validateRequest.object({
+    file: validateRequest.object().required()
+  });
+
+  return validate(req.body, req, next, schema);
+}
+
+const uploadedFiles = (req, res, next) => {
   req.data = req.files
   next();
+}
+
+const document = (req, res, next) => {
+  const schema = validateRequest.object({
+    document: validateRequest.object().required()
+  });
+
+  return validate(req.body, req, next, schema);
+}
+
+const documentId = (req, res, next) => {
+  const schema = validateRequest.object({
+    documentId: validateRequest.string().required()    
+  });
+
+  return validate(req.params, req, next, schema);
 }
 
 const slug = (req, res, next) => {
@@ -190,7 +214,7 @@ const product = (req, res, next) => {
 
 const schedule = (req, res, next) => {
   const schema = validateRequest.object({
-    id: validateRequest.string().required(),
+    id:   validateRequest.string().required(),
     year: validateRequest.number().optional()
   })
 
@@ -207,10 +231,10 @@ const timeslot = (req, res, next) => {
 
 const search = (req, res, next) => {
   const schema = validateRequest.object({
-    term: validateRequest.string().optional().allow(''),
+    term:     validateRequest.string().optional().allow(''),
     location: validateRequest.string().optional().allow(''),
-    price: validateRequest.number().optional().min(1).max(5),
-    sort: validateRequest.string().optional().allow('')
+    price:    validateRequest.number().optional().min(1).max(5),
+    sort:     validateRequest.string().optional().allow('')
   })
 
   return validate(req.query, req, next, schema)
@@ -252,10 +276,9 @@ const filters = (req, res, next) => {
 const feedback = (req, res, next) => {
   const schema = validateRequest.object({
     presentation: validateRequest.string().required(),
-    artist: validateRequest.string().required(),
-    contractor: validateRequest.string().required(),
-    rating: validateRequest.number().min(1).max(5).required(),
-    notes: validateRequest.string().optional().allow('')
+    artist:       validateRequest.string().required(),
+    rating:       validateRequest.number().min(1).max(5).required(),
+    notes:        validateRequest.string().optional().allow('')
   });
 
   return validate(req.body, req, next, schema)
@@ -263,8 +286,8 @@ const feedback = (req, res, next) => {
 
 const billing = (req, res, next) => {
   const schema = validateRequest.object({
-    artist: validateRequest.string().required(),    
-    contractor: validateRequest.string().required(),
+    artist:       validateRequest.string().required(),    
+    contractor:   validateRequest.string().required(),
     presentation: validateRequest.string().required(),
   });
 
@@ -305,7 +328,10 @@ module.exports = {
   proposal,
   counterOffer,
   category,
-  files,
+  file,
+  uploadedFiles,
+  document,
+  documentId,
   filters,
   feedback,
   billing,

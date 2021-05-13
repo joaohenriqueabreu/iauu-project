@@ -18,7 +18,7 @@ module.exports = class SendFeedbackService extends BaseService
       this.ensureFeedbackIsValid()
         .populateFeedbackModel();
 
-      await this.ensurePartiesExist();
+      // await this.ensurePartiesExist();
       await this.saveFeedback();
       return this;
     }
@@ -27,29 +27,29 @@ module.exports = class SendFeedbackService extends BaseService
       return this;
     }
 
-    async ensurePartiesExist() {
-      try {
-        console.log('Verifying parties services...');
-        await this.requestEndpointSvc.get(`/artists/${this.feedback.artist_id}/validate`);
-        await this.requestEndpointSvc.get(`/presentations/${this.feedback.presentation_id}/validate`);
-      } catch (error) {
-        console.log(error);
-        throw new BadRequestException('Invalid parties provided');
-      }
+    // async ensurePartiesExist() {
+    //   try {
+    //     console.log('Verifying parties services...');
+    //     await this.requestEndpointSvc.get(`/artists/${this.feedback.artist_id}/validate`);
+    //     await this.requestEndpointSvc.get(`/presentations/${this.feedback.presentation_id}/validate`);
+    //   } catch (error) {
+    //     console.log(error);
+    //     throw new BadRequestException('Invalid parties provided');
+    //   }
 
-      console.log('Parties exists...');
-      return this;
-    }
+    //   console.log('Parties exists...');
+    //   return this;
+    // }
 
     populateFeedbackModel() {
       console.log('Populating feedback...');
-      this.feedback = new Feedback(this.feedbackData);
-      this.feedback.artist_id = this.feedbackData.artist;
+      this.feedback                 = new Feedback(this.feedbackData);
+      this.feedback.artist_id       = this.feedbackData.artist;
       this.feedback.presentation_id = this.feedbackData.presentation;
-      this.feedback.from = {
-        contractor_id: this.user.id,
-        name: this.user.name,
-        photo: this.user.photo
+      this.feedback.from            = {
+        contractor_id:  this.user.id,
+        name:           this.user.name,
+        photo:          this.user.photo
       };
 
       return this;

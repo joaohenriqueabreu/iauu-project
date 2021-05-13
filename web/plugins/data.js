@@ -114,9 +114,9 @@ const translate = (str, path)  => {
   }
 };
 
-const decimalsMap  = {order: 1, symbol: ''};
-const thousandsMap = {order: 1000, symbol: 'k'};
-const millionsMap  = {order: 1000000, symbol: 'M'};
+const decimalsMap  = { order: 1, symbol: '' };
+const thousandsMap = { order: 1000, symbol: 'k' };
+const millionsMap  = { order: 1000000, symbol: 'M' };
 
 const NUMERIC_SCALE_LOG_MAP = [
   decimalsMap, decimalsMap, decimalsMap,
@@ -132,6 +132,18 @@ const shortMoney = (value) => {
   const shortValue  = Math.round(value / scaleMap.order);
   
   return `R$ ${shortValue}${scaleSymbol}`;
+}
+
+const phone = (number) => {
+  // return number.replace(/^\s*(\d{2}|\d{0})[-. ]?(\d{5}|\d{4})[-. ]?(\d{4})[-. ]?\s*$/, '$1');
+  if (number == null) { return number; }
+  const unformattedNumber = number.replace(/[^a-zA-Z0-9]/g, '');
+
+  return `(${unformattedNumber.substring(0,2)}) ${unformattedNumber.substring(2,7)}-${unformattedNumber.substring(7,11)}`;
+}
+
+const maxLength = (str, max) => {
+  return str.substring(0, max);
 }
 
 // https://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-and-arrays-by-string-path
@@ -168,6 +180,8 @@ Vue.filter('longTime',        longTimeFilter);
 Vue.filter('nl2br',           nl2br);
 Vue.filter('translate',       translate);
 Vue.filter('shortMoney',      shortMoney);
+Vue.filter('phone',           phone);
+Vue.filter('maxLength',       maxLength);
 
 export default ({ app }, inject) => {
   inject('array', _);

@@ -7,6 +7,7 @@ const CompletePresentationService         = require('../services/presentation/co
 const CancelPresentationService           = require('../services/presentation/cancelPresentation');
 const ManagePresentationChecklistService  = require('../services/presentation/manageChecklist');
 const UpdatePresentationStatusService     = require('../services/presentation/updatePresentationStatus');
+const PresentationDocumentService         = require('../services/presentation/presentationDocument');
 // const CreatePresentationService           = require('../services/presentation/createPresentation');
 const { Presentation }                    = require('../models');
 const { BadRequestException }             = require('../exception');
@@ -126,6 +127,61 @@ class PresentationController extends BaseController {
     try {
       await updatePresentationStatusSvc.update(req.data.status);
       res.status(200).json(updatePresentationStatusSvc.getPresentation());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async uploadDocument(req, res, next) {
+    console.log('Uploading presentation document...');
+    const presentationDocumentSvc = new PresentationDocumentService(req.user, req.data.id);
+    try {
+      await presentationDocumentSvc.upload(req.data.file);
+      res.status(200).json(presentationDocumentSvc.getPresentation());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async editDocument(req, res, next) {
+    console.log('Updating document...');
+    const presentationDocumentSvc = new PresentationDocumentService(req.user, req.data.id);
+    try {
+      await presentationDocumentSvc.update(req.data.document);
+      res.status(200).json(presentationDocumentSvc.getPresentation());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async approveDocument(req, res, next) {
+    console.log('Approving document...');
+    const presentationDocumentSvc = new PresentationDocumentService(req.user, req.data.id);
+    try {
+      await presentationDocumentSvc.approve(req.data.document);
+      res.status(200).json(presentationDocumentSvc.getPresentation());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async rejectDocument(req, res, next) {
+    console.log('Rejecting document...');
+    const presentationDocumentSvc = new PresentationDocumentService(req.user, req.data.id);
+    try {
+      await presentationDocumentSvc.update(req.data.document);
+      res.status(200).json(presentationDocumentSvc.getPresentation());
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteDocument(req, res, next) {
+    console.log('Deleting presentation document...');
+    const presentationDocumentSvc = new PresentationDocumentService(req.user, req.data.id);
+    try {
+      await presentationDocumentSvc.delete(req.data.document);
+      res.status(200).json(presentationDocumentSvc.getPresentation());
     } catch (error) {
       next(error);
     }

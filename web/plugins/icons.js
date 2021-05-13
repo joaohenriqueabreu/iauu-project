@@ -69,7 +69,6 @@ import {
   faSignature,
   faMobileAlt,
   faThumbsUp,
-  faExclamationCircle,
   faAngleDoubleLeft,
   faAngleDoubleRight,
   faListOl,
@@ -103,6 +102,10 @@ import {
   faAsterisk,
   faKey,
   faFileContract,
+  faUpload,
+  faExclamationCircle,
+  faExclamationTriangle,
+  faFilePdf,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -229,7 +232,6 @@ library.add(
   faSignature,
   faMobileAlt,
   faThumbsUp,
-  faExclamationCircle,
   faAngleDoubleLeft,
   faAngleDoubleRight,
   faListOl,
@@ -267,6 +269,10 @@ library.add(
   faCcMastercard,
   faCcAmex,
   faFileContract,
+  faUpload,
+  faExclamationCircle,
+  faExclamationTriangle,
+  faFilePdf,
 );
 
 Vue.component('icon', FontAwesomeIcon);

@@ -1,8 +1,7 @@
-// const db = require('../../data/db')
-const db = require('mongoose');
+const { Schema, model } = require('mongoose');
 const baseSchemaOptions = require('../schemas/options');
 
-const bankAccountSchema = new db.Schema({
+const bankAccountSchema = new Schema({
     institution: { type: String },
     agency: { type: String },
     number: { type: String },
@@ -11,4 +10,4 @@ const bankAccountSchema = new db.Schema({
     legal_name: { type: String }
 }, baseSchemaOptions)
 
-module.exports = db.model('BankAccount', bankAccountSchema);
+module.exports = model('BankAccount', bankAccountSchema);

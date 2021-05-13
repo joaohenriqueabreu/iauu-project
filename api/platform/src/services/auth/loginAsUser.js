@@ -14,7 +14,7 @@ module.exports = class LoginAsUserService extends LoginUserService
 
     async login() {
       await this.authorizeAdmin();
-      await this.searchUser();
+      await this.searchUserById(this.id);
       await this.validateNonPasswordLogin();
       await this.generateAccessToken();
       await this.saveUser();

@@ -10,9 +10,12 @@
           :current="presentationStatusIndex" 
           :icons="presentationIcons"
           :labels="presentationLabels">
-        </timeline>
+        </timeline>        
       </div>
     </tabs>
+    <div class="bottom-right">
+      <chat></chat>
+    </div>
   </div>
 </template>
 

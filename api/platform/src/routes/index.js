@@ -14,7 +14,7 @@ const proposal      = require('./proposal');
 const presentation  = require('./presentation');
 const billing       = require('./billing');
 
-const upload        = require('./upload');
+const file          = require('./file');
 const statistics    = require('./statistics');
 const data          = require('./data');
 
@@ -31,7 +31,7 @@ api.use('/proposals',     proposal);
 api.use('/presentations', presentation);
 api.use('/billing',       billing);
 
-api.use('/upload',        upload);
+api.use('/files',         file);
 api.use('/statistics',    statistics);
 api.use('/feedbacks',     feedbacks);
 

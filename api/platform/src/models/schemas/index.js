@@ -9,6 +9,8 @@ const Payment         = require('./payment');
 const Instalment      = require('./instalment');
 const BankAccount     = require('./bankAccount');
 const GatewayAccount  = require('./gatewayAccount');
+const Document        = require('./document');
+const Comment         = require('./comment');
 
 module.exports = { 
   BaseSchemaOptions, 
@@ -20,4 +22,6 @@ module.exports = {
   BankAccount,
   GatewayAccount,
   CounterOffer,
+  Document,
+  Comment,
 };

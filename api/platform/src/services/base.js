@@ -1,13 +1,12 @@
-const config                 	= require('lib/env');
+const config                  = require('lib/env');
 const { BadRequestException } = require('lib/exception');
-const RequestEndpointService 	= require('lib/services/request');
-const { EventPublisher }			= require('lib/events');
+const RequestEndpointService  = require('lib/services/request');
+const { EventPublisher }	  	= require('lib/events');
 
 module.exports = class BaseService {
     constructor(user) {
         this.user = user;
 
-        this.requestNotificationEndpointSvc = new RequestEndpointService('notification');
         this.requestEndpointSvc             = new RequestEndpointService();
 
         // Can be supressed by sched or migration scripts
@@ -43,22 +42,22 @@ module.exports = class BaseService {
     }
 
     async sendNotification(to, from, message, type, target) {
-			if (this.supressNotifications || config.isTestEnv()) { return this; }
+			// if (this.supressNotifications || config.isTestEnv()) { return this; }
 
-			console.log('Sending notification...');
-			try {
-				await this.requestNotificationEndpointSvc.post('/', {
-					from:     from,
-					to:       to, 
-					message:  message, 
-					type:     type, 
-					target:   target,
-				});
-			} catch (error) {
-				console.log(error);
-			}
+			// console.log('Sending notification...');
+			// try {
+			// 	await this.requestNotificationEndpointSvc.post('/', {
+			// 		from:     from,
+			// 		to:       to, 
+			// 		message:  message, 
+			// 		type:     type, 
+			// 		target:   target,
+			// 	});
+			// } catch (error) {
+			// 	console.log(error);
+			// }
 
-			return this;
+			// return this;
     }
 
     async emitEvent(event, data) {

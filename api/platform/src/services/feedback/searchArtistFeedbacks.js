@@ -5,13 +5,17 @@ module.exports = class SearchArtistFeedbacksService extends BaseService
 {
     constructor(user) {
       super();
-      this.user = user;
-      this.feedback = {}
+      this.user       = user;
+      this.feedbacks  = [];
     }
 
-    async search(presentationId) {
-      this.presentation = presentationId;
+    async search(artistId) {
+      this.feedbacks = await Feedback.find({ artist_id: artistId });
       
       return this;
+    }
+
+    getFeedbacks() {
+      return this.feedbacks;
     }
 }

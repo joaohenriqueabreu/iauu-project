@@ -20,13 +20,13 @@ export const actions = {
     await Promise.all([
       dispatch('proposal/loadProposal',     data.proposal_id,   { root: true }),
       dispatch('artist/loadArtist',         data.artist_id,     { root: true }),
-      dispatch('contractor/loadContractor', data.contractor_id, { root: true })
+      dispatch('contractor/loadContractor', data.contractor_id, { root: true }),
     ]);
 
     const presentation = {
       ...data,
-      proposal: rootState.proposal.proposal,
-      artist: rootState.artist.artist, 
+      proposal:   rootState.proposal.proposal,
+      artist:     rootState.artist.artist, 
       contractor: rootState.contractor.contractor,
     };
 
@@ -70,6 +70,26 @@ export const actions = {
     const { data } = await this.$axios.put(`presentations/${state.presentation.id}`, state.presentation);
     dispatch('setPresentation', data);
   },
+  async uploadDocument({ dispatch, state }, file) {
+    const { data } = await this.$axios.post(`presentations/${state.presentation.id}/document`, { file });
+    dispatch('setPresentation', data);
+  },
+  async editDocument({ dispatch, state }, document) {
+    const { data } = await this.$axios.put(`presentations/${state.presentation.id}/document`, { document });
+    dispatch('setPresentation', data);
+  },
+  async approveDocument({ dispatch, state }, document) {
+    const { data } = await this.$axios.put(`presentations/${state.presentation.id}/document/approve`, { document });
+    dispatch('setPresentation', data);
+  },
+  async rejectDocument({ dispatch, state }, document) {
+    const { data } = await this.$axios.put(`presentations/${state.presentation.id}/document/reject`, { document });
+    dispatch('setPresentation', data);
+  },
+  async deleteDocument({ dispatch, state }, documentId) {
+    const { data } = await this.$axios.delete(`presentations/${state.presentation.id}/document/${documentId}`);
+    dispatch('setPresentation', data);
+  }
 }
 
 export const getters = {

@@ -1,36 +1,41 @@
 'use strict';
 
-const BaseController = require('./base');
-const RegisterUserService = require('../services/auth/registerUser');
-const LoginUserService = require('../services/auth/loginUser');
-const ValidateUserService = require('../services/auth/validateUser');
-const VerifyUserService = require('../services/auth/verifyUser');
-const ResetPasswordService = require('../services/auth/resetPassword');
-const FacebookLoginService = require('../services/auth/facebookLogin');
-const GoogleLoginService = require('../services/auth/googleLogin');
-const AssignRoleService = require('../services/auth/assignRole');
-const RenewAuthService = require('../services/auth/renewAuth');
-const UserProfileService = require('../services/auth/userProfile');
-const GenerateTokenService = require('../services/auth/generateToken');
-const SaveUserProfileService = require('../services/auth/saveProfile');
+const BaseController          = require('./base');
+const RegisterUserService     = require('../services/auth/registerUser');
+const LoginUserService        = require('../services/auth/loginUser');
+const ValidateUserService     = require('../services/auth/validateUser');
+const VerifyUserService       = require('../services/auth/verifyUser');
+const ResetPasswordService    = require('../services/auth/resetPassword');
+const FacebookLoginService    = require('../services/auth/facebookLogin');
+const GoogleLoginService      = require('../services/auth/googleLogin');
+const AssignRoleService       = require('../services/auth/assignRole');
+const RenewAuthService        = require('../services/auth/renewAuth');
+const UserProfileService      = require('../services/auth/userProfile');
+const GenerateTokenService    = require('../services/auth/generateToken');
+const SaveUserProfileService  = require('../services/auth/saveProfile');
 
 class AuthController extends BaseController {
-  register(req, res, next) {
+  async register(req, res, next) {
     const { name, email, password, referral_token, artist_token } = req.data;
 
     const registerUserSvc = new RegisterUserService(name, email, password);
-    registerUserSvc.register(referral_token, artist_token)
-      .then(() => res.status(200).json({ message: 'Successfully registered. Please verify account' }))
-      .catch((error) => next(error));
+    try {
+      await registerUserSvc.register(referral_token, artist_token);
+      res.status(200).json({ message: 'Successfully registered. Please verify account' });
+    } catch (error) {
+      next(error);
+    }
   }
 
-  verify(req, res, next) {
-    const { token } = req.data;
-    const verifyUserService = new VerifyUserService(token);
+  async verify(req, res, next) {
+    const verifyUserService = new VerifyUserService();
 
-    verifyUserService.verify()
-      .then(() => res.status(200).send(verifyUserService.getToken()))
-      .catch((error) => next(error));
+    try {
+      await verifyUserService.verify(req.data.token);
+      res.status(200).send({}); // No need to send anything, user MUST attempt login after verify
+    } catch (error) {
+      next(error);
+    }
   }
 
   resendVerification(req, res, next) {
@@ -42,13 +47,17 @@ class AuthController extends BaseController {
       .catch((error) => next(error));
   }
 
-  login(req, res, next) {
+  async login(req, res, next) {
+    console.log('Login user in...');
     const { email, password } = req.data;
-    const loginUserService = new LoginUserService(email, password);
+    const loginUserService = new LoginUserService();
 
-    loginUserService.login()
-      .then(() => res.status(200).json(loginUserService.getToken()))
-      .catch((error) => next(error));
+    try {
+      await loginUserService.login(email, password);
+      res.status(200).json(loginUserService.getToken());
+    } catch (error) {
+      next(error);
+    }
   }
 
   socialLogin(req, res, next) {

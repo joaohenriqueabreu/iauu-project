@@ -1,7 +1,7 @@
-const GetMessageHistoryService = require('../services/message/getMessageHistory');
-const SearchUnreadNotificationsService = require('../services/notification/searchUnreadNotifications');
-const MarkNotificationReadService = require('../services/notification/markNotificationRead');
-const SaveMessageService = require('../services/message/saveMessage');
+const GetMessageHistoryService          = require('../services/message/getMessageHistory');
+const SearchUnreadNotificationsService  = require('../services/notification/searchUnreadNotifications');
+const MarkNotificationReadService       = require('../services/notification/markNotificationRead');
+const SaveMessageService                = require('../services/message/saveMessage');
 
 // Socket config
 const app = require('express')();

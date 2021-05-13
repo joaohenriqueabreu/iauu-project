@@ -80,6 +80,30 @@ class Artist extends BaseRepository {
   get product_items() {
     return _.uniq(_.flatten(_.map(this.products, 'items')));
   }
+
+  get company_phone() {
+    if (this.phone != null)   { return this.phone; }
+    if (this.manager != null) { return this.manager.phone; }
+    return '';    
+  }
+
+  get company_email() {
+    if (this.email != null)   { return this.email; }
+    if (this.manager != null) { return this.manager.email; }
+    return '';
+  }
+
+  get company_document() {
+    if (this.document != null)  { return this.document; }
+    if (this.manager != null)   { return this.manager.document; }
+    return '';
+  }
+
+  get company_address() {
+    if (this.address != null) { return this.address.display; }
+    if (this.manager != null) { return this.manager.address.display; }
+    return '';
+  }
 }
 
 artistSchema.loadClass(Artist);

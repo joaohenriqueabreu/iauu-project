@@ -116,7 +116,7 @@ export default {
       }
 
       if (type === 'event' && status === 'accepted') {
-        this.$router.push({ path: `/artist/presentation${presentationId}`, target: '_blank' });
+        this.$router.push({ path: `/artist/presentations/${presentationId}`, target: '_blank' });
       }
     },
     async saveBusyTimeslot(timeslot) {

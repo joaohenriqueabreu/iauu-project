@@ -25,6 +25,18 @@ $regular:       12px;
 $large:         15px;
 $huge:          20px;
 
+$fonts: (
+  "tiny":     $tiny,
+  "small":    $small,
+  "regular":  $regular, 
+  "large":    $large, 
+  "huge":     $huge,  
+);
+
+@each $name, $font in $fonts {
+  .font-#{$name} { font-size: $font !important; }
+}
+
 $bold:          700;
 
 // border-radius

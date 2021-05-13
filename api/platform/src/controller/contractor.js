@@ -42,8 +42,8 @@ class ContractorController extends BaseController {
 
   updateProfile(req, res, next) {
     console.log('Updating profile...');
-    const saveProfileService = new SaveContractorProfileService(req.user, req.data);
-    saveProfileService.save()
+    const saveProfileService = new SaveContractorProfileService(req.user);
+    saveProfileService.save(req.data.profile)
       .then(() => { res.status(200).json(saveProfileService.getContractor()); })
       .catch((error) => next(error));
   }

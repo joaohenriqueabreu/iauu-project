@@ -1,4 +1,4 @@
-const db 						= require('../data/db');
+const db 						= require('lib/data/db');
 const { Exception } = require('lib/exception');
 const BaseService 	= require('./base');
 

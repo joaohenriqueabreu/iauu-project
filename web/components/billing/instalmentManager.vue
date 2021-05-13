@@ -26,7 +26,8 @@
     </div>
     <div class="horizontal middle center mt-5">
       <form-button @action="createOrUpdateInstalment" :disabled="$v.targetInstalment.$invalid" class="mr-4">{{ !$empty(instalment) ? 'Atualizar' : 'Adicionar' }} forma de pagamento</form-button>
-      <form-button v-if="isUpdating" :processing="processing" @action="confirmRemovingInstalment">Remover</form-button>
+      <!-- <form-button v-if="isUpdating" :processing="processing" @action="confirmRemovingInstalment">Remover</form-button></form-button> -->
+      <u><h5 v-if="isUpdating" class="clickable brand-hover" :processing="processing" @click="confirmRemovingInstalment">Remover</h5></u>
     </div>
     <confirm-dialog ref="removeInstalmentDialog" message="Deseja remover esta parcela?" @confirmed="removeInstalment" @cancelled="processing=false"></confirm-dialog>
   </div>

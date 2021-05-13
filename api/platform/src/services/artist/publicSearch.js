@@ -1,9 +1,8 @@
-const Artist = require('../../models/artist')
-const Presentation = require('../../models/presentation')
-const BaseService = require('../base')
-const BadRequestException = require('../../exception/bad')
+const { Artist, Presentation }  = require('../../models')
+const BaseService               = require('../base')
+const { BadRequestException }   = require('lib/exception');
 
-module.exports = class SearchArtistProfileService extends BaseService
+module.exports = class PublicArtistProfileService extends BaseService
 {
     constructor(user, data) {
       super()
@@ -25,13 +24,13 @@ module.exports = class SearchArtistProfileService extends BaseService
 
     async searchArtist() {
       console.log('Searching for artist from slug...')      
-      this.artist = await Artist.findOne({ slug: this.slug }).populate('users')
-      return this
+      this.artist = await Artist.findOne({ slug: this.slug }).populate('users');
+      return this;
     }
 
     ensureArtistWasFound() {      
       if (Artist.notFound(this.artist) || !this.artist instanceof Artist) {
-        throw new Error('Artist not found...')
+        throw new Error('Artist not found...');
       }
   
       console.log('Artist found...')
@@ -40,7 +39,6 @@ module.exports = class SearchArtistProfileService extends BaseService
 
     async calculateStats() {
       const presentationsCount = await Presentation.countDocuments({ artist: this.artist.id, status: { $ne: 'proposal'}})
-      console.log(presentationsCount)
 
       this.artist.stats = { 
         score: this.artist.feedback_count,

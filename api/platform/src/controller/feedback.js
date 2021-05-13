@@ -22,7 +22,7 @@ class FeedbackController extends BaseController {
     const searchArtistFeedbacksSvc = new SearchArtistFeedbacksService(req.user);
     try {
       await searchArtistFeedbacksSvc.search(req.data.id);
-      res.status(200).json(searchArtistFeedbacksSvc.getFeedback());
+      res.status(200).json(searchArtistFeedbacksSvc.getFeedbacks());
     } catch (error) {
       next(error);
     }

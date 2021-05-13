@@ -9,7 +9,6 @@ const { cleanup, setup } = require('./setup');
 // Set env test
 process.env.NODE_ENV = 'test';
 
-const dbConnection = require('../src/data/db');
 const db = require('mongoose');
 
 // Exceptions
@@ -31,7 +30,7 @@ const SearchArtistProfileService = require('../src/services/artist/searchProfile
 const SaveArtistProfileService = require('../src/services/artist/saveProfile')
 const SaveProductService = require('../src/services/artist/saveProduct')
 const DeleteProductService = require('../src/services/artist/deleteProduct')
-const LookupProductsService = require('../src/services/artist/lookupProducts')
+const SearchProductsService = require('../src/services/artist/searchProducts')
 const SearchArtistUsersService = require('../src/services/artist/searchUsers')
 const SendFeedbackService = require('../src/services/artist/sendFeedback')
 

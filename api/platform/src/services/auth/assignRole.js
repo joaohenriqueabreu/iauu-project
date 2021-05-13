@@ -1,8 +1,7 @@
-const axios = require('axios');
-const AuthService = require('./auth');
-const { User, Artist, Contractor } = require('../../models');
-const RequestEndpointService = require('lib/services/request');
-const BadRequestException = require('../../exception/bad');
+const AuthService                   = require('./auth');
+const { User, Artist, Contractor }  = require('../../models');
+const BadRequestException           = require('lib/exception/bad');
+const { EVENTS }                    = require('lib/events');
 
 module.exports = class AssignRoleService extends AuthService {
   constructor(data, role) {
@@ -11,7 +10,6 @@ module.exports = class AssignRoleService extends AuthService {
     this.id = data.id;
     this.role = role;
     this.roleInstance = {};
-    this.requestNotificationEndpointSvc = new RequestEndpointService('notification');
   }
 
   async assign() {
@@ -179,7 +177,8 @@ module.exports = class AssignRoleService extends AuthService {
   }
 
   async generateCompleteProfileNotification(adminUser) {
-    await this.requestNotificationEndpointSvc.post('/', {
+
+    this.emitEvent(EVENTS.ASK_USER_TO_COMPLETE_PROFILE_EVENT, {
       from: adminUser, 
       to: this.user, 
       message: 'Bem vindo a iauü! Para começar a receber propostas, complete seu perfil', 
@@ -191,7 +190,7 @@ module.exports = class AssignRoleService extends AuthService {
   }
 
   async generateCreateProductNotification(adminUser) {
-    await this.requestNotificationEndpointSvc.post('/', {
+    this.emitEvent(EVENTS.ASK_USER_TO_CREATE_PRODUCT_EVENT, {
       from: adminUser, 
       to: this.user, 
       message: 'Inclua formatos de apresentação para ser encontrado', 

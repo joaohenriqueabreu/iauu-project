@@ -58,6 +58,10 @@ a {
 
 [data-icon] {
   margin-right: 2 * $space;
+
+  &.huge {
+    font-size: 48px;
+  }
 }
 
 h1,
@@ -196,9 +200,16 @@ a {
   }
 }
 
+// Define positioning with padding
 .top-right {
   position: absolute;
   top:      0px;
+  right:    0px;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom:   0px;
   right:    0px;
 }
 
@@ -306,9 +317,10 @@ a {
 
 .ps--active-x .ps__rail-x { display: none !important } // Hide annoying horizontal scrollbar
 
-@each $name, $color in $colors {
-  .color-#{$name} { color: $color; }
-  .bg-#{$name}    { background: $color !important; }
+$pcts: (5, 10, 15, 20, 50);
+@each $pct in $pcts {
+  .w-#{$pct} { width: #{$pct}vw; }
+  .h-#{$pct} { height: #{$pct}vh }
 }
 
 // TODO should not need this

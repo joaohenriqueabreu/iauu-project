@@ -1,9 +1,8 @@
-// const db = require('../../data/db')
-const db = require('mongoose')
-const mediaSchema = require('./media')
+const { Schema, model } = require('mongoose')
+const mediaSchema       = require('./media')
 const baseSchemaOptions = require('../schemas/options')
 
-const productSchema = new db.Schema({
+const productSchema = new Schema({
     name: 				{ type: String },
     description: 	{ type: String },
     photo:      	{ type: String },
@@ -14,4 +13,4 @@ const productSchema = new db.Schema({
     items:      	[String]
 }, baseSchemaOptions)
  
-module.exports = db.model('Product', productSchema);
+module.exports = model('Product', productSchema);

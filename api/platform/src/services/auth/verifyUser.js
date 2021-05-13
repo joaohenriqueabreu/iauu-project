@@ -1,53 +1,54 @@
-const moment = require('moment')
-const AuthService = require('./auth')
-const User = require('../../models/user')
-const SendMailService = require('../mail/sendMail')
-const BadRequestException = require('../../exception/bad')
-const UnauthorizedException = require('../../exception/unauthorized')
+const moment      = require('moment');
+const AuthService = require('./auth');
+const User        = require('../../models/user');
+const { EVENTS }  = require('lib/events');
+const { BadRequestException, UnauthorizedException } = require('lib/exception');
 
 module.exports = class VerifyUserService extends AuthService {
   constructor(token, bypassExpiration) {
     super()
-    this.token = token
-    this.bypassExpiration = bypassExpiration
+    
+    this.bypassExpiration = bypassExpiration;
   }
 
-  async verify() {
-    console.log('Trying to verify...')
-    await this.lookupUser({ 'verification.token': this.token })
-    await this.validateLogin()
-    this.isTokenExpired()
-    await this.generateAccessToken()
-    this.setUserAsVerified()
-      .updateUserStatus()
-    await this.saveUser()
+  async verify(token) {
+    this.token = token;
 
-    this.sendWelcomeMail()
+    console.log('Trying to verify...')
+    await this.searchUserFromCredentials({ 'verification.token': this.token })
+    await this.validateLogin();
+    this.isTokenExpired();
+    await this.generateAccessToken();
+    this.setUserAsVerified()
+      .updateUserStatus();
+    await this.saveUser();
+
+    this.emitEvent(EVENTS.USER_VERIFIED_EVENT, this.user);
     return this
   }
 
   async resend() {
-    console.log('Resending verification token...')
-    await this.lookupUser({ 'verification.token': this.token })
-    await this.validateLogin()
+    console.log('Resending verification token...');
+    await this.searchUserFromCredentials({ 'verification.token': this.token });
+    await this.validateLogin();
     this.generateVerificationToken()
-      .renewIssueDt()
-    await this.saveUser()
+      .renewIssueDt();
+    await this.saveUser();
 
-    this.sendRegistrationMail()
+    this.emitEvent(EVENTS.USER_REGISTERED_EVENT, this.user);
     return this
   }
 
   async authorize() {
     console.log('Trying to verify...')
-    await this.lookupUser({ 'verification.token': this.token })
+    await this.searchUserFromCredentials({ 'verification.token': this.token })
     await this.validateLogin()
     return this
   }  
 
   async validateLogin() {
     if (User.notFound(this.user)) {
-      throw new BadRequestException('Invalid token')
+      throw new BadRequestException('Invalid token');
     }
 
     return this
@@ -72,16 +73,6 @@ module.exports = class VerifyUserService extends AuthService {
 
   setUserAsVerified() {
     this.user.verification.is_verified = true
-    return this
-  }
-
-  async sendWelcomeMail() {
-    const mailSvc = new SendMailService(this.user.email, 'Bem vindo a iauü')
-    await mailSvc.buildBody('welcome', {
-      user: this.user,
-      url: this.generateVerificationUrl(),
-    })
-    await mailSvc.send()
     return this
   }
 }

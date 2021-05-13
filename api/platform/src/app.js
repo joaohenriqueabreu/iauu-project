@@ -11,11 +11,12 @@ const compression = require('compression');
 const cors        = require('cors');
 
 // init db and connect
-const db          = require('./data/db');
-const corsOptions = require('./data/cors');
+const db          = require('lib/data/db');
+const orm         = require('mongoose');
+// const corsOptions = require('lib/data/cors');
 const initDb      = async () => {
   try {
-    await db.connect();
+    await db.connect(orm);
   } catch (error) {
     console.log(error);
     process.exit(0);

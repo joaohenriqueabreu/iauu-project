@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const BaseService = require('../base');
 const { User, Artist, Contractor } = require('../../models');
 const GenerateTokenService = require('./generateToken');
-const SendMailService = require('../mail/sendMail');
 
 module.exports = class AuthService extends BaseService {
   constructor() {
@@ -67,12 +66,12 @@ module.exports = class AuthService extends BaseService {
     return this;
   }
 
-  async lookupUserById(id) {
+  async searchUserById(id) {
     this.user = await User.fetchWithSensitiveDataById(id);
     return this;
   }
 
-  async lookupUser(conditions) {
+  async searchUserFromCredentials(conditions) {
     this.user = await User.fetchWithSensitiveData(conditions);
     return this;
   }
@@ -138,17 +137,17 @@ module.exports = class AuthService extends BaseService {
     return this;
   }
 
-  async sendMail() {
-    const mailSvc = new SendMailService(this.user.email, this.mail.subtitle);
-    await mailSvc.buildBody(this.mail.template, this.mail.data);
-    await mailSvc.send();
-    return this;
-  }
+  // async sendMail() {
+  //   const mailSvc = new SendMailService(this.user.email, this.mail.subtitle);
+  //   await mailSvc.buildBody(this.mail.template, this.mail.data);
+  //   await mailSvc.send();
+  //   return this;
+  // }
 
-  async sendRegistrationMail() {
-    const mailSvc = new SendMailService(this.user.email, 'iauü | Verifique sua conta');
-    await mailSvc.buildBody('register', {user: this.user, url: this.generateVerificationUrl() });
-    await mailSvc.send();
-    return this;
-  }
+  // async sendRegistrationMail() {
+  //   const mailSvc = new SendMailService(this.user.email, 'iauü | Verifique sua conta');
+  //   await mailSvc.buildBody('register', {user: this.user, url: this.generateVerificationUrl() });
+  //   await mailSvc.send();
+  //   return this;
+  // }
 }

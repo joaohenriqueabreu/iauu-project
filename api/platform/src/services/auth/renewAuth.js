@@ -11,7 +11,7 @@ module.exports = class LoginAsUserService extends LoginUserService
     }
 
     async renew() {
-      await this.searchUser()
+      await this.searchUserById(this.id)
       await this.validateNonPasswordLogin()
       await this.generateAccessToken()
       await this.saveUser()

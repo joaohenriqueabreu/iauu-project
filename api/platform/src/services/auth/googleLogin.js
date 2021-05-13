@@ -20,8 +20,8 @@ module.exports = class GoogleLoginService extends SocialLoginService {
     return data
   }
 
-  async lookupUserFromSocial() {
-    await this.lookupUser({
+  async searchUserFromSocial() {
+    await this.searchUserFromCredentials({
       $or: [{ google_id: this.socialData.sub }, { email: this.socialData.email }],
     })
 

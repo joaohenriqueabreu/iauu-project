@@ -48,8 +48,6 @@
         Nenhuma apresentação confirmada
         <nuxt-link to="/search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
       </div>
-      <presentation-summary v-if="!$empty(presentation)" ref="presentation" :read-only="false" @confirmed="handleConfirmedPresentaion">
-      </presentation-summary>
     </div>
     <div v-else>
       <h5>Nenhuma apresentação contratada</h5>
@@ -60,10 +58,8 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import PresentationInfo from '@/components/presentation/info';
-import PresentationSummary from '@/components/presentation/contractor/presentationSummary';
 export default {
   components: {
-    PresentationSummary,
     PresentationInfo
   },
   async asyncData({ store, app }) {

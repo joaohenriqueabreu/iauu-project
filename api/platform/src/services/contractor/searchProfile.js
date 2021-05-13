@@ -8,7 +8,7 @@ module.exports = class SearchContractorProfileService extends ContractorService
     }
 
     async search() {
-      await this.lookupContractor()
+      await this.searchContractor()
       await this.ensureContractorWasFound()
       return this
     }

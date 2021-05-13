@@ -8,7 +8,7 @@ const sinon         = require('sinon');
 const sinonChai     = require("sinon-chai");
 const should        = require('chai').should();
 const expect        = require('chai').expect;
-const dbConnection  = require('../src/data/db');
+const dbConnection  = require('../../lib/data/db');
 const db            = require('mongoose');
 
 if (config.shouldDebug()) { db.set('debug', true); }

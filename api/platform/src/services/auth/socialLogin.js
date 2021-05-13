@@ -10,7 +10,7 @@ module.exports = class SocialLogin extends AuthService {
 
   async login() {
     this.socialData = await this.fetchProfile()
-    await this.lookupUserFromSocial()
+    await this.searchUserFromSocial()
     await this.generateAccessToken()
     await this.saveUser()
     return this
