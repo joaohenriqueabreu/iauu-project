@@ -7,6 +7,7 @@ const FailedAPIConnectionException          = require('./apiConnection');
 const FailedChargingPaymentMethodException  = require('./chargePaymentMethod');
 const InterfaceNotImplementedException      = require('./interfaceNotImplemented');
 const EventBrokerException                  = require('./eventBrokerException');
+const ModelValidationException              = require('./modelValidation');
 
 
 module.exports = {
@@ -18,5 +19,6 @@ module.exports = {
   FailedAPIConnectionException,
   FailedChargingPaymentMethodException,
   InterfaceNotImplementedException,
-  EventBrokerException
+  EventBrokerException,
+  ModelValidationException
 }

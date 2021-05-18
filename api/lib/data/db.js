@@ -5,6 +5,7 @@ const connectionOptions = {
     useCreateIndex: true, 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
+    poolSize: 10, // Max socket connections
     autoIndex: config.env !== 'production'
     // useFindAndModify: false,
     // autoReconnect: true,

@@ -1,17 +1,17 @@
 const { BaseService }         = require('lib/services');
 const { Chat }                = require('../models');
-const { BadRequestException } = require('lib/exception');
+const { BadRequestException, ModelValidationException } = require('lib/exception');
 
 module.exports = class BaseMessageService extends BaseService
 {
-    constructor(user, data) {
-      super(user)
+    constructor(user, presentationId) {
+      super(user);
 
-      if (data === null || data === undefined) {
-        throw new BadRequestException('Presentation required to search for message chat')
-      }
+      // if (data === null || data === undefined) {
+      //   throw new BadRequestException('Presentation required to search for message chat')
+      // }
 
-      this.id   = data.id;
+      this.id   = presentationId;
       this.user = user;
       this.chat = {};
     }
@@ -23,12 +23,22 @@ module.exports = class BaseMessageService extends BaseService
 
     async searchChat() {
       console.log('Searching presentation message chat...');
-      this.chat = await Chat.findOne({ presentation: this.id });
+      this.chat = await Chat.findOne({ presentation_id: this.id });
       return this;
     }
 
     async saveMessage() {
-      await this.chat.save();
+      console.log('Saving message...');
+      console.log(this.chat);
+      console.log(this.chat.messages[0])
+      try {
+        await this.chat.save();
+      } catch (error) {
+        console.log(error);
+        throw ModelValidationException(error);
+      }
+      
+      console.log('Message saved...');
       return this;
     }
 }

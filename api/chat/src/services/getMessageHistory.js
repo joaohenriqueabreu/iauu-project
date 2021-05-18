@@ -1,10 +1,11 @@
-const BaseMessageService = require('./base')
+const BaseMessageService = require('./base');
 
 module.exports = class GetMessageHistoryService extends BaseMessageService
 {
-  constructor(user, data) {
-    super(user, data)
-    this.chat = {}
+  constructor(user, presentationId) {
+    super(user, presentationId)
+
+    this.chat = {};
   }
 
   async get() {
@@ -14,6 +15,6 @@ module.exports = class GetMessageHistoryService extends BaseMessageService
 
   getMessages() {
     if (this.chat != null) { return this.chat.messages; }
-    return;
+    return [];
   }
 }

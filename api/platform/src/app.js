@@ -12,11 +12,12 @@ const cors        = require('cors');
 
 // init db and connect
 const db          = require('lib/data/db');
-const orm         = require('mongoose');
+const odm         = require('mongoose');
+
 // const corsOptions = require('lib/data/cors');
 const initDb      = async () => {
   try {
-    await db.connect(orm);
+    await db.connect(odm);
   } catch (error) {
     console.log(error);
     process.exit(0);
@@ -29,8 +30,8 @@ initDb();
 const app = express();
 
 // Express routing config
-const router = express.Router();
-const routes = require('./routes');
+const router              = express.Router();
+const routes              = require('./routes');
 const { errorMiddleware } = require('lib/middleware');
 
 // app.options('*', cors(corsOptions))

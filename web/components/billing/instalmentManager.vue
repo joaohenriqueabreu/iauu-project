@@ -65,7 +65,11 @@ export default {
     },
     isUpdating() {
       return ! this.$empty(this.instalment);
-    }
+    },
+    instalmentIndex() {
+      const self = this;
+      return this.$array.findIndex(this.billing.instalments, (instalment) => instalment.id === self.targetInstalment.id);
+    },
   },
   mounted() {
     this.targetInstalment = this.$object.clone(this.isUpdating ? this.instalment : this.newInstalment);
@@ -95,22 +99,22 @@ export default {
       }
 
       this.$refs.removeInstalmentDialog.show();
-    },
-    getInstalmentIndex() {
-      const self = this;
-      return this.$array.findIndex(this.billing.instalments, (instalment) => instalment.id === self.targetInstalment.id);
-    },
+    },    
     async createOrUpdateInstalment() {
       this.processing = true;
 
       // Copy billing instalments
       let instalments = this.$object.clone(this.billing.instalments);
 
-      // upsert instalments on billing instalments array
-      let instalmentIndex = this.getInstalmentIndex();
-      if (instalmentIndex === -1) { instalmentIndex = 0; }
+      if (this.isUpdating) {
+        // upsert instalments on billing instalments array
+        let instalmentIndex = this.instalmentIndex;
+        if (instalmentIndex === -1) { instalmentIndex = 0; }
 
-      this.$set(instalments, instalmentIndex, this.targetInstalment);
+        this.$set(instalments, instalmentIndex, this.targetInstalment);
+      } else {
+        instalments.push(this.targetInstalment);
+      }
 
       try {
         await this.saveInstalments({ billingId: this.billing.id, instalments: instalments});
@@ -125,7 +129,7 @@ export default {
     async removeInstalment() {
       // Copy billing instalments
       let instalments = this.$object.clone(this.billing.instalments);
-      this.$delete(instalments, this.getInstalmentIndex());
+      this.$delete(instalments, this.instalmentIndex);
 
       try {
         await this.saveInstalments({ billingId: this.billing.id, instalments: instalments});

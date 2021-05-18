@@ -12,15 +12,14 @@
           :labels="presentationLabels">
         </timeline>        
       </div>
-    </tabs>
-    <div class="bottom-right">
-      <chat></chat>
-    </div>
+    </tabs>    
+    <chat :presentation="presentation"></chat>    
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import Chat             from '@/components/layout/chat';
 import PresentationInfo from '@/components/presentation/info';
 
 export default {
@@ -28,6 +27,7 @@ export default {
     await this.loadPresentation(this.$route.params.id);
   },
   components: {
+    Chat,
     PresentationInfo,
   },
   data() {

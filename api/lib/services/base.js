@@ -1,7 +1,7 @@
-const config                  		= require('../env');
-const { BadRequestException } 		= require('../exception');
-const { RequestEndpointService }	= require('../services');
-const { EventPublisher }	 				= require('../events');
+const config                  	= require('../env');
+const { BadRequestException } 	= require('../exception');
+const { EventPublisher }	 	= require('../events');
+const RequestEndpointService    = require('./request');
 
 module.exports = class BaseService {
     constructor(user) {

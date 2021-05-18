@@ -3,6 +3,7 @@ const config = require('lib/env');
 // init db and connect
 const db  = require('lib/data/db');
 const odm = require('mongoose');
+
 const initDb = async () => {
   try {
     await db.connect(odm);

@@ -45,6 +45,14 @@ class Proposal extends BaseRepository {
     return this.selected_timeslot != null;
   }
 
+  get tentative_dt() {
+    if (this.selected_timeslot != null) {
+      return this.selected_timeslot.start_dt;
+    }
+
+    return this.timeslots[0].start_dt;
+  }
+
   get has_counter_offer() {
     return !isEmpty(this.counter_offer);
   }

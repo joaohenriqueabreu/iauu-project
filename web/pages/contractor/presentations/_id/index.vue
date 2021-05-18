@@ -5,7 +5,7 @@ import PresentationContract   from '@/components/presentation/contract';
 import PresentationProduction from '@/components/presentation/contractor/production';
 import PresentationFeedback   from '@/components/presentation/contractor/feedback';
 import BillingDetails         from '@/components/presentation/contractor/billing';
-import PresentationStats      from '@/components/presentation/stats';
+import PresentationAudit      from '@/components/presentation/audit';
 
 export default {
   extends: PresentationPage,
@@ -20,7 +20,7 @@ export default {
         { status: null,         icon: 'tasks',          title: 'Produção',      component: PresentationProduction },
         { status: null,         icon: 'music',          title: 'Apresentação',  component: PresentationFeedback },
         { status: 'completed',  icon: 'credit-card',    title: 'Faturamento',   component: BillingDetails },
-        { status: 'paid',       icon: 'check',          title: 'Resumo',        component: PresentationStats },
+        { status: 'paid',       icon: 'check',          title: 'Resumo',        component: PresentationAudit },
       ]
     },
     customPresentationDayIndex()  { return 3; },

@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="mb-5">
-        <h4 class="mb-4">Formas de pagamento <icon icon="plus" class="clickable brand-hover" @click="openCreateInstalmentModal"></icon></h4>
+        <h4 class="mb-4">Formas de pagamento <icon v-if="billing.has_amount_to_allocate" icon="plus" class="clickable brand-hover" @click="openCreateInstalmentModal"></icon></h4>
         <instalments-table :billing="billing" v-if="!$empty(billing.instalments)" @selected="openEditInstalmentModal"></instalments-table>
         <div v-else>
           <div class="mb-2">

@@ -1,35 +1,35 @@
 <template>
   <div>
     <portal to="modal">
-    <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">            
-      <!-- Portal is used to render component code outside its definition (modal is rendered outside app div so it can take 100% width) -->
-        <div class="modal-content" :class="[modalHeight, noPad ? 'no-pad' : '']">
-          <header>
-            <div class="close" @click="close">
-              <icon icon="times"></icon>
-            </div>
-            <div v-show="!hideHeader" :class="headerCustomHeight">
-              <slot name="header"></slot>
-            </div>
-          </header>
-          <scrollbar>
-            <main :class="height">
-              <div v-if="hideHeader" class="mb-4">&nbsp;</div>
-              <slot name="main"></slot>
-            </main>
-            <div v-show="!hideFooter" class="compensate-footer">&nbsp;</div>
-          </scrollbar>
-          <footer v-show="!hideFooter">
-            <div :class="footerCustomHeight">
-              <slot name="footer"></slot>
-            </div>
-          </footer>
-        </div>
-        <aside>
-          <slot name="external"></slot>
-        </aside>
-      </v-modal>
-      </portal>
+      <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">            
+        <!-- Portal is used to render component code outside its definition (modal is rendered outside app div so it can take 100% width) -->
+          <div class="modal-content" :class="[modalHeight, noPad ? 'no-pad' : '']">
+            <header>
+              <div class="close" @click="close">
+                <icon icon="times"></icon>
+              </div>
+              <div v-show="!hideHeader" :class="headerCustomHeight">
+                <slot name="header"></slot>
+              </div>
+            </header>
+            <scrollbar>
+              <main :class="height">
+                <div v-if="hideHeader" class="mb-4">&nbsp;</div>
+                <slot name="main"></slot>
+              </main>
+              <div v-show="!hideFooter" class="compensate-footer">&nbsp;</div>
+            </scrollbar>
+            <footer v-show="!hideFooter">
+              <div :class="footerCustomHeight">
+                <slot name="footer"></slot>
+              </div>
+            </footer>
+          </div>
+          <aside>
+            <slot name="external"></slot>
+          </aside>
+        </v-modal>
+    </portal>
   </div>
 </template>
 

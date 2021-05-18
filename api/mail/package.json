@@ -39,6 +39,6 @@
         "testEnvironment": "node"
     },
     "_moduleAliases": {
-        "lib": "../lib/"
+        "lib": "../../lib/"
     }
 }

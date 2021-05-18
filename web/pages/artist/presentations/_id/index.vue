@@ -4,7 +4,7 @@ import ProposalSummary        from '@/components/proposal/summary';
 import PresentationContract   from '@/components/presentation/contract';
 import PresentationDay        from '@/components/presentation/artist/day';
 import BillingDetails         from '@/components/presentation/artist/billing';
-import PresentationStats      from '@/components/presentation/stats';
+import PresentationAudit      from '@/components/presentation/audit';
 
 export default {
   extends: PresentationPage,
@@ -18,7 +18,7 @@ export default {
         { status: 'accepted',   icon: 'file-contract',  title: 'Contrato',      component: PresentationContract },
         { status: null,         icon: 'guitar',         title: 'Apresentação',  component: PresentationDay },
         { status: 'completed',  icon: 'dollar-sign',    title: 'Faturamento',   component: BillingDetails },
-        { status: 'paid',       icon: 'search',         title: 'Resumo',        component: PresentationStats },
+        { status: 'paid',       icon: 'search',         title: 'Resumo',        component: PresentationAudit },
       ]
     },
     customPresentationDayIndex()  { return 2; },

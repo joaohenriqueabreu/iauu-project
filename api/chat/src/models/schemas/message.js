@@ -1,5 +1,6 @@
-const { Schema }        = require('mongoose');
+const { Schema, model } = require('mongoose');
 const baseSchemaOptions = require('lib/models/options');
+const BaseRepository    = require('lib/models/repository');
 
 const messageSchema = new Schema({
     author: { 
@@ -9,6 +10,9 @@ const messageSchema = new Schema({
     },
     type: { type: String, enum: ['text', 'emoji', 'file'] },
     data: { type: Object }
-}, baseSchemaOptions)
- 
-module.exports = messageSchema
+}, baseSchemaOptions);
+
+class Message extends BaseRepository { }
+
+messageSchema.loadClass(Message);
+module.exports = model('Message', messageSchema);

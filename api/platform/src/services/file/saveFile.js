@@ -8,7 +8,6 @@ module.exports = class SaveFileService extends BaseService {
   }
 
   async save(url) {
-    console.log(this.uplodedFile);
     this.file       = new File(this.uplodedFile);
     this.file.url   = url;
     // this.file.name  = this.uplodedFile.name;

@@ -18,6 +18,7 @@
       <feedback v-if="showFeedback"></feedback>
     </client-only>
     <portal-target name="modal" multiple></portal-target>
+    <portal-target name="chat" class="chat-position"></portal-target>
   </div>
 </template>
 
@@ -117,6 +118,13 @@ export default {
       height:         10vh;
     }
   }
+}
+
+.chat-position {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: $moveToTop;
 }
 
 // .modal-portal {
