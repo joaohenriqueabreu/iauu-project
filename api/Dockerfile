@@ -18,7 +18,7 @@ RUN npm install --only=prod
 WORKDIR /usr/app
 RUN mkdir node_modules && chown node:node node_modules
 COPY ${service_path} .
-RUN npm install --only=prod
+RUN npm install --only=prod --unsafe-perm
 
 EXPOSE 4444 5555 5556 9999
 
