@@ -7,24 +7,24 @@ ARG npm_config_user=root
 
 # General permission configs
 RUN mkdir /usr/app && chown node:node /usr/app
-RUN mkdir /usr/iauulib && chown node:node /usr/iauulib
+# RUN mkdir /usr/iauulib && chown node:node /usr/iauulib
 RUN mkdir /var/lib/iauu && chown node:node /var/lib/iauu
 
 
-WORKDIR /usr/iauulib
-RUN mkdir node_modules && chown node:node node_modules
-COPY ./lib .
-RUN npm install
+# WORKDIR /usr/iauulib
+# RUN mkdir node_modules && chown node:node node_modules
+# COPY ./lib .
+# RUN npm install
 
 WORKDIR /var/lib/iauu
 RUN mkdir node_modules && chown node:node node_modules
 COPY ./lib .
-RUN npm install
+RUN npm install --only=prod
 
 WORKDIR /usr/app
 RUN mkdir node_modules && chown node:node node_modules
 COPY ${service_path} .
-RUN npm install
+RUN npm install --only=prod
 
 EXPOSE 4444 5555 5556 9999
 

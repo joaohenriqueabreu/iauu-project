@@ -13,20 +13,16 @@
         "stop": "pkill --signal SIGINT reforma.ai.server",
         "migrate": "./node_modules/.bin/migrate -c src",
         "test": "mocha --timeout 50000 --exit",
-        "test-file": "mocha --timeout 50000 --exit --grep",
-        "postinstall": "link-module-alias"
+        "test-file": "mocha --timeout 50000 --exit --grep"
     },
     "dependencies": {
         "app-module-path": "^2.2.0",
         "cors": "2.8.5",
         "cors-anywhere": "0.4.3",
         "dotenv": "8.2.0",
-        "link-module-alias": "^1.2.0"
+        "lib": "file:/var/lib/iauu"
     },
     "devDependencies": {
         "nodemon": "2.0.7"
-    },
-    "_moduleAliases": {
-        "lib": "../iauulib/"
     }
 }
