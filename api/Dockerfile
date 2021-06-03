@@ -26,6 +26,6 @@ RUN mkdir node_modules && chown node:node node_modules
 COPY ${service_path} .
 RUN npm install
 
-EXPOSE 4444 5555 5556 9999
+EXPOSE 4444 5555 5556 9999 587
 
 CMD ["npm", "start"]
