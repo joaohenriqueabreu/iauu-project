@@ -31,7 +31,7 @@ services:
                         - broker
         mail:
                 build: 
-                        context: ./api
+                        context: ./api 
                         dockerfile: ./Dockerfile
                         args:
                                 - service_path=./mail
