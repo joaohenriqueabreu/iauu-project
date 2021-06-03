@@ -1,62 +1,84 @@
 version: '3.7'
 services:
-<<<<<<< HEAD
-        db:
-                # build: ./db
-                image: mongo:4.2.7
-                container_name: db
+        # lib: 
+        #         build: ./api/lib
+        #         container_name: lib
+        #         volumes:
+        #                 - ./api/lib:/usr/lib
+        broker:
+                image: rabbitmq:3-management-alpine
+                container_name: broker
                 ports:
-                        - "27017:27017"
+                        - "5672:5672"
+                        - "15672:15672"
                 volumes:
-                        - db:/data/db
+                        - ./broker/data/:/var/lib/rabbitmq/
+                        - ~/broker/logs/:/var/log/rabbitmq
                 networks:
                         iauu_net:
-=======
-        # db:
-        #          build: ./db
-        #          container_name: db
-        #          ports:
-        #                  - "27017:27017"
-        #          volumes:
-        #                  - db:/data/db
-        #          networks:
-        #                   iauu_net:
->>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
-        api:
-                build: ./api
-                restart: always
-                container_name: api
-<<<<<<< HEAD
-                command: npm run dev
-                # volumes:
-                #         - ./api:/usr/app
-                #         - /usr/app/node_modules
-=======
->>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
+        platform:                
+                build: 
+                        context: ./api
+                        dockerfile: ./Dockerfile
+                        args:
+                                - service_path=./platform
+                container_name: platform
                 ports:
                         - "4444:4444"
-                        - "555:555"
-                        - "999:999"
-                networks:
-                        iauu_net:
-<<<<<<< HEAD
-                depends_on: 
-                        - db
-        web:
-                build: ./web
-                restart: always
-                container_name: web
-                command: npm run dev
-                # volumes:
-                #         - ./web:/usr/app
-                #         - /usr/app/node_modules
-                ports:
-                        - "3000:3000"
                 networks:
                         iauu_net:
                 depends_on:
-                        - api
-=======
+                        - broker
+        mail:
+                build: 
+                        context: ./api
+                        dockerfile: ./Dockerfile
+                        args:
+                                - service_path=./mail
+                container_name: mail
+                networks:
+                        iauu_net:
+                depends_on:
+                        - broker                
+        chat:
+                build: 
+                        context: ./api
+                        dockerfile: ./Dockerfile
+                        args:
+                                - service_path=./chat
+                container_name: chat
+                ports:
+                        - "5555:5555"
+                networks:
+                        iauu_net:
+                depends_on: 
+                        - broker
+        notifications:
+                build: 
+                        context: ./api
+                        dockerfile: ./Dockerfile
+                        args:
+                                - service_path=./notifications
+                container_name: notifications
+                ports:
+                        - "5556:5556"
+                networks:
+                        iauu_net:
+                depends_on: 
+                        - broker
+        proxy:
+                build: 
+                        context: ./api
+                        dockerfile: ./Dockerfile
+                        args:
+                                - service_path=./proxy
+                container_name: proxy
+                ports:
+                        - "9999:9999"
+                networks:
+                        iauu_net:
+                depends_on: 
+                        - broker
         web:
                build: ./web
                container_name: web
@@ -65,8 +87,10 @@ services:
                networks:
                        iauu_net:
                depends_on:
-                       - api
->>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
+                       - platform
+                       - chat
+                       - mail
+                       - proxy
         server:
                 image: nginx:1.19
                 container_name: server
@@ -79,26 +103,13 @@ services:
                         - ./server/certbot/conf:/etc/letsencrypt
                         - ./server/certbot/www:/var/www/certbot
                 networks:
-<<<<<<< HEAD
-                        iauu_net:                             
-                depends_on:
-                        - api                
-=======
                         iauu_net:
                 depends_on: 
                         - web
-                        - api
-        broker:
-                image: rabbitmq:3-management-alpine
-                container_name: broker
-                ports:
-                        - 5672:5672
-                        - 15672:15672
-                volumes:
-                        - ./broker/data/:/var/lib/rabbitmq/
-                        - ~/broker/logs/:/var/log/rabbitmq
-                networks:
-                        iauu_net:
+                        - platform
+                        - mail
+                        - chat
+                        - proxy
         ssl:
                 image: certbot/certbot
                 container_name: ssl
@@ -109,8 +120,5 @@ services:
                         - server
                 entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
->>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
 networks:
         iauu_net:
-volumes:
-        db:

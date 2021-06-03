@@ -20,13 +20,13 @@
         "app-module-path": "^2.2.0",
         "cors": "2.8.5",
         "cors-anywhere": "0.4.3",
-        "dotenv": "8.2.0"
+        "dotenv": "8.2.0",
+        "link-module-alias": "^1.2.0"
     },
     "devDependencies": {
-        "link-module-alias": "^1.2.0",
         "nodemon": "2.0.7"
     },
     "_moduleAliases": {
-        "lib": "../lib/"
+        "lib": "../iauulib/"
     }
 }

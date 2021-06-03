@@ -28,10 +28,11 @@
         "socket.io": "^3.1.2",
         "socketio-jwt": "4.6.2",
         "uid": "1.0.0",
-        "uuid": "8.3.0"
+        "uuid": "8.3.0",
+        "link-module-alias": "^1.2.0",
+        "debug": "4.3.1"
     },
     "devDependencies": {
-        "link-module-alias": "^1.2.0",
         "nodemon": "^2.0.7",
         "npm-watch": "0.7.0"
     },
@@ -43,6 +44,6 @@
         "testEnvironment": "node"
     },
     "_moduleAliases": {
-        "lib": "../lib/"
+        "lib": "../iauulib/"
     }
 }

@@ -7,11 +7,6 @@ WORKDIR /usr/app
 
 RUN mkdir node_modules && chown node:node node_modules
 
-<<<<<<< HEAD
-COPY ./.env.production .env
-# COPY package.json .
-=======
->>>>>>> b09b34670d90a362efd2f8e98ed73830bbdd7b0f
 COPY . .
 
 RUN apk add bash

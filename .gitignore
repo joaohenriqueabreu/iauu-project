@@ -12,3 +12,5 @@ api/notifications/node_modules/
 
 api/lib/.env
 api/lib/.env.testing
+broker/data
+broker/logs

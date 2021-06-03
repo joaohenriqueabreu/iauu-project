@@ -15,7 +15,7 @@ const initDb  = async () => {
 initDb();
 
 const socketServer  = require('./server');
-const webSocketPort = config.socket.port || 555;
+const webSocketPort = config.socket.port || 5555;
 
 // Wire up the server to listen to our port 500
 socketServer.listen(webSocketPort, () => {
