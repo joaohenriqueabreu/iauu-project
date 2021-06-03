@@ -3,6 +3,7 @@
 FROM node:14.16.0-alpine
 
 ARG service_path
+ARG npm_config_user=root
 
 RUN mkdir /usr/app && chown node:node /usr/app
 RUN mkdir /usr/iauulib && chown node:node /usr/iauulib
