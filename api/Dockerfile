@@ -17,12 +17,12 @@ RUN npm config set unsafe-perm true
 WORKDIR /usr/iauulib
 RUN mkdir node_modules && chown node:node node_modules && chmod 777 -R node_modules
 COPY ./lib .
-RUN npm install --only=prod
+RUN npm install
 
 WORKDIR /usr/app
 RUN mkdir node_modules && chown node:node node_modules && chmod 777 -R node_modules
 COPY ${service_path} .
-RUN npm install --only=prod --unsafe-perm
+RUN npm install
 
 EXPOSE 4444 5555 5556 9999
 
