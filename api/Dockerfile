@@ -6,6 +6,8 @@ ARG service_path
 
 RUN mkdir /usr/app && chown node:node /usr/app
 RUN mkdir /usr/iauulib && chown node:node /usr/iauulib
+RUN chmod 777 -R /usr/app
+RUN chmod 777 -R /usr/iauulib 
 
 WORKDIR /usr/iauulib
 RUN mkdir node_modules && chown node:node node_modules
