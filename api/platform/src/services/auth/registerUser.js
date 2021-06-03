@@ -45,7 +45,7 @@ module.exports = class RegisterUserService extends AuthService {
     console.log('Checking if user was referred...');
     
     // No referral, move on
-    if (referral_token === undefined || referral_token === null) { return; }
+    if (referral_token == null) { return; }
 
     const referralSvc = new ReferralService(this.user, referral_token);
     try {

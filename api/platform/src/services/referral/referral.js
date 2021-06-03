@@ -2,12 +2,12 @@ const BaseService = require('../base')
 const { User } = require('../../models')
 const BadRequestException = require('../../exception/bad')
 
-module.exports = class SearchUsersService extends BaseService
+module.exports = class ReferralService extends BaseService
 {
   constructor(user, token) {
     super()
 
-    this.token = token
+    this.token    = token
     this.referred = user
     this.referrer = {}
   }

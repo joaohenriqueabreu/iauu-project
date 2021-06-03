@@ -28,11 +28,11 @@ const validate = (data, req, next, schema) => {
 
 const newCrendentials = (req, res, next) => {
   const schema = validateRequest.object({
-    name: validateRequest.string().required(),
-    email: validateRequest.string().email().required(),
-    password: validateRequest.string().required(),
+    name:           validateRequest.string().required(),
+    email:          validateRequest.string().email().required(),
+    password:       validateRequest.string().required(),
     referral_token: validateRequest.string().optional(),
-    artist_token: validateRequest.string().optional()
+    artist_token:   validateRequest.string().optional()
   })
 
   return validate(req.body, req, next, schema);
