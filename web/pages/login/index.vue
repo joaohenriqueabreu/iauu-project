@@ -100,29 +100,18 @@ export default {
       }
 
       try {
-        await this.$auth.loginWith('user', {
-          data: this.credentials
-        });
+        await this.$auth.loginWith('user', { data: this.credentials });
 
-        this.$router.push('/artist/schedule')
+        this.$router.push('/artist/schedule');
       } catch (error) {
-        console.log(error);
+        this.$toast.error('Email ou senha inválidos');
       }
     },
     async loginWithFacebook(accessToken) {
-      await this.$auth.loginWith('facebook', {
-        data: {
-          token: accessToken
-        }
-      })
+      await this.$auth.loginWith('facebook', { data: { token: accessToken }})
     },
     async loginWithGoogle(accessToken) {
-      await this.$auth.loginWith('google', {
-        data: {
-          token: accessToken,
-          provider: 'google'
-        }
-      })
+      await this.$auth.loginWith('google', { data: { token: accessToken, provider: 'google'}})
     },
     openForgotPasswordModal() {
       this.$refs.forgotPassword.open()

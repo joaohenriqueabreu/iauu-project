@@ -4,7 +4,7 @@ let alreadyLogged = false
 export default function({ $auth, app }) {
     $auth.onError((error, name, endpoint) => {
       if (!alreadyLogged && error.response !== undefined) {
-        app.$toast.error(error.response.data)
+        // app.$toast.error(error.response);
       }
 
       alreadyLogged = !alreadyLogged

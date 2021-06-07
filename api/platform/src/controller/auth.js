@@ -56,7 +56,7 @@ class AuthController extends BaseController {
       await loginUserService.login(email, password);
       res.status(200).json(loginUserService.getToken());
     } catch (error) {
-      next(error);
+      res.status(401).json(error.message);
     }
   }
 
