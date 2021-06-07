@@ -25,13 +25,6 @@
           @accepted="handleAcceptProposal"
           @rejected="handleRejectProposal">
         </proposal-details>
-        <!-- <presentation
-          v-if="!$empty(presentation) && ['accepted', 'completed', 'cancelled'].includes(presentation.status)"
-          ref="presentation"
-          :read-only="false"
-          @confirmed="handleConfirmPresentation"
-          @cancelled="handleCancelPresentation">
-        </presentation> -->
       </div>
     </div>
     <div class="horizontal middle center text-right">
@@ -57,7 +50,6 @@ export default {
   components: {
     Busy,
     ProposalDetails,
-    Presentation,
     PresentationsYearly
   },
   async asyncData({ app, store }) {
@@ -73,7 +65,6 @@ export default {
   computed: {
     ...mapState({ timeslots: (state) => state.schedule.timeslots }),
     ...mapState({ presentation: (state) => state.presentation.presentation })
-    // ...mapState({ proposal: (state) => state.presentation.proposal })
   },
   methods: {
     ...mapActions('presentation', [

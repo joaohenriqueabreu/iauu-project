@@ -101,7 +101,7 @@ class Artist extends BaseRepository {
 
   get company_address() {
     if (this.address != null) { return this.address.display; }
-    if (this.manager != null) { return this.manager.address.display; }
+    if (this.manager != null && this.manager.address != null) { return this.manager.address.display; }
     return '';
   }
 }
