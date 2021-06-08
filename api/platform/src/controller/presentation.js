@@ -24,17 +24,6 @@ class PresentationController extends BaseController {
     }
   }
 
-  async fetchPresentation(req, res, next) {
-    try {
-      const presentation = await Presentation.findById(req.data.id);
-      if (!presentation instanceof Presentation) { throw new BadRequestException('Presentation does not exist'); }
-
-      res.status(200).json(presentation);
-    } catch (error) {
-      next(error);
-    }
-  }
-
   async searchUserPresentations(req, res, next) {
     console.log('Searching presentations...');
     const searchPresentationsSvc = new SearchPresentationsService();

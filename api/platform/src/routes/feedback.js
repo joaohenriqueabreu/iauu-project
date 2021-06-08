@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const feedbackController = require('../controller/feedback');
-const { authorizationMiddleware, validationMiddleware } = require('lib/middleware');
+const { authorizationMiddleware, validationMiddleware } = require('iauu/middleware');
 
 api.get('/presentation/:id',  authorizationMiddleware.authorize,  validationMiddleware.id, feedbackController.presentationFeedback);
 api.get('/artist/:id',        validationMiddleware.id,            feedbackController.artistFeedbacks);

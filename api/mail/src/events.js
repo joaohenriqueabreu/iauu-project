@@ -1,4 +1,4 @@
-const { EVENTS, EventConsumer } = require('lib/events');
+const { EVENTS, EventConsumer } = require('iauu/events');
 const {
   UserRegisteredMailService, 
   UserVerifiedMailService,

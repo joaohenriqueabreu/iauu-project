@@ -1,6 +1,6 @@
 const BaseService = require('../base');
 const { File }    = require('../../models');
-const { BadRequestException } = require('lib/exception');
+const { BadRequestException } = require('iauu/exception');
 
 module.exports = class SearchFileService extends BaseService {
   constructor() {

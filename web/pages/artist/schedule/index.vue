@@ -1,34 +1,31 @@
 <template>
-  <div>
+  <div class="calendar">
     <div class="d-flex justify-content-between">
       <div class="vertical mb-4">
         <span>Interaja com seus próximos eventos e responda a propostas de clientes</span>
       </div>
-    </div>
-    <presentations-yearly v-if="timeslots.length > 0" @selected="navigateCalendar"></presentations-yearly>
+    </div>    
     <div v-if="timeslots">
       <calendar
         ref="calendar"
-        class="content"
+        class="content mb-5"
         week-mode
         owner-mode
         :timeslots="timeslots"
         @reload-events="reloadTimeslotsForYear"
         @event-click="handleEvent"
-        @selected="openBusyModal"
-      ></calendar>
-      <busy ref="busy" @save="saveBusyTimeslot"></busy>
-      <div v-if="!$empty(presentation)">
-        <proposal-details
-          v-if="!$empty(presentation.proposal) && presentation.status === 'proposal'"
-          ref="proposal"
-          @accepted="handleAcceptProposal"
-          @rejected="handleRejectProposal">
-        </proposal-details>
-      </div>
+        @selected="openBusyModal">
+      </calendar>
+      <presentations-yearly v-if="timeslots.length > 0" @selected="navigateCalendar" class="hide-mobile"></presentations-yearly>      
+      <busy ref="busy" @save="saveBusyTimeslot"></busy>      
+      <proposal-details
+        v-if="!$empty(proposal)"
+        ref="proposal"
+        @accepted="handleAcceptProposal"
+        @rejected="handleRejectProposal">
+      </proposal-details>      
     </div>
-    <div class="horizontal middle center text-right">
-      <h6 class="mr-3">Legenda:</h6>
+    <div class="caption horizontal middle mb-4 mr-4 hide-mobile">
       <div class="horizontal middle mr-4">
         <span class="event-subtitle proposal"></span>
         <h6>Proposta</h6>
@@ -57,26 +54,26 @@ export default {
   },
   data() {
     return {
-      selectedTimeslot: '',
-      selectedProposalId: null,
+      selectedTimeslot:       '',
+      selectedProposalId:     null,
       selectedPresentationId: null
     }
   },
   computed: {
-    ...mapState({ timeslots: (state) => state.schedule.timeslots }),
+    ...mapState({ timeslots:    (state) => state.schedule.timeslots }),
+    ...mapState({ proposal:     (state) => state.proposal.proposal }),
     ...mapState({ presentation: (state) => state.presentation.presentation })
   },
   methods: {
+    ...mapActions('app', ['setAlert']),
+    ...mapActions('schedule', ['loadMySchedule', 'saveTimeslot', 'removeTimeslot']),
+    ...mapActions('proposal', ['loadProposal']),
     ...mapActions('presentation', [
-      'loadProposal',
-      'loadPresentation',
       'acceptProposal',
       'rejectProposal',
       'confirmPresentation',
       'cancelPresentation'
-    ]),
-    ...mapActions('schedule', ['loadMySchedule', 'saveTimeslot', 'removeTimeslot']),
-    ...mapActions('app', ['setAlert']),
+    ]),    
     openBusyModal(timeslot) {
       if (this.haveEventsOnDate(timeslot)) {
         this.$toast.error(
@@ -94,16 +91,15 @@ export default {
     },    
     async handleEvent({ eventId, timeslotId, type, status, presentationId }) {
       if (type === 'busy') {
-        await this.removeTimeslot(timeslotId)
-        this.$toast.success('Evento removido!')
-        return
-      }
-
-      await this.loadPresentation(presentationId)
+        await this.removeTimeslot(timeslotId);
+        this.$toast.success('Evento removido!');
+        return;
+      }      
 
       if (type === 'event' && status === 'proposal') {
-        this.$refs.proposal.openModal()
-        return
+        await this.loadProposal(presentationId);
+        this.$refs.proposal.openModal();
+        return;
       }
 
       if (type === 'event' && status === 'accepted') {
@@ -156,5 +152,15 @@ export default {
   &.presentation {
     background: $presentationTimeslot;
   }
+}
+
+.calendar {
+  height: 100%;
+}
+
+.caption {
+  position: fixed;
+  bottom:   0;
+  right:    0;
 }
 </style>

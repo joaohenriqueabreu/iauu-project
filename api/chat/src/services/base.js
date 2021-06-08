@@ -1,6 +1,6 @@
-const { BaseService }         = require('lib/services');
+const { BaseService }         = require('iauu/services');
 const { Chat }                = require('../models');
-const { BadRequestException, ModelValidationException } = require('lib/exception');
+const { BadRequestException, ModelValidationException } = require('iauu/exception');
 
 module.exports = class BaseMessageService extends BaseService
 {

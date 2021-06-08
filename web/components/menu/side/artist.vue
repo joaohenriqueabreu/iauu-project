@@ -7,7 +7,7 @@
       </nuxt-link>
       <nuxt-link to="/artist/presentations" :class="{ routed: routed('presentations') }">
         <icon icon="music"></icon>
-        <span v-show="!minimized">Apresentações</span>
+        <span v-show="!minimized">Shows</span>
       </nuxt-link>
       <nuxt-link to="/artist/proposals" :class="{ routed: routed('proposals') }">
         <icon icon="search-dollar"></icon>

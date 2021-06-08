@@ -1,4 +1,4 @@
-const config          = require('lib/env');
+const config          = require('iauu/env');
 const SendMailService = require('./base');
 
 module.exports = class UserRegisteredMailService extends SendMailService {

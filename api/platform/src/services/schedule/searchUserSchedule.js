@@ -1,4 +1,5 @@
 const _                     = require('lodash');
+const { get }               = require('iauu/request');
 const SearchScheduleService = require('./searchSchedule');
 
 module.exports = class SearchUserScheduleService extends SearchScheduleService
@@ -25,33 +26,28 @@ module.exports = class SearchUserScheduleService extends SearchScheduleService
 
   // TODO include status in queries
   async searchPresentations() {
-    this.presentations = await this.requestEndpointSvc.get(`/presentations/role/${this.id}`);
+    this.presentations = await get('presentations/role', this.id);
     return this;
   }
 
   async searchProposals() {
     // Build query string
-    const query = {
-      ...this.query,
-      status: 'proposal',
-    };
+    const query = { ...this.query, status: 'proposal' };
 
-    this.proposals = await this.requestEndpointSvc.get(`/proposals/role/${this.id}`, query);
+    this.proposals = await get('/proposals/role', this.id, query);
     return this;
   }
 
   populateProposalSchedule() {
-    const proposals = _.filter(this.proposals, (proposal) => proposal.status === 'proposal');
-
-    // Add presentation id info for every timeslot, so we can query it back
+    const proposals         = _.filter(this.proposals, (proposal) => proposal.is_open);
     const proposalTimeslots = _.map(proposals, 'timeslots');
 
-    this.schedule = [...this.schedule, ...proposalTimeslots];   
+    this.schedule = [...this.schedule, ...proposalTimeslots];  
     return this;
   }
 
   populatePresentationSchedule() {
-    const presentations = _.filter(this.presentations, (presentation) => ['accepted', 'completed', 'cancelled'].includes(presentation.status));
+    const presentations         = _.filter(this.presentations, (presentation) => presentation.is_contracted);
     const presentationTimeslots = _.map(presentations, 'timeslot');
 
     this.schedule = [...this.schedule, ...presentationTimeslots];

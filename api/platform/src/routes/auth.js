@@ -1,7 +1,7 @@
 const api = require('express').Router();
 const authController = require('../controller/auth');
 const adminController = require('../controller/admin');
-const { validationMiddleware, authorizationMiddleware } = require('lib/middleware');
+const { validationMiddleware, authorizationMiddleware } = require('iauu/middleware');
 
 api.post('/login',          validationMiddleware.credentials,       authController.login);
 api.post('/loginAs',        validationMiddleware.adminCredentials,  adminController.loginAsUser);

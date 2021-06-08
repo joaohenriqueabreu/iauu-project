@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const adminController = require('../controller/admin');
-const { authorizationMiddleware, validationMiddleware } = require('lib/middleware');
+const { authorizationMiddleware, validationMiddleware } = require('iauu/middleware');
 
 api.get('/users/statistics',          authorizationMiddleware.authorize, authorizationMiddleware.admin, adminController.calculateUsersStatistics);
 api.get('/presentations/statistics',  authorizationMiddleware.authorize, authorizationMiddleware.admin, adminController.calculatePresentationsStatistics);

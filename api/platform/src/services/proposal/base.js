@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const BaseService = require('../base');
 const Proposal = require('../../models/proposal');
-const { UnauthorizedException } = require('lib/exception');
+const { UnauthorizedException } = require('iauu/exception');
 
 module.exports = class ProposalService extends BaseService
 {

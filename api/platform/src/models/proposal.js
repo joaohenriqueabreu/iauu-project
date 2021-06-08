@@ -1,5 +1,5 @@
 const { Schema, model }       = require('mongoose');
-const { isEmpty }             = require('lib/utils');
+const { isEmpty }             = require('iauu/utils');
 
 const BaseRepository          = require('./repositories/base');
 const baseSchemaOptions 	    = require('./schemas/options');
@@ -33,17 +33,9 @@ class Proposal extends BaseRepository {
 		return this.price;
   }
 
-  get is_open() {
-    return this.status === 'proposal'; // TODO change to open or pending
-  }
-
-  get is_rejected() {
-    return this.status === 'rejected';
-  }
-
-  get has_selected_timeslot() {
-    return this.selected_timeslot != null;
-  }
+  get is_open()     { return this.status === 'proposal'; }
+  get is_rejected() { return this.status === 'rejected'; }
+  get has_selected_timeslot() { return this.selected_timeslot != null; }
 
   get tentative_dt() {
     if (this.selected_timeslot != null) {

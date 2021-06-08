@@ -1,8 +1,8 @@
 const moment      = require('moment');
 const AuthService = require('./auth');
 const User        = require('../../models/user');
-const { EVENTS }  = require('lib/events');
-const { BadRequestException, UnauthorizedException } = require('lib/exception');
+const { EVENTS }  = require('iauu/events');
+const { BadRequestException, UnauthorizedException } = require('iauu/exception');
 
 module.exports = class VerifyUserService extends AuthService {
   constructor(token, bypassExpiration) {

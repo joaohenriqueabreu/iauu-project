@@ -1,7 +1,6 @@
-const _ = require('lodash')
-const BaseService = require('../base')
-const Presentation = require('../../models/presentation')
-const { InterfaceNotImplementedException, Exception } = require('lib/exception')
+const _             = require('lodash');
+const BaseService   = require('../base');
+const Presentation  = require('../../models/presentation');
 
 module.exports = class SearchPresentationsService extends BaseService
 {
@@ -11,8 +10,16 @@ module.exports = class SearchPresentationsService extends BaseService
       this.presentations = [];
     }
 
-    async search(id) {
-      this.presentations = await Presentation.find({ $or: [{ artist_id: id }, { contractor_id: id }] });
+    async search(id, query) {
+      let page = query != null && query.page != null ? query.page * 10 : 0;
+
+      this.presentations = await Presentation.find({ 
+        $or: [{ artist_id: id }, { contractor_id: id }],
+      })
+        .sort('timeslot.start_dt')
+        .limit(10)
+        .skip(page);
+
       return this;
     }
 

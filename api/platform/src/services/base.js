@@ -1,7 +1,7 @@
-const config                  = require('lib/env');
-const { BadRequestException } = require('lib/exception');
-const RequestEndpointService  = require('lib/services/request');
-const { EventPublisher }	  	= require('lib/events');
+const config                  = require('iauu/env');
+const { BadRequestException } = require('iauu/exception');
+const RequestEndpointService  = require('iauu/services/request');
+const { EventPublisher }	  	= require('iauu/events');
 
 module.exports = class BaseService {
     constructor(user) {

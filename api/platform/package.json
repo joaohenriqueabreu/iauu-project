@@ -16,6 +16,7 @@
         "test-file": "mocha --timeout 50000 --exit --grep"
     },
     "dependencies": {
+        "iauu": "file:/var/lib/iauu",
         "app-module-path": "^2.2.0",
         "atob": "^2.1.2",
         "aws-sdk": "2.750.0",
@@ -46,8 +47,7 @@
         "node-cache": "5.1.2",
         "pagarme": "4.15.3",
         "uid": "1.0.0",
-        "uuid": "8.3.0",
-        "lib": "file:/var/lib/iauu"
+        "uuid": "8.3.0"
     },
     "devDependencies": {
         "chai": "4.2.0",

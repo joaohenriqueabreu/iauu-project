@@ -1,5 +1,5 @@
-const { EventConsumerService }    = require('lib/events');
-const { DataRequestService }      = require('lib/services');
+const { EventConsumerService }    = require('iauu/events');
+const { DataRequestService }      = require('iauu/services');
 const { Billing }                 = require('../../models');
 const { BadRequestException }     = require('../../exception');
 const SearchArtistAccountService  = require('./searchArtistAccount');

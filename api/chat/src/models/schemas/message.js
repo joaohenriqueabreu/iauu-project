@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
-const baseSchemaOptions = require('lib/models/options');
-const BaseRepository    = require('lib/models/repository');
+const baseSchemaOptions = require('iauu/models/options');
+const BaseRepository    = require('iauu/models/repository');
 
 const messageSchema = new Schema({
     author: { 

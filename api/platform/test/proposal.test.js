@@ -22,7 +22,7 @@ const {
   AcceptCounterOfferService,
   RejectCounterOfferService,
 } = require('../src/services/proposal');
-const { UnauthorizedException } = require('lib/exception');
+const { UnauthorizedException } = require('iauu/exception');
 
 // Test-wide objects
 let artistUser      = {};

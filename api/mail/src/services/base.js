@@ -1,11 +1,11 @@
-const BaseService   = require('lib/services/base');
+const BaseService   = require('iauu/services/base');
 const fs            = require('fs');
 const mailer        = require('../config');
 const mustache      = require('mustache');
 const { promisify } = require('util');
 const path          = require('path');
-const config        = require('lib/env');
-const { InterfaceNotImplementedException, Exception } = require('lib/exception');
+const config        = require('iauu/env');
+const { InterfaceNotImplementedException, Exception } = require('iauu/exception');
 
 const readFileAsync = promisify(fs.readFile);
 

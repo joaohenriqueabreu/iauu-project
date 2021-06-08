@@ -50,9 +50,9 @@ a {
   transition:       $transition;
   color: $brand;
   &:hover {
-    transition: $transition;
-    text-decoration: none;
-    color: $brandLayer !important;
+    transition:       $transition;
+    text-decoration:  none;
+    color:            $brandLayer;
   }
 }
 

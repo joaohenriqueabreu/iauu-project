@@ -25,8 +25,8 @@
         &nbsp;
         <icon v-show="canPrevious" icon="arrow-left" @click="previousStep"></icon>
       </div>
-      <div class="col-8 horizontal center middle">
-        &nbsp;
+      <div class="col-8 vertical center middle">
+        <h6 class="mb-4 hide-mobile">Siga estes passos na timeline para enviar a proposta</h6>
         <timeline
           :steps="proposalStepComponents.length" 
           :completed="completedSteps" 

@@ -1,5 +1,5 @@
-const { EventConsumerService }  = require('lib/events');
-const { BadRequestException }   = require('lib/exception');
+const { EventConsumerService }  = require('iauu/events');
+const { BadRequestException }   = require('iauu/exception');
 const { Presentation }          = require('../../models');
 
 module.exports = class UpdatePresentationStatusService extends EventConsumerService {

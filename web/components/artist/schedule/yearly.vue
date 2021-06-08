@@ -22,12 +22,15 @@ export default {
       lastMonYear: '',
     }
   },
+  mounted() {
+    this.lastMonYear = this.moment().format('MM/YY')
+  },
   computed: {
     ...mapState({ timeslots: (state) => state.schedule.timeslots }),
     oneYearCalendar() {
       // iterate thru the next 12 months
       let yearCalendar = [];
-      for (let m = 0; m <= 12; m++) {
+      for (let m = -6; m <= 6; m++) {
         yearCalendar.push(this.moment().startOf('month').add(m, 'M').format('MM/YY'));
       }
 
@@ -49,7 +52,6 @@ export default {
       return this.$array.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'accepted').length > 0;
     },
     selectMonYear(monYear) {
-      console.log(monYear)
       this.$emit('selected', monYear);
       this.lastMonYear = monYear;
     }

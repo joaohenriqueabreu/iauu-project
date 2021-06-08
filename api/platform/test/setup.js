@@ -1,6 +1,6 @@
 // Setup environment to testing
 process.env.NODE_ENV = 'test';
-const config = require('lib/env');
+const config = require('iauu/env');
 // require("dotenv").config({ path: process.env.NODE_ENV === 'test' ? '.env.testing' : '.env'});
 
 const chai          = require('chai');
@@ -14,7 +14,7 @@ const db            = require('mongoose');
 if (config.shouldDebug()) { db.set('debug', true); }
 
 // Exceptions
-const { BadRequestException, UnauthorizedException } = require('lib/exception');
+const { BadRequestException, UnauthorizedException } = require('iauu/exception');
 
 chai.use(sinonChai);
 

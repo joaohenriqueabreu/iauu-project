@@ -1,4 +1,4 @@
 module.exports = (req, res, next) => {      
-    console.log(req);
+    console.log(`Requesting ${req.url}`);
     next();
 }

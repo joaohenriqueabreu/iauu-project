@@ -1,4 +1,4 @@
-const config 				= require('lib/env');
+const config 				= require('iauu/env');
 const nodemailer 		= require('nodemailer');
 const aws       		= require('aws-sdk');
 

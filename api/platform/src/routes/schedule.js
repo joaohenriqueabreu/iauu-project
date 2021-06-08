@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const scheduleController = require('../controller/schedule');
-const { authorizationMiddleware, validationMiddleware } = require('lib/middleware');
+const { authorizationMiddleware, validationMiddleware } = require('iauu/middleware');
 
 api.get('/public/:id',  validationMiddleware.schedule,      validationMiddleware.query,     scheduleController.publicSearch);
 api.get('/my',          authorizationMiddleware.authorize,  validationMiddleware.query,     scheduleController.userSchedule);

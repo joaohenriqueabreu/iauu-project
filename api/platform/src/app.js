@@ -2,7 +2,7 @@
  We have required all the packages we need for our application, defined the database, created an express server and an express router.
 Now, let's define CORS middleware, to ensure we do not run into any cross origin resource errors:
  */
-const config      = require('lib/env');
+const config      = require('iauu/env');
 
 // Express and Request config
 const express     = require('express');
@@ -11,10 +11,10 @@ const compression = require('compression');
 const cors        = require('cors');
 
 // init db and connect
-const db          = require('lib/data/db');
+const db          = require('iauu/data/db');
 const odm         = require('mongoose');
 
-// const corsOptions = require('lib/data/cors');
+// const corsOptions = require('iauu/data/cors');
 const initDb      = async () => {
   try {
     await db.connect(odm);
@@ -33,7 +33,7 @@ const app = express();
 const router = express.Router();
 const routes = require('./routes');
 
-const { errorMiddleware, loggerMiddleware } = require('lib/middleware');
+const { errorMiddleware, loggerMiddleware } = require('iauu/middleware');
 
 // app.options('*', cors(corsOptions))
 app.use(cors());

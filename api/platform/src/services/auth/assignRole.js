@@ -1,7 +1,7 @@
 const AuthService                   = require('./auth');
 const { User, Artist, Contractor }  = require('../../models');
-const BadRequestException           = require('lib/exception/bad');
-const { EVENTS }                    = require('lib/events');
+const BadRequestException           = require('iauu/exception/bad');
+const { EVENTS }                    = require('iauu/events');
 
 module.exports = class AssignRoleService extends AuthService {
   constructor(data, role) {

@@ -1,6 +1,6 @@
 const _               = require('lodash');
 const ProposalService = require('./base');
-const { EVENTS }      = require('lib/events');
+const { EVENTS }      = require('iauu/events');
 
 module.exports = class ReplyProposalService extends ProposalService
 {

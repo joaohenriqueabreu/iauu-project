@@ -1,4 +1,4 @@
-const { EVENTS, EventConsumer }     = require('lib/events');
+const { EVENTS, EventConsumer }     = require('iauu/events');
 const { CreatePresentationService } = require('../services/presentation');
 
 const proposalAcceptedConsumer  = new EventConsumer(EVENTS.PROPOSAL_ACCEPTED_EVENT);

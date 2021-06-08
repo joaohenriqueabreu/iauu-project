@@ -49,9 +49,9 @@ export default {
     FullCalendar
   },
   props: {
+    timeslots:  { type: Array, default: () => {} },
     readOnly:   { type: Boolean, default: true },
     weekMode:   { type: Boolean, default: false },
-    timeslots:  { type: Array, default: () => {} },
     ownerMode:  { type: Boolean, default: false },
     max:        { type: Number, default: null },
     futureOnly: { type: Boolean, default: true }
@@ -110,16 +110,16 @@ export default {
       return {
         hour:           'numeric',
         minute:         '2-digit',
+        meridiem:       'short',
         omitZeroMinute: false,
-        meridiem:       'short'
       }
     },
     eventTimeFormat: () => {
       return {
         hour:           'numeric',
         minute:         '2-digit',
+        meridiem:       'short',
         omitZeroMinute: false,
-        meridiem:       'short'
       }
     },
     columnHeaderFormat: () => {
@@ -139,8 +139,8 @@ export default {
     }
   },
   mounted() {
-    this.currentYear = this.moment(this.fullcalendarApi.getDate()).year()
-    this.loadCalendarEvents()
+    this.currentYear = this.moment(this.fullcalendarApi.getDate()).year();
+    this.loadCalendarEvents();
   },
   methods: {
     eventClick({ event }) {
@@ -205,25 +205,23 @@ export default {
       this.$emit('date-click', day)
     },
     formatEventFromTimeslot(timeslot, isBackground) {
-      let startDt = moment(timeslot.start_dt).toISOString()
-      const endDt = moment(timeslot.end_dt).toISOString()
+      let startDt = moment(timeslot.start_dt).toISOString();
+      let endDt   = moment(timeslot.end_dt).toISOString();
 
       // According to viewer and timeslot status setup event status to change its display
-      const eventStatus = isBackground ? 'unavailable' : timeslot.status
+      const eventStatus = isBackground ? 'unavailable' : timeslot.status;
 
       if (isBackground) {
-        startDt = moment(timeslot.start_dt)
-          .startOf('day')
-          .toISOString()
+        startDt = moment(timeslot.start_dt).startOf('day').toISOString();
       }
 
       const fullcalendarEvent = {
-        id: `${timeslot.status}_${timeslot.id}`,
-        title: isBackground ? 'Indisponível' : timeslot.label,
-        start: startDt,
-        end: endDt,
-        allDay: isBackground,
-        extendedProps: timeslot
+        id:             `${timeslot.status}_${timeslot.id}`,
+        title:          isBackground ? 'Indisponível' : timeslot.label,
+        start:          startDt,
+        end:            endDt,
+        allDay:         isBackground,
+        extendedProps:  timeslot
       }
 
       if (isBackground) {
@@ -249,7 +247,7 @@ export default {
     loadCalendarEvents() {
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
-        if (!this.$empty(timeslot)) {
+        if (! this.$empty(timeslot)) {
           this.calendarEvents.push(
             this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot))
           )
@@ -258,17 +256,17 @@ export default {
     },
     refresh() {
       // TODO think about a way of triggering reactivity without having to reload
-      this.calendarEvents = []
-      this.loadCalendarEvents()
+      this.calendarEvents = [];
+      this.loadCalendarEvents();
     },
     isBusyDay(date) {
-      return this.busyDates.some((busyDate) => moment(date).isSame(moment(busyDate), 'day'))
+      return this.busyDates.some((busyDate) => moment(date).isSame(moment(busyDate), 'day'));
     },
     isDatePast(date) {
-      return this.moment(date).isBefore(this.moment())
+      return this.moment(date).isBefore(this.moment());
     },
     isUnavailable(timeslot) {
-      return ['busy', 'accepted'].includes(timeslot.status) && !this.ownerMode
+      return ['busy', 'accepted'].includes(timeslot.status) && !this.ownerMode;
     }
   }
 }
@@ -276,11 +274,11 @@ export default {
 
 <style lang="scss">
 .event {
-  border: none;
-  box-shadow: $lightShadow;
-  border-radius: 5px;
-  padding: 5px;
-  background-clip: none;
+  border:           none;
+  box-shadow:       $lightShadow;
+  border-radius:    5px;
+  padding:          5px;
+  background-clip:  none;
 
   span {
     font-size: $small;
@@ -306,16 +304,17 @@ export default {
 
     &:hover {
       transition: $transition;
-      background: red;
+      background: $error;
+      color:      $brand;
       span {
-        color: $brand;
+        color:    $brand;
       }
 
       &::before {
-        display: block;
-        font-size: $small;
-        color: $brand;
-        content: 'Remover';
+        display:    block;
+        font-size:  $small;
+        color:      $brand;
+        content:    'Remover';
       }
     }
   }
@@ -331,32 +330,30 @@ export default {
 
   &.busy {
     transition: $transition;
-    background: transparent;
-    span {
-      color: $layer5;
-    }
+    background: $layer3;
 
-    .fc-time {
-      display: none;
-    }
-
-    &::before {
-      display: none;
-      content: '';
+    span      { color: $layer5; }
+    .fc-time  { display: none; }
+    &::before { display: none; content: '';
     }
 
     &:hover {
       transition: $transition;
-      background: red;
-      span {
-        color: $brand;
-      }
+      background: $error;
+      color:      $brand;
+
+      &:not(.fc-time-grid-event) {
+        display:  flex;
+      }      
+
+      span { color: $brand; }
 
       &::before {
-        display: block;
-        font-size: $small;
-        color: $white;
-        content: 'Remover';
+        display:      block;
+        font-size:    $small;
+        color:        $white;
+        content:      'Remover';
+        margin-right: 5px;
       }
     }
   }
@@ -368,31 +365,18 @@ export default {
 
 // for "busy" events
 .fc-bgevent {
-  background: $layer1;
-  position: relative;
-  opacity: 0.8;
-  cursor: default;
-  z-index: $moveToTop;
+  background: $layer2;  
+  opacity:    0.8;
+  cursor:     default;
+  z-index:    $moveToTop;
+
   &::before {
     @extend .horizontal, .center, .middle;
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    // position: absolute;
-    // left: 45%;
-    // top: 20%;
-    color: $layer5;
-    padding: $space;
-    // padding-top: -10px;
-
-    // font-family: FontAwesome;
-    // font-weight: 900;
-    // font-size: 20px;
-    // content: '\f057'; // circle-times
-    // content: '\f00d'; // times
-    content: 'Indisponível';
+    color:       $error;
+    width:       100%;
+    height:      100%;    
+    font-weight: $bold;
+    content:     'Indisponível';
   }
 }
 
@@ -427,19 +411,19 @@ export default {
 
 span.remove-event {
   @extend .vertical, .center, .middle;
-  position: absolute;
-  top: -5px;
-  right: -10px;
-  padding: 5px;
-  width: 10px;
-  height: 10px;
-  border-radius: $rounded;
-  color: $brand !important;
-  font-size: $large;
-  font-weight: $bold;
-  box-shadow: $shadow;
-  background: $layer5;
-  z-index: $moveToTop;
+  position:       absolute;
+  top:            -5px;
+  right:          -10px;
+  padding:        5px;
+  width:          10px;
+  height:         10px;
+  border-radius:  $rounded;
+  color:          $brand !important;
+  font-size:      $large;
+  font-weight:    $bold;
+  box-shadow:     $shadow;
+  background:     $layer5;
+  z-index:        $moveToTop;
 }
 
 // Full calendar overrides
@@ -448,11 +432,11 @@ td {
 }
 
 .fc-view-container {
-  background: $layer3;
-  box-shadow: $higherShadow;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 3 * $space;
+  background:     $layer3;
+  box-shadow:     $higherShadow;
+  border-radius:  5px;
+  padding:        10px;
+  margin-bottom:  3 * $space;
 }
 
 .fc-unthemed {
@@ -471,14 +455,15 @@ td {
   th,
   tr,
   td {
-    border: none;
+    border:     none;
     box-shadow: none;
   }
 }
 
 th.fc-axis,
 .fc-axis.fc-time {
-  font-weight: $bold;
+  color:        $brand;
+  font-weight:  $bold;
 }
 
 .fc-time-grid .fc-slats {

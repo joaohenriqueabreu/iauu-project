@@ -1,11 +1,11 @@
 const _                                   = require('lodash');
-const RequestEndpointService              = require('lib/services/request');
+const RequestEndpointService              = require('iauu/services/request');
 const GatewayCreateAccountServiceBuilder  = require('../builders/gatewayCreateAccountServiceBuilder');
 const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
 const BaseService                         = require('../base');
 const { BadRequestException }             = require('../../exception');
 const { ArtistAccount }                   = require('../../models');
-const { DataRequestService } = require('lib/services');
+const { DataRequestService } = require('iauu/services');
 
 module.exports = class SaveArtistAccountService extends BaseService
 {

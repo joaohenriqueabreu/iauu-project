@@ -1,5 +1,5 @@
 const BaseService = require('../base');
-const cache = require('lib/data/cache');
+const cache = require('iauu/data/cache');
 
 module.exports = class CacheManagerService extends BaseService {
   constructor(user, key) {

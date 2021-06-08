@@ -1,9 +1,9 @@
 <template>
   <div>
-    <modal ref="modal" height="small">
+    <modal ref="modal" tiny>
       <template v-slot:header>
         <div class="vertical middle">
-          <h6>Deseja tornar adicionar um evento para esta data?</h6>
+          <h6>Deseja adicionar um evento para esta data?</h6>
           <small>Ela ficará indisponível para receber propostas</small>
         </div>
       </template>
@@ -20,7 +20,7 @@
           </div>
         </div>
         <form-toggle v-model="timeslot.full_day" class="d-flex justify-content-end">
-          Dia inteiro?
+          <template v-slot:before>Dia inteiro?</template>
         </form-toggle>
         <div class="vertical mb-2">
           <form-input v-model="timeslot.title" placeholder="Título" icon="edit"></form-input>

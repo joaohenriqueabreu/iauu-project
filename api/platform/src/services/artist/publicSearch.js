@@ -1,6 +1,6 @@
 const { Artist, Presentation }  = require('../../models')
 const BaseService               = require('../base')
-const { BadRequestException }   = require('lib/exception');
+const { BadRequestException }   = require('iauu/exception');
 
 module.exports = class PublicArtistProfileService extends BaseService
 {

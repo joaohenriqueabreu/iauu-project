@@ -59,7 +59,8 @@ module.exports = class SearchScheduleService extends BaseService
       // TODO move this to query
       console.log(`Searching for ${this.year} schedule...`);
       
-      this.schedule = [...this.schedule, ...this.artist.schedule];
+      this.schedule = _.flatten([...this.schedule, ...this.artist.schedule]);
+      console.log(this.schedule);
       return this;
     }
 

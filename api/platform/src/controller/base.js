@@ -1,6 +1,6 @@
-const RequestEndpointService      = require('lib/services/request');
-const { BadRequestException }     = require('lib/exception');
-const { errorHandlerMiddleware }  = require('lib/middleware');
+const RequestEndpointService      = require('iauu/services/request');
+const { BadRequestException }     = require('iauu/exception');
+const { errorHandlerMiddleware }  = require('iauu/middleware');
 
 module.exports = class Controller {  
   constructor() {

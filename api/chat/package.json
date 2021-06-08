@@ -16,6 +16,7 @@
         "test-file": "mocha --timeout 50000 --exit --grep"
     },
     "dependencies": {
+        "iauu": "file:/var/lib/iauu",        
         "app-module-path": "^2.2.0",
         "dotenv": "8.2.0",
         "express": "^4.17.1",
@@ -28,8 +29,7 @@
         "socketio-jwt": "4.6.2",
         "uid": "1.0.0",
         "uuid": "8.3.0",
-        "debug": "4.3.1",
-        "lib": "file:/var/lib/iauu"
+        "debug": "4.3.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.7",

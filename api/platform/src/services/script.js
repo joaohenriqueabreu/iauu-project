@@ -1,5 +1,5 @@
-const db 						= require('lib/data/db');
-const { Exception } = require('lib/exception');
+const db 						= require('iauu/data/db');
+const { Exception } = require('iauu/exception');
 const BaseService 	= require('./base');
 
 module.exports = class ScriptService extends BaseService {

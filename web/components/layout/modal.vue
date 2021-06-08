@@ -191,7 +191,7 @@ export default {
     width:      100%;
     min-height: 2vh;
 
-    .tiny, .single  { height: 5vh; }
+    .tiny, .single  { height: 7vh; }
     .small          { height: 7vh; }
     .regular        { height: 10vh; }
 

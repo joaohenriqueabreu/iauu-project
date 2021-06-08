@@ -1,5 +1,5 @@
 const BaseService  = require('../base');
-const RequestEndpointService  = require('lib/services/request');
+const RequestEndpointService  = require('iauu/services/request');
 const { BadRequestException }  = require('../../exception');
 const { Feedback }  = require('../../models');
 
