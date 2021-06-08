@@ -113,6 +113,7 @@ main {
           background: $layer4;
           border-top-left-radius: $edges;
           border-top-right-radius: $edges;
+          padding: $space !important;
         }
       }
       
@@ -152,7 +153,7 @@ footer {
   border-bottom: none;
   z-index: $above;
   .nav-link {
-    padding-bottom: 0;
+    padding: 0;
     border: none;
     border-top-left-radius: $edges;
     border-top-right-radius: $edges;
@@ -165,9 +166,10 @@ footer {
     }
 
     &.active {
+      padding:    $space;
       background: $layer4;
-      border: none;
-      color: $brand;
+      border:     none;
+      color:      $brand;
       box-shadow: 0 -19px 19px 2px rgba(0, 0, 0, 0.1);
     }
 

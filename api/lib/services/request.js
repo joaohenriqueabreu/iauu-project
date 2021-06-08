@@ -29,9 +29,9 @@ module.exports = class RequestEndpointService {
     throw new BadRequestException('Invalid service provided');
   }
 
-  async get(endpoint) {
-    // const response = await this.http.get(`${this.baseUrl}${endpoint}`);
-    const { data } = await this.http.get(endpoint);
+  async get(endpoint, queryObj) {
+    const queryString = new URLSearchParams(queryObj).toString();
+    const { data } = await this.http.get(`${endpoint}?${queryString}`);
     return data;
   }
 

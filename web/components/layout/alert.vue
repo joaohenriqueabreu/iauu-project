@@ -11,16 +11,13 @@ export default {
   },
   watch: {
     newAlert(value) {
-      console.log('triggered something')
-      if (!this.$utils.empty(this.alert.message)) {
-        this.showAlert()
-      }
+      if (! this.$empty(this.alert.message)) { this.showAlert(); }
     }
   },
   mounted() {
-    const alert = window.localStorage.getItem('alert')
-    if (!this.$utils.empty(this.alert.message) || !this.$utils.empty(alert)) {
-      this.showAlert()
+    const alert = window.localStorage.getItem('alert');
+    if ((! this.$empty(this.alert) && ! this.$empty(this.alert.message)) || ! this.$empty(alert)) {
+      this.showAlert();
     }
   },
   methods: {

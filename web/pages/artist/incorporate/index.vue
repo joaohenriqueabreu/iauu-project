@@ -16,50 +16,52 @@
         <h4 class="no-cap mb-2">Faça o download do QRCode para suas redes sociais ou mostre em suas lives!</h4>
         <small>Links para página da banda na plataforma da {{ $config.companyName }}</small>
       </div>
-      <div class="mb-4 horizontal middle">
-        <h6 class="mr-2">Posicionar na</h6>
+      <div class="mb-5">
+        <h6 class="mb-2">Posicionar:</h6>
         <form-toggle v-model="horizontal">
           <template v-slot:off>Vertical</template>
           <template v-slot:on>Horizontal</template>
         </form-toggle>
       </div>
       <div class="qrcodes vertical middle center mx-5">
-        <div v-show="horizontal" ref="horizontal" class="qrcode horizontal center middle">
-          <div v-show="!downloading" class="download">
-            <icon icon="download" @click="download('horizontal')"></icon>
-          </div>
-          <vue-qrcode class="mr-4" :value="shareUrl" />
-          <div class="p-2 vertical middle center">
-            <div class="d-flex align-items-start">
-              <h4>Contrate agora nosso espetáculo!</h4>
+        <transition name="fade" mode="out-in">
+          <div v-if="horizontal" ref="horizontal" class="qrcode horizontal center middle" key="horizontal">
+            <div v-show="!downloading" class="download">
+              <icon icon="download" @click="download('horizontal')"></icon>
+            </div>
+            <vue-qrcode class="mr-4" :value="shareUrl" />
+            <div class="p-2 vertical middle center">
+              <div class="d-flex align-items-start">
+                <h4>Contrate agora nosso espetáculo!</h4>
+              </div>
+            </div>
+            <div class="powered-by">
+              <nuxt-link to="/">
+                <h6 class="mr-2 no-caps">
+                  Powered by {{ $config.companyName }}
+                </h6>
+                <logo :height="20" :width="20"></logo>
+              </nuxt-link>
             </div>
           </div>
-          <div class="powered-by">
-            <nuxt-link to="/">
-              <h6 class="mr-2 no-caps">
-                Powered by {{ $config.companyName }}
-              </h6>
-              <logo :height="20" :width="20"></logo>
-            </nuxt-link>
-          </div>
-        </div>
-        <div v-show="!horizontal" ref="vertical" class="qrcode vertical center middle">
-          <div ref="vertical-download" class="download">
-            <icon icon="download" @click="download('vertical')"></icon>
-          </div>
-          <vue-qrcode value="https://www.1stg.me" />
-          <div class="p-2 vertical middle center">
-            <div class="d-flex align-items-start">
-              <h4>Contrate agora nosso espetáculo!</h4>
+          <div v-else ref="vertical" class="qrcode vertical center middle" key="vertical">
+            <div ref="vertical-download" class="download">
+              <icon icon="download" @click="download('vertical')"></icon>
+            </div>
+            <vue-qrcode value="https://www.1stg.me" />
+            <div class="p-2 vertical middle center">
+              <div class="d-flex align-items-start">
+                <h4>Contrate agora nosso espetáculo!</h4>
+              </div>
+            </div>
+            <div class="powered-by">
+              <nuxt-link to="/">
+                <h6 class="mr-2">Powered by {{ $config.companyName }}</h6>
+                <logo :height="20" :width="20"></logo>
+              </nuxt-link>
             </div>
           </div>
-          <div class="powered-by">
-            <nuxt-link to="/">
-              <h6 class="mr-2">Powered by {{ $config.companyName }}</h6>
-              <logo :height="20" :width="20"></logo>
-            </nuxt-link>
-          </div>
-        </div>
+        </transition>
       </div>
       <!-- TODO create a pixel of our own -->
       <div v-if="false">

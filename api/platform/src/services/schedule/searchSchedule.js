@@ -9,11 +9,12 @@ module.exports = class SearchScheduleService extends BaseService
 
       if (id === undefined) { throw new BadRequestException('Target schedule id is required'); }
 
-      this.id             = id
-      this.artist         = {}
+      this.id             = id;
+      this.artist         = {};
 
-      this.schedule       = []
-      this.presentations  = []
+      this.schedule       = [];
+      this.presentations  = [];
+      this.query          = {};
     }
 
     async search(data) {
@@ -31,6 +32,7 @@ module.exports = class SearchScheduleService extends BaseService
       this.year = data !== undefined && data.year !== undefined ? data.year : new Date().getFullYear();
       // TODO additional query
 
+      this.query = { year: this.year };
       return this;
     }
 

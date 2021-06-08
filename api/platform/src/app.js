@@ -30,9 +30,10 @@ initDb();
 const app = express();
 
 // Express routing config
-const router              = express.Router();
-const routes              = require('./routes');
-const { errorMiddleware } = require('lib/middleware');
+const router = express.Router();
+const routes = require('./routes');
+
+const { errorMiddleware, loggerMiddleware } = require('lib/middleware');
 
 // app.options('*', cors(corsOptions))
 app.use(cors());
@@ -50,6 +51,11 @@ Now, let's use the express server to make our application accessible:
 app.use(router);
 app.use(routes);
 app.use(errorMiddleware);
+
+if (! config.isProductionEnv()) {
+  console.log('Enabling logger middleware for non-prod env');
+  app.use(loggerMiddleware); 
+}
 
 process.title = 'iauu.api';
 let expressPort = config.http.port || 4444;

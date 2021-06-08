@@ -3,7 +3,7 @@
     <scrollbar>
       <div class="horizontal center mon-year">
         <div v-for="(monYear, index) in oneYearCalendar" :key="index" class="mr-2 vertical center">
-          <div class="clickable brandHover" @click="$emit('selected', monYear)">{{ monYear }}</div>
+          <div class="clickable brand-hover" :class="{ active: monYear == lastMonYear }" @click="selectMonYear(monYear)">{{ monYear }}</div>
           <div class="horizontal center middle">
             <div v-if="hasProposal(monYear)" class="proposal"></div>
             <div v-if="hasPresentation(monYear)" class="presentation"></div>
@@ -15,33 +15,43 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 export default {
+  data() {
+    return {
+      lastMonYear: '',
+    }
+  },
   computed: {
     ...mapState({ timeslots: (state) => state.schedule.timeslots }),
     oneYearCalendar() {
       // iterate thru the next 12 months
-      let yearCalendar = []
+      let yearCalendar = [];
       for (let m = 0; m <= 12; m++) {
-        yearCalendar.push(this.moment().startOf('month').add(m, 'M').format('MM/YY'))
+        yearCalendar.push(this.moment().startOf('month').add(m, 'M').format('MM/YY'));
       }
 
-      return yearCalendar
+      return yearCalendar;
     },
     timeslotsByMonth() {
       return this.$array.groupBy(this.timeslots, (timeslot) => {
         return this.moment(timeslot.start_dt).format('MM/YY')
-      })
+      });
     }
   },
   methods: {
     hasProposal(index) {
-      if (this.timeslotsByMonth[index] === undefined) { return false }
-      return this.$array.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'proposal').length > 0
+      if (this.timeslotsByMonth[index] === undefined) { return false; }
+      return this.$array.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'proposal').length > 0;
     },
     hasPresentation(index) { 
-      if (this.timeslotsByMonth[index] === undefined) { return false }
-      return this.$array.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'accepted').length > 0
+      if (this.timeslotsByMonth[index] === undefined) { return false; }
+      return this.$array.filter(this.timeslotsByMonth[index], (timeslot) => timeslot.status === 'accepted').length > 0;
+    },
+    selectMonYear(monYear) {
+      console.log(monYear)
+      this.$emit('selected', monYear);
+      this.lastMonYear = monYear;
     }
   }
 }
@@ -54,8 +64,17 @@ export default {
 }
 
 .mon-year {
-  color: $layer5;
-  min-height: 40px;
+  // transition:   $transition;
+  color:        $layer5;
+  font-weight:  $bold;
+  min-height:   40px;
+  // &:hover {
+  //   transition: $transition;
+  //   color:      $brandLayer;
+  // }
+  .active {
+    color: $brandLayer;
+  }
 }
 
 .proposal {

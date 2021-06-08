@@ -52,9 +52,9 @@
           </div>
         </div>
       </main>
-      <footer>
-        <div class="half-width" v-if="statsTab">
-          <form-button v-if="!bankAccountTab" @action="saveProfile">Salvar</form-button>
+      <footer v-if="!bankAccountTab">
+        <div class="half-width">
+          <form-button @action="saveProfile">Salvar</form-button>
         </div>
       </footer>
     </form>
@@ -112,31 +112,15 @@ export default {
       photo: 'artist.photo',
       background: 'artist.background'
     }),
-    statsTab() {
-      return this.activeTab === 'stats';
-    },
-    presentationsTab() {
-      return this.activeTab === 'presentations';
-    },
-    infoTab() {
-      return this.activeTab === 'info';
-    },
-    usersTab() {
-      return this.activeTab === 'users';
-    },
-    socialTab() {
-      return this.activeTab === 'social';
-    },
-    catTab() {
-      return this.activeTab === 'categories';
-    },
-    typesTab() {
-      return this.activeTab === 'types';
-    },
-    bankAccountTab() {
-      return this.activeTab === 'bankAccount';
-    },
-    backgroundImg() {
+    statsTab()          { return this.activeTab === 'stats'; },
+    presentationsTab()  { return this.activeTab === 'presentations'; },
+    infoTab()           { return this.activeTab === 'info'; },
+    usersTab()          { return this.activeTab === 'users'; },
+    socialTab()         { return this.activeTab === 'social'; },
+    catTab()            { return this.activeTab === 'categories'; },
+    typesTab()          { return this.activeTab === 'types'; },
+    bankAccountTab()    { return this.activeTab === 'bankAccount'; },
+    backgroundImg() { 
       return !this.$utils.empty(this.background)
         ? this.background
         : this.$config.defaultBGImgUrl;
@@ -207,7 +191,7 @@ form {
   main {
     @extend .vertical, .center, .middle;
     position: relative;
-    margin-bottom: 5 * $space;
+    padding-bottom: 10 * $space;
     .logo {
       position: absolute;
       top: -75px;
@@ -253,6 +237,8 @@ form {
             background: $layer4;
             border-top-left-radius: $edges;
             border-top-right-radius: $edges;
+            padding: 2 * $space;
+            width: 100%;
           }
         }
         
@@ -283,8 +269,13 @@ form {
   }
 
   footer {
-    height: 10vh;
-    position: relative;
+    height:     10vh;
+    position:   fixed;
+    bottom:     0;
+    left:       0;
+    right:      0;
+    background: $layer1;
+    padding:    2 * $space;    
   }
 
   // Overwrite bootstrap styling

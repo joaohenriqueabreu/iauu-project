@@ -1,5 +1,5 @@
-const _                     = require('lodash')
-const SearchScheduleService = require('./searchSchedule')
+const _                     = require('lodash');
+const SearchScheduleService = require('./searchSchedule');
 
 module.exports = class SearchUserScheduleService extends SearchScheduleService
 {
@@ -30,7 +30,13 @@ module.exports = class SearchUserScheduleService extends SearchScheduleService
   }
 
   async searchProposals() {
-    this.proposals = await this.requestEndpointSvc.get(`/proposals/role/${this.id}`);
+    // Build query string
+    const query = {
+      ...this.query,
+      status: 'proposal',
+    };
+
+    this.proposals = await this.requestEndpointSvc.get(`/proposals/role/${this.id}`, query);
     return this;
   }
 

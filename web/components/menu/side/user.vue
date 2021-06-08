@@ -13,6 +13,8 @@ export default {
 
 <style lang="scss">
 .side-menu-items {
+  height: 100%;
+
   .logo {
     margin-left: 0;
     margin-right: 2 * $space;
@@ -25,11 +27,6 @@ export default {
 
   [data-icon] {
     font-size: $huge;
-  }
-
-  main {
-    background: none !important; // override main.scss
-    box-shadow: none !important; // override main.scss
   }
 
   @include desktop {
@@ -60,7 +57,8 @@ export default {
       // margin-bottom: 10 * $space;
       transition: $transition;
       color: $brand;
-      padding: 5 * $space;
+      margin: 4 * $space 0;
+      padding: 2 * $space 5 * $space;
       width: 100%;
       // border-top-right-radius: $rounded;
       // border-bottom-right-radius: $rounded;
@@ -74,7 +72,9 @@ export default {
       }
 
       &.routed {
-        background: $layer2;
+        color: $brandLayer;
+        border-left: 5px solid $brandLayer;
+        // padding: 10px 0;
       }
 
       &:hover {
@@ -85,6 +85,11 @@ export default {
   }
 
   @include mobile {
+      display:          flex;
+      flex-direction:   row;
+      align-items:      center;
+      justify-content:  center;
+
     aside {
       width: 100vw;
       div {
@@ -93,14 +98,24 @@ export default {
     }
 
     div {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
+      display:          flex;
+      flex-direction:   row;
+      align-items:      center;
+      justify-content:  center;
+      height: 100%
     }
 
     a {
-      margin-right: 4 * $space;
+      margin: 0 2 * $space;
+      padding: 0 2 * $space;
+      height: 50%;
+      text-align: center;
+      [data-icon] { margin-right: 0; }
+
+      &.routed {
+        color: $brandLayer;
+        border-bottom: 5px solid $brandLayer;
+      }
     }
 
     header,

@@ -2,20 +2,20 @@
   <div>
     <FullCalendar
       ref="fullcalendar"
-      default-view="dayGridMonth"
-      :nav-links="weekMode"
+      default-view="dayGridMonth"      
       nav-link-day-click="timeGridWeek"
-      :events="calendarEvents"
       theme="bootstrap"
       locale="pt-br"
-      :plugins="calendarPlugins"
       content-height="auto"
       height="parent"
       width="parent"
-      :aspect-ratio="0.5"
-      :select-long-press-delay="250"
       slot-duration="01:00:00"
       slot-label-interval="04:00:00"
+      :nav-links="weekMode"
+      :events="calendarEvents"
+      :plugins="calendarPlugins"
+      :aspect-ratio="0.5"
+      :select-long-press-delay="250"
       :selectable="true"
       :editable="true"
       :event-overlap="true"
@@ -36,74 +36,70 @@
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
-import FullCalendar from '@fullcalendar/vue'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import bootstrapPlugin from '@fullcalendar/bootstrap'
-import moment from 'moment'
-import Timeslot from '@/models/timeslot'
+import moment             from 'moment';
+import FullCalendar       from '@fullcalendar/vue';
+import dayGridPlugin      from '@fullcalendar/daygrid';
+import timeGridPlugin     from '@fullcalendar/timegrid';
+import interactionPlugin  from '@fullcalendar/interaction';
+import bootstrapPlugin    from '@fullcalendar/bootstrap';
+import Timeslot           from '@/models/timeslot';
 
 export default {
   components: {
     FullCalendar
   },
   props: {
-    readOnly: { type: Boolean, default: true },
-    weekMode: { type: Boolean, default: false },
-    timeslots: { type: Array, default: () => {} },
-    ownerMode: { type: Boolean, default: false },
-    max: { type: Number, default: null },
+    readOnly:   { type: Boolean, default: true },
+    weekMode:   { type: Boolean, default: false },
+    timeslots:  { type: Array, default: () => {} },
+    ownerMode:  { type: Boolean, default: false },
+    max:        { type: Number, default: null },
     futureOnly: { type: Boolean, default: true }
   },
   data() {
     return {
-      calendarPlugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, bootstrapPlugin],
-      calendarEvents: [],
-      currentYear: 0 // store to fetch new events when user switches year
+      calendarPlugins:  [interactionPlugin, dayGridPlugin, timeGridPlugin, bootstrapPlugin],
+      calendarEvents:   [],
+      currentYear:      0 // store to fetch new events when user switches year
     }
   },
   computed: {
     defaultView() {
-      return this.weekMode ? 'timeGridWeek' : 'dayGridMonth'
+      return this.weekMode ? 'timeGridWeek' : 'dayGridMonth';
     },
     busyDates() {
-      const self = this
-      const busyTimeslots = this.$array.filter(
-        this.timeslots,
-        (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot)
-      )
+      const self = this;
+      const busyTimeslots = this.$array.filter(this.timeslots, (timeslot) => 
+        !self.$empty(timeslot) && self.isUnavailable(timeslot)
+      );
 
-      return this.$array.map(busyTimeslots, 'start_dt')
+      return this.$array.map(busyTimeslots, 'start_dt');
     },
     unavailableTimeslots() {
-      const self = this
-      return this.$array.filter(
-        this.timeslots,
-        (timeslot) => !self.$empty(timeslot) && self.isUnavailable(timeslot)
-      )
+      const self = this;
+      return this.$array.filter(this.timeslots, (timeslot) => 
+        !self.$empty(timeslot) && self.isUnavailable(timeslot)
+      );
     },
     availableTimeslots() {
-      const self = this
-      return this.$array.filter(
-        this.timeslots,
-        (timeslot) => !self.$empty(timeslot) && !self.isUnavailable(timeslot)
-      )
+      const self = this;
+      return this.$array.filter(this.timeslots, (timeslot) => 
+        !self.$empty(timeslot) && !self.isUnavailable(timeslot)
+      );
     },
     headerButtons: () => {
       return {
-        left: 'title',
+        left:   'title',
         center: 'timeGridWeek, dayGridMonth',
-        right: 'today, prev, next, nextYear'
+        right:  'today, prev, next, nextYear'
       }
     },
     buttonText: () => {
       return {
-        today: 'Hoje',
-        month: 'Mês',
-        week: 'Semana',
-        day: 'Dia',
+        today:  'Hoje',
+        month:  'Mês',
+        week:   'Semana',
+        day:    'Dia',
         timeWeekGrid: 'Ver semana'
       }
     },
@@ -112,26 +108,24 @@ export default {
     },
     slotLabelFormat: () => {
       return {
-        hour: 'numeric',
-        minute: '2-digit',
+        hour:           'numeric',
+        minute:         '2-digit',
         omitZeroMinute: false,
-        meridiem: 'short'
+        meridiem:       'short'
       }
     },
     eventTimeFormat: () => {
       return {
-        hour: 'numeric',
-        minute: '2-digit',
+        hour:           'numeric',
+        minute:         '2-digit',
         omitZeroMinute: false,
-        meridiem: 'short'
+        meridiem:       'short'
       }
     },
     columnHeaderFormat: () => {
       return {
-        weekday: 'short',
-        month: 'numeric',
-        day: 'numeric',
-        omitCommas: 'false'
+        weekday:    'short',
+        omitCommas: false
       }
     },
     fullcalendarApi() {

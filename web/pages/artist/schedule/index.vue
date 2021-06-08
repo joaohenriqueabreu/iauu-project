@@ -5,7 +5,7 @@
         <span>Interaja com seus próximos eventos e responda a propostas de clientes</span>
       </div>
     </div>
-    <presentations-yearly v-if="timeslots.length > 0"></presentations-yearly>
+    <presentations-yearly v-if="timeslots.length > 0" @selected="navigateCalendar"></presentations-yearly>
     <div v-if="timeslots">
       <calendar
         ref="calendar"
@@ -77,10 +77,6 @@ export default {
     ]),
     ...mapActions('schedule', ['loadMySchedule', 'saveTimeslot', 'removeTimeslot']),
     ...mapActions('app', ['setAlert']),
-    async reloadTimeslotsForYear(year) {
-      await this.loadMySchedule({ year })
-      this.$refs.calendar.loadCalendarEvents()
-    },
     openBusyModal(timeslot) {
       if (this.haveEventsOnDate(timeslot)) {
         this.$toast.error(
@@ -92,6 +88,10 @@ export default {
       this.selectedTimeslot = timeslot
       this.$refs.busy.openModal(timeslot)
     },
+    async reloadTimeslotsForYear(year) {
+      await this.loadMySchedule({ year })
+      this.$refs.calendar.loadCalendarEvents();
+    },    
     async handleEvent({ eventId, timeslotId, type, status, presentationId }) {
       if (type === 'busy') {
         await this.removeTimeslot(timeslotId)
@@ -111,8 +111,8 @@ export default {
       }
     },
     async saveBusyTimeslot(timeslot) {
-      await this.saveTimeslot(timeslot)
-      this.$refs.busy.closeModal()
+      await this.saveTimeslot(timeslot);
+      this.$refs.busy.closeModal();
     },
     async handleAcceptProposal(id) {
       this.$refs.proposal.closeModal();
@@ -120,20 +120,24 @@ export default {
       this.$router.push(`/artist/presentations/${id}`);
     },
     async handleRejectProposal(id) {
-      await this.loadMySchedule()
-      this.$refs.calendar.refresh()
-      this.$refs.proposal.closeModal()
-      this.$toast.success('Proposta recusada com sucesso')
+      await this.loadMySchedule();
+      this.$refs.calendar.refresh();
+      this.$refs.proposal.closeModal();
+      this.$toast.success('Proposta recusada com sucesso');
     },
     haveEventsOnDate(date) {
       const indexOfEvent = this.$array.findIndex(this.timeslots, (timeslot) => {
         return (
           ['proposal', 'presentation'].includes(timeslot.type) &&
           this.moment(date).isSame(this.moment(timeslot.start_dt), 'day')
-        )
+        );
       })
 
       return indexOfEvent !== -1
+    },
+    navigateCalendar(monYear) {
+      // console.log(this.$refs.calendar.fullcalendarApi);
+      this.$refs.calendar.fullcalendarApi.gotoDate(this.moment(`01/${monYear}`, 'DD/MM/YYYY').toDate());
     }
   }
 }

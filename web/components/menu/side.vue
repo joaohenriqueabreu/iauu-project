@@ -60,6 +60,7 @@ export default {
 main {
   background: none !important; // override main.scss
   box-shadow: none !important; // override main.scss
+  height: 100%;
 }
 
 @include desktop {
@@ -114,7 +115,7 @@ main {
     }
 
     &.routed {
-      background: $layer2;
+      color: $brandLayer;
     }
 
     &:hover {
@@ -136,6 +137,7 @@ main {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    height: 100%;
   }
 
   a {

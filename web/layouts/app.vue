@@ -80,12 +80,14 @@ export default {
     }
 
     main {
-      position:       relative;  
-      margin:         10vh 2vw 20vh 2vw;
-      z-index:        $base;
-      transition:     $transition;
-      max-height:     90vw;
-      width:          85vw;
+      @include desktop() {
+        position:       relative;  
+        margin:         10vh 2vw 20vh 2vw;
+        z-index:        $base;
+        transition:     $transition;
+        max-height:     90vw;
+        width:          85vw;
+      }      
     }
   }
 

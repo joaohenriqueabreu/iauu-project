@@ -5,7 +5,7 @@ const { authorizationMiddleware, validationMiddleware } = require('lib/middlewar
 
 // Apps endpoints
 api.get('/',                authorizationMiddleware.authorize,  proposalController.searchUserProposals);
-api.get('/role/:id',        authorizationMiddleware.app,        validationMiddleware.id,            proposalController.searchRoleProposals);
+api.get('/role/:id',        authorizationMiddleware.app,        validationMiddleware.id,            validationMiddleware.query,     proposalController.searchRoleProposals);
 api.post('/',               authorizationMiddleware.authorize,  authorizationMiddleware.contractor, validationMiddleware.proposal,  proposalController.sendProposal);
 api.delete('/:id',          authorizationMiddleware.authorize,  validationMiddleware.id,            proposalController.rejectProposal);
 api.put('/:id/timeslot',    authorizationMiddleware.authorize,  validationMiddleware.id,            validationMiddleware.timeslot,  proposalController.selectTimeslot);

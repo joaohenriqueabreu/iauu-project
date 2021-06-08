@@ -90,7 +90,9 @@ export default {
 <style lang="scss">
 /*Overriding modal css*/
 .vm--overlay {
-  background: rgba(0, 0, 0, 0.95);
+  // background: rgba(0, 0, 0, 0.95);
+  background: $layer5;
+  opacity:    0.8;
   z-index:    auto;
 }
 
