@@ -16,7 +16,7 @@
         "test-file": "mocha --timeout 50000 --exit --grep"
     },
     "dependencies": {
-        "iauu": "file:/var/lib/iauu",        
+        "iauu": "file:/var/lib/iauu",
         "app-module-path": "^2.2.0",
         "dotenv": "8.2.0",
         "express": "^4.17.1",

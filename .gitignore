@@ -1,6 +1,7 @@
 .env
 .env.testing
 node_modules/
+node_modules
 /.vscode
 /api/tmp
 /db/playground.mongodb
