@@ -34,6 +34,9 @@ class Timeslot extends BaseRepository {
     if (this.type === 'busy' || typeof this.ownerDocument != 'function') { return 'busy'; }
     return this.ownerDocument().status;
   }
+  
+  get is_proposal()     { return this.type === 'event' && this.status == 'proposal'; }
+  get is_presentation() { return this.type === 'event' && ['accepted', 'completed', 'cancelled'].includes(this.status); } // TODO use const
 }
 
 timeslotSchema.loadClass(Timeslot);

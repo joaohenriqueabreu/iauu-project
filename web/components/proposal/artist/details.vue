@@ -57,9 +57,12 @@
             <div v-if="proposal.has_counter_offer && !proposal.has_accepted_counter_offer">
               O contratante deve aceitar o orçamento para poder confirmar a apresentação
             </div>
-            <div v-if="!proposal.has_selected_timeslot">
-              Selecione uma opção de data para o evento
+            <div v-if="!proposal.has_selected_timeslot && proposal.timeslots != null && proposal.timeslots.length === 1">
+              Por favor confirme a data da apresentação
             </div>
+            <div v-if="!proposal.has_selected_timeslot && proposal.timeslots != null && proposal.timeslots.length > 1">
+              Selecione uma opção de data para o evento
+            </div>            
             <div v-if="isProposalPast">
               Data da apresentação expirada. Não é possível aceitar a proposta neste momento.
             </div>
@@ -97,16 +100,6 @@ export default {
     PresentationPrice,
     CounterOffer,
     // Chat
-  },
-  async mounted() {
-    if (this.proposal.timeslots == null) { return; }
-
-    if (this.proposal.timeslots.length === 1) {
-      await this.selectTimeslot({
-        id:       this.proposal.id,
-        timeslot: this.proposal.timeslots[0],
-      })
-    }
   },
   computed: {
     ...mapState({ proposal: (state) => state.proposal.proposal }),

@@ -99,16 +99,6 @@ export default {
     ReplyCounterOffer,
     // Chat
   },
-  async mounted() {
-    if (this.proposal.timeslots == null) { return; }
-
-    if (this.proposal.timeslots.length === 1) {
-      await this.selectTimeslot({
-        id:       this.proposal.id,
-        timeslot: this.proposal.timeslots[0],
-      })
-    }
-  },
   computed: {
     ...mapState({ proposal: (state) => state.proposal.proposal }),
     hasAcceptedCounterOffer() {

@@ -49,18 +49,21 @@ export default {
     FullCalendar
   },
   props: {
-    timeslots:  { type: Array, default: () => {} },
-    readOnly:   { type: Boolean, default: true },
-    weekMode:   { type: Boolean, default: false },
-    ownerMode:  { type: Boolean, default: false },
-    max:        { type: Number, default: null },
-    futureOnly: { type: Boolean, default: true }
+    timeslots:        { type: Array,    default: () => {} },
+    timeslotsByType:  { type: Object,   default: () => {} },
+    readOnly:         { type: Boolean,  default: true },
+    weekMode:         { type: Boolean,  default: false },
+    ownerMode:        { type: Boolean,  default: false },
+    max:              { type: Number,   default: null },
+    futureOnly:       { type: Boolean,  default: true }
   },
   data() {
     return {
       calendarPlugins:  [interactionPlugin, dayGridPlugin, timeGridPlugin, bootstrapPlugin],
       calendarEvents:   [],
-      currentYear:      0 // store to fetch new events when user switches year
+      currentYear:      0,  // store to fetch new events when user switches year
+      proposalsPerDay:  {}, // store number of events for a given day, so we can group if they exceed max allowed
+      allTimeslots:     [],
     }
   },
   computed: {
@@ -134,9 +137,7 @@ export default {
   },
   watch: {
     // Timeslots may get updated not only when loading the component
-    timeslots(timeslots) {
-      this.refresh()
-    }
+    timeslots(timeslots) { this.refresh(); }
   },
   mounted() {
     this.currentYear = this.moment(this.fullcalendarApi.getDate()).year();
@@ -144,14 +145,25 @@ export default {
   },
   methods: {
     eventClick({ event }) {
-      this.$emit('event-click', {
-        eventId: event.id,
-        timeslotId: event.extendedProps.id,
-        proposalId: event.extendedProps.proposal_id,
-        presentationId: event.extendedProps.presentation_id,
-        type: event.extendedProps.type,
-        status: event.extendedProps.status
-      })
+      if (event.extendedProps.type === 'busy') {
+        this.$emit('busy-click', event.extendedProps.id);
+        return;
+      }
+
+      if (event.extendedProps.is_proposal) {
+        this.$emit('proposal-click', event.extendedProps.proposal_id);
+        return;
+      }
+
+      if (event.extendedProps.is_presentation) {
+        this.$emit('presentation-click', event.extendedProps.presentation_id);
+        return;
+      }
+
+      if (event.extendedProps.type === 'group') {
+        this.$emit('proposals-click', moment(event.start).format('DD-MM-YYYY'));
+        return;
+      }
     },
     addEvent(timeslot) {
       this.calendarEvents.push(this.formatEventFromTimeslot(timeslot))
@@ -178,25 +190,25 @@ export default {
       }
     },
     selected(selection) {
-      if (this.isDatePast(selection.start) && this.futureOnly) {
-        this.$toast.error('Selecione uma data futura')
-        return
+      if (!this.ownerMode && this.isDatePast(selection.start) && this.futureOnly) {
+        this.$toast.error('Selecione uma data futura');
+        return;
       }
 
       // do nothing if it's a busy day - don't allow actions here
       if (this.isBusyDay(selection.start) && !this.ownerMode) {
-        this.$toast.error('O artista não está disponível nesta data')
-        return
+        this.$toast.error('O artista não está disponível nesta data');
+        return;
       }
 
       if (!this.$utils.empty(this.max) && this.availableTimeslots.length + 1 > this.max) {
-        this.$toast.error(`Não pode adicionar mais do que ${this.max} opções`)
-        return
+        this.$toast.error(`Não pode adicionar mais do que ${this.max} opções`);
+        return;
       }
 
       if (this.weekMode && selection.allDay) {
-        this.fullcalendarApi.changeView('timeGridWeek', selection.start)
-        return
+        this.fullcalendarApi.changeView('timeGridWeek', selection.start);
+        return;
       }
 
       this.$emit('selected', this.formatTimeslotFromEvent(selection))
@@ -204,58 +216,63 @@ export default {
     dateClick(day) {
       this.$emit('date-click', day)
     },
-    formatEventFromTimeslot(timeslot, isBackground) {
+    loadCalendarEvents() {
+      const nonProposalTimeslots = [...this.timeslotsByType.presentations, ...this.timeslotsByType.busy];
+
+      // Convert provided timeslots into full-calender format
+      this.$array.forEach(nonProposalTimeslots, (timeslot) => {
+        if (this.$empty(timeslot)) { return; }
+
+        this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot)));        
+      });
+
+      const proposalTimeslotsByDate = this.$array.groupBy(this.timeslotsByType.proposals, (timeslot) => moment(timeslot.start_dt).format('DD-MM-YYYY'));
+      this.$array.forEach(proposalTimeslotsByDate, (timeslots, index) => {
+        this.calendarEvents.push(this.formatGroupedEventFromTimeslot(index, timeslots))
+      });
+
+    },
+    formatEventFromTimeslot(timeslot, isAllDay) {
       let startDt = moment(timeslot.start_dt).toISOString();
       let endDt   = moment(timeslot.end_dt).toISOString();
 
-      // According to viewer and timeslot status setup event status to change its display
-      const eventStatus = isBackground ? 'unavailable' : timeslot.status;
-
-      if (isBackground) {
-        startDt = moment(timeslot.start_dt).startOf('day').toISOString();
-      }
-
       const fullcalendarEvent = {
         id:             `${timeslot.status}_${timeslot.id}`,
-        title:          isBackground ? 'Indisponível' : timeslot.label,
+        title:          timeslot.label,
         start:          startDt,
         end:            endDt,
-        allDay:         isBackground,
+        allDay:         isAllDay,
         extendedProps:  timeslot
       }
 
-      if (isBackground) {
-        fullcalendarEvent.rendering = 'background'
-      } else {
-        const classes = ['event', eventStatus]
-        if (!this.ownerMode) {
-          classes.push('proposing')
-        }
+      const classes = ['event', timeslot.status];
+      if (!this.ownerMode) { classes.push('proposing'); }
 
-        fullcalendarEvent.classNames = classes
+      fullcalendarEvent.classNames = classes;      
+      return fullcalendarEvent;
+    },
+    formatGroupedEventFromTimeslot(startDt, timeslots) {
+      if (timeslots == null || timeslots.length == 0) { return {}}
+
+      let start = moment(startDt, 'DD-MM-YYYY');
+      return {
+        id:         `grouped_proposals_for_${start.unix().toString()}`,
+        title:      `${timeslots.length} ${this.$utils.pluralize('proposta', timeslots.length)}`,
+        start:      start.set('hour', 0).toISOString(),
+        end:        start.add('4', 'hours').toISOString(),
+        allDay:     false,
+        classNames: ['event', 'group', 'proposal'],
+        extendedProps: { type: 'group' }
       }
-
-      return fullcalendarEvent
     },
     formatTimeslotFromEvent(event) {
       return new Timeslot({
         start_dt: moment(event.start).toISOString(),
-        end_dt: moment(event.end).toISOString(),
+        end_dt:   moment(event.end).toISOString(),
         full_day: event.allDay
       })
     },
-    loadCalendarEvents() {
-      // Convert provided timeslots into full-calender format
-      this.timeslots.forEach((timeslot) => {
-        if (! this.$empty(timeslot)) {
-          this.calendarEvents.push(
-            this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot))
-          )
-        }
-      })
-    },
     refresh() {
-      // TODO think about a way of triggering reactivity without having to reload
       this.calendarEvents = [];
       this.loadCalendarEvents();
     },
@@ -326,6 +343,11 @@ export default {
   &.blank {
     background: $layer3;
     color: $layer3;
+  }
+
+  &.group {
+    .fc-time  { display: none; }
+    &::before { display: none; content: ''; }
   }
 
   &.busy {

@@ -1,36 +1,40 @@
 <template>
   <div>
-    <div v-if="!$empty(proposals)" class="vertical">
-      <h6 class="mb-4">Últimas propostas</h6>
-      <div v-for="(proposal, id) in proposals" :key="id" @click="open(id)">
+    <div v-if="!$empty(unreadProposals)" class="vertical mb-5">
+      <h6 class="horizontal middle mb-4">Propostas não lidas <span class="badge circle brand">{{ unreadProposals.length }}</span></h6>
+      <div v-for="(proposal, index) in unreadProposals" :key="index" @click="open(proposal)">
         <proposal-info :presentation="proposal"></proposal-info>
-      </div>
-      <proposal-details ref="proposal" :read-only="false"></proposal-details>
+      </div>      
     </div>
-    <div v-else>
-      <h6>Nenhuma proposta encontrada</h6>
+    <div v-if="!$empty(otherProposals)" class="vertical">            
+      <h6 class="mb-4">Outras propostas</h6>
+      <div v-for="(proposal, index) in otherProposals" :key="index" @click="open(proposal)">
+        <proposal-info :presentation="proposal"></proposal-info>
+      </div>      
     </div>
+    <div v-if="$empty(unreadProposals) && $empty(otherProposals)">
+      <h6>Nenhuma proposta recebida</h6>
+    </div>
+    <proposal-details ref="proposal" :read-only="false"></proposal-details>
   </div>
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 export default {
-  // Not sure why, but this is not working on ayncData(after getting artist and contractor from microservices)
-  // async asyncData({store}) {
-  //   await store.dispatch('proposal/loadProposals');
-  // },
   async mounted() {
     await this.loadProposals();
   },
   computed: {
-    ...mapState({proposals: (state) => state.proposal.proposals}),
+    ...mapGetters('proposal', ['unreadProposals', 'otherProposals']),
     ...mapState({proposal:  (state) => state.proposal.proposal})
   },
   methods: {
-    ...mapActions('proposal', ['loadProposals', 'loadProposal']),
-    async open(id) {
-      await this.loadProposal(id);
+    ...mapActions('proposal', ['loadProposals', 'loadProposal', 'markProposalRead']),
+    async open(proposal) {
+      await this.loadProposal(proposal.id);
+      if (! proposal.is_read) { await this.markProposalRead(); }
+      
       this.$refs.proposal.openModal();
     }
   }

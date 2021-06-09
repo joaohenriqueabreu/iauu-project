@@ -48,15 +48,8 @@ export const actions = {
 }
 
 export const getters = {
-  lastTimeslot(state) {
-    return this.$array.last(state.timeslots)
-  },
-  presentations(state) {
-    return state.timeslots.filter((timeslot) =>
-      ['accepted', 'completed', 'cancelled'].includes(timeslot.status)
-    )
-  },
-  proposals(state) {
-    return state.timeslots.filter((timeslot) => timeslot.status === 'proposal')
-  }
+  lastTimeslot(state)   { return this.$array.last(state.timeslots); },
+  busy(state)           { return state.timeslots.filter((timeslot) => timeslot.type === 'busy'); },
+  presentations(state)  { return state.timeslots.filter((timeslot) => timeslot.is_presentation); },
+  proposals(state)      { return state.timeslots.filter((timeslot) => timeslot.is_proposal) }
 }

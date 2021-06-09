@@ -10,8 +10,11 @@ export const state = () => ({
 export const mutations = {
   updateField,
   set_presentation(state, data)   { state.presentation = data; },
-  set_presentations(state, data)  { state.presentations = data; },
-  add_presentation(state, data)   { Vue.set(state.presentations, data.id, data); },
+  set_presentations(state, data)  { state.presentations = _.sortBy(data, 'timeslot.start_dt'); },
+  add_presentation(state, data)   { 
+    Vue.set(state.presentations, data.id, data); 
+    state.presentations = _.sortBy(state.presentations, 'timeslot.start_dt'); 
+  },
   reset_presentation(state)       { state.presentation = {}; }
 }
 

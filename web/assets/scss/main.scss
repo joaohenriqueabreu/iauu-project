@@ -315,6 +315,31 @@ a {
   }
 }
 
+.badge {
+  background:     $layer3;
+  padding:        $space 2 * $space;
+  border-radius:  $rounded;
+  font-weight:    $bold;
+  margin:         0 2 * $space;
+
+  &.circle { 
+    display:          flex;
+    align-items:      center;
+    justify-content:  center;
+    padding:          0;
+    border-radius:    $circle;
+    width:            20px;
+    height:           20px;
+  }
+
+  &.brand  { 
+    background:    $brandLayer; 
+    color:         $layer3;
+  }
+}
+
+
+/** Perfect scroll overrides */
 .ps--active-x .ps__rail-x { display: none !important } // Hide annoying horizontal scrollbar
 
 $pcts: (5, 10, 15, 20, 50);

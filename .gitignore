@@ -2,7 +2,7 @@
 .env.testing
 node_modules/
 node_modules
-/.vscode
+.vscode
 /api/tmp
 /db/playground.mongodb
 /api/scripts/node_modules/

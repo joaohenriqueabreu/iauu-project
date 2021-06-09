@@ -12,19 +12,23 @@ module.exports = class SearchProposalsService extends BaseService
 
     async search(id, query) {      
       this.proposals = await Proposal.find({ 
-        $or: [{ artist_id: id }, { contractor_id: id }], 
-        status: { $in: ['proposal'] },
+        $or: [{ artist_id: id }, { contractor_id: id }],
         ...this.additionalQueryConditions(query)
       }).sort('-created_at');
 
       return this;
     }
 
-    additionalQueryConditions(query) {
-      if (query == null) { return {}; }
+    additionalQueryConditions(queryParams) {
+      if (queryParams == null) { return {}; }
+
+      let queryConditions = {};
+      if (queryParams.status != null) {
+        queryConditions = { ...queryConditions, ...{ status: { $in: queryParams.status }}}
+      }
 
       // TODO build query support
-      return {};
+      return queryConditions;
     }
 
     getProposals() {

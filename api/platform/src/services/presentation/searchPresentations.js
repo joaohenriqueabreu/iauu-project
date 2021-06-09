@@ -15,12 +15,25 @@ module.exports = class SearchPresentationsService extends BaseService
 
       this.presentations = await Presentation.find({ 
         $or: [{ artist_id: id }, { contractor_id: id }],
+        ...this.additionalQueryConditions(query)
       })
         .sort('timeslot.start_dt')
         .limit(10)
         .skip(page);
 
       return this;
+    }
+
+    additionalQueryConditions(queryParams) {
+      if (queryParams == null) { return {}; }
+
+      let queryConditions = {};
+      if (queryParams.status != null) {
+        queryConditions = { ...queryConditions, ...{ status: { $in: queryParams.status }}}
+      }
+
+      // TODO build query support
+      return queryConditions;
     }
 
     getPresentations() {

@@ -1,10 +1,7 @@
 import Vue                        from 'vue';
 import _                          from 'lodash';
+import moment                     from 'moment';
 import { getField, updateField }  from 'vuex-map-fields';
-
-// Should not be in state
-let cachedArtist      = {};
-let cachedContractor  = {};
 
 export const state = () => ({
   proposal:  {},
@@ -15,7 +12,7 @@ export const mutations = {
   updateField,
   edit_proposal(state, { prop, value }) { Vue.set(state.proposal, prop, value); },
   set_proposal(state, data)             { state.proposal  = data; },
-  set_proposals(state, data)            { state.proposals = _.keyBy(data, 'id'); },
+  set_proposals(state, data)            { state.proposals = _.keyBy(_.sortBy(data, 'timeslots.start_dt'), 'id'); },
   add_proposal(state, data)             { Vue.set(state.proposals, data.id, data); },
   reset_proposal(state)                 { state.proposal  = {}; }
 }
@@ -70,14 +67,14 @@ export const actions = {
     });
   },
   async selectTimeslot({ dispatch }, { id, timeslot }) {
-    const { data } = await this.$axios.put(`/proposals/${id}/timeslot`, {timeslot});
+    const { data } = await this.$axios.put(`/proposals/${id}/timeslot`, { timeslot });
     await dispatch('setProposal', data);
   },
   async sendProposal({ state, rootState }) {
-    await this.$axios.post('/proposals', {proposal: state.proposal, artist: rootState.artist.artist.id});
+    await this.$axios.post('/proposals', { proposal: state.proposal, artist: rootState.artist.artist.id });
   },
   async sendCounterOffer({ state, dispatch }, counterOffer) {
-    const { data } = await this.$axios.post(`/proposals/${state.proposal.id}/counterOffer`, {counterOffer});
+    const { data } = await this.$axios.post(`/proposals/${state.proposal.id}/counterOffer`, { counterOffer });
     dispatch('setProposal', data);
   },
   async acceptCounterOffer({ state, dispatch }) {
@@ -100,6 +97,10 @@ export const actions = {
     const { data } = await this.$axios.put(`/proposals/${state.proposal.id}`, proposal);
     dispatch('setProposal', data);
   },
+  async markProposalRead({ dispatch, state }) {
+    const { data } = await this.$axios.put(`/proposals/${state.proposal.id}`, { read_dt: moment().toISOString() });
+    dispatch('setProposal', data);
+  },
   editProposal({ commit }, data) {
     commit('edit_proposal', data);
   }
@@ -107,6 +108,8 @@ export const actions = {
 
 export const getters = {
   getField,
-  openProposals:     (state) => _.filter(state.proposals, (proposal) => proposal.is_open),
-  rejectedProposals: (state) => _.filter(state.proposals, (proposal) => proposal.is_rejected),
+  unreadProposals:    (state) => _.filter(state.proposals, (proposal) => !proposal.is_read),
+  otherProposals:     (state) => _.filter(state.proposals, (proposal) => proposal.is_read),
+  openProposals:      (state) => _.filter(state.proposals, (proposal) => proposal.is_open),
+  rejectedProposals:  (state) => _.filter(state.proposals, (proposal) => proposal.is_rejected),
 }

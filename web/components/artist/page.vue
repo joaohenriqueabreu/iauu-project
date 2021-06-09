@@ -225,13 +225,6 @@ div:not(.bg) {
   margin-bottom: 4 * $space;
 }
 
-.badge {
-  background: $layer3;
-  padding: $space 2 * $space;
-  border-radius: $rounded;
-  margin: 0 2 * $space;
-}
-
 .stats {
   @extend .horizontal;
   justify-content: center;

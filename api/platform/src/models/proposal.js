@@ -23,6 +23,7 @@ const proposalSchema = new Schema({
     instalments:              { type: Number, default: 1 },
     counter_offer: 	          { type: counterOfferSchema },
     rejected_counter_offers:  { type: [counterOfferSchema] },
+    read_dt:                  { type: Date, default: null },
 }, baseSchemaOptions);
 
 class Proposal extends BaseRepository {
@@ -33,6 +34,7 @@ class Proposal extends BaseRepository {
 		return this.price;
   }
 
+  get is_read()     { return this.read_dt != null; }
   get is_open()     { return this.status === 'proposal'; }
   get is_rejected() { return this.status === 'rejected'; }
   get has_selected_timeslot() { return this.selected_timeslot != null; }

@@ -12,9 +12,13 @@
         week-mode
         owner-mode
         :timeslots="timeslots"
+        :timeslotsByType="{ proposals, presentations, busy }"
         @reload-events="reloadTimeslotsForYear"
-        @event-click="handleEvent"
-        @selected="openBusyModal">
+        @selected="openBusyModal"
+        @proposal-click="handleProposal"
+        @proposals-click="handleProposals"
+        @presentation-click="handlePresentation"
+        @busy-click="handleBusy">
       </calendar>
       <presentations-yearly v-if="timeslots.length > 0" @selected="navigateCalendar" class="hide-mobile"></presentations-yearly>      
       <busy ref="busy" @save="saveBusyTimeslot"></busy>      
@@ -39,10 +43,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import Busy                     from '@/components/artist/schedule/busy';
-import ProposalDetails          from '@/components/proposal/artist/details';
-import PresentationsYearly      from '@/components/artist/schedule/yearly';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import Busy                from '@/components/artist/schedule/busy';
+import ProposalDetails     from '@/components/proposal/artist/details';
+import PresentationsYearly from '@/components/artist/schedule/yearly';
 export default {
   components: {
     Busy,
@@ -61,6 +65,7 @@ export default {
   },
   computed: {
     ...mapState({ timeslots:    (state) => state.schedule.timeslots }),
+    ...mapGetters('schedule', ['proposals', 'presentations', 'busy']),
     ...mapState({ proposal:     (state) => state.proposal.proposal }),
     ...mapState({ presentation: (state) => state.presentation.presentation })
   },
@@ -88,24 +93,21 @@ export default {
     async reloadTimeslotsForYear(year) {
       await this.loadMySchedule({ year })
       this.$refs.calendar.loadCalendarEvents();
-    },    
-    async handleEvent({ eventId, timeslotId, type, status, presentationId }) {
-      if (type === 'busy') {
-        await this.removeTimeslot(timeslotId);
-        this.$toast.success('Evento removido!');
-        return;
-      }      
-
-      if (type === 'event' && status === 'proposal') {
-        await this.loadProposal(presentationId);
-        this.$refs.proposal.openModal();
-        return;
-      }
-
-      if (type === 'event' && status === 'accepted') {
-        this.$router.push({ path: `/artist/presentations/${presentationId}`, target: '_blank' });
-      }
     },
+    async handleProposal(id) {
+      await this.loadProposal(id);
+      this.$refs.proposal.openModal();
+    },
+    async handleProposals(date) {
+      this.$router.push({ path: `/artist/proposals?date=${date}` });
+    },
+    async handlePresentation(id) {
+      this.$router.push({ path: `/artist/presentations/${id}` });
+    },
+    async handleBusy(id) {
+      await this.removeTimeslot(id);
+      this.$toast.success('Evento removido!');
+    },    
     async saveBusyTimeslot(timeslot) {
       await this.saveTimeslot(timeslot);
       this.$refs.busy.closeModal();
