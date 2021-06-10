@@ -1,9 +1,9 @@
 <script>
-import ProposalPage     from '@/components/proposal/page';
+import ProposalList     from '@/components/proposal/list';
 import ProposalInfo     from '@/components/proposal/info';
 import ProposalDetails  from '@/components/proposal/contractor/details';
 export default {
-  extends: ProposalPage,
+  extends: ProposalList,
   components: {
     ProposalInfo,
     ProposalDetails

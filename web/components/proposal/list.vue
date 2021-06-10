@@ -2,12 +2,12 @@
   <div>
     <div class="mb-5 horizontal middle">
       <form-date v-model="filters.from" class="mr-4">
-        Recebidas a partir de
+        Recebidas de:
       </form-date>
       <form-date v-model="filters.to" class="mr-2">
-        Recebidas até
+        Recebidas até:
       </form-date>
-      <div class="p-4 badge circle brand clickable horizontal center middle" @click="loadFilteredProposals">
+      <div class="p-4 filter badge circle clickable horizontal center middle" :class="{ active: filters.from != null || filters.to != null }" @click="loadFilteredProposals">
         <icon icon="calendar-alt" class="mr-0"></icon>
       </div>      
       <div class="filter" :class="{ active: filters.status === 'proposal' }" @click="loadOpenProposals">Abertas</div>
@@ -84,7 +84,8 @@ export default {
       this.filters.to     = null;
       await this.loadFilteredProposals();
     },
-    async loadFilteredProposals() {
+    async loadFilteredProposals(status) {
+      this.filters.status = status == null || this.filters.status === status ? null : status;
       await this.loadProposals(this.filters);
     },
     async afterReject() {

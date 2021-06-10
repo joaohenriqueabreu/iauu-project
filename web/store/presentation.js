@@ -50,9 +50,9 @@ export const actions = {
 
     await dispatch('setPresentation', presentation);
   },
-  async loadPresentations({ commit, dispatch }) {
+  async loadPresentations({ commit, dispatch }, query) {
     commit('reset_presentation');
-    const { data } = await this.$axios.get('/presentations');
+    const { data } = await this.$axios.get('/presentations', { params: query });
     
     // Get artist and contractor data
     await _.forEach(data, async (presentation) => {
