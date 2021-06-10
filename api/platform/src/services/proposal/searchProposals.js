@@ -26,6 +26,10 @@ module.exports = class SearchProposalsService extends BaseService
       if (queryParams == null) { return {}; }
 
       let queryConditions = {};
+      if (queryParams.text != null) {
+        queryConditions = { ...queryConditions, ...{ $text: { $search: queryParams.text }}};
+      }
+
       if (queryParams.status != null) {
         this.ensureQueryStatusIsValid(queryParams.status);
         queryConditions = { ...queryConditions, ...{ status: { $in: [queryParams.status] }}}
@@ -38,7 +42,7 @@ module.exports = class SearchProposalsService extends BaseService
         }
       }
 
-      if (queryParams.toRefs != null) {
+      if (queryParams.to != null) {
         queryConditions = { 
           ...queryConditions, 
           ...{ 'timeslots.start_dt': { $lte: moment(queryParams.to, config.format.dbDate).add(1, 'days').format(config.format.dbDate) }}

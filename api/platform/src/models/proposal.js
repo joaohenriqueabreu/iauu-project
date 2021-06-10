@@ -70,4 +70,11 @@ class Proposal extends BaseRepository {
 }
 
 proposalSchema.loadClass(Proposal);
+proposalSchema.index({ 
+    'title':        'text', 
+    'description':  'text',   
+  }, 
+  { name: 'text' }
+);
+
 module.exports = model('Proposal', proposalSchema);
