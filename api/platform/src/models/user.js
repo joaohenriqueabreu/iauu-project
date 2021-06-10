@@ -1,4 +1,4 @@
-const config              = require('../env');
+const config              = require('iauu/env');
 const { Schema, model }   = require('mongoose');
 const BaseRepository      = require('./repositories/base');
 

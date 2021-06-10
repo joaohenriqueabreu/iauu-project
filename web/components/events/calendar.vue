@@ -161,7 +161,7 @@ export default {
       }
 
       if (event.extendedProps.type === 'group') {
-        this.$emit('proposals-click', moment(event.start).format('DD-MM-YYYY'));
+        this.$emit('proposals-click', moment(event.start).format('MM-DD-YYYY'));
         return;
       }
     },
@@ -226,7 +226,7 @@ export default {
         this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot)));        
       });
 
-      const proposalTimeslotsByDate = this.$array.groupBy(this.timeslotsByType.proposals, (timeslot) => moment(timeslot.start_dt).format('DD-MM-YYYY'));
+      const proposalTimeslotsByDate = this.$array.groupBy(this.timeslotsByType.proposals, (timeslot) => moment(timeslot.start_dt).format('MM-DD-YYYY'));
       this.$array.forEach(proposalTimeslotsByDate, (timeslots, index) => {
         this.calendarEvents.push(this.formatGroupedEventFromTimeslot(index, timeslots))
       });
@@ -254,12 +254,14 @@ export default {
     formatGroupedEventFromTimeslot(startDt, timeslots) {
       if (timeslots == null || timeslots.length == 0) { return {}}
 
-      let start = moment(startDt, 'DD-MM-YYYY');
+      let start = moment(startDt, 'MM-DD-YYYY');
+      const earliest = this.$array.min(this.$array.map(timeslots, 'start_dt'));
+      const latest   = this.$array.max(this.$array.map(timeslots, 'end_dt'));
       return {
         id:         `grouped_proposals_for_${start.unix().toString()}`,
         title:      `${timeslots.length} ${this.$utils.pluralize('proposta', timeslots.length)}`,
-        start:      start.set('hour', 0).toISOString(),
-        end:        start.add('4', 'hours').toISOString(),
+        start:      moment(earliest).toISOString(),
+        end:        moment(latest).toISOString(),
         allDay:     false,
         classNames: ['event', 'group', 'proposal'],
         extendedProps: { type: 'group' }

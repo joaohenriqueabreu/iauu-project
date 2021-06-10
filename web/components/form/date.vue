@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h6><slot></slot></h6>
     <datepicker v-model="dateValue" @selected="change" class="form-input mt-2"></datepicker>
   </div>
 </template>

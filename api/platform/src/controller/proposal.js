@@ -126,9 +126,9 @@ class ProposalController extends BaseController {
 
   async rejectProposal(req, res, next) {
     console.log('Rejecting proposal...');
-    const rejectProposalService = new RejectProposalService(req.user, req.data);
+    const rejectProposalService = new RejectProposalService(req.user);
     try {
-      await rejectProposalService.reply();
+      await rejectProposalService.reply(req.data.id);
       res.status(200).json(rejectProposalService.getProposal());
     } catch(error) {
       next(error)

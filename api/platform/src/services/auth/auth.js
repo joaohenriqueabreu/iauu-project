@@ -1,4 +1,4 @@
-const config = require('../../env');
+const config = require('iauu/env');
 const bcrypt = require('bcryptjs');
 const BaseService = require('../base');
 const { User, Artist, Contractor } = require('../../models');

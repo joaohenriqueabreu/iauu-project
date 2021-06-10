@@ -1,7 +1,7 @@
-const _ = require('lodash');
-const moment = require('moment');
-const ReplyProposalService = require('./replyProposal');
-const BadRequestException = require('../../exception/bad');
+const { _, moment }         = require('iauu/utils');
+const ReplyProposalService  = require('./replyProposal');
+const BadRequestException   = require('../../exception/bad');
+const { EVENTS }            = require('iauu/events');
 
 module.exports = class AcceptProposalService extends ReplyProposalService
 {
@@ -39,5 +39,10 @@ module.exports = class AcceptProposalService extends ReplyProposalService
     }
 
     throw new BadRequestException('Cannot accept proposal without an agreed price and duration');
+  }
+
+  afterReply() {
+    super.emitEvent(EVENTS.PROPOSAL_ACCEPTED_EVENT, this.proposal);
+    return this;
   }
 }

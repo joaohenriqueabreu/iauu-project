@@ -14,7 +14,8 @@ export const mutations = {
   set_proposal(state, data)             { state.proposal  = data; },
   set_proposals(state, data)            { state.proposals = _.keyBy(_.sortBy(data, 'timeslots.start_dt'), 'id'); },
   add_proposal(state, data)             { Vue.set(state.proposals, data.id, data); },
-  reset_proposal(state)                 { state.proposal  = {}; }
+  reset_proposal(state)                 { state.proposal  = {}; },
+  reset_proposals(state)                { state.proposals = {}; }
 }
 
 export const actions = {
@@ -55,9 +56,10 @@ export const actions = {
 
     await dispatch('setProposal', proposal);
   },
-  async loadProposals({ commit, dispatch }) {
+  async loadProposals({ commit, dispatch }, query) {
     commit('reset_proposal');
-    const { data } = await this.$axios.get('/proposals');
+    commit('reset_proposals');
+    const { data } = await this.$axios.get('/proposals', { params: { ...query }});
 
     // Get artist and contractor data
     await _.forEach(data, async (proposal) => {
@@ -89,9 +91,9 @@ export const actions = {
     const { data } = await this.$axios.put(`/proposals/${id}/accept`);
     dispatch('setProposal', data);
   },
-  async rejectProposal({ commit }, id) {
-    await this.$axios.delete(`/proposals/${id}`);
-    commit('reset_proposal');
+  async rejectProposal({ dispatch }, id) {
+    const { data } = await this.$axios.delete(`/proposals/${id}`);
+    dispatch('setProposal', data);    
   },
   async updateProposal({ dispatch, state }, proposal) {
     const { data } = await this.$axios.put(`/proposals/${state.proposal.id}`, proposal);
@@ -103,6 +105,9 @@ export const actions = {
   },
   editProposal({ commit }, data) {
     commit('edit_proposal', data);
+  },
+  resetProposal({ commit }) {
+    commit('reset_proposal');
   }
 }
 

@@ -1,4 +1,4 @@
-const config = require('../../env');
+const config = require('iauu/env');
 
 const BaseServiceBuilder = require('./base');
 const { PagarmeCreateAccountService } = require('../gateways');

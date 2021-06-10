@@ -1,28 +1,26 @@
 const _               = require('lodash');
 const ProposalService = require('./base');
-const { EVENTS }      = require('iauu/events');
 
 module.exports = class ReplyProposalService extends ProposalService
 {
-    constructor(user, id) {
-      super(user, id);
+    constructor(user) {
+      super(user);
     }
 
-    async reply() {
+    async reply(id) {
+      this.id = id;
       await this.searchProposal();
       this.ensureProposalWasFound()
         .ensureIsPartyToProposal()
         .populateProposal();
+
       await this.saveProposal();
 
-      this.emitEvent();
-      return this
-    }
-
-    async emitEvent() {
-      super.emitEvent(EVENTS.PROPOSAL_ACCEPTED_EVENT, this.proposal);
+      this.afterReply();
       return this;
     }
+
+    afterReply() { return this; }
 
     ensureIsPartyToProposal() {
       if (this.user.role_id !== this.proposal.artist_id && 
@@ -30,6 +28,6 @@ module.exports = class ReplyProposalService extends ProposalService
         throw new UnauthorizedException('User is not party to proposal')
       }
 
-      return this
+      return this;
     }
 }

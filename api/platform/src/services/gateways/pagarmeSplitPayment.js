@@ -1,4 +1,4 @@
-const config = require('../../env');
+const config = require('iauu/env');
 
 const moment = require('moment');
 const { PaymentData } = require('../../config/data');

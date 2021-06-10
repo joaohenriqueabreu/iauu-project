@@ -1,4 +1,4 @@
-const config                            = require('../env');
+const config                            = require('iauu/env');
 const { Schema, model }                 = require('mongoose');
 const moment                            = require('moment');
 const BaseRepository                    = require('./repositories/base');
@@ -41,13 +41,8 @@ class Presentation extends BaseRepository {
   get is_cancelled()  { return this.status === PresentationData.PRESENTATION_STATUS_CANCELLED; }
   get is_paid()       { return this.is_completed && this.billing !== undefined && this.billing.status === BillingData.COMPLETED_STATUS; }
 
-  get display_start_dt() {
-    return this.timeslot.start_dt;
-  }
-
-  get display_end_dt() {
-    return this.timeslot.end_dt;
-  }
+  get display_start_dt() { return this.timeslot.start_dt; }
+  get display_end_dt()   { return this.timeslot.end_dt; }
 
   get is_presentation_close() {
     if (this.status === PresentationData.PRESENTATION_STATUS_PROPOSAL) { return false; }

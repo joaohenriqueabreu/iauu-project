@@ -26,9 +26,6 @@ module.exports = class ProposalService extends BaseService
 
     async searchProposal() {
       this.proposal = await Proposal.findById(this.id);
-        // .populate({ path: 'contractor', populate: { path: 'user' }})
-        // .populate({ path: 'artist',  populate: { path: 'user' }});
-
       return this;
     }
 

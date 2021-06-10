@@ -1,3 +1,6 @@
+const _       = require('lodash');
+const moment  = require('moment');
+
 const isEmpty = function (value) {
   if (value === undefined || value === null) {
     return true;
@@ -31,5 +34,7 @@ const isEmpty = function (value) {
 }
 
 module.exports = {
+  _,
+  moment,
   isEmpty,
 }

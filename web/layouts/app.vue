@@ -87,6 +87,10 @@ export default {
         transition:     $transition;
         max-height:     90vw;
         width:          85vw;
+      }
+
+      @include mobile() {
+        margin:         10vh 0 20vh 0;
       }      
     }
   }

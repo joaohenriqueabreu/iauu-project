@@ -34,9 +34,13 @@
         <span class="event-subtitle proposal"></span>
         <h6>Proposta</h6>
       </div>
-      <div class="horizontal middle">
+      <div class="horizontal middle mr-4">
         <span class="event-subtitle presentation"></span>
         <h6>Apresentação</h6>
+      </div>
+      <div class="horizontal middle">
+        <span class="event-subtitle busy"></span>
+        <h6>Indisponibilidade</h6>
       </div>
     </div>
   </div>
@@ -99,7 +103,8 @@ export default {
       this.$refs.proposal.openModal();
     },
     async handleProposals(date) {
-      this.$router.push({ path: `/artist/proposals?date=${date}` });
+      const formattedDt = this.moment(date).format('YYYY-MM-DD');
+      this.$router.push({ path: `/artist/proposals?from=${formattedDt}&to=${formattedDt}` });
     },
     async handlePresentation(id) {
       this.$router.push({ path: `/artist/presentations/${id}` });
@@ -147,13 +152,10 @@ export default {
   width: 30px;
   border-radius: $rounded;
   margin-right: $space;
-  &.proposal {
-    background: $proposalTimeslot;
-  }
 
-  &.presentation {
-    background: $presentationTimeslot;
-  }
+  &.proposal      { background: $proposalTimeslot; }
+  &.presentation  { background: $presentationTimeslot; }
+  &.busy          { background: $layer3; }
 }
 
 .calendar {

@@ -29,6 +29,7 @@ export default {
       return this.isCustomProduct ? 'Personalizado' : this.presentation.product.name;
     },
     isCustomProduct() {
+      if (this.presentation.product == null) { return false; }
       return this.presentation.product.custom || this.presentation.product.name === 'custom';
     }
   },

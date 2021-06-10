@@ -1,4 +1,4 @@
-const config 	= require('../../env');
+const config 	= require('iauu/env');
 const jwt 		= require('jwt-simple');
 const faker 	= require('faker');
 const crypto 	= require('crypto');

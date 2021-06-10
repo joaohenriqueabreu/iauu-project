@@ -4,6 +4,7 @@ import Product  from '../models/product';
 
 const utils = {
   pluralize: (value, count) => {
+    if (count < 2) { return value; }
     return plural(value, count);
   },
   genCalendarEventId: (timeslot) => `${timeslot.type}_${timeslot.id}`,

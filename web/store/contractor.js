@@ -10,7 +10,9 @@ export const mutations = {
   updateField,  
   set_contractor(state, data)           { state.contractor = data; },
   set_contractors(state, data)          { state.contractors = data; },
-  add_contractor(state, data)           { Vue.set(state.contractors, data.id, data); },
+  add_contractor(state, data)           { 
+    Vue.set(state.contractors, data.id, data);
+  },
   reset_contractor(state)               { state.contractor = {}},
   update_profile(state, { prop, data }) { 
     if (prop == null) {
@@ -41,8 +43,8 @@ export const actions = {
   },
   async loadContractor({ commit, state, dispatch}, id) {
     // Try to get contractor from "cache"
-    // const contractor = _.find((state.contractors), (existingContractor) => existingContractor.id === id);
     const contractor = state.contractors[id];
+
     if (contractor != null) { 
       commit('set_contractor', contractor);
       return;
