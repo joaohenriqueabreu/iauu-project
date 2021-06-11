@@ -352,3 +352,26 @@ $pcts: (5, 10, 15, 20, 50);
 .fix-bounds {
   width: 90vw;
 }
+
+/** Filter common styling */
+.filter {
+  @extend .horizontal, .middle;
+  padding:        2 * $space;
+  transition:     $transition;
+  background:     $layer4;
+  border-radius:  $rounded;
+  color:          $brand;
+  font-weight:    $bold;
+  margin-right:   2 * $space;
+  cursor:         pointer;
+
+  &:hover {
+    transition:   $transition;
+    background:   $brandLayer;
+  }
+
+  &.active {
+    background:   $brandLayer;
+    color:        $layer1;
+  }
+}
