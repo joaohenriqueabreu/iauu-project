@@ -11,11 +11,9 @@ export const mutations = {
   updateField,
   set_presentation(state, data)   { state.presentation = data; },
   set_presentations(state, data)  { state.presentations = _.sortBy(data, 'timeslot.start_dt'); },
-  add_presentation(state, data)   { 
-    Vue.set(state.presentations, data.id, data); 
-    state.presentations = _.sortBy(state.presentations, 'timeslot.start_dt'); 
-  },
-  reset_presentation(state)       { state.presentation = {}; }
+  add_presentation(state, data)   { Vue.set(state.presentations, data.id, data); },
+  reset_presentation(state)       { state.presentation = {}; },
+  reset_presentations(state)      { state.presentations = {}; }
 }
 
 export const actions = {
@@ -52,6 +50,8 @@ export const actions = {
   },
   async loadPresentations({ commit, dispatch }, query) {
     commit('reset_presentation');
+    commit('reset_presentations');
+
     const { data } = await this.$axios.get('/presentations', { params: query });
     
     // Get artist and contractor data

@@ -45,7 +45,7 @@ module.exports = class SearchProposalsService extends BaseService
       if (queryParams.to != null) {
         queryConditions = { 
           ...queryConditions, 
-          ...{ 'timeslots.start_dt': { $lte: moment(queryParams.to, config.format.dbDate).add(1, 'days').format(config.format.dbDate) }}
+          ...{ 'timeslots.end_dt': { $lte: moment(queryParams.to, config.format.dbDate).add(1, 'days').format(config.format.dbDate) }}
         }
       }
       

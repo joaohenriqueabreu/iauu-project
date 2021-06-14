@@ -1,6 +1,8 @@
-const _             = require('lodash');
-const BaseService   = require('../base');
-const Presentation  = require('../../models/presentation');
+const config                = require('iauu/env');
+const { _, moment }         = require('iauu/utils');
+const BaseService           = require('../base');
+const { Presentation }      = require('../../models');
+const { PresentationData }  = require('../../config/data');
 
 module.exports = class SearchPresentationsService extends BaseService
 {
@@ -28,12 +30,39 @@ module.exports = class SearchPresentationsService extends BaseService
       if (queryParams == null) { return {}; }
 
       let queryConditions = {};
+      if (queryParams.text != null) {
+        queryConditions = { ...queryConditions, ...{ $text: { $search: queryParams.text }}};
+      }
+
       if (queryParams.status != null) {
+        this.ensureQueryStatusIsValid(queryParams.status);
         queryConditions = { ...queryConditions, ...{ status: { $in: queryParams.status }}}
       }
 
-      // TODO build query support
+      if (queryParams.from != null) {
+        queryConditions = { 
+          ...queryConditions, 
+          ...{ 'timeslot.start_dt': { $gte: moment(queryParams.from, config.format.dbDate).format(config.format.dbDate) }}
+        }
+      }
+
+      if (queryParams.to != null) {
+        queryConditions = { 
+          ...queryConditions, 
+          ...{ 'timeslot.end_dt': { $lte: moment(queryParams.to, config.format.dbDate).add(1, 'days').format(config.format.dbDate) }}
+        }
+      }
+
+      console.log(queryConditions);
       return queryConditions;
+    }
+
+    ensureQueryStatusIsValid(status) {
+      if (! PresentationData.PRESENTATION_STATUS.includes(status)) {
+        throw new BadRequestException('Invalid status provided');
+      }
+
+      return this;
     }
 
     getPresentations() {

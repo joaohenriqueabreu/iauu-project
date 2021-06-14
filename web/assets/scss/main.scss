@@ -51,7 +51,8 @@ a {
   color: $brand;
 
   &:hover {
-    text-decoration: none;
+    text-decoration:  none;
+    color:            $white;
   }
 
   // &:hover {
