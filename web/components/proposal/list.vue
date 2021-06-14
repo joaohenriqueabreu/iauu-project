@@ -16,13 +16,13 @@
     <div v-if="!$empty(unreadProposals)" class="vertical mb-5">
       <h6 class="horizontal middle mb-4">Propostas não lidas <span class="badge circle brand">{{ unreadProposals.length }}</span></h6>
       <div v-for="(proposal, index) in unreadProposals" :key="index" @click="open(proposal)">
-        <proposal-info :presentation="proposal"></proposal-info>
+        <proposal-item :presentation="proposal"></proposal-item>
       </div>      
     </div>
     <div v-if="!$empty(otherProposals)" class="vertical">            
       <h6 class="mb-4">Propostas recebidas</h6>
       <div v-for="(proposal, index) in otherProposals" :key="index" @click="open(proposal)">
-        <proposal-info :presentation="proposal"></proposal-info>
+        <proposal-item :presentation="proposal"></proposal-item>
       </div>      
     </div>
     <div v-if="$empty(unreadProposals) && $empty(otherProposals)">

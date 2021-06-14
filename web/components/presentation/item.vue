@@ -1,7 +1,16 @@
 <template>
   <div class="event position-relative" :class="simple ? '': 'interact'">
-    <div v-if="showStatus" class="label">
-      {{ presentationStatusLabel }}
+    <!-- Just testing different styles (this one is a circle with white text - whereas ) -->
+    <!-- <div class="top-right horizontal middle p-2">
+      <div class="status-badge mr-2" :class="presentation.status"></div>
+      <h6 class="hide-mobile">
+        {{ presentationStatusLabel }}
+      </h6>
+    </div>     -->
+    <div class="top-right horizontal middle p-2">
+      <div class="status-badge" :class="presentation.status">
+        <h6>{{ presentationStatusLabel }}</h6>
+      </div>
     </div>
     <h4>{{ presentationDate | date }}</h4>
     <div class="info">
@@ -28,7 +37,7 @@ export default {
   props: {
     presentation: { type: Object, default: () => {} },
     simple:       { type: Boolean, default: false },
-    showStatus:   { type: Boolean, default: false }
+    showStatus:   { type: Boolean, default: true }
   },
   data() {
     return {
@@ -36,7 +45,8 @@ export default {
         'proposal':   'Proposta',
         'accepted':   'Contratada',
         'completed':  'Realizada', 
-        'paid':       'Fechada' 
+        'paid':       'Fechada',
+        'cancelled':  'Cancelada'
       }
     }
   },
@@ -61,54 +71,59 @@ export default {
 <style lang="scss" scoped>
 .event {
   @extend .full-width, .horizontal, .middle;
-  margin-bottom: 3 * $space;
-  padding: 2 * $space;
-  transition: $transition;
-  border-radius: $edges;
+  margin-bottom:  3 * $space;
+  padding:        2 * $space;
+  transition:     $transition;
+  border-radius:  $edges;
 
   &.interact {
     @extend .clickable;
-    box-shadow: $shadow;
-    background: $layer3;
+    box-shadow:     $shadow;
+    background:     $layer3;
 
     &:hover {
-      transition: $transition;
-      background: $layer4;
+      transition:   $transition;
+      background:   $layer4;
     }
   }
 
   h4 {
-    margin-right: 4 * $space;
+    margin-right:   4 * $space;
   }
 
   .info {
-    border-left: 5px solid $layer2;
-    padding-left: 4 * $space;
+    border-left:    5px solid $layer2;
+    padding-left:   4 * $space;
   }
 }
 
-.label {
-  padding: $space;
-  font-weight: $bold;
-  border-radius: $edges;
-  position: absolute;
-  top: $space;
-  right: $space;
-  font-size: $small;
+.status-badge {
+  padding:        $space;
+  font-weight:    $bold;
+  border-radius:  $smoothEdges;
+  // position:       absolute;
+  // top:            $space;
+  // right:          $space;
+  font-size:      $small;
 
   &.proposal {
-    background: $layer5;
-    color: $white;
+    background:   $warning;
+    color:        $layer1;
   }
 
   &.accepted {
-    background: $brandLayer;
-    color: $white;
+    background:   $brandLayer;
+    color:        $layer1;
   }
 
   &.completed, &.paid {
-    background: $success;
-    color: $white;
+    background:   $success;
+    color:        $white;
+  }
+
+  &.cancelled, &.rejected {
+    background:   $error;
+    color:        $white;
   }
 }
 </style>

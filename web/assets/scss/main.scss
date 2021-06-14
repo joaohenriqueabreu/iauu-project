@@ -49,11 +49,16 @@ a {
   font-weight:      $bold;
   transition:       $transition;
   color: $brand;
+
   &:hover {
-    transition:       $transition;
-    text-decoration:  none;
-    color:            $brandLayer;
+    text-decoration: none;
   }
+
+  // &:hover {
+  //   transition:       $transition;
+  //   text-decoration:  none;
+  //   color:            $brandLayer;
+  // }
 }
 
 [data-icon] {

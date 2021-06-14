@@ -62,16 +62,16 @@
 </template>
 
 <script>
-import { mapFields } from 'vuex-map-fields';
+import { mapFields }                          from 'vuex-map-fields';
 import { mapActions, mapState, mapMutations } from 'vuex';
-import ProfileStats from '@/components/artist/profile/stats';
-import ArtistInfo from '@/components/artist/profile/info';
-import PresentationConfig from '@/components/artist/profile/presentationsConfig';
-import ArtistUsers from '@/components/artist/profile/users';
-import SocialNetworks from '@/components/artist/profile/social';
-import ArtistCategories from '@/components/artist/profile/categories';
-import PresentationTypes from '@/components/artist/profile/presentationTypes';
-import BankAccount from '@/components/artist/profile/bankAccount';
+import ProfileStats                           from '@/components/artist/profile/stats';
+import ArtistInfo                             from '@/components/artist/profile/info';
+import PresentationConfig                     from '@/components/artist/profile/presentationsConfig';
+import ArtistUsers                            from '@/components/artist/profile/users';
+import SocialNetworks                         from '@/components/artist/profile/social';
+import ArtistCategories                       from '@/components/artist/profile/categories';
+import PresentationTypes                      from '@/components/artist/profile/presentationTypes';
+import BankAccount                            from '@/components/artist/profile/bankAccount';
 export default {
   components: {
     ProfileStats,

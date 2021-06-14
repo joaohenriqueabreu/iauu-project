@@ -6,7 +6,7 @@
         <overlay v-for="(presentation, index) in unpaidPresentations" :key="index">
           <template v-slot:default>
             <nuxt-link :to="`presentations/${presentation.id}`" target="_blank">
-              <presentation-info :presentation="presentation"></presentation-info>
+              <presentation-item :presentation="presentation"></presentation-item>
             </nuxt-link>
           </template>
           <template v-slot:hover>
@@ -20,28 +20,28 @@
       <div v-if="!$empty(openPresentations)" class="vertical mb-4">
         <h6 class="mb-4">Próximas apresentações contratadas</h6>
         <div v-for="(presentation, index) in openPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-info :presentation="presentation"></presentation-info>
+          <presentation-item :presentation="presentation"></presentation-item>
         </div>
         <hr />
       </div>
       <div v-if="!$empty(pendingConfirmPresentations)" class="vertical mb-4">
         <h6 class="mb-4">Apresentações realizadas (aguardando confirmação)</h6>
         <div v-for="(presentation, index) in pendingConfirmPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-info :presentation="presentation"></presentation-info>
+          <presentation-item :presentation="presentation"></presentation-item>
         </div>
         <hr />
       </div>
       <div v-if="!$empty(completedPresentations)" class="vertical mb-4">
         <h6 class="mb-4">Apresentações concluídas</h6>
         <div v-for="(presentation, index) in completedPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-info :presentation="presentation"></presentation-info>
+          <presentation-item :presentation="presentation"></presentation-item>
         </div>
         <hr />
       </div>
       <div v-if="!$empty(cancelledPresentations)" class="vertical mb-4">
         <h6 class="mb-4">Apresentações canceladas</h6>
         <div v-for="(presentation, index) in cancelledPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-info :presentation="presentation"></presentation-info>
+          <presentation-item :presentation="presentation"></presentation-item>
         </div>
       </div>
       <div v-if="presentations.length === 0" class="mb-4">
@@ -57,10 +57,10 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import PresentationInfo from '@/components/presentation/info';
+import PresentationItem from '@/components/presentation/item';
 export default {
   components: {
-    PresentationInfo
+    PresentationItem
   },
   async asyncData({ store, app }) {
     await store.dispatch('presentation/loadPresentations');

@@ -1,14 +1,15 @@
 <script>
-import PresentationInfo from '@/components/presentation/info';
+import PresentationItem from '@/components/presentation/item';
 export default {
-  extends: PresentationInfo,
+  extends: PresentationItem,
   data() {
     return {      
       PRESENTATION_STATUS_LABELS_MAP: {
-        'proposal':   'Proposta',
+        'proposal':   'Aguardando Resposta',
         'accepted':   'Contratada',
         'completed':  'Realizada', 
-        'paid':       'Fechada' 
+        'paid':       'Fechada',
+        'rejected':   'Rejeitada',
       }
     }
   },

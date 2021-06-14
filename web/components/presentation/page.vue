@@ -2,7 +2,7 @@
   <div v-if="!$empty(presentation)">
     <tabs :items="presentationTabComponents" :default-tab="presentationStatusIndex">
       <div class="mb-4 position-relative">
-        <presentation-info simple show-status :presentation="presentation" class="mb-5"></presentation-info>
+        <presentation-item simple show-status :presentation="presentation" class="mb-5"></presentation-item>
         <timeline
           class="mb-4"
           :steps="presentationTabComponents.length" 
@@ -20,7 +20,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import Chat             from '@/components/layout/chat';
-import PresentationInfo from '@/components/presentation/info';
+import PresentationItem from '@/components/presentation/item';
 
 export default {
   async created() {
@@ -28,7 +28,7 @@ export default {
   },
   components: {
     Chat,
-    PresentationInfo,
+    PresentationItem,
   },
   data() {
     return { 

@@ -16,7 +16,7 @@
     <div class="vertical">
       <h6 class="mb-4">Próximas apresentações</h6>
       <nuxt-link v-for="(presentation, index) in presentations" :key="index" :to="`/${redirectRoute}/${presentation.id}`" target="_blank">
-        <presentation-info :presentation="presentation"></presentation-info>
+        <presentation-item :presentation="presentation"></presentation-item>
       </nuxt-link>
     </div>
   </div>
@@ -24,10 +24,10 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import PresentationInfo from '@/components/presentation/info';
+import PresentationItem from '@/components/presentation/item';
 export default {
   components: {
-    PresentationInfo,
+    PresentationItem,
   },
   data() {
     return {
