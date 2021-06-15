@@ -16,8 +16,12 @@ const userVerifiedConsumer        = new EventConsumer(EVENTS.USER_VERIFIED_EVENT
 // const proposalAcceptedConsumer    = new EventConsumer(EVENTS.PROPOSAL_ACCEPTED_EVENT);
 // const presentationCreatedConsumer = new EventConsumer(EVENTS.PRESENTATION_CREATED_EVENT);
 
-const userRegisteredMailSvc = new UserRegisteredMailService();
-const userVerifiedMailSvc   = new UserVerifiedMailService();
+const documentSentForApprovalConsumer = new EventConsumer(EVENTS.DOCUMENT_SENT_FOR_APPROVAL);
+
+const userRegisteredMailSvc     = new UserRegisteredMailService();
+const userVerifiedMailSvc       = new UserVerifiedMailService();
+
+const docSentForApprovalMailSvc = new DocumentSentForApprovalService();
 
 const startEventConsumers = function () {
   console.log('Listening to mail events...');
@@ -26,6 +30,8 @@ const startEventConsumers = function () {
     userVerifiedConsumer.consume(function (user)   { userVerifiedMailSvc.send(user); }),
     // presentationCreatedConsumer.consume(function (presentation) { sendMailSvc.send(presentation); }),
     // proposalAcceptedConsumer.consume(function (proposal)        { sendMailSvc.send(proposal); })
+
+    documentSentForApprovalConsumer.consume(function ({ presentation, target }) { docSentForApprovalMailSvc.send(presentation, target) })
   ]);
 }
 

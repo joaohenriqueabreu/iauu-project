@@ -1,8 +1,5 @@
 <template>
   <div class="position-relative">
-    <div class="top-right">
-      <icon v-if="!document.has_approval && document.requires_approval" v-tooltip="'Este documento requer aprovacao'" icon="exclamation-triangle" class="error font-large"></icon>
-    </div>
     <small>Enviado por {{ owner.name }} em {{ document.create_dt | date }}</small>
     <a :href="file.url" target="_blank">      
       <div class="vertical center middle h-10">
@@ -15,9 +12,12 @@
     <div class="h-5">
       <hr>
       <div v-if="displayApproveBtns" class="my-2 p-2 horizontal center middle">
-        <h6 class="clickable brand-hover" @click="openDocumentModal">Revisar</h6>
+        <h6 class="horizontal middle clickable brand-hover" @click="openDocumentModal">
+          <icon v-if="!document.has_approval && document.requires_approval" v-tooltip="'Este documento requer aprovacao'" icon="exclamation-triangle" class="error font-large"></icon>
+          Revisar
+        </h6>
       </div>
-      <div v-if="document.uploaded_by === $auth.user.main_role" class="horizontal center middle">
+      <div v-if="document.uploaded_by === $auth.user.main_role && ! document.is_approved" class="horizontal center middle">
         <h6 class="clickable brand-hover" @click="openDocumentModal">Editar</h6>
       </div>
       <div v-if="document.is_approved" class="vertical center middle">

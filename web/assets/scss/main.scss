@@ -50,16 +50,16 @@ a {
   transition:       $transition;
   color: $brand;
 
-  &:hover {
-    text-decoration:  none;
-    color:            $white;
-  }
-
   // &:hover {
-  //   transition:       $transition;
   //   text-decoration:  none;
-  //   color:            $brandLayer;
+  //   color:            $white;
   // }
+
+  &:hover {
+    transition:       $transition;
+    text-decoration:  none;
+    color:            $brandLayer;
+  }  
 }
 
 [data-icon] {
@@ -379,5 +379,15 @@ $pcts: (5, 10, 15, 20, 50);
   &.active {
     background:   $brandLayer;
     color:        $layer1;
+  }
+}
+
+/** Override any natural hover effect */
+.no-hover-effect {
+  transition: none;
+  &:hover {
+    transition:       none;
+    text-decoration:  none;
+    color:            $white;
   }
 }

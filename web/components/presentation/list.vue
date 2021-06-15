@@ -15,7 +15,7 @@
     </div>
     <div class="vertical">
       <h6 class="mb-4">Próximas apresentações</h6>
-      <nuxt-link v-for="(presentation, index) in presentations" :key="index" :to="`/${redirectRoute}/${presentation.id}`" target="_blank">
+      <nuxt-link v-for="(presentation, index) in presentations" :key="index" :to="`/artist/presentations/${presentation.id}`" class="no-hover-effect">
         <presentation-item :presentation="presentation"></presentation-item>
       </nuxt-link>
     </div>

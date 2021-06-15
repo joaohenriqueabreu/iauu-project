@@ -45,7 +45,7 @@ export default {
 .confirmDialog {
   .toasted {
     background: $brandLayer !important;
-    color:      $white !important;
+    color:      $layer1 !important;
   }
 
   a {

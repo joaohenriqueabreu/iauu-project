@@ -1,4 +1,4 @@
-const _                   = require('lodash');
+const { map, filter}      = require('lodash');
 const moment              = require('moment');
 const PresentationService = require('./base')
 const { Document }        = require('../../models/schemas');
@@ -24,9 +24,10 @@ module.exports = class PresentationDocumentService extends PresentationService
     async update(document) {
       await this.searchPresentation();
       this.ensurePresentationWasFound()
-        .editDocument(document);
+        .editDocument(document);  
 
-      await this.savePresentation();
+      await this.savePresentation();      
+      this.emitDocSentForApprovalEvent(document);
       return this;
     }
 
@@ -68,7 +69,7 @@ module.exports = class PresentationDocumentService extends PresentationService
     }
 
     editDocument(updatedDocument) {
-      this.presentation.documents = _.map(this.presentation.documents, (existingDocument) => {
+      this.presentation.documents = map(this.presentation.documents, (existingDocument) => {
         return existingDocument.id !== updatedDocument.id ? existingDocument : updatedDocument;
       });
 
@@ -76,7 +77,27 @@ module.exports = class PresentationDocumentService extends PresentationService
     }
 
     removeDocument(document) {
-      this.presentation.documents = _.filter(this.presentation.documents, (existingDocument) => existingDocument.id !== document.id);
+      this.presentation.documents = filter(this.presentation.documents, (existingDocument) => existingDocument.id !== document.id);
       return this;
+    }
+
+    // TODO implement
+    emitDocSentForApprovalEvent(document) {
+      // if (! document.requires_approval || document.is_approved) {
+      //   return this;
+      // }
+
+      // const otherPartyId = document.uploaded_by === 'artist' 
+      //   ? this.presentation.contractor_id 
+      //   : this.presentation.artist_id;
+      
+      // const otherPartyRole = document.uploaded_by === 'artist' 
+      //   ? 'contractor'
+      //   : 'artist';
+
+      // this.emitEvent(EVENTS.DOCUMENT_SENT_FOR_APPROVAL, {
+      //   presentation: { id: this.presentation.id, name: this.presentation.title },
+      //   user:         { id: otherPartyId, role: otherPartyRole }
+      // })
     }
 }
