@@ -14,7 +14,7 @@
     </div>
     <div class="mb-5 raised p-5" :class="{ first: isFirstTabActive }">
       <fade-transition mode="out-in" v-for="(component, index) in tabComponents" :key="index">
-        <component :is="component" v-if="isActiveTab(index)"></component>
+        <component :is="component" v-if="isActiveTab(index)" @navigate="navigateToTab"></component>
       </fade-transition>
     </div>
   </div>
@@ -23,7 +23,7 @@
 <script>
 export default {
   props: {
-    items: Array,
+    items:      Array,
     defaultTab: Number
   },
   data() {
@@ -46,95 +46,91 @@ export default {
     }
   },
   methods: {
-    isActiveTab(index) { return this.activeTab === index; }
+    isActiveTab(index)    { return this.activeTab === index; },
+    navigateToTab(index)  { this.activeTab = index; }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 header {
-  height: 30vh;
-  background-size: cover;
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  height:               30vh;
+  background-size:      cover;
+  position:             relative;
+  top:                  0;
+  left:                 0;
+  width:                100%;
+  background-position:  center;
+  background-repeat:    no-repeat;
+  background-size:      cover;
 }
 
 main {
   @extend .vertical, .center, .middle;
-  position: relative;
-  margin-bottom: 5 * $space;
+  position:       relative;
+  margin-bottom:  5 * $space;
   .logo {
-    position: absolute;
-    top: -75px;
-    z-index: $above;
+    position:     absolute;
+    top:          -75px;
+    z-index:      $above;
   }
 
   .boxed {
     @extend .vertical, .middle;
-    background: $layer3;
-    box-shadow: $shadow;
-    border-radius: $edges;
-    padding: 5 * $space;
-    position: relative;
-    z-index: $base;
+    background:     $layer3;
+    box-shadow:     $shadow;
+    border-radius:  $edges;
+    padding:        5 * $space;
+    position:       relative;
+    z-index:        $base;
 
     ul {
-      // background: $layer4;
-      margin-bottom: 0;
-      padding-left: 0;
-      z-index: $above;
-      border-top-left-radius: $edges;
-      border-top-right-radius: $edges;
+      margin-bottom:            0;
+      padding-left:             0;
+      z-index:                  $above;
+      border-top-left-radius:   $edges;
+      border-top-right-radius:  $edges;
 
       li {
-        padding-top: 2 * $space;
-        padding-bottom: 2 * $space;
-        z-index: $above;
-        min-width: 100px;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        margin-right: 2 * $space;
+        padding-top:      2 * $space;
+        padding-bottom:   2 * $space;
+        z-index:          $above;
+        min-width:        100px;
+        text-align:       center;
+        display:          flex;
+        justify-content:  center;
+        align-items:      center;
+        cursor:           pointer;
+        margin-right:     2 * $space;
 
-        transition: $transition;
+        transition:       $transition;
         &:hover {
-          transition: $transition;
-          color: $brandLayer;
+          transition:     $transition;
+          color:          $brandLayer;
         }
 
         &.active {
-          background: $layer4;
-          border-top-left-radius: $edges;
-          border-top-right-radius: $edges;
-          padding: $space !important;
+          background:               $layer4;
+          border-top-left-radius:   $edges;
+          border-top-right-radius:  $edges;
+          padding:                  $space !important;
         }
       }
       
     }
 
     .raised {
-      transition: $transition;
-      background: $layer4;
-      padding: 4 * $space;
-      box-shadow: $shadow;
-      width: 100%;
-      border-radius: $edges;
-      min-height: 50vh;
-      border-radius: $edges;
+      transition:       $transition;
+      background:       $layer4;
+      padding:          4 * $space;
+      box-shadow:       $shadow;
+      width:            100%;
+      border-radius:    $edges;
+      min-height:       50vh;
+      border-radius:    $edges;
       &.first {
-        border-radius: 0 $edges $edges $edges; 
+        border-radius:  0 $edges $edges $edges; 
       }
-
-      // &.first {
-      //   border-radius: 0 $edges $edges $edges;
-      // }
     }
   }
 
@@ -144,38 +140,38 @@ main {
 }
 
 footer {
-  height: 10vh;
-  position: relative;
+  height:         10vh;
+  position:       relative;
 }
 
 // Overwrite bootstrap styling
 .nav-tabs {
-  border-bottom: none;
-  z-index: $above;
+  border-bottom:  none;
+  z-index:        $above;
   .nav-link {
-    padding: 0;
-    border: none;
-    border-top-left-radius: $edges;
-    border-top-right-radius: $edges;
-    cursor: pointer;
-    transition: $transition;
+    padding:                  0;
+    border:                   none;
+    border-top-left-radius:   $edges;
+    border-top-right-radius:  $edges;
+    cursor:                   pointer;
+    transition:               $transition;
 
     &.first {
-      padding-left: 0;
-      padding-right: 0;
+      padding-left:   0;
+      padding-right:  0;
     }
 
     &.active {
-      padding:    $space;
-      background: $layer4;
-      border:     none;
-      color:      $brand;
-      box-shadow: 0 -19px 19px 2px rgba(0, 0, 0, 0.1);
+      padding:        $space;
+      background:     $layer4;
+      border:         none;
+      color:          $brand;
+      box-shadow:     0 -19px 19px 2px rgba(0, 0, 0, 0.1);
     }
 
     &:hover {
-      transition: $transition;
-      color: $layer5;
+      transition:     $transition;
+      color:          $layer5;
     }
     a {
       padding-bottom: 2 * $space;

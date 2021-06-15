@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { sumBy, reduce, filter } = require('lodash');
 const { Schema, model } = require('mongoose');
 const BaseRepository    = require('./repositories/base');
 const baseSchemaOptions = require('./schemas/options');
@@ -19,16 +19,6 @@ const billingSchema = new Schema({
   payments:         [paymentSchema]
 }, { ...baseSchemaOptions });
 
-// TODO think of a way of populating instalment here or in payment schema (currently doing at frontend)
-// billingSchema.post('findOne', function(billing) {
-//   console.log('running post billing found');
-//   billing.payments.forEach((payment) => {
-//     payment.instalment = payment.instalment_id != null
-//       ? null 
-//       : _.find(billing.instalments, (instalment) => instalment.id === payment.instalment_id);
-//   });
-// });
-
 class Billing extends BaseRepository { 
   get is_fully_paid() {
     return this.total_paid >= this.total_amount;
@@ -38,13 +28,18 @@ class Billing extends BaseRepository {
     return this.status === BillingData.PENDING_STATUS;
   }
 
+  get has_unpaid_upfront_instalment() {
+    const upfrontInstalments = filter(this.instalments, instalment => instalment.is_upfront && !instalment.is_paid);
+    return upfrontInstalments != null && upfrontInstalments.length > 0;
+  }
+
   // get installments() {
   //   return this.payments.length;
   // }
 
   // Sum of instalments
   get amount_allocated() {
-    return _.sumBy(this.instalments, 'amount');
+    return sumBy(this.instalments, 'amount');
   }
 
   get amount_unallocated() {
@@ -64,7 +59,7 @@ class Billing extends BaseRepository {
   }
 
   get total_paid() {
-    return _.reduce(this.payments, (total, payment) => {
+    return reduce(this.payments, (total, payment) => {
       total += (! payment.is_failed && ! payment.is_overdue ? payment.amount : 0);
       return total;
     }, 0);

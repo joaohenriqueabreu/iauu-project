@@ -13,14 +13,19 @@ module.exports = class SaveArtistAccountService extends BaseService
     constructor(user) {
       super(user);
 
-      this.id = user.role_id;
+      this.id             = user.role_id;
+      this.artistAccount  = {};
+      this.bankAccount    = {};
+      this.artist         = {};
     }
 
     async save(bankAccountData) {
       this.bankAccount = bankAccountData;
       this.ensureBankAccountIsValid();
 
-      await this.searchArtist();
+      await this.getArtist();
+      this.ensureArtistWasFound();
+      await this.searchArtistAccount();
       this.ensureArtistCanSaveAccount();
 
       this.ensureArtistCanConnectBankAccount()
@@ -36,21 +41,32 @@ module.exports = class SaveArtistAccountService extends BaseService
       return this;
     }
 
-    async searchArtist() {
-      console.log('Searching for artist...');
-      this.artist = await ArtistAccount.findOne({ source_id: this.id });
+    async getArtist() {
+      console.log('Requesting artist...');
+      this.artist = await DataRequestService.getArtist(this.id);
+      return this;
+    }
 
-      // Create artist if not found
-      if (ArtistAccount.notFound(this.artist) || !this.artist instanceof ArtistAccount) {
-        let artistData  = DataRequestService.getArtist(this.id);
-        this.artist     = new ArtistAccount({ source_id: this.id,  ...artistData});
+    ensureArtistWasFound() {
+      if (this.artist == null) {
+        throw new BadRequestException('Artist not found');
+      }
+    }
+
+    async searchArtistAccount() {
+      console.log('Searching artist account...');
+      this.artistAccount = await ArtistAccount.findOne({ source_id: this.id });
+
+      // Create artist account if not found
+      if (ArtistAccount.notFound(this.artistAccount) || !this.artistAccount instanceof ArtistAccount) {        
+        this.artistAccount = new ArtistAccount({ source_id: this.id,  ...this.artist });
       }
 
       return this;
     }
 
     ensureArtistCanSaveAccount() {
-      if (this.artist.email === undefined) {
+      if (this.artist.email == null) {
         throw new BadRequestException('Artist missing required information');
       }
 
@@ -68,19 +84,20 @@ module.exports = class SaveArtistAccountService extends BaseService
         throw new BadRequestException('Unformatted bank account number provided');
       }
 
-      this.bankAccount.number = bankAccountNumberParts[0];
+      this.bankAccount.number       = bankAccountNumberParts[0];
       this.bankAccount.number_digit = bankAccountNumberParts[1];
+      this.artistAccount.document   = this.bankAccount.document;
       return this;
     }
 
     assignArtistBankAccount() {
-      if (this.artist.account === undefined) { this.artist.account = {}; }
-      this.artist.account.bank = this.bankAccount;
+      if (this.artistAccount.account === undefined) { this.artistAccount.account = {}; }
+      this.artistAccount.account.bank = this.bankAccount;
       return this;
     }
 
     async saveArtist() {
-      await this.artist.save();
+      await this.artistAccount.save();
       console.log('Artist saved...');
 
       return this;
@@ -92,7 +109,7 @@ module.exports = class SaveArtistAccountService extends BaseService
 
     // Cannot init from constructor as it requires artist info
     initCreateAccountService() {
-      this.createGatewayAccountSvc = (new GatewayCreateAccountServiceBuilder(this.artist)).getService();
+      this.createGatewayAccountSvc = (new GatewayCreateAccountServiceBuilder(this.artistAccount)).getService();
       return this;
     }
 
@@ -103,7 +120,7 @@ module.exports = class SaveArtistAccountService extends BaseService
 
     assignArtistGatewayAccount() {
       console.log(this.gateway);
-      this.artist.account.gateway = this.gatewayAccount;
+      this.artistAccount.account.gateway = this.gatewayAccount;
       return this;
     }
 
@@ -112,6 +129,6 @@ module.exports = class SaveArtistAccountService extends BaseService
     }
 
     getAccount() {
-      return this.artist.account;
+      return this.artistAccount.account;
     }
 }

@@ -1,7 +1,9 @@
 <template>
   <div>
     <fade-transition :duration="300" mode="out-in">
-      <div v-if="!submitted && !disabled && !processing" key="submitting" class="button" :class="{ disabled, small, noShadow }" @click="submit">
+      <!-- <div v-if="!submitted && !disabled && !processing" key="submitting" class="button" :class="btnClass" -->
+      <div v-if="!submitted && !disabled && !processing" key="submitting" class="button" :class="[{ noShadow, small, disabled }, color]"
+        @click="submit">
         <input ref="submit" type="submit" :disabled="disabled" @click.prevent="submit" />
         <slot></slot>
       </div>
@@ -21,12 +23,18 @@ export default {
     disabled:   { type: Boolean, default: false },
     small:      { type: Boolean, default: false },
     noShadow:   { type: Boolean, default: false },
+    color:      { type: String, default: 'white' },
     processing: { type: Boolean, default: false },
   },
   data() {
     return {
       submitted:  false,
       submitting: false
+    }
+  },
+  computed: {
+    btnClass() {
+      return `${this.disabled ? 'disabled' : ''} ${this.small ? 'small' : ''} ${this.noShadow ? 'no-shadow' : ''} ${this.color}`;
     }
   },
   methods: {
@@ -67,18 +75,32 @@ input {
 
 .button {
   @extend .horizontal, .middle, .center;
-  transition: $transition;
-  cursor: pointer;
-  border-radius: $rounded;
-  padding: 10px;
-  width: 100%;
-  height: 100%;
-  box-shadow: $shadow;
-  background-color: $white;
-  color: black;
-  font-weight: $bold;
-  border: none;
-  outline: none;
+  transition:       $transition;
+  cursor:           pointer;
+  border-radius:    $rounded;
+  padding:          10px;
+  width:            100%;
+  height:           100%;
+  box-shadow:       $shadow;
+  font-weight:      $bold;
+  border:           none;
+  outline:          none;
+  color:            $white;
+
+  &.white {
+    background-color: $white;
+    color:            $layer1;
+  }
+
+  &.brand {
+    background-color: $brandLayer;
+    color:            $layer1;
+  }
+
+  &.green {
+    background-color: $green;
+    color:            $layer1;
+  }
 
   &.noShadow {
     box-shadow: none;

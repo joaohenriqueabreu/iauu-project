@@ -50,23 +50,24 @@ module.exports = class PagarmeCreateBankAccountService extends VendorGatewayCrea
 
   translateAccounts() {
     this.pagarmeAccountData = {
-      bank_code: this.bankInstitutionData.code,
-      agencia: this.artistBankAccount.agency,
-      conta: this.artistBankAccount.number,
-      conta_dv: this.artistBankAccount.number_digit,
-      document_number: DocumentHelper.formatDocument(this.artistBankAccount.document),
-      legal_name: this.artistBankAccount.legal_name,
-      type: PagarmeData.PAGARME_BANK_ACCOUNT_TYPE_CONTA_CORRENTE // TODO only accepting conta corrente for now
+      bank_code:        this.bankInstitutionData.code,
+      agencia:          this.artistBankAccount.agency,
+      conta:            this.artistBankAccount.number,
+      conta_dv:         this.artistBankAccount.number_digit,
+      document_number:  DocumentHelper.formatDocument(this.artistBankAccount.document),
+      legal_name:       this.artistBankAccount.legal_name,
+      // TODO only accepting conta corrente for now
+      type:             PagarmeData.PAGARME_BANK_ACCOUNT_TYPE_CONTA_CORRENTE
     }
-
+    
     return this;
   }
 
   async createPagarmeAccount() {
-    try {
+    try {      
       this.pagarmeAccount = await this.apiClient.bankAccounts.create(this.pagarmeAccountData);
     } catch (error) {
-      throw new ManualPaymentRequiredException('Failed creating user bank account', error.response.errors);
+      throw new ManualPaymentRequiredException('Failed creating user bank account', error.response);
     }
     
     return this;

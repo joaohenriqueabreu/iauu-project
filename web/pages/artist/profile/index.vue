@@ -275,7 +275,10 @@ form {
     left:       0;
     right:      0;
     background: $layer1;
-    padding:    2 * $space;    
+    padding:    2 * $space;   
+    @include desktop() {
+      padding-left: 15vw; // follow side menu 
+    }    
   }
 
   // Overwrite bootstrap styling

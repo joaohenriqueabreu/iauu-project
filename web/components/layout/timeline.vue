@@ -1,7 +1,7 @@
 <template>
   <div class="full-width">
     <div v-if="!$utils.empty(steps)" class="full-width horizontal center middle">
-      <div v-for="(data, step) in steps" :key="step" class="horizontal middle center">
+      <div v-for="(data, step) in steps" :key="step" @click="$emit('clicked', step)" class="horizontal middle center">
         <div class="step" :class="{ completed: isStepCompleted(step), current: isCurrentStep(step) }">
           <icon :icon="stepIcons[step]" @click="goToStep(step)" :title="labels[step]"></icon>
         </div>
@@ -14,12 +14,12 @@
 <script>
 export default {
   props: {
-    steps: { type: Number, default: 0 },
-    completed: { type: Array, default: () => {} },
-    current: { type: Number, default: 0 },
-    icons: { type: Array, default: () => {}},
-    readOnly: { type: Boolean, default: false },
-    labels: { type: Array, default: () => {}}
+    steps:      { type: Number, default: 0 },
+    completed:  { type: Array, default: () => {} },
+    current:    { type: Number, default: 0 },
+    icons:      { type: Array, default: () => {}},
+    readOnly:   { type: Boolean, default: false },
+    labels:     { type: Array, default: () => {}}
   },
   data() {
     return {
@@ -59,18 +59,18 @@ export default {
 }
 .step {
   @include hover();
-  height: 50px;
-  width: 50px;
-  text-align: center;
-  transition: $transition;
-  color: $layer5;
-  font-size: $huge;
-  cursor: pointer;
+  height:         50px;
+  width:          50px;
+  text-align:     center;
+  transition:     $transition;
+  color:          $layer5;
+  font-size:      $huge;
+  cursor:         pointer;
   padding-bottom: $space;
-  border-radius: $rounded;
-  border-color: $layer5;
-  border: solid 4px $layer5;
-  padding: $space;
+  border-radius:  $rounded;
+  border-color:   $layer5;
+  border:         solid 4px $layer5;
+  padding:        $space;
 
   [data-icon] {
     // @include hover();
@@ -87,8 +87,8 @@ export default {
   
   &.completed, &.current {
     @include hover();
-    transition: $transition;
-    color: $brand;
+    transition:   $transition;
+    color:        $brand;
     border-color: $white;
     [data-icon] {
       @include hover();
@@ -99,18 +99,15 @@ export default {
 .progress {
   @include desktop {
     @include hover();
-    transition: $transition;
-    background: $layer5;
-    border-radius: 0;
-    height: 5px;
-    min-width: 100px;
-    // margin-left: 2 * $space;
-    // margin-right: 2 * $space;
+    transition:     $transition;
+    background:     $layer5;
+    border-radius:  0;
+    height:         5px;
+    min-width:      100px;
     &.completed {
       @include hover();
-      transition: $transition;
-      background: $brand;
-      // border-bottom: solid 4px $brand;
+      transition:   $transition;
+      background:   $brand;
     }
   }
 }

@@ -20,14 +20,19 @@
       <form-masked v-model="$v.newBankAccount.document.$model" icon="id-card" placeholder="CPF/CNPJ" mask="document"></form-masked>
       <form-validation :error="$v.newBankAccount.document.$error">Número de documento inválido (formato deve ser CPF ou CNPJ) de acordo com o titular da conta</form-validation>
       <form-input v-model="$v.newBankAccount.legal_name.$model" placeholder="Nome do titular da conta" icon="signature"></form-input>
-      <form-validation :error="$v.newBankAccount.legal_name.$error" class="mb-4">O nome do titular não pode estar vazio (máximo 30 caractéres)</form-validation>
-      <form-button :disabled="$v.newBankAccount.$invalid" @action="saveArtistBankAccount">Salvar dados bancários</form-button>
+      <form-validation :error="$v.newBankAccount.legal_name.$error" class="mb-4">O nome do titular não pode estar vazio (máximo 30 caractéres)</form-validation>      
+      <div class="text-center">
+        <form-checkbox v-model="confirmed" class="mb-4">
+          <h6>Você concorda em receber pagamentos por meio da nossa plataforma?</h6>
+        </form-checkbox>
+      </div>
+      <form-button :disabled="$v.newBankAccount.$invalid" @action="saveArtistBankAccount">Salvar dados bancários</form-button>      
     </div>
     <div v-else class="api">
       <div class="mb-4">
         <div v-if="hasConnectedBankAccount" class="horizontal middle">
           <h4><icon icon="check"></icon></h4>
-          <h6>Contactado com sistema de pagamentos!</h6>
+          <h6>Conectado com sistema de pagamentos!</h6>
         </div>
         <div v-if="!hasConnectedBankAccount || hasFailedConnectingToGateway" class="error">Tivemos um problema ao conectar sua conta ao sistema de pagamentos. Favor entrar em contato</div>
       </div>
@@ -49,6 +54,7 @@ const bankAccountNumber = helpers.regex('bankAccountNumber', /^\d+-\d{1}$/);
 export default {
   data() {
     return {
+      confirmed: false,
       newBankAccount: {
         institution:  '',
         agency:       '',
@@ -67,19 +73,15 @@ export default {
       legal_name:   { required, maxLength: maxLength(30) }
     }
   },
-  async created() {
+  async mounted() {
     await Promise.all([
       this.loadBanks(),
       this.loadAccount()
     ]);
-  },
-  mounted() {
+
     // Initialize artist account if it's the first setup
     if (this.$empty(this.connectedAccount)) {
-      this.connectedAccount = {
-        bank: {},
-        gateway: {}
-      };
+      this.connectedAccount = { bank: {}, gateway: {} };
     }
   },
   computed: {
@@ -98,12 +100,21 @@ export default {
       });
     },
     bankAccountNumberDisplay() {
-      return ! this.$empty(this.connectedAccount.bank) ? `***${this.connectedAccount.bank.number.substr(3,3)}***` : '';
+      if (this.$empty(this.connectedAccount.bank) || this.$empty(this.connectedAccount.bank.number)) {
+        return '';
+      }
+      
+      return `${'*'.repeat(this.connectedAccount.bank.number.length)}${this.connectedAccount.bank.number.slice(-4)}`;
     }
   },
     methods: {
     ...mapActions('billing', ['loadBanks', 'loadAccount', 'saveBankAccount']),  
     async saveArtistBankAccount() {
+      if (!this.confirmed) {
+        this.$toast.error('Por favor revise os termos e confirme que quer receber pagamentos por nossa plataforma, marcando a opção de confirmação');
+        return;
+      }
+
       try {
         await this.saveBankAccount(this.newBankAccount);
         this.$toast.success('Conta bancária conectada com sistema de pagamentos');
@@ -118,41 +129,41 @@ export default {
 
 <style lang="scss" scoped>
 .light-bg {
-  background: $layer5;
-  padding: 4 * $space;
-  border-radius: $edges;
+  background:     $layer5;
+  padding:        4 * $space;
+  border-radius:  $edges;
 }
 
 .api {
-  font-size: $small;
-  color: $layer3;
-  font-weight: $bold;
+  font-size:      $small;
+  color:          $layer3;
+  font-weight:    $bold;
 
   h4, h6 {
-    color: $white;
+    color:        $white;
   }
 
   .connected {
-    height: 100%;
-    border: 2px solid $green;
-    color: $white;
-    border-radius: $edges;
-    padding: $space;
+    height:         100%;
+    border:         2px solid $green;
+    color:          $white;
+    border-radius:  $edges;
+    padding:        $space;
   }
 
   .error {
-    color: $error;
-    border-radius: $edges;
-    padding: 2 * $space;
+    color:          $error;
+    border-radius:  $edges;
+    padding:        2 * $space;
   }
 }
 
 .bank-container {
-  background: $layer2;
-  max-width: 250px;
-  border-radius: $edges;
-  padding: 2 * $space;
-  color: $white;
-  font-size: $large;
+  background:     $layer2;
+  max-width:      250px;
+  border-radius:  $edges;
+  padding:        2 * $space;
+  color:          $white;
+  font-size:      $large;
 }
 </style>

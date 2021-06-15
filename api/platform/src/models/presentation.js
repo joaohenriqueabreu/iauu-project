@@ -36,7 +36,7 @@ const presentationSchema = new Schema({
 
 class Presentation extends BaseRepository {
   get is_rejected()   { return this.status === PresentationData.PRESENTATION_STATUS_REJECTED; }
-  get is_contracted() { return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED; }
+  get is_contracted() { return this.status === PresentationData.PRESENTATION_STATUS_ACCEPTED; }  
   get is_completed()  { return this.status === PresentationData.PRESENTATION_STATUS_COMPLETED; }
   get is_cancelled()  { return this.status === PresentationData.PRESENTATION_STATUS_CANCELLED; }
   get is_paid()       { return this.is_completed && this.billing !== undefined && this.billing.status === BillingData.COMPLETED_STATUS; }
@@ -62,6 +62,10 @@ class Presentation extends BaseRepository {
     const today = moment();
     const date = moment(this.timeslot.start_dt);
     return today.diff(date, 'days') > 0;
+  }
+
+  get is_confirmed()  { 
+    return this.is_completed || (this.was_confirmed_by_contractor && this.was_confirmed_by_artist);
   }
 
   get was_confirmed_by_contractor() {

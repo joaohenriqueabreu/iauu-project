@@ -13,6 +13,9 @@
     <hr />
     <div class="row">
       <div class="col-sm-12">
+        <form-email v-model="email" placeholder="Email"></form-email>
+      </div>
+      <div class="col-sm-12">
         <form-location
           :default="artist.address"
           street
@@ -46,10 +49,11 @@ export default {
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
     ...mapFields('artist', {
-      companyName: 'artist.name',
-      story: 'artist.story',
-      document: 'artist.document',
-      phone: 'artist.phone'
+      companyName:  'artist.name',
+      story:        'artist.story',
+      document:     'artist.document',
+      email:        'artist.email',
+      phone:        'artist.phone'
     })
   },
   created() {

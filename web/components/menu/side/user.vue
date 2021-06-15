@@ -72,14 +72,19 @@ export default {
       }
 
       &.routed {
-        color: $brandLayer;
-        border-left: 5px solid $brandLayer;
-        // padding: 10px 0;
+        color:          $brandLayer;
+        border-left:    5px solid $brandLayer;
+        &:hover {
+          transition:   $transition;
+          color:        $layer5;  
+          border-left:  5px solid $layer5;
+        }
       }
 
       &:hover {
-        transition: $transition;
-        color: $layer4;
+        transition:   $transition;
+        color:        $brandLayer;
+        border-left:  5px solid $brandLayer;
       }
     }
   }

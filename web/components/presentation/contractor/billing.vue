@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="presentation.is_proposal || !$empty(billing)">
+    <div v-if="presentation.is_confirmed || (!$empty(billing) && billing.has_unpaid_upfront_instalment)">
       <div class="row mb-5">
         <div class="col-12 col-md-6 mb-4 mb-md-0">
           <div class="total">
@@ -35,7 +35,9 @@
       <div class="mb-5" v-if="billing.has_amount_to_allocate">
         <hr>
         <h4 class="mb-3 text-center">Escolher forma de pagamento</h4>
-        <form-button no-shadow class="half-width mb-4" @action="openPaymentModal(billing.amount_due)">Pagar saldo em aberto <u class="ml-2">{{ billing.amount_due | currency }}</u></form-button>
+        <form-button no-shadow class="half-width mb-4" @action="openPaymentModal(billing.amount_due)">
+          Pagar saldo em aberto <u class="ml-2">{{ billing.amount_due | currency }}</u>
+        </form-button>
         <hr>
       </div>
       <div class="mb-5">
@@ -62,8 +64,14 @@
     </div>
     <div v-else class="vertical middle center">
       <div class="text-center">
-        <h3 class="mb-2">Total contratado</h3>
-        <h6 class="mb-4">Aguardando confirmação da proposta</h6>
+        <h3 class="mb-2">Total contratado</h3>        
+        <h6 class="mb-2">Aguardando confirmação da apresentação</h6>
+        <div class="mb-4 clickable brand-hover">
+          <small @click="$emit('navigate', 3)">
+            <u>Caso a apresentação ja tenha sido realizada, clique aqui para confirmar</u>
+          </small>
+        </div>
+        
         <h1>{{ presentation.price | currency }}</h1>
       </div>
     </div>
@@ -133,21 +141,21 @@ export default {
 
 <style lang="scss" scoped>
 .failed {
-  color: $error;
-  font-weight: $bold;
+  color:            $error;
+  font-weight:      $bold;
 }
 .total {
-  transition: $transition;
-  border-radius: $edges;
-  padding: 2 * $space;
-  background: $layer5;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  transition:       $transition;
+  border-radius:    $edges;
+  padding:          2 * $space;
+  background:       $layer5;
+  height:           100%;
+  display:          flex;
+  flex-direction:   column;
+  justify-content:  space-between;
 
   h1 {
-    text-align: right;
+    text-align:     right;
   }
 }
 </style>

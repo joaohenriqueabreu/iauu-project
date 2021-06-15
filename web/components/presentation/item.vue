@@ -107,23 +107,23 @@ export default {
   font-size:      $small;
 
   &.proposal {
-    background:   $warning;
-    color:        $layer1;
+    // background:   $warning;
+    color:        $warning;
   }
 
   &.accepted {
-    background:   $brandLayer;
-    color:        $layer1;
+    // background:   $brandLayer;
+    color:        $brandLayer;
   }
 
   &.completed, &.paid {
-    background:   $success;
-    color:        $white;
+    // background:   $success;
+    color:        $green;
   }
 
   &.cancelled, &.rejected {
-    background:   $error;
-    color:        $white;
+    // background:   $error;
+    color:        $error;
   }
 }
 </style>

@@ -1,99 +1,10 @@
-<template>
-  <div>
-    <div v-if="hasPresentations">
-      <div v-if="!$empty(unpaidPresentations)" class="vertical mb-4">
-        <h6 class="mb-4">Pagamentos pendentes</h6>
-        <overlay v-for="(presentation, index) in unpaidPresentations" :key="index">
-          <template v-slot:default>
-            <nuxt-link :to="`presentations/${presentation.id}`" target="_blank">
-              <presentation-item :presentation="presentation"></presentation-item>
-            </nuxt-link>
-          </template>
-          <template v-slot:hover>
-            <nuxt-link :to="`presentations/${presentation.id}`" target="_blank">
-              <div class="full-width" @click="pay(presentation.id)"><h1>Pagar</h1></div>
-            </nuxt-link>
-          </template>
-        </overlay>
-        <hr />
-      </div>
-      <div v-if="!$empty(openPresentations)" class="vertical mb-4">
-        <h6 class="mb-4">Próximas apresentações contratadas</h6>
-        <div v-for="(presentation, index) in openPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-item :presentation="presentation"></presentation-item>
-        </div>
-        <hr />
-      </div>
-      <div v-if="!$empty(pendingConfirmPresentations)" class="vertical mb-4">
-        <h6 class="mb-4">Apresentações realizadas (aguardando confirmação)</h6>
-        <div v-for="(presentation, index) in pendingConfirmPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-item :presentation="presentation"></presentation-item>
-        </div>
-        <hr />
-      </div>
-      <div v-if="!$empty(completedPresentations)" class="vertical mb-4">
-        <h6 class="mb-4">Apresentações concluídas</h6>
-        <div v-for="(presentation, index) in completedPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-item :presentation="presentation"></presentation-item>
-        </div>
-        <hr />
-      </div>
-      <div v-if="!$empty(cancelledPresentations)" class="vertical mb-4">
-        <h6 class="mb-4">Apresentações canceladas</h6>
-        <div v-for="(presentation, index) in cancelledPresentations" :key="index" @click="open(presentation.id)">
-          <presentation-item :presentation="presentation"></presentation-item>
-        </div>
-      </div>
-      <div v-if="presentations.length === 0" class="mb-4">
-        Nenhuma apresentação confirmada
-        <nuxt-link to="/search">Encontre um artista para seu evento e envie uma proposta</nuxt-link>
-      </div>
-    </div>
-    <div v-else>
-      <h5>Nenhuma apresentação contratada</h5>
-    </div>
-  </div>
-</template>
-
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
-import PresentationItem from '@/components/presentation/item';
+import PresentationList from '@/components/presentation/list';
+
 export default {
-  components: {
-    PresentationItem
-  },
-  async asyncData({ store, app }) {
-    await store.dispatch('presentation/loadPresentations');
-  },
+  extends: PresentationList,
   computed: {
-    ...mapGetters('presentation', [
-      'unpaidPresentations',
-      'openPresentations',
-      'pendingConfirmPresentations',
-      'completedPresentations',
-      'cancelledPresentations'
-    ]),
-    ...mapState({ presentations: (state) => state.presentation.presentations }),
-    ...mapState({ presentation: (state) => state.presentation.presentation }),
-    hasPresentations() {
-      return !this.$empty(this.unpaidPresentations) || 
-        !this.$empty(this.openPresentations) || 
-        !this.$empty(this.pendingConfirmPresentations) || 
-        !this.$empty(this.completedPresentations) || 
-        !this.$empty(this.cancelledPresentations);
-    }
-  },
-  methods: {
-    ...mapActions('presentation', ['loadPresentation', 'loadPresentations']),
-    async open(id) {
-      const route = this.$router.resolve({path: `/contractor/presentations/${id}`});
-      window.open(route.href, '_blank');
-    },
-    async handleConfirmedPresentaion() {
-      await this.loadPresentations();
-    },
+    redirectRoute() { return 'contractor/presentations'; }
   }
 }
 </script>
-
-<style lang="scss" scoped></style>

@@ -1,6 +1,6 @@
 <template>
   <div v-if="!$empty(presentation)">
-    <tabs :items="presentationTabComponents" :default-tab="presentationStatusIndex">
+    <tabs ref="tabs" :items="presentationTabComponents" :default-tab="presentationStatusIndex">
       <div class="mb-4 position-relative">
         <presentation-item simple show-status :presentation="presentation" class="mb-5"></presentation-item>
         <timeline
@@ -9,7 +9,8 @@
           :completed="presentationStatusIndexes" 
           :current="presentationStatusIndex" 
           :icons="presentationIcons"
-          :labels="presentationLabels">
+          :labels="presentationLabels"
+          @clicked="navigateToTab">
         </timeline>        
       </div>
     </tabs>    
@@ -84,7 +85,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions('presentation', ['loadPresentation'])
+    ...mapActions('presentation', ['loadPresentation']),
+    navigateToTab(index) {
+      this.$refs.tabs.navigateToTab(index);
+    }
   }
 }
 </script>

@@ -2,7 +2,8 @@ $brand: rgb(250, 250, 240);
 $brand2: rgb(200, 200, 100);
 
 $white: white;
-$green: rgb(50, 255, 50);
+// $green: rgb(119, 221, 119);
+$green: rgb(129, 182, 34);
 $success: rgb(50, 255, 50);
 $info: blue;
 $error: red;
@@ -29,7 +30,8 @@ $presentationTimeslot: rgb(100, 200, 100);
 $colors: (
   "white":    $white,
   "brand":    $brandLayer,
-  "success":  $success, 
+  "success":  $success,
+  "green":    $green,
   "info":     $info, 
   "error":    $error, 
   "warning":  $warning, 

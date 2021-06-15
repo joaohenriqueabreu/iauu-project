@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="presentation.is_proposal || !$empty(billing)">
+    <div v-if="!$empty(billing)">
       <div class="row mb-5">
         <div class="col-12 col-md-6 mb-4 mb-md-0">
           <div class="total">
