@@ -32,7 +32,7 @@
               <presentation-config v-show="presentationsTab" ref="presentations"></presentation-config>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-users v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-users>
+              <artist-members v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-members>
             </fade-transition>
             <fade-transition mode="out-in">
               <artist-info v-if="infoTab" ref="info"></artist-info>
@@ -54,6 +54,7 @@
       </main>
       <footer v-if="!bankAccountTab">
         <div class="half-width">
+          <h6 class="hide-mobile text-center mb-3">Clique aqui para salvar suas alterações no perfil</h6>
           <form-button @action="saveProfile">Salvar</form-button>
         </div>
       </footer>
@@ -67,7 +68,7 @@ import { mapActions, mapState, mapMutations } from 'vuex';
 import ProfileStats                           from '@/components/artist/profile/stats';
 import ArtistInfo                             from '@/components/artist/profile/info';
 import PresentationConfig                     from '@/components/artist/profile/presentationsConfig';
-import ArtistUsers                            from '@/components/artist/profile/users';
+import ArtistMembers                          from '@/components/artist/profile/members';
 import SocialNetworks                         from '@/components/artist/profile/social';
 import ArtistCategories                       from '@/components/artist/profile/categories';
 import PresentationTypes                      from '@/components/artist/profile/presentationTypes';
@@ -77,7 +78,7 @@ export default {
     ProfileStats,
     PresentationConfig,
     ArtistInfo,
-    ArtistUsers,
+    ArtistMembers,
     SocialNetworks,
     ArtistCategories,
     PresentationTypes,

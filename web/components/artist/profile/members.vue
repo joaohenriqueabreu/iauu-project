@@ -9,19 +9,20 @@
     </div>
     <div>
       <h5 class="mb-4" v-if="!$empty(artist.name)">Integrantes de {{ artist.name }}</h5>
-      <table class="full-width">
+      <table class="full-width" v-if="!$empty(artist.members)">
         <thead>
           <tr>
             <td></td>
             <th>Nome</th>
             <th>Email</th>
+            <th>Administrador</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user,index) in users" :key="index">
-            <td class="py-3">
-              <avatar :src="user.photo" :username="user.name"></avatar>
+          <tr v-for="(user, index) in members" :key="index">
+            <td v-if="!$empty(user)" class="py-3">
+              <!-- <avatar :src="user.photo" :username="user.name"></avatar> -->
             </td>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
@@ -29,6 +30,9 @@
           </tr>
         </tbody>
       </table>
+      <div v-else>
+        <h6>Nenhum membro cadastrado</h6>
+      </div>
     </div>
   </div>
 </template>
@@ -40,8 +44,8 @@ export default {
     roleId: { type: String, default: '' }
   },
   computed: {
-    ...mapState({ users: (state) => state.artist.artist.users}),
-    ...mapState({ artist: (state) => state.artist.artist }),
+    ...mapState({ members: (state) => state.artist.artist.members}),
+    ...mapState({ artist:  (state) => state.artist.artist }),
     artistInviteLink() {
       const url = window.location
       return url.protocol + '//' + url.host + '/register?artist=' + this.roleId

@@ -282,7 +282,7 @@ describe('Auth testing', function () {
       const artistUser = await User.findById(user.id).populate({ path: 'artist', populate: { path: 'users' }});
       artistUser.artist.should.be.instanceof(Artist);
       artistUser.status.should.be.equal('active');
-      artistUser.artist.users[0].id.should.be.equal(user.id);
+      artistUser.artist.members[0].id.should.be.equal(user.id);
     });
 
     it('should save user with artist', async function () {

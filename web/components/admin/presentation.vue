@@ -88,10 +88,10 @@
     </template>
     <template v-if="!$empty(presentation)" v-slot:footer>
       <div class="horizontal center middle full-height">
-        <form-button class="mr-4" @action="handleLoginAs(presentation.contractor.users[0].id)"
+        <form-button class="mr-4" @action="handleLoginAs(presentation.contractor.members[0].id)"
           >Fazer login como {{ presentation.contractor.name }}</form-button
         >
-        <form-button @action="handleLoginAs(presentation.artist.users[0].id)"
+        <form-button @action="handleLoginAs(presentation.artist.members[0].id)"
           >Fazer login como {{ presentation.artist.name }}</form-button
         >
       </div>

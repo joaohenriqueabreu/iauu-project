@@ -5,7 +5,7 @@ const baseSchemaOptions = require('./schemas/options');
 const addressSchema     = require('./schemas/address').schema;
 
 const contractorSchema = new Schema({
-  users:    [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  members:  [{ type: Schema.Types.ObjectId, ref: 'User' }],
   name:     { type: String },
   photo:    { type: String },
   phone:    { type: String },
@@ -22,7 +22,7 @@ class Contractor extends BaseRepository {
   }
 
   get manager() {
-    return this.users[0];
+    return this.members[0];
   }
 
   get company_phone() {

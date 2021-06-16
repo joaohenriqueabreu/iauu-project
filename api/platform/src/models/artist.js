@@ -10,7 +10,7 @@ const productsSchema    = require('./schemas/product').schema;
 const timeslotSchema    = require('./schemas/timeslot').schema;
 
 const artistSchema = new Schema({
-  users : [{
+  members: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
@@ -52,7 +52,7 @@ const artistSchema = new Schema({
 
   products: [productsSchema],
   schedule: [timeslotSchema],
-  social: [String],
+  social:   [String],
   stats: {
     followers:      { type: Number, default: 0 },
     presentations:  { type: Number, default: 0 },
@@ -74,7 +74,7 @@ class Artist extends BaseRepository {
   }
 
   get manager() {
-    return this.users[0];
+    return this.members[0];
   }
 
   get product_items() {

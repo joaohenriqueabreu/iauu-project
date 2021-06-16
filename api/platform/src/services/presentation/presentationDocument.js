@@ -26,8 +26,11 @@ module.exports = class PresentationDocumentService extends PresentationService
       this.ensurePresentationWasFound()
         .editDocument(document);  
 
-      await this.savePresentation();      
-      this.emitDocSentForApprovalEvent(document);
+      await this.savePresentation();  
+      if (document.requires_approval && !document.is_approved) {    
+        this.emitDocSentForApprovalEvent(document);
+      }
+
       return this;
     }
 
@@ -81,23 +84,23 @@ module.exports = class PresentationDocumentService extends PresentationService
       return this;
     }
 
-    // TODO implement
-    emitDocSentForApprovalEvent(document) {
-      // if (! document.requires_approval || document.is_approved) {
-      //   return this;
-      // }
+    async emitDocSentForApprovalEvent(document) {
+      const otherParty = await this.getDocTargetUser(document)
 
-      // const otherPartyId = document.uploaded_by === 'artist' 
-      //   ? this.presentation.contractor_id 
-      //   : this.presentation.artist_id;
-      
-      // const otherPartyRole = document.uploaded_by === 'artist' 
-      //   ? 'contractor'
-      //   : 'artist';
+      this.emitEvent(EVENTS.DOCUMENT_SENT_FOR_APPROVAL, {
+        presentation: { id: this.presentation.id, name: this.presentation.title },
+        user:         { name: otherParty.name }
+      })
+    }
 
-      // this.emitEvent(EVENTS.DOCUMENT_SENT_FOR_APPROVAL, {
-      //   presentation: { id: this.presentation.id, name: this.presentation.title },
-      //   user:         { id: otherPartyId, role: otherPartyRole }
-      // })
+    async getDocTargetUser(document) {
+      const otherParty = document.uploaded_by === 'artist' 
+        ? { id: this.presentation.contractor_id, enpoint: 'contractor' }
+        : { id: this.presentation.artist_id, enpoint: 'artist' }
+
+      otherParty = await this.requestEndpointSvc.get(otherParty.endpoint, id);
+      console.log(otherParty)
+
+      return otherParty;
     }
 }

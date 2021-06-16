@@ -61,7 +61,7 @@ module.exports = class PagarmeTransactionFactory extends BaseFactory {
       card_pin_mode: null,
       card_magstripe_fallback: false,
       cvm_pin: false,
-      postback_url: 'https://app.test.iauu.com.br/api/payments/ihypjjraaqoti6y1/status/update',
+      postback_url: 'https://test.iauu.com.br/api/payments/ihypjjraaqoti6y1/status/update',
       
       capture_method: 'ecommerce',
       antifraud_score: null,

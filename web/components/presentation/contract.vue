@@ -28,6 +28,7 @@
         </div>        
       </div>
     </div>
+    <confirm-dialog ref="docToApprove" yes-no :message="`O documento deve ser aprovado pelo ${otherPartyLabel}?`"></confirm-dialog>
   </div>
 </template>
 
