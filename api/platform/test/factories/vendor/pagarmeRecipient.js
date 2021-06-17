@@ -1,4 +1,5 @@
 const BaseFactory = require('../base');
+const config      = require('iauu/env');
 
 module.exports = class PagarmeTransactionFactory extends BaseFactory {
   make() {
@@ -34,7 +35,7 @@ module.exports = class PagarmeTransactionFactory extends BaseFactory {
       },
       status: 'active',
       status_reason: null,
-      postback_url: 'https://test.iauu.com.br/api/artists/60534aa8a17e3a4a0c2bb144/recipient/status/update',
+      postback_url: `${config.url.api}/artists/60534aa8a17e3a4a0c2bb144/recipient/status/update`,
       register_information: {
         type: 'individual',
         document_number: '26268738888',

@@ -6,25 +6,25 @@ const BaseFactory = require('../base');
 module.exports = class PagarmeTransactionFactory extends BaseFactory {
   make() {
     return {
-      object: 'transaction',
-      status: 'processing',
-      payment_method: 'credit_card',
-      date_created: moment(faker.date.recent()).toISOString(),
-      date_updated: moment(faker.date.recent()).toISOString(),
-      refuse_reason: null,
-      status_reason: 'acquirer',
+      object:                 'transaction',
+      status:                 'processing',
+      payment_method:         'credit_card',
+      date_created:           moment(faker.date.recent()).toISOString(),
+      date_updated:           moment(faker.date.recent()).toISOString(),
+      refuse_reason:          null,
+      status_reason:          'acquirer',
       acquirer_response_code: null,
-      acquirer_name: null,
-      acquirer_id: null,
-      authorization_code: null,
-      split_rules: null,
-      antifraud_metadata: {},
-      amount: 0,
-      authorized_amount: 0,
-      paid_amount: 0,
-      refunded_amount: 0,
-      installments: 1,
-      cost: 0
+      acquirer_name:          null,
+      acquirer_id:            null,
+      authorization_code:     null,
+      split_rules:            null,
+      antifraud_metadata:     {},
+      amount:                 0,
+      authorized_amount:      0,
+      paid_amount:            0,
+      refunded_amount:        0,
+      installments:           1,
+      cost:                   0
     };
   }
 }
