@@ -124,7 +124,7 @@ export default {
     async confirm() {
       await this.confirmPresentation(this.presentation.id)
       this.$toast.success(
-        'Obrigado por confirmar a realização da apresentação. Iniciaremos agora o faturamento da apresentação e você deverá receber seu pagamento em alguns dias.'
+        'Obrigado por confirmar a realização. Iniciaremos agora o faturamento da apresentação e você deverá receber seu pagamento em alguns dias.'
       )
       this.closeModal()
       this.$emit('confirmed')

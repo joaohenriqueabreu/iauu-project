@@ -1,18 +1,19 @@
 'use strict';
 
-const BaseController          = require('./base');
-const RegisterUserService     = require('../services/auth/registerUser');
-const LoginUserService        = require('../services/auth/loginUser');
-const ValidateUserService     = require('../services/auth/validateUser');
-const VerifyUserService       = require('../services/auth/verifyUser');
-const ResetPasswordService    = require('../services/auth/resetPassword');
-const FacebookLoginService    = require('../services/auth/facebookLogin');
-const GoogleLoginService      = require('../services/auth/googleLogin');
-const AssignRoleService       = require('../services/auth/assignRole');
-const RenewAuthService        = require('../services/auth/renewAuth');
-const UserProfileService      = require('../services/auth/userProfile');
-const GenerateTokenService    = require('../services/auth/generateToken');
-const SaveUserProfileService  = require('../services/auth/saveProfile');
+const BaseController              = require('./base');
+const RegisterUserService         = require('../services/auth/registerUser');
+const LoginUserService            = require('../services/auth/loginUser');
+const ValidateUserService         = require('../services/auth/validateUser');
+const VerifyUserService           = require('../services/auth/verifyUser');
+const ResetPasswordService        = require('../services/auth/resetPassword');
+const FacebookLoginService        = require('../services/auth/facebookLogin');
+const GoogleLoginService          = require('../services/auth/googleLogin');
+const AssignArtistRoleService     = require('../services/auth/assignArtist');
+const AssignContractorRoleService = require('../services/auth/assignContractor');
+const RenewAuthService            = require('../services/auth/renewAuth');
+const UserProfileService          = require('../services/auth/userProfile');
+const GenerateTokenService        = require('../services/auth/generateToken');
+const SaveUserProfileService      = require('../services/auth/saveProfile');
 
 class AuthController extends BaseController {
   async register(req, res, next) {
@@ -86,14 +87,19 @@ class AuthController extends BaseController {
         .catch((error) => next(error));
   }
 
-  assignRole(req, res, next) {
+  async assignRole(req, res, next) {
     console.log('Assigning user role...');
-    const { role } = req.data;
-    const assignRoleService = new AssignRoleService(req.user, role);
+    const { role } = req.data;    
+    const assignRoleService = role === 'artist' 
+      ? new AssignArtistRoleService()
+      : new AssignContractorRoleService();
 
-    assignRoleService.assign()
-      .then(() => res.status(200).json(assignRoleService.getToken()))
-      .catch((error) => next(error));
+    try {
+      await assignRoleService.assign(req.user.id);
+      res.status(200).json(assignRoleService.getToken());
+    } catch (error) {
+      next(error);
+    }
   }
 
   authorizeFromVerification(req, res, next) {

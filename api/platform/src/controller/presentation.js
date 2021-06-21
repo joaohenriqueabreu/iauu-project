@@ -57,37 +57,15 @@ class PresentationController extends BaseController {
     }
   }
 
-  // async createPresentation(req, res, next) {
-  //   console.log('Creating presentation from proposal...');
-  //   const createPresentationSvc = new CreatePresentationService();
-  //   try {
-  //     await createPresentationSvc.create(req.data.proposal);
-  //     const newPresentation = createPresentationSvc.getPresentation();
-  //   } catch (error) {
-  //     next(error);
-  //   }
-
-  //   // Send separate request to create billing for billing service
-  //   try {
-  //     const billing = await requestEndpointSvc.post('billing', { 
-  //       presentation: newPresentation.id,
-  //       artist:       newPresentation.artist.id,
-  //       contractor:   newPresentation.contractor.id
-  //     });
-  //   } catch (error) {
-  //     // TODO we should probably rollback presentation in case billing fails creating
-  //     next(error);
-  //   }
-
-  //   res.status(200).json(newPresentation);
-  // }
-
-  completePresentation(req, res, next) {
+  async completePresentation(req, res, next) {    
     console.log('Confirming presentation...');
     const completePresentationService = new CompletePresentationService(req.user);
-    completePresentationService.complete(req.data.id)
-      .then(() => { res.status(200).json(completePresentationService.getPresentation()) })
-      .catch((error) => next(error));
+    try {
+      await completePresentationService.complete(req.data.id);
+      res.status(200).json(completePresentationService.getPresentation())
+    } catch (error) {
+      next(error);
+    }
   }
 
   cancelPresentation(req, res, next) {

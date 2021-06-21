@@ -13,28 +13,30 @@
 <script>
 export default {
   async asyncData({ app, route }) {
-    const { data } = await app.$axios.post('role', { role: route.params.role })
-    app.$auth.setUserToken(data)
+    const { data } = await app.$axios.post('role', { role: route.params.role });
+    app.$auth.setUserToken(data);
   },
   mounted() {
-    this.$refs.assign.open()
-    setTimeout(this.afterAssign(), 3000)
+    this.$refs.assign.open();
+    setTimeout(this.afterAssign(), 3000);
   },
   methods: {
-    afterAssign() {
-      this.$toast.success(`Tudo pronto! Bem vindo a ${this.$config.companyName}`)
+    async afterAssign() {
+      await this.$auth.fetchUser();
+
+      this.$toast.success(`Tudo pronto! Bem vindo a ${this.$config.companyName}`);
 
       if (this.$auth.hasScope('artist')) {
-        this.$router.push('/artist/schedule')
-        return
+        this.$router.push('/artist/schedule');
+        return;
       }
 
       if (this.$auth.hasScope('contractor')) {
-        this.$router.push('/search')
-        return
+        this.$router.push('/search');
+        return;
       }
 
-      throw new Error('Something is wrong')
+      throw new Error('Something is wrong');
     }
   }
 }

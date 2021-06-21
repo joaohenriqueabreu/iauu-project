@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { EVENTS }          = require('iauu/events');
 const PresentationService = require('./base');
 const BadRequestException = require('../../exception/bad');
 
@@ -18,7 +18,7 @@ module.exports = class CompletePresentationService extends PresentationService
         .populatePresentation();
 
       await this.savePresentation();
-      this.sendMarkedAsCompleteMail();
+      this.sendPresentationCompleteEvent();
       return this;
     }
 
@@ -57,16 +57,8 @@ module.exports = class CompletePresentationService extends PresentationService
       return this;
     }
 
-    // TODO implement send mail fns
-    // sendArtistMakedCompleteMail() {
-    //   return this;
-    // }
-
-    // sendContractorMarkedCompleteMail() {
-    //   return this;
-    // }
-
-    sendMarkedAsCompleteMail() {
+    async sendPresentationCompleteEvent() {
+      super.emitEvent(EVENTS.PRESENTATION_COMPLETE, this.presentation);
       return this;
     }
 }

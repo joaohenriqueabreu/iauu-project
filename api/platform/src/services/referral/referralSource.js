@@ -1,8 +1,8 @@
-const BaseService = require('../base')
-const { User } = require('../../models')
-const BadRequestException = require('../../exception/bad')
+const BaseService             = require('../base');
+const { BadRequestException } = require('iauu/exception');
+const { User }                = require('../../models');
 
-module.exports = class ReferralService extends BaseService
+module.exports = class RegisterReferralSourceService extends BaseService
 {
   constructor(user, token) {
     super()

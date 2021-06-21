@@ -94,6 +94,10 @@ class User extends BaseRepository {
   get is_artist() {
     this.role === 'artist';
   }
+
+  get was_referred_by_someone() {
+    return this.referral != null && this.referral.from != null;
+  }
 }
 
 userSchema.index({ email: 'text', name: 'text' });

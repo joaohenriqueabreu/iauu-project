@@ -87,7 +87,7 @@ module.exports = class PresentationDocumentService extends PresentationService
     async emitDocSentForApprovalEvent(document) {
       const otherParty = await this.getDocTargetUser(document)
 
-      this.emitEvent(EVENTS.DOCUMENT_SENT_FOR_APPROVAL, {
+      this.emitEvent(EVENTS.DOCUMENT_SENT_FOR_APPROVAL_EVENT, {
         presentation: { id: this.presentation.id, name: this.presentation.title },
         user:         { name: otherParty.name }
       })

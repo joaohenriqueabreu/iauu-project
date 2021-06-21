@@ -62,9 +62,10 @@ const artistSchema = new Schema({
       amount: { type: Number, default: 0 }
     }
   },
-  address: addressSchema,
-  rating: { type: Number },
-  has_closed_first_presentation: { type: Boolean, default: false }
+  referral_source_id:             { type: String, default: null },
+  address:                        addressSchema,
+  rating:                         { type: Number },
+  has_closed_first_presentation:  { type: Boolean, default: false }
 }, { ...baseSchemaOptions });
 
 class Artist extends BaseRepository {
@@ -104,6 +105,8 @@ class Artist extends BaseRepository {
     if (this.manager != null && this.manager.address != null) { return this.manager.address.display; }
     return '';
   }
+
+  get was_referred_by_someone() { return this.referral_source_id != null; }
 }
 
 artistSchema.loadClass(Artist);

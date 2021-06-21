@@ -2,9 +2,12 @@
   <div>
     <div class="share mb-4 horizontal center" @click="share">
       <h4><icon icon="share-alt" class="mr-4"></icon></h4>
-      <h4><span>Compartilhe o link abaixo e receba {{ 5 }}% do valor dos shows realizados</span></h4>
+      <h4>
+        <span>Compartilhe o link abaixo e receba {{ 5 }}% do valor dos shows realizados</span>
+      </h4>
     </div>
     <div class="link mb-5" @click="share">
+      <icon icon="copy"></icon>
       <span id="user-referral-link" ref="link">{{ userReferralLink }}</span>
     </div>
     <div class="vertical center middle full-height">

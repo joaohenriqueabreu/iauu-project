@@ -12,6 +12,7 @@ const contractorSchema = new Schema({
   email:    { type: String },
   document: { type: String },
   address:  { type: addressSchema},
+  referral_source_id: { type: String },
 }, { ...baseSchemaOptions });
 
 class Contractor extends BaseRepository {
@@ -48,6 +49,8 @@ class Contractor extends BaseRepository {
     if (this.manager != null) { return this.manager.address.display; }
     return '';
   }
+
+  get was_referred_by_someone() { return this.referral_source_id != null; }
 }
 
 contractorSchema.loadClass(Contractor);

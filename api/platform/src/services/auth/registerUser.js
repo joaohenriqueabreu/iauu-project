@@ -1,8 +1,8 @@
 const { AuthService, AssignRoleService, GenerateTokenService } = require('.');
-const ReferralService       = require('../referral/referral');
-const BadRequestException   = require('../../exception/bad');
-const { User }              = require('../../models');
-const { EVENTS }            = require('iauu/events');
+const RegisterReferralSourceService = require('../referral/referralSource');
+const { BadRequestException }       = require('iauu/exception');
+const { EVENTS }                    = require('iauu/events');
+const { User }                      = require('../../models');
 
 module.exports = class RegisterUserService extends AuthService {
   constructor(name, email, password) {
@@ -47,7 +47,7 @@ module.exports = class RegisterUserService extends AuthService {
     // No referral, move on
     if (referral_token == null) { return; }
 
-    const referralSvc = new ReferralService(this.user, referral_token);
+    const referralSvc = new RegisterReferralSourceService(this.user, referral_token);
     try {
       await referralSvc.refer();
     } catch (error) {

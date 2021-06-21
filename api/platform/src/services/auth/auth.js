@@ -1,8 +1,9 @@
-const config = require('iauu/env');
-const bcrypt = require('bcryptjs');
-const BaseService = require('../base');
-const { User, Artist, Contractor } = require('../../models');
-const GenerateTokenService = require('./generateToken');
+const config                  = require('iauu/env');
+const bcrypt                  = require('bcryptjs');
+const BaseService             = require('../base');
+const { User }                = require('../../models');
+const { BadRequestException } = require('iauu/exception');
+const GenerateTokenService    = require('./generateToken');
 
 module.exports = class AuthService extends BaseService {
   constructor() {
@@ -48,7 +49,7 @@ module.exports = class AuthService extends BaseService {
   }
 
   generateVerificationToken() {
-    this.user.verification.token = GenerateTokenService.generateSimple();
+    this.user.verification.token = GenerateTokenService.generateSimple(64);
     return this;
   }
 
@@ -57,7 +58,7 @@ module.exports = class AuthService extends BaseService {
   }
 
   generateReferralToken() {
-    this.user.referral.token = GenerateTokenService.generateSimple();
+    this.user.referral.token = GenerateTokenService.generateSimple(32);
     return this;
   }
 

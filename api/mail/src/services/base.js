@@ -5,7 +5,7 @@ const mustache      = require('mustache');
 const { promisify } = require('util');
 const path          = require('path');
 const config        = require('iauu/env');
-const { InterfaceNotImplementedException, Exception } = require('iauu/exception');
+const { InterfaceOrAbstractNotImplementedException, Exception } = require('iauu/exception');
 
 const readFileAsync = promisify(fs.readFile);
 
@@ -31,7 +31,7 @@ module.exports = class SendMailService extends BaseService {
     }
 
     setupMail(data) {
-      throw new InterfaceNotImplementedException('Must implement setupMail interface');
+      throw new InterfaceOrAbstractNotImplementedException('Must implement setupMail interface');
     }
 
     ensureMailIsSetup() {

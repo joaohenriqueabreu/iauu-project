@@ -5,7 +5,8 @@ const UnauthorizedException                 = require('./unauthorized');
 const InvalidPaymentMethodProvidedException = require('./invalidPaymentMethod');
 const FailedAPIConnectionException          = require('./apiConnection');
 const FailedChargingPaymentMethodException  = require('./chargePaymentMethod');
-const InterfaceNotImplementedException      = require('./interfaceNotImplemented');
+const CannotConstructAbstractClassException = require('./constructAbstractClass');
+const InterfaceOrAbstractNotImplementedException      = require('./interfaceNotImplemented');
 const EventBrokerException                  = require('./eventBrokerException');
 const ModelValidationException              = require('./modelValidation');
 
@@ -15,10 +16,11 @@ module.exports = {
   BadRequestException,
   ManualPaymentRequiredException,
   UnauthorizedException,
+  CannotConstructAbstractClassException,
   InvalidPaymentMethodProvidedException,
   FailedAPIConnectionException,
   FailedChargingPaymentMethodException,
-  InterfaceNotImplementedException,
+  InterfaceOrAbstractNotImplementedException,
   EventBrokerException,
   ModelValidationException
 }

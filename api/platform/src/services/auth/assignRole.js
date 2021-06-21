@@ -1,66 +1,38 @@
 const AuthService                   = require('./auth');
 const { User, Artist, Contractor }  = require('../../models');
-const BadRequestException           = require('iauu/exception/bad');
+const { 
+  BadRequestException,
+  CannotConstructAbstractClassException,
+  InterfaceOrAbstractNotImplementedException,
+} = require('iauu/exception');
 const { EVENTS }                    = require('iauu/events');
 
 module.exports = class AssignRoleService extends AuthService {
-  constructor(data, role) {
+  constructor(id) {
     super();
-    
-    this.id = data.id;
-    this.role = role;
+    if (this.constructor === AssignRoleService) { throw new CannotConstructAbstractClassException(); }
+
     this.roleInstance = {};
   }
 
-  async assign() {
+  async assign(id) {
+    this.id = id;
     await this.searchUserById(this.id);
     this.ensureUserWasFound()
       .ensureUserIsNotYetAssigned()
       .createRole();
-    await this.saveRole();
 
-    if (this.role === 'artist') { await this.linkArtist(this.roleInstance.id); }
-    if (this.role === 'contractor') { await this.linkContractor(this.roleInstance.id); }
+    await this.saveRole();
+    await this.link(this.roleInstance.id);
 
     this.generateFirstStepsNotifications();
     return this;
   }
 
-  async linkArtist(artist_id) {
-    console.log('Linking artist to user...');
-    await this.searchUserById(this.id);
-    this.ensureUserWasFound()
-      .ensureUserIsNotYetAssigned();
-    await this.searchArtistById(artist_id);
-    this.ensureArtistWasFound()
-      .assignUserToRole()
-      .assignRoleToUser()
-      .updateUserStatus();
-    await this.generateShareUrls();
-    await this.saveRole();
-    await this.saveUser();
-    await this.searchUserById(this.user.id);
-    await this.generateAccessToken();
-    return this;
-  }
-
-  async linkContractor(contractor_id) {
-    console.log('Linking contractor to user...');
-    await this.searchUserById(this.id);
-    this.ensureUserWasFound()
-      .ensureUserIsNotYetAssigned();
-    await this.searchContractorById(contractor_id);
-    this.ensureContractorWasFound()
-      .assignUserToRole()
-      .assignRoleToUser()
-      .defaultRoleProfile()
-      .updateUserStatus();
-    await this.saveRole();
-    await this.saveUser();
-    await this.searchUserById(this.user.id);
-    await this.generateAccessToken();
-    return this;
-  }
+  // Abstract methods
+  async link()        { throw new InterfaceOrAbstractNotImplementedException(); }
+  async createRole()  { throw new InterfaceOrAbstractNotImplementedException(); }
+  assignRoleToUser()  { throw new InterfaceOrAbstractNotImplementedException(); }
 
   ensureUserIsNotYetAssigned() {
     if (['contractor', 'artist'].includes(this.user.role)) {
@@ -70,81 +42,9 @@ module.exports = class AssignRoleService extends AuthService {
     return this;
   }
 
-  createRole() {
-    this.user.role = this.role;
-
-    if (this.role === 'artist') {
-      this.createArtist();
-      return this;
-    }
-
-    if (this.role === 'contractor') {
-      this.createContractor();
-      return this;
-    }    
-
-    throw new Error('Invalid role provided...');
-  }
-
-  createArtist() {
-    this.roleInstance = new Artist();
-    return this;
-  }
-
-  createContractor() {
-    this.roleInstance = new Contractor();
-    return this;
-  }
-
-  async searchArtistById(id) {
-    this.user.role = 'artist';
-    this.roleInstance = await Artist.findById(id).populate('users');
-    return this;
-  }
-
-  async searchContractorById(id) {
-    this.user.role = 'contractor';
-    this.roleInstance = await Contractor.findById(id).populate('users');
-    return this;
-  }
-
-  ensureArtistWasFound() {
-    if (Artist.notFound(this.roleInstance) || !this.roleInstance instanceof Artist) {
-      throw new BadRequestException('Artista não reconhecido');
-    }
-
-    console.log('Artist found...');
-    return this;
-  }
-
-  ensureContractorWasFound() {
-    if (Contractor.notFound(this.roleInstance) || !this.roleInstance instanceof Contractor) {
-      throw new BadRequestException('Organizador de eventos não reconhecido');
-    }
-
-    console.log('Contractor found...');
-    return this;
-  }
-
   async saveRole() {
     await this.roleInstance.save();
     return this;
-  }
-
-  assignRoleToUser() {
-    if (this.role === 'artist') {
-      console.log('Assigning user as artist...');
-      this.user.artist = this.roleInstance.id;
-      return this;
-    }
-
-    if (this.role === 'contractor') {
-      console.log('Assigning user as contractor...');
-      this.user.contractor = this.roleInstance.id;
-      return this;
-    }
-
-    throw new Error('No role assigned');
   }
 
   assignUserToRole() {
@@ -157,47 +57,24 @@ module.exports = class AssignRoleService extends AuthService {
   }
 
   defaultRoleProfile() {
-    if (this.role === 'artist') { return this; } // contractor only
-    this.roleInstance.name = this.user.name;
+    return this;
+  }
+
+  copyReferralSource() {
+    // Bring referral source data from user to role layer
+    if (! this.user.was_referred_by_someone) { return this; }
+
+    this.roleInstance.referral_source_id = this.user.referral.from;
     return this;
   }
 
   async generateShareUrls() {
+    // TODO implement
     if (this.role !== 'artist') { return this; }
-    
+    return this;
   }
 
   async generateFirstStepsNotifications() {
-    if (this.user.role !== 'artist') { return this; }
-    
-    const from = await User.findOne({ email: 'admin@iauu.com.br' });
-    await this.generateCompleteProfileNotification(from);
-    await this.generateCreateProductNotification(from);
-    return this;
-  }
-
-  async generateCompleteProfileNotification(adminUser) {
-
-    this.emitEvent(EVENTS.ASK_USER_TO_COMPLETE_PROFILE_EVENT, {
-      from: adminUser, 
-      to: this.user, 
-      message: 'Bem vindo a iauü! Para começar a receber propostas, complete seu perfil', 
-      type: 'role', 
-      target: this.user
-    });
-
-    return this;
-  }
-
-  async generateCreateProductNotification(adminUser) {
-    this.emitEvent(EVENTS.ASK_USER_TO_CREATE_PRODUCT_EVENT, {
-      from: adminUser, 
-      to: this.user, 
-      message: 'Inclua formatos de apresentação para ser encontrado', 
-      type: 'product', 
-      target: this.user
-    });
-
     return this;
   }
 }

@@ -30,7 +30,7 @@ const RANDOM_FUNNY_PHRASES = [
   'Parece que o vocalista acordou com a garganta inflamada',
   'Parece que o agente marcou dois shows no mesmo dia',
   'Parece que o baterista perdeu as baquetas',
-  'Parece que a corda do baixo estourou',
+  'Parece que o baixo desafinou em cima da hora',
 ]
 export default {
   layout: 'guest',
