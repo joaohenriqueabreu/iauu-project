@@ -4,18 +4,19 @@ const { BadRequestException }   = require('iauu/exception');
 
 module.exports = class PublicArtistProfileService extends BaseService
 {
-    constructor(user, data) {
+    constructor(user) {
       super()
 
-      if (data === undefined) {
-        throw new BadRequestException('Data is required')
-      }
+      // if (data === undefined) {
+      //   throw new BadRequestException('Data is required')
+      // }
 
-      this.slug = data.slug
       this.artist = {}
     }
 
-    async search() {
+    async search(slug) {
+      this.slug = slug;
+
       await this.searchArtist()
       this.ensureArtistWasFound()
       await this.calculateStats()

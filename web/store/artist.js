@@ -1,8 +1,7 @@
 /* eslint-disable */
-import Vue                      from 'vue';
-import _                        from 'lodash';
-import moment                   from 'moment';
-import {getField, updateField}  from 'vuex-map-fields';
+import Vue                        from 'vue';
+import moment                     from 'moment';
+import { getField, updateField }  from 'vuex-map-fields';
 
 export const state = () => ({
   artist:       {},
@@ -14,7 +13,9 @@ export const state = () => ({
     location: '',
     sort:     '',
     price:    0,
+    page:     0,
   },
+  lastSearchCount: 1 // 1 so that every first scroll runs
 })
 
 export const mutations = {
@@ -40,11 +41,12 @@ export const mutations = {
     );
   },
   set_statistics(state, statistics)   { state.statistics = statistics; },
-  set_artists(state, data)            { state.artists = _.keyBy(data, 'id'); },
+  set_artists(state, data)            { state.artists = this.$array.keyBy(data, 'id'); },  
   add_artist(state, data)             { Vue.set(state.artists, data.id, data); },
   set_artist(state, data)             { state.artist = data; },
   remove_artist(state, id)            { Vue.delete(state.artists, this.$array.findIndex(state.artists, (artist) => artist.id === id)); },
   set_search_filters(state, filters)  { state.searchFilters = filters; },
+  set_last_search_count(state, count) { state.lastSearchCount = count; },
   reset_artist(state)                 { state.artist = {}},
 }
 
@@ -110,13 +112,18 @@ export const actions = {
   async searchArtists({ commit }, filters) {
     const { data } = await this.$axios.get('/artists/search', { params: filters });
     commit('set_artists', data);
+
+    // Resets lastSearchCount to allow search by scrolling
+    commit('set_last_search_count', 1);
+  },
+  async appendSeachedArtists({ commit }, filters) {
+    const { data } = await this.$axios.get('/artists/search', { params: filters });
+    data.forEach((artist) => commit('add_artist', artist));
+    commit('set_last_search_count', data.length);
   },
   async loadArtistPublicProfile({ commit }, slug) {
     const { data } = await this.$axios.get(`artists/${slug}/public`);
     commit('set_artist', data);
-  },
-  setSearchFilters({ commit }, searchFilters) {
-    commit('set_search_filters', searchFilters);
   }
 }
 

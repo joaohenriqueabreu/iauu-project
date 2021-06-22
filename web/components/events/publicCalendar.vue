@@ -9,27 +9,27 @@ export default {
 
       // Convert provided timeslots into full-calender format
       this.timeslots.forEach((timeslot) => {
-        if (this.$empty(timeslot)) { continue; }
+        if (this.$empty(timeslot)) { return; }
 
         let event = {};
         if (timeslot.is_proposal) { 
           // Build proposal per day structure
           this.appendProposalForDay(timeslot);
-          continue;
+          return;
         }
             
         this.calendarEvents.push(this.formatEventFromTimeslot(timeslot, this.isUnavailable(timeslot)));        
       });
     },
     formatEventFromTimeslot(timeslot, isBackground) {
-      let startDt = moment(timeslot.start_dt).toISOString();
-      let endDt   = moment(timeslot.end_dt).toISOString();
+      let startDt = this.moment(timeslot.start_dt).toISOString();
+      let endDt   = this.moment(timeslot.end_dt).toISOString();
 
       // According to viewer and timeslot status setup event status to change its display
       const eventStatus = isBackground ? 'unavailable' : timeslot.status;
 
       if (isBackground) {
-        startDt = moment(timeslot.start_dt).startOf('day').toISOString();
+        startDt = this.moment(timeslot.start_dt).startOf('day').toISOString();
       }
 
       const fullcalendarEvent = {

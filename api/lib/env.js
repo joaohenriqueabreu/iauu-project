@@ -16,6 +16,9 @@ module.exports = {
     date:           'DD-MM-YYYY',
     dbDate:         'YYYY-MM-DD',
   },
+  search: {
+    perPage:        5,
+  },
   http: {
     port:           process.env.HTTP_PORT
   },

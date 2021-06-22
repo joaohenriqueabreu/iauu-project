@@ -101,7 +101,7 @@
     </div>
     <div class="proposal">
       <div v-if="$empty(artist.proposal) || $empty(artist.proposal.display_price)" class="horizontal center middle full-height full-width">
-        <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.id}`" >
+        <nuxt-link v-if="$auth.loggedIn && $auth.hasScope('contractor')" class="brand-btn" :to="`/proposal/to/artist/${artist.slug}`" >
           Enviar proposta
         </nuxt-link>
         <nuxt-link v-if="!$auth.loggedIn" class="brand-btn" to="/register">

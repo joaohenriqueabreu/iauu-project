@@ -7,15 +7,18 @@
         </form-input>
       </div>
     </div>
-    <div class="search-results" v-if="!$empty(artists)">
+    <div v-if="!$empty(artists)" class="search-results" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" infinite-scroll-throttle-delay="1000">
       <h6 class="mb-4 pr-4 d-none d-md-block">
         Artistas encontrados 
         <span v-if="!$empty(searchFilters.location)">Próximo a {{ searchFilters.location.display }}</span>
       </h6>
       <hr>
       <div v-for="(artist, index) in artists" :key="index" class="mb-4">
-        <search-result :artist="artist" @select="selectedArtist"></search-result>
+        <search-result :artist="artist" @select="selectedArtist"></search-result>        
       </div>
+      <div class="full-width horizontal center middle p-5">
+        <loading :active="searching"></loading>
+      </div>      
     </div>
     <div v-else class="horizontal center middle py-5">
       <h4 class="mr-2">Nenhum artista encontrado... </h4>
@@ -38,7 +41,7 @@
         </div>
       </div>
     </div>
-    <modal ref="filters" height="tiny">
+    <modal ref="filters" single hide-header>
       <template v-slot:main>
         <client-only>
           <div class="vertical center middle full-height" v-show="currentFilter === 'location'">
@@ -115,14 +118,18 @@ export default {
   },
   data() {
     return {
-      selectingFilter:  false,
-      currentFilter:    '',
+      selectingFilter:    false,
+      currentFilter:      '',
+      searching:          false,
+      hasChangedFilters:  true,
+      page:               0,
     }
   },
   computed: {
     ...mapState({ artists: (state) => state.artist.artists }),
+    ...mapState({ searchFilters: (state) => state.artist.searchFilters }),
+    ...mapState({ lastSearchCount: (state) => state.artist.lastSearchCount }),
     ...mapFields('artist', {
-      searchFilters:  'searchFilters',
       term:           'searchFilters.term',
       location:       'searchFilters.location',
       price:          'searchFilters.price',
@@ -130,7 +137,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions('artist', ['loadArtistPublicProfile', 'searchArtists']),
+    ...mapActions('artist', ['loadArtistPublicProfile', 'searchArtists', 'appendSeachedArtists']),
     selectedArtist(artist) {
       this.$router.push(`/search/artists/${artist.slug}`);
     },
@@ -168,9 +175,37 @@ export default {
     async filter() {
       await this.searchArtists(this.searchFilters);
       this.closeFilterModal();
+
+      // Reset pagination
+      this.page = 0;
     },
     isPriceRangeSelected(index) {
       return this.searchFilters.price === index;
+    },
+    async loadMore() {
+      if (this.searching || this.lastSearchCount === 0) { return; }
+
+      // trigger additional search 
+      this.page++;
+      this.searching  = true;
+      await this.appendSeachedArtists({ ...this.searchFilters, page: this.page });
+      this.closeFilterModal();
+
+      const self = this
+      setTimeout(() => {         
+        console.log('Finished searching...');
+        self.searching          = false; 
+        self.hasChangedFilters  = false;
+      }, 1000);
+    }
+  },
+  watch: {
+    searchFilters: {
+      handler(value) {
+        console.log('Filters have changed')
+        this.hasChangedFilters = true;
+      },
+      deep: true
     }
   }
 }

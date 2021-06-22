@@ -56,15 +56,24 @@ export default {
   async asyncData({ app, store, route }) {
     // Required for dateStep
     const today = new Date();
-    await store.dispatch('schedule/loadSchedule', { id: route.params.id, year: today.getFullYear(), month: today.getMonth() });
 
     // if page was reloaded we will lose artist data, verify and reload if necessary
-    if (app.$utils.empty(store.state.artist)) {
-      await store.dispatch('artist/loadArtistPublicProfile', route.params.id);
+    if (app.$utils.empty(store.state.artist.artist) && app.$utils.empty(store.state.artist.artist.id)) {
+      await store.dispatch('artist/loadArtistPublicProfile', route.params.slug);
     }
 
-    await store.dispatch('artist/loadProducts', route.params.id);
-    await store.dispatch('proposal/initProposal', route.params.id);
+    // Artist not found
+    if (app.$utils.empty(store.state.artist.artist) && app.$utils.empty(store.state.artist.artist.id)) {
+      route.push('/artist/search');
+      app.$toast.error('Tivemos um problema ao resgatar os dados do artista');
+    }
+
+    const artistId = store.state.artist.artist.id;
+    await Promise.all([
+      store.dispatch('schedule/loadSchedule', { id: artistId, year: today.getFullYear(), month: today.getMonth() }),
+      store.dispatch('artist/loadProducts',   artistId),
+      store.dispatch('proposal/initProposal', artistId)
+    ]);    
 
     return {
       proposal:   store.state.proposal.proposal,

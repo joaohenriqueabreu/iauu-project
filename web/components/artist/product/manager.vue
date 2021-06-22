@@ -1,10 +1,13 @@
 <template>
   <div class="full-height" :class="readOnly ? 'clickable' : ''" @click="readOnlyPreview">
-    <div class="info full-height">              
-      <image-uploader ref="productPhoto" @uploaded="uploadPhoto">
-        <div class="media" :class="!readOnly ? 'clickable' : ''" :style="{'background-image': `url(${$images(productPhoto)})`}">
-        </div>
-      </image-uploader>
+    <div class="info full-height">
+      <div v-if="!readOnly">
+        <image-uploader ref="productPhoto" @uploaded="uploadPhoto">
+          <div class="media" :class="!readOnly ? 'clickable' : ''" :style="{'background-image': `url(${$images(productPhoto)})`}">
+          </div>
+        </image-uploader>
+      </div>
+      <div v-else class="media" :style="{'background-image': `url(${$images(productPhoto)})`}">&nbsp;</div>      
       <div class="product">
         <div v-if="!readOnly" class="copy clickable" @click="copyProduct">
           <h4 class="brand-hover"><icon icon="copy"></icon></h4>
@@ -14,7 +17,7 @@
             <icon icon="edit" class="mr-2"></icon>{{ product.name }}
           </h2>
         </div>
-        <div v-else>
+        <div v-else class="fit-width">
           <h2 class="cap mb-2 one-line">{{ product.name }}</h2>
         </div>
         <div v-if="!hidePrice" class="horizontal middle mb-3">
@@ -29,8 +32,8 @@
         <div v-if="!readOnly" class="description one-line mb-3">
           {{ product.description }}
         </div>
-        <div class="one-line mb-5">
-          <icon icon="check"></icon>Itens inclusos no formato
+        <div class="mb-5" :class="!readOnly ? 'one-line' : ''">
+          <icon icon="check" v-if="!readOnly"></icon>Itens inclusos no formato
           <span v-for="(item, index) in product.items" :key="`item_${index}`" class="mr-2">
             <b>{{ item }}</b><span v-if="index < $array.lastIndexOf(product.items)">,</span>
           </span>
@@ -78,7 +81,7 @@ export default {
       await this.saveProduct(product);
       this.$toast.success('Produto copiado');
     },
-    async uploadPhoto(url) {
+    async uploadPhoto({ url }) {
       // Don't allow uploading photo if contractor is viewing product
       if (this.readOnly) { return; }
 
@@ -120,8 +123,7 @@ h6 {
 
 .product {
   @extend .vertical, .middle, .center;
-  width: 100%;
-  padding: 4 * $space;
+  padding:  4 * $space;
   position: relative;
 
   // main {

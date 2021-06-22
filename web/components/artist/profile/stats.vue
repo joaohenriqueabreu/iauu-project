@@ -1,7 +1,7 @@
 <template>
   <div class="vertical middle center">
     <div v-if="wontShowOnSearchResults" class="no-search-result mb-4">
-      <h6>Seu perfil está incompleto e não será exibido nos resultados das buscas dos organizadores de eventos, por favor, fornece mais informações para ser encontrado</h6>
+      <h6>Seu perfil está incompleto e não será exibido nos resultados das buscas dos organizadores de eventos, por favor, forneça mais informações para ser encontrado</h6>
     </div>
     <h4 class="horizontal">
       <!-- Seu perfil <h4 class="mx-2" v-if="completeness === 0">está</h4><h4 class="mx-2" v-else>é</h4> <i>{{ strengthMessage }}</i> -->

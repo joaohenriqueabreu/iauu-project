@@ -25,9 +25,9 @@ class ArtistController extends BaseController {
 
   async searchArtists(req, res, next) {
     console.log('Searching for artists...');
-    const searchArtistsService = new SearchArtistsService(req.user, req.data)
+    const searchArtistsService = new SearchArtistsService(req.user)
     try {
-      await searchArtistsService.search();
+      await searchArtistsService.search(req.data);
       res.status(200).json(searchArtistsService.getArtists());
     } catch (error) {
       next(error);
@@ -51,7 +51,7 @@ class ArtistController extends BaseController {
 
     const publicArtistProfileService = new PublicArtistProfileService(req.user, req.data);
     try {
-      await publicArtistProfileService.search(req.user, req.data);
+      await publicArtistProfileService.search(req.data.slug);
       res.status(200).json(publicArtistProfileService.getArtist());
     } catch (error) {
       next(error);

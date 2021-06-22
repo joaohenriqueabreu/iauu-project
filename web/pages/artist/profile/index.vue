@@ -55,7 +55,7 @@
       <footer v-if="!bankAccountTab">
         <div class="half-width">
           <h6 class="hide-mobile text-center mb-3">Clique aqui para salvar suas alterações no perfil</h6>
-          <form-button @action="saveProfile">Salvar</form-button>
+          <form-button @action="saveArtistProfile">Salvar</form-button>
         </div>
       </footer>
     </form>
@@ -91,9 +91,9 @@ export default {
       const presentationTypesResponse = await app.$axios.get('presentations/types');
       const roleIdResponse = await app.$axios.get('/users/exchange');
       return { 
-        categories: catResponse.data,
-        presentationTypes: presentationTypesResponse.data,
-        shareableId:  roleIdResponse.data
+        categories:         catResponse.data,
+        presentationTypes:  presentationTypesResponse.data,
+        shareableId:        roleIdResponse.data
       }
     } catch (e) {
       $sentry.captureException(e)
@@ -153,12 +153,12 @@ export default {
       this.validBankAccount = valid;
       this.bankAccount = bankAccount;
     },
-    async setBackground(url) {
+    async setBackground({ url }) {
       this.background = url;
       await this.saveProfile();
       this.$toast.success('Background atualizado');
     },
-    async setAvatar(url) {
+    async setAvatar({ url }) {
       this.photo = url;
       await this.saveProfile();
       this.$toast.success('Foto atualizada');
@@ -167,6 +167,7 @@ export default {
       // Special handling for bank account
       try {
         await this.saveProfile();
+        this.$toast.success('Perfil atualizado com sucesso');
       } catch (error) {
         this.$toast.error('Tivemos um problema ao salvar o perfil');
       }

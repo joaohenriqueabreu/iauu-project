@@ -1,5 +1,5 @@
 <template>
-  <modal ref="modal" hide-header>
+  <modal ref="modal" hide-header no-pad>
     <template v-slot:main>
       <div class="bg-image" :style="{ 'background-image': `url(${$images(productPhoto)})` }"></div>
       <carousel
@@ -64,11 +64,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   props: {
     proposal: { type: Boolean, default: false },
     readOnly: { type: Boolean, default: false },
-    artist:   { type: Object, default: () => {}},
   },
   data() {
     return {
@@ -77,6 +77,7 @@ export default {
     }
   },
   computed: {
+    ...mapState({ artist: (state) => state.artist.artist }),
     productPhoto() {
       return !this.$utils.empty(this.product.photo)
         ? this.product.photo

@@ -1,5 +1,5 @@
 {
-    "name": "server",
+    "name": "iauu-platform",
     "version": "0.1.0",
     "private": true,
     "watch": {
@@ -10,7 +10,7 @@
         "start": "node src/app",
         "dev": "nodemon -L src/app.js",
         "debug": "node --inspect  src/app.js",
-        "stop": "pkill --signal SIGINT reforma.ai.server",
+        "stop": "pkill --signal SIGINT iauu-platform",
         "migrate": "./node_modules/.bin/migrate -c src",
         "test": "mocha --timeout 50000 --exit",
         "test-file": "mocha --timeout 50000 --exit --grep"

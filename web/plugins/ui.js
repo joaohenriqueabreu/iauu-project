@@ -10,6 +10,7 @@ import VuePerfectScrollbar  from 'vue-perfect-scrollbar';
 import moment               from 'moment';
 import PortalVue            from 'portal-vue';
 import VToolTip             from 'v-tooltip';
+import InfiniteScroll       from 'vue-infinite-scroll'
 import { FadeTransition, SlideYDownTransition } from 'vue2-transitions';
 
 // Form components
@@ -71,6 +72,7 @@ Vue.use(VueTheMask);
 Vue.use(Chat);
 Vue.use(PortalVue);
 Vue.use(VToolTip);
+Vue.use(InfiniteScroll)
 
 Vue.component('logo',           Logo);
 Vue.component('avatar',         Avatar);

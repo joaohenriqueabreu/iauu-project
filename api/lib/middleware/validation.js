@@ -234,7 +234,8 @@ const search = (req, res, next) => {
     term:     validateRequest.string().optional().allow(''),
     location: validateRequest.string().optional().allow(''),
     price:    validateRequest.number().optional().min(1).max(5),
-    sort:     validateRequest.string().optional().allow('')
+    sort:     validateRequest.string().optional().allow(''),
+    page:     validateRequest.number().optional(),
   })
 
   return validate(req.query, req, next, schema)

@@ -4,7 +4,7 @@
       <v-modal :name="name" :adaptive="true" :click-to-close="true" height="auto">            
         <!-- Portal is used to render component code outside its definition (modal is rendered outside app div so it can take 100% width) -->
           <div class="modal-content" :class="[modalHeight, noPad ? 'no-pad' : '']">
-            <header>
+            <header v-show="!shouldHideHeader">
               <div class="close" @click="close">
                 <icon icon="times"></icon>
               </div>
@@ -14,12 +14,11 @@
             </header>
             <scrollbar>
               <main :class="height">
-                <div v-if="hideHeader" class="mb-4">&nbsp;</div>
                 <slot name="main"></slot>
               </main>
-              <div v-show="!hideFooter" class="compensate-footer">&nbsp;</div>
+              <div v-show="!shouldHideFooter" class="compensate-footer">&nbsp;</div>
             </scrollbar>
-            <footer v-show="!hideFooter">
+            <footer v-show="!shouldHideFooter">
               <div :class="footerCustomHeight">
                 <slot name="footer"></slot>
               </div>
@@ -42,6 +41,9 @@ export default {
     headerHeight: { type: String, default: null },
     footerHeight: { type: String, default: null },
     noPad:        { type: Boolean, default: false },
+
+    hideHeader:   { type: Boolean, default: false },
+    hideFooter:   { type: Boolean, default: false },
 
     // Or provide heights as params
     single:       { type: Boolean, default: false },
@@ -67,11 +69,11 @@ export default {
 
       return this.height;
     },
-    hideHeader() {
-      return this.$slots.header == null;
+    shouldHideHeader() {
+      return this.hideHeader || this.$slots.header == null;
     },
-    hideFooter() {
-      return this.$slots.footer == null;
+    shouldHideFooter() {
+      return this.hideFooter || this.$slots.footer == null;
     }
   },
   methods: {
@@ -126,8 +128,7 @@ export default {
   &.regular { height: 85vh; }
 
   header {
-    // @extend .vertical, .middle, .center;
-    .tiny, .single  { height: 5vh; }
+    .tiny           { height: 5vh; }
     .small          { height: 7vh; }
     .regular        { height: 10vh; }
 

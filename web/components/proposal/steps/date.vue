@@ -18,7 +18,7 @@
       </div>
     </div>
     <div>
-      <calendar
+      <public-calendar
         ref="calendar"
         week-mode
         :timeslots="timeslots"
@@ -26,7 +26,7 @@
         :max="$config.maxProposedTimeslots"
         @event-click="removeProposalTimeslot"
         @selected="addTimeslot"
-      ></calendar>
+      ></public-calendar>
     </div>
     <input v-model="date" type="hidden" />
   </div>
