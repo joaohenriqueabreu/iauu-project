@@ -1,11 +1,12 @@
 const { ScriptService }     = require('iauu/services');
 const { User }              = require('../../models');
+const bcrypt                = require('bcryptjs');
 const GenerateTokenService  = require('./generateToken');
-const mongoose              = require('mongoose');
+const context               = require('mongoose');
 
 module.exports = class RegisterAdminUserScriptService extends ScriptService {
   constructor(name, email, password) {
-    super(mongoose);
+    super(context);
     
     if (!name || !email || !password) {
       throw new Error('Invalid user info...');
