@@ -12,7 +12,7 @@ module.exports = class RegisterAdminUserScriptService extends ScriptService {
       throw new Error('Invalid user info...');
     }
 
-    this.user       = {};
+    this.user       = new User();
     this.user.email = email;
     this.user.name  = name;
     this.password   = password;
