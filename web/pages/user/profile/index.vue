@@ -90,7 +90,7 @@ export default {
       await this.saveAddress(address);
       this.$toast.success('Endereço adicionado com sucesso!');
     },
-    async setAvatar(url) {
+    async setAvatar({ url }) {
       this.photo = url;
       await this.saveProfile();
       await this.renewAuth();
