@@ -34,9 +34,10 @@ class Proposal extends BaseRepository {
 		return this.price;
   }
 
-  get is_read()     { return this.read_dt != null; }
-  get is_open()     { return this.status === 'proposal'; }
-  get is_rejected() { return this.status === 'rejected'; }
+  get is_read()               { return this.read_dt != null; }  
+  get is_open()               { return this.status === 'proposal'; }
+  get is_accepted()           { return this.status === 'accepted'; }
+  get is_rejected()           { return this.status === 'rejected'; }
   get has_selected_timeslot() { return this.selected_timeslot != null; }
 
   get tentative_dt() {

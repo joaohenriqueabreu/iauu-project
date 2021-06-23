@@ -80,10 +80,7 @@
         <chat v-if="!$empty(presentation)" :presentation="presentation"></chat>
       </template>
       <template v-slot:footer>
-        <div
-          v-if="hasCounterOffer && !hasAcceptedCounterOffer"
-          class="horizontal middle center mb-2"
-        >
+        <div v-if="hasCounterOffer && !hasAcceptedCounterOffer" class="horizontal middle center mb-2">
           Aguardando definição de orçamento
         </div>
         <div class="horizontal center middle full-height">

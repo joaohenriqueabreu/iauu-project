@@ -1,8 +1,11 @@
-const { EventConsumerService }    = require('iauu/events');
-const { DataRequestService }      = require('iauu/services');
-const { Billing }                 = require('../../models');
-const { BadRequestException }     = require('../../exception');
-const SearchArtistAccountService  = require('./searchArtistAccount');
+const { EVENTS, EventConsumerService }  = require('iauu/events');
+const { DataRequestService }            = require('iauu/services');
+const { Billing }                       = require('../../models');
+const SearchArtistAccountService        = require('./searchArtistAccount');
+const { 
+  BadRequestException, 
+  ManualPaymentRequiredException,
+} = require('iauu/exception');
 
 module.exports = class CreateBillingService extends EventConsumerService
 {
@@ -46,7 +49,7 @@ module.exports = class CreateBillingService extends EventConsumerService
     }
 
     ensureBillingWasFound() {
-      if (Billing.notFound(this.billing)) {
+      if (Billing.notFound(this.billing)) {        
         throw new BadRequestException('Invalid billing provided');
       }
 
@@ -54,7 +57,14 @@ module.exports = class CreateBillingService extends EventConsumerService
     }
 
     async searchArtistAccount() {
-      await this.searchArtistAccountSvc.search(this.billingData.artist.id);
+      try {
+        await this.searchArtistAccountSvc.search(this.billingData.artist.id);
+      } catch (error) {
+        // Rollback presentation creation
+        this.emitEvent(EVENTS.BANK_ACCOUNT_NOT_LINKED_EVENT, this.billingData.presentation.id);
+        throw new ManualPaymentRequiredException('Artist has no bank account');
+      }
+      
       this.artistAccount = this.searchArtistAccountSvc.getArtistAccount();
       return this;
     }

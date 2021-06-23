@@ -1,5 +1,6 @@
 const { EventBrokerException }        = require('../exception');
 const { connectBroker, consumeEvent } = require('./broker');
+const moment                          = require('moment');
 
 module.exports = class EventConsumer {
   constructor(queue) {
@@ -15,6 +16,10 @@ module.exports = class EventConsumer {
   }
 
   async consume(callback) {
+    const timestamp = moment().format('DD-MM-YYYY hh:mm:ss');
+    console.log('---------------------------------------------');
+    console.log(`[${timestamp}]: Consuming new event ${this.queue}`)
+
     try {
       await this.connect();
       await consumeEvent(this.broker, this.queue, message => {

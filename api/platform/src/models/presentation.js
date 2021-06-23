@@ -24,6 +24,7 @@ const presentationSchema = new Schema({
   price:          { type: Number, required: true },
   address:        { type: addressSchema },
   status:         { type: String, enum: PresentationData.PRESENTATION_STATUS, required: true, default: PresentationData.PRESENTATION_STATUS_ACCEPTED },
+  manual_payment: { type: Boolean, default: false },
   confirm_status: [String],
   timeslot:       { type: timeslotSchema, required: true },
   checklist: [{

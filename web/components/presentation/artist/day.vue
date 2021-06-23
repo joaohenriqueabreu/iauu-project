@@ -12,7 +12,7 @@
         <h6>Obrigado por confirmar a realização da apresentação no dia {{ presentation.timeslot.end_dt | date }}</h6>
       </div>
     </div>
-    <div v-if="presentation.is_presentation_today" class="vertical center">
+    <div v-else-if="presentation.is_presentation_today" class="vertical center">
       <div v-if="presentation.is_presentation_today" class="today mb-4">
         Hoje é o dia da apresentação! Revise todos os detalhes e divirta-se!
       </div>
@@ -29,6 +29,9 @@
           </a> 
         </small>
       </div>
+    </div>
+    <div>
+      something
     </div>
   </div>
 </template>

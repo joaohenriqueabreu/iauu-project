@@ -1,0 +1,10 @@
+# How to install / update library in development (automatically installed on prod)?
+
+- Make any changes to local library repository;
+- Run `ilib` bash command or `sudo cp -rf [project dir]/api/lib/* /var/lib/iauu` (this will copy library to environemnt folder correctly);
+- Next stop running services that consume the library;
+- Run `npm install` for that service;
+- Run `npm run dev` to keep testing;
+
+## CHANGELOG
+[2021-06-22]: Included `BANK_ACCOUNT_NOT_LINKED_EVENT` for rolling back (or marking presentation manual payment - TBD) presentation when artist has no bank account linked 

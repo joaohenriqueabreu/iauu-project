@@ -48,8 +48,7 @@ module.exports = class SearchProposalsService extends BaseService
           ...{ 'timeslots.end_dt': { $lte: moment(queryParams.to, config.format.dbDate).add(1, 'days').format(config.format.dbDate) }}
         }
       }
-      
-      console.log(queryConditions)
+
       return queryConditions;
     }
 

@@ -12,6 +12,7 @@ const PRESENTATION_CREATED_EVENT          = 'presentation_created';
 const PRESENTATION_COMPLETED_EVENT        = 'presentation_completed';
 
 // Billing events
+const BANK_ACCOUNT_NOT_LINKED_EVENT       = 'bank_account_not_linked';
 const BILLING_PAID_EVENT                  = 'billing_paid';
 
 // File Events
@@ -31,6 +32,8 @@ module.exports = {
   PROPOSAL_ACCEPTED_EVENT,
   PRESENTATION_CREATED_EVENT,
   PRESENTATION_COMPLETED_EVENT,
+
+  BANK_ACCOUNT_NOT_LINKED_EVENT,
   BILLING_PAID_EVENT,
 
   DOCUMENT_SENT_FOR_APPROVAL_EVENT,

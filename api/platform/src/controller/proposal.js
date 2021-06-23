@@ -114,10 +114,10 @@ class ProposalController extends BaseController {
 
   async acceptProposal(req, res, next) {
     console.log('Accepting proposal...');
-    const acceptProposalService = new AcceptProposalService(req.user, req.data.id);
+    const acceptProposalService = new AcceptProposalService(req.user);
     
     try {
-      await acceptProposalService.reply();
+      await acceptProposalService.reply(req.data.id);
       res.status(200).json(acceptProposalService.getProposal());
     } catch (error) {
       next(error);

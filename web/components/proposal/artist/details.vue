@@ -67,13 +67,16 @@
               Data da apresentação expirada. Não é possível aceitar a proposta neste momento.
             </div>
           </div>
-          <div class="horizontal center middle full-height">
+          <div class="horizontal center middle full-height" v-if="proposal.is_open">
             <div v-if="(!proposal.has_custom_product || proposal.has_accepted_counter_offer) && proposal.has_selected_timeslot && ! isProposalPast" class="mr-5">
               <form-button @action="accept">Aceitar</form-button>
             </div>
             <div v-if="!isProposalPast">
               <h5 class="clickable" @click="reject">Recusar</h5>
             </div>
+          </div>
+          <div v-else>
+            <h6>Você já {{ proposal.is_accepted ? 'aceitou' : 'recusou' }} esta proposta.</h6>
           </div>
         </div>
       </template>

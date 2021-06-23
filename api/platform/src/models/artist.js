@@ -63,6 +63,7 @@ const artistSchema = new Schema({
     }
   },
   referral_source_id:             { type: String, default: null },
+  has_linked_bank_account:        { type: String, default: false },
   address:                        addressSchema,
   rating:                         { type: Number },
   has_closed_first_presentation:  { type: Boolean, default: false }

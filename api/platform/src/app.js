@@ -12,12 +12,12 @@ const cors        = require('cors');
 
 // init db and connect
 const db          = require('iauu/data/db');
-const odm         = require('mongoose');
+const context     = require('mongoose');
 
 // const corsOptions = require('iauu/data/cors');
 const initDb      = async () => {
   try {
-    await db.connect(odm);
+    await db.connect(context);
   } catch (error) {
     console.log(error);
     process.exit(0);
@@ -43,6 +43,11 @@ app.use(compression());
 router.use(express.urlencoded({ extended: false }));
 router.use(express.json());
 
+if (! config.isProductionEnv()) {
+  console.log('Enabling logger middleware for non-prod env');
+  app.use(loggerMiddleware); 
+}
+
 /**
 For login, we use bcrypt to compare our hashed password with the user supplied password. If they are the same, we log the user in. If not, well, feel free to respond to the user how you please.
 Now, let's use the express server to make our application accessible:
@@ -51,11 +56,6 @@ Now, let's use the express server to make our application accessible:
 app.use(router);
 app.use(routes);
 app.use(errorMiddleware);
-
-if (! config.isProductionEnv()) {
-  console.log('Enabling logger middleware for non-prod env');
-  app.use(loggerMiddleware); 
-}
 
 process.title = 'iauu.api';
 let expressPort = config.http.port || 4444;

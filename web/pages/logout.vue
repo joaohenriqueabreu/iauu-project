@@ -7,7 +7,7 @@ export default {
     await app.$auth.logout()
   },
   mounted() {
-    this.$router.push('/')
+    this.$router.push('/login')
   }
 }
 </script>

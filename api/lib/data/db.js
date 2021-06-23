@@ -1,5 +1,5 @@
-const config  = require('../env');
-// const db      = require('mongoose');
+const config    = require('../env');
+// const mongoose  = require('mongoose');
 
 const connectionOptions = { 
     useCreateIndex: true, 
@@ -13,7 +13,7 @@ const connectionOptions = {
     // reconnectInterval: 3000
 };
 
-async function connect (db) {
+async function connect(db) {
   if (config.debug) {
     db.set('debug', true);
   }

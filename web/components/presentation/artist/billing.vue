@@ -39,9 +39,15 @@
     </div>
     <div v-else class="vertical middle center">
       <div class="text-center">
-        <h3 class="mb-2">Total contratado</h3>
-        <h6 class="mb-4">Aguardando confirmação da proposta</h6>
-        <h1>{{ presentation.price | currency }}</h1>
+        <h3 class="mb-2">Total contratado</h3>        
+        <h1 class="mb-4">{{ presentation.price | currency }}</h1>
+        <div v-if="presentation.manual_payment" class="mb-4 full-width p-4 bg-error color-white rounded">
+          <h4>
+            Não detectamos uma conta bancária conectada a nosso sistema para receber pagamentos pela plataforma. Iremos proceder com pagamento manual.            
+          </h4>
+        </div>
+        <h4 v-else class="mb-4 error">Tivemos um problema ao criar o faturamento para essa apresentação.</h4>
+        <h6>Em caso de dúvidas entre em contato com nosso suporte {{ $config.supportMail }}</h6>
       </div>
     </div>
     <modal ref="instalments" small>
