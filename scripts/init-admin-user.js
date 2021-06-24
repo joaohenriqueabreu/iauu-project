@@ -1,8 +1,8 @@
 const config = require('../api/lib/env');
-const RegisterAdminUserScriptService = require('../api/platform/src/services/auth/registerAdminUser');
+const RegisterSuperAdminUserScriptService = require('../api/platform/src/services/auth/registerSuperAdminUser');
 
 const initAdmin = async () => {
-  const registerAdminUserSvc = new RegisterAdminUserScriptService(
+  const registerAdminUserSvc = new RegisterSuperAdminUserScriptService(
     'admin', config.admin.mail, config.admin.password
   );
 

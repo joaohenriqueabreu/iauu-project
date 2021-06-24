@@ -229,18 +229,17 @@ form {
           cursor: pointer;
           margin-right: 2 * $space;
 
-          transition: $transition;
+          transition:   $transition;
           &:hover {
             transition: $transition;
-            color: $brandLayer;
+            color:      $brandLayer;
           }
 
           &.active {
-            background: $layer4;
-            border-top-left-radius: $edges;
-            border-top-right-radius: $edges;
-            padding: 2 * $space;
-            width: 100%;
+            background:               $layer4;
+            border-top-left-radius:   $edges;
+            border-top-right-radius:  $edges;
+            padding:                  2 * $space;
           }
         }
         

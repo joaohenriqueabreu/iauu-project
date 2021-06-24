@@ -95,7 +95,7 @@ main {
         padding-top:      2 * $space;
         padding-bottom:   2 * $space;
         z-index:          $above;
-        min-width:        100px;
+        width:            200px;
         text-align:       center;
         display:          flex;
         justify-content:  center;
@@ -124,7 +124,6 @@ main {
       background:       $layer4;
       padding:          4 * $space;
       box-shadow:       $shadow;
-      width:            100%;
       border-radius:    $edges;
       min-height:       50vh;
       border-radius:    $edges;
