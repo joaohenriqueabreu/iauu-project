@@ -1,0 +1,4 @@
+# CHANGELOG
+
+[2021-06-23]: Created branch `running-scripts` (with `node_modules` installed) for running script services (like admin register).
+[2021-06-23]: We should instead move scripts to be run inside a docker container, so we keep production clean (can uninstall node and npm)

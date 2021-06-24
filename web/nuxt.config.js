@@ -38,7 +38,7 @@ export default {
         content: process.env.GOOGLE_CLIENT_ID
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: `${process.env.CDN_STATIC_ASSETS_DOMAIN}/logo-icon-1.png` }],
     script: [
       {
         src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`
