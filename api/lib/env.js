@@ -53,6 +53,11 @@ module.exports = {
     user:           process.env.SMTP_USER,
     password:       process.env.SMTP_PWD,
   },
+  marketing: {
+    username:       process.env.MAUTIC_USERNAME,
+    password:       process.env.MAUTIC_PASSWORD,
+    baseUrl:        process.env.MAUTIC_BASE_URL,
+  },
   url: {
     api:            process.env.API_URL,
     web:            process.env.WEB_URL,

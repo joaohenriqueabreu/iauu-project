@@ -1,3 +1,4 @@
+const { EVENTS }            = require('iauu/events');
 const AuthService           = require('./auth');
 const User                  = require('../../models/user');
 const UnauthorizedException = require('../../exception/unauthorized');
@@ -18,6 +19,7 @@ module.exports = class AuthenticateUserService extends AuthService
       await this.generateAccessToken();
       this.generateAdminToken().renewLastLogin();
       await this.saveUser();
+      this.emitEvent(EVENTS.DUMMY_EVENT, this.user)
       return this;
     }
 

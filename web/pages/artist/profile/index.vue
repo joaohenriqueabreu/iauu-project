@@ -240,6 +240,8 @@ form {
             border-top-left-radius:   $edges;
             border-top-right-radius:  $edges;
             padding:                  2 * $space;
+            max-width:                150px;
+            width:                    100%;
           }
         }
         

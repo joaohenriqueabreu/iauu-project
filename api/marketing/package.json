@@ -1,0 +1,31 @@
+{
+    "name": "iauu-marketing-connector",
+    "version": "1.0.0",
+    "private": true,
+    "watch": {
+        "server": "src/app.js"
+    },
+    "scripts": {
+        "server": "node src/app",
+        "start": "node src/app",
+        "dev": "nodemon -L src/app.js",
+        "debug": "node --inspect  src/app.js",
+        "stop": "pkill --signal SIGINT reforma.ai.server",
+        "migrate": "./node_modules/.bin/migrate -c src",
+        "test": "mocha --timeout 50000 --exit",
+        "test-file": "mocha --timeout 50000 --exit --grep"
+    },
+    "dependencies": {
+        "dotenv": "8.2.0",
+        "iauu": "file:/var/lib/iauu",
+        "moment": "^2.29.1",
+        "node-mautic": "^1.2.6"
+    },
+    "devDependencies": {
+        "nodemon": "2.0.7",
+        "npm-watch": "0.7.0"
+    },
+    "jest": {
+        "testEnvironment": "node"
+    }
+}
