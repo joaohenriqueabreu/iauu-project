@@ -87,6 +87,11 @@ hr {
     border-top-color: $brand;
   }
 
+  &.lighter {
+    border-top-color: $brand;
+    opacity:          0.1;
+  }
+
   &.thick {
     border-top-width: 5px;
   }

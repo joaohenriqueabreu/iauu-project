@@ -16,6 +16,13 @@ class StaticDataController extends BaseController {
     
     res.status(200).json(data);
   }
+
+  async presentations(req, res, next) {
+    console.log('Requesting presentation types list...');
+    const data = await ReadStaticFileHelper.getFileContents('presentations');
+    
+    res.status(200).json(data);
+  }
 }
 
 module.exports = new StaticDataController();

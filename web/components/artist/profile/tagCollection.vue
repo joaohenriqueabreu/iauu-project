@@ -35,17 +35,22 @@ small {
 }
 
 .tags {
-  @extend .horizontal, .center, .middle;
-  width: 100%;
+  // @extend .horizontal, .center, .middle;
+  display:          flex;
+  flex-direction:   row;
+  flex-wrap:        wrap;
+  justify-content:  center;
+  max-width:        100%;
   span {
-    @extend .horizontal, .center, .middle;
-    border-radius: $rounded;
-    background: $layer3;
-    padding: 2 * $space;
-    min-width: 5vw;
-    margin-right: 2 * $space;
-    cursor: pointer;
-    transition: $transition;
+    @extend         .horizontal, .center, .middle;
+    border-radius:  $rounded;
+    background:     $layer3;
+    padding:        2 * $space;
+    min-width:      5vw;
+    margin-right:   2 * $space;
+    margin-bottom:  2 * $space;
+    cursor:         pointer;
+    transition:     $transition;
 
     h6 {
       margin-bottom: 0;

@@ -4,18 +4,12 @@
       <h6>Qual tipo de apresentação sua empresa realiza?</h6>
     </div>
     <div class="select">
-      <form-select
-        :options="options"
-        :auto-open="true"
-        :hide-selected="false"
-        label="Selecione os tipos de apresentação"
-        @selected="addPresentationType"
-      ></form-select>
+      <form-select :options="options" :auto-open="true" :hide-selected="false" label="Selecione os tipos de apresentação" @selected="addPresentationType"></form-select>
     </div>
     <div class="mb-4"></div>
     <div class="tags">
       <span v-for="(presentationType, index) in presentationTypes" :key="index" @click="removePresentationType(presentationType)">
-        <h6>{{ presentationType }}</h6>
+        <h6>{{ presentationType | capitalize }}</h6>
         <icon icon="times"></icon>
       </span>
     </div>
@@ -24,8 +18,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import TagCollection from './tagCollection';
+import { mapFields }            from 'vuex-map-fields';
+import TagCollection            from './tagCollection';
 export default {
   extends: TagCollection,
   props: {
@@ -39,7 +33,7 @@ export default {
   },
   methods: {
     ...mapActions('artist', ['saveProfile']),
-    addPresentationType(presentationType) {
+    async addPresentationType(presentationType) {
       if (this.presentationTypes.length >= this.$config.maxAllowedPresentationTypes) {
         this.$toast.error(`Máximo de ${this.$config.maxAllowedPresentationTypes} tipos permitidos`);
         return;
@@ -52,14 +46,18 @@ export default {
         this.presentationTypes = presentationTypes;
       }
 
-      this.saveProfile();
+      await this.saveProfile();
+      this.$toast.success('Tipo de apresentação adicionado');
     },
-    removePresentationType(presentationType) {
-      let presentationTypes = this.$object.clone(this.presentationTypes);
+    async removePresentationType(presentationType) {
+      let presentationTypes = [...this.presentationTypes];
+      
       const index = this.$array.indexOf(presentationTypes, presentationType)      ;
       this.$delete(presentationTypes, index);
       this.presentationTypes = presentationTypes;
-      this.saveProfile();
+      
+      await this.saveProfile();
+      this.$toast.success('Tipo de apresentação removido');
     }
   }
 }

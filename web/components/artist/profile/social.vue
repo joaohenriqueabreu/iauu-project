@@ -29,7 +29,8 @@
     <div class="mb-4">
       <social-connect-info social-tab :has-connected-instagram="hasConnectedInstagram" :has-connected-spotify="hasConnectedSpotify"></social-connect-info>
     </div>
-    <div v-if="hasConnectedInstagram">
+    <!-- TODO This is not working anymore (429 error) need to use Instagram API (with consent) directly -->
+    <!-- <div v-if="hasConnectedInstagram">
       <div class="mb-4">
         <h6 class="mb-2">Agora que conectou seu insta (<u>{{ this.instagramUrl }}</u>), clique aqui para que possamos buscar o número de seguidores da sua página</h6>
         <div class="vertical">
@@ -44,7 +45,7 @@
         <span v-if="!$empty(artist.stats.followers)">{{ artist.stats.followers }}</span>
         <span v-else class="error">Clique no botão para buscar</span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

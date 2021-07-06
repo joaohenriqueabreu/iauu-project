@@ -18,9 +18,8 @@
               <li class="nav-link" :class="{ active: infoTab }" @click="activeTab = 'info'"><h6>Informações</h6></li>
               <li class="nav-link" :class="{ active: presentationsTab }" @click="activeTab = 'presentations'"><h6>Apresentações</h6></li>
               <li class="nav-link" :class="{ active: catTab }" @click="activeTab = 'categories'"><h6>Estilo</h6></li>
-              <li class="nav-link" :class="{ active: typesTab }" @click="activeTab = 'types'"><h6>Eventos</h6></li>
               <li class="nav-link" :class="{ active: socialTab }" @click="activeTab = 'social'"><h6>Redes Sociais</h6></li>
-              <li class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'"><h6>Integrantes</h6></li>              
+              <!-- <li class="nav-link" :class="{ active: usersTab }" @click="activeTab = 'users'"><h6>Integrantes</h6></li>               -->
               <li v-if="arePaymentsEnabled" class="nav-link" :class="{ active: bankAccountTab }" @click="activeTab = 'bankAccount'"><h6>Dados bancários</h6></li>
             </ul>
           </div>
@@ -31,9 +30,9 @@
             <fade-transition mode="out-in">
               <presentation-config v-show="presentationsTab" ref="presentations"></presentation-config>
             </fade-transition>
-            <fade-transition mode="out-in">
+            <!-- <fade-transition mode="out-in">
               <artist-members v-if="!$empty(shareableId)" v-show="usersTab" :role-id="shareableId" ref="users" key="users"></artist-members>
-            </fade-transition>
+            </fade-transition> -->
             <fade-transition mode="out-in">
               <artist-info v-if="infoTab" ref="info"></artist-info>
             </fade-transition>
@@ -41,10 +40,15 @@
               <social-networks v-if="socialTab" ref="social" key="social"></social-networks>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-categories v-if="catTab" key="categories" :sub-category-options="subCategories"></artist-categories>
-            </fade-transition>
-            <fade-transition mode="out-in">
-              <presentation-types v-if="typesTab" :options="presentationTypes" key="types"></presentation-types>
+              <div v-if="catTab" key="categories">
+                <div class="mb-5">
+                  <artist-categories :sub-category-options="subCategories"></artist-categories>
+                </div>
+                <hr class="lighter">
+                <div class="mt-5">
+                  <presentation-types :options="presentationTypes"></presentation-types>
+                </div>
+              </div>                            
             </fade-transition>
             <fade-transition mode="out-in">
               <bank-account v-if="bankAccountTab" key="bankAccount" @bank-account-changed="validateBankAccount"></bank-account>
@@ -52,7 +56,7 @@
           </div>
         </div>
       </main>
-      <footer v-if="!bankAccountTab">
+      <footer v-if="!bankAccountTab && !catTab">
         <div class="half-width">
           <h6 class="hide-mobile text-center mb-3">Clique aqui para salvar suas alterações no perfil</h6>
           <form-button @action="saveArtistProfile">Salvar</form-button>
@@ -88,7 +92,7 @@ export default {
     try {
       await store.dispatch('artist/loadArtistPrivateProfile');
       const catResponse               = await app.$axios.get('data/categories');
-      const presentationTypesResponse = await app.$axios.get('presentations/types');
+      const presentationTypesResponse = await app.$axios.get('data/presentations');
       const roleIdResponse            = await app.$axios.get('/users/exchange');
       return { 
         // Only suporting banda for now
@@ -117,10 +121,10 @@ export default {
     statsTab()          { return this.activeTab === 'stats'; },
     presentationsTab()  { return this.activeTab === 'presentations'; },
     infoTab()           { return this.activeTab === 'info'; },
-    usersTab()          { return this.activeTab === 'users'; },
+    // usersTab()          { return this.activeTab === 'users'; },
     socialTab()         { return this.activeTab === 'social'; },
     catTab()            { return this.activeTab === 'categories'; },
-    typesTab()          { return this.activeTab === 'types'; },
+    // typesTab()          { return this.activeTab === 'types'; },
     bankAccountTab()    { return this.activeTab === 'bankAccount'; },
     backgroundImg() { 
       return !this.$utils.empty(this.background)
