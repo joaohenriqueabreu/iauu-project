@@ -5,13 +5,13 @@
     <div class="form-input">
       <v-selectize v-if="allowInput" :name="name" :settings="settings">
         <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value">
-          {{ option.display }}
+          {{ option.display | capitalize }}
         </option>
       </v-selectize>
-      <select v-else required :value="value" @change="$emit('input', $event.target.value)">
+      <select v-else required :value="value" @change="onChangeHandler">
         <option disabled selected hidden value="" v-if="!$empty(placeholder)" class="placeholder">{{ placeholder }}</option>
         <option v-for="(option, index) in selectizeOptions" :key="index" :value="option.value">
-          {{ option.display }}
+          {{ option.display | capitalize }}
         </option>
       </select>
       <icon :icon="iconHelper"></icon>
@@ -21,18 +21,19 @@
 
 <script>
 import VueSelectize from 'vue2-selectize'
-import Input from '@/components/form/input'
+import Input        from '@/components/form/input'
+
 export default {
   components: {
     'v-selectize': VueSelectize
   },
   extends: Input,
   props: {
-    allowInput: { type: Boolean, default: true },
-    options: { type: [Array, Object], default: () => [] },
-    name: { type: String, default: '' },
-    label: { type: String, default: '' },
-    autoOpen: { type: Boolean, default: false },
+    allowInput:   { type: Boolean, default: true },
+    options:      { type: [Array, Object], default: () => [] },
+    name:         { type: String, default: '' },
+    label:        { type: String, default: '' },
+    autoOpen:     { type: Boolean, default: false },
     hideSelected: { type: Boolean, default: false }
   },
   computed: {
@@ -59,7 +60,12 @@ export default {
       })
     }
   },
-  methods: {}
+  methods: {
+    onChangeHandler(event) {
+      this.$emit('input', $event.target.value);
+      this.value = '';
+    }
+  }
 }
 </script>
 

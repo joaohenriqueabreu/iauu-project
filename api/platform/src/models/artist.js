@@ -30,7 +30,7 @@ const artistSchema = new Schema({
     presentations: [String]
   },
   category: {
-    name: { type: String },
+    name: { type: String, default: 'banda' }, // Defaulting to band for now as we will only work with this niche at the moment
     subcategories: [String]
   },
   presentation: {

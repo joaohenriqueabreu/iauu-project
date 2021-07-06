@@ -1,4 +1,9 @@
-const BankAccountHelper = require('./bankAccountHelper');
-const DocumentHelper = require('./documentHelper');
+const BankAccountHelper     = require('./bankAccountHelper');
+const ReadStaticFileHelper  = require('./readStaticFile');
+const DocumentHelper        = require('./documentHelper');
 
-module.exports = { BankAccountHelper, DocumentHelper }
+module.exports = {
+  ReadStaticFileHelper,
+  BankAccountHelper,
+  DocumentHelper 
+}

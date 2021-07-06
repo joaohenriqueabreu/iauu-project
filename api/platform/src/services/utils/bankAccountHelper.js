@@ -1,15 +1,14 @@
-const _ = require('lodash');
-const fs = require('fs');
-const path = require('path');
+const { find }              = require('lodash');
+const ReadStaticFileHelper  = require('./readStaticFile');
 
 const getInstitutionsList = async () => {
-  const banks = await JSON.parse(fs.readFileSync(path.join(__dirname, '../../config/banks.json'), 'utf8'));
+  const banks = await ReadStaticFileHelper.getFileContents('banks');
   return banks;
 }
 
 const getInstitutionData = async (code) => {
   const banks = await getInstitutionsList();
-  const data = _.find(banks, (bank) => bank.code === code);
+  const data = find(banks, (bank) => bank.code === code);
 
   return data;
 }

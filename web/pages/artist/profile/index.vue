@@ -41,7 +41,7 @@
               <social-networks v-if="socialTab" ref="social" key="social"></social-networks>
             </fade-transition>
             <fade-transition mode="out-in">
-              <artist-categories v-if="catTab" key="categories" :categories="categories"></artist-categories>
+              <artist-categories v-if="catTab" key="categories" :sub-category-options="subCategories"></artist-categories>
             </fade-transition>
             <fade-transition mode="out-in">
               <presentation-types v-if="typesTab" :options="presentationTypes" key="types"></presentation-types>
@@ -87,11 +87,12 @@ export default {
   async asyncData({ app, store, error, $sentry }) {
     try {
       await store.dispatch('artist/loadArtistPrivateProfile');
-      const catResponse = await app.$axios.get('categories');
+      const catResponse               = await app.$axios.get('data/categories');
       const presentationTypesResponse = await app.$axios.get('presentations/types');
-      const roleIdResponse = await app.$axios.get('/users/exchange');
+      const roleIdResponse            = await app.$axios.get('/users/exchange');
       return { 
-        categories:         catResponse.data,
+        // Only suporting banda for now
+        subCategories:      catResponse.data,
         presentationTypes:  presentationTypesResponse.data,
         shareableId:        roleIdResponse.data
       }

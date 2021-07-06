@@ -5,12 +5,12 @@ class CategoryController extends BaseController {
   categories(req, res, next) {
     res.status(200).json([
         { id: 120, name: 'banda' },
-        { id: 121, name: 'DJ' },
-        { id: 122, name: 'teatro' },
-        { id: 123, name: 'circo' },
-        { id: 124, name: 'standup' },
-        { id: 125, name: 'palestra' },
-        { id: 126, name: 'outros' }
+        // { id: 121, name: 'DJ' },
+        // { id: 122, name: 'teatro' },
+        // { id: 123, name: 'circo' },
+        // { id: 124, name: 'standup' },
+        // { id: 125, name: 'palestra' },
+        // { id: 126, name: 'outros' }
     ])
   }
   

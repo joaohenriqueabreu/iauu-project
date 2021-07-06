@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="vertical center middle mb-4">
-      <h6>Qual estilo artístico da sua empresa?</h6>
+      <h6>Quais os estilos sua banda toca?</h6>
     </div>
-    <fade-transition mode="out-in">
+    <!-- <fade-transition mode="out-in">
       <div v-show="$empty(artist.category.name)" class="horizontal center middle">
         <div v-for="(category, index) in categories" :key="index" class="img-box" @click="getSubcategories(category.name)">
           <h6>
@@ -14,8 +14,8 @@
           </overlay>
         </div>
       </div>
-    </fade-transition>
-    <fade-transition mode="out-in">
+    </fade-transition> -->
+    <!-- <fade-transition mode="out-in">
       <div v-show="!$utils.empty(categoryName)" class="vertical center middle mb-4">
         <overlay :rounded="true">
           <avatar :src="categoryImg(categoryName)" :size="70" />
@@ -26,21 +26,15 @@
           <small @click="resetCategory">Trocar</small>
         </div>
       </div>
-    </fade-transition>
-    <div v-show="!$utils.empty(categoryName)" class="select">
+    </fade-transition> -->
+    <div class="select">
       <h6></h6>
-      <form-select
-        :options="subCategoryOptions"
-        :auto-open="true"
-        :hide-selected="false"
-        label="Selecione os estilos de apresentação"
-        @selected="addSubcategory"
-      ></form-select>
+      <form-select :options="subCategoryOptions" :auto-open="true" :hide-selected="false" label="Selecione os estilos de apresentação" @selected="addSubcategory"></form-select>
     </div>
     <div class="mb-4"></div>
     <div class="tags">
       <span v-for="(subcategory, index) in subCategories" :key="index" @click="removeSubcategory(subcategory)">
-        <h6>{{ subcategory }}</h6>
+        <h6>{{ subcategory | capitalize }}</h6>
         <icon icon="times"></icon>
       </span>
     </div>
@@ -49,56 +43,54 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { mapFields } from 'vuex-map-fields';
-import TagCollection from './tagCollection';
+import { mapFields }            from 'vuex-map-fields';
+import TagCollection            from './tagCollection';
+
 export default {
   extends: TagCollection,
   props: {
-    categories: { type: Array, default: () => {} }
+    subCategoryOptions: { type: Array, default: () => {} }
   },
-  data() {
-    return {
-      subCategoryOptions: { type: Object, default: () => {} }
-    }
-  },
+  // data() {
+  //   return {
+  //     subCategoryOptions: { type: Object, default: () => {} }
+  //   }
+  // },
   computed: {
     ...mapState({ artist: (state) => state.artist.artist }),
     ...mapFields('artist', {
-      categoryName: 'artist.category.name',
+      // categoryName: 'artist.category.name',
       subCategories: 'artist.category.subcategories',
     })
   },
   async mounted() {
-    if (! this.$empty(this.categoryName)) {
-      await this.getSubcategories(this.categoryName);
-    }
+    // if (! this.$empty(this.categoryName)) {
+    //   await this.getSubcategories(this.categoryName);
+    // }    
   },
   methods: {
     ...mapActions('artist', ['saveProfile']),
-    async getSubcategories(categoryName) {
-      const { data } = await this.$axios.get(
-        `categories/${encodeURI(categoryName)}/subcategories`
-      );
-
-      this.categoryName = categoryName;
-      this.subCategoryOptions = this.$array.orderBy(data, [], ['asc']);
-    },
-    categoryImg(item) {
-      try {
-        if (this.$empty(item)) { throw 'invalid category'; }
-        return this.$images(`categories/${item}.jpg`);
-      } catch (error) {
-        return this.$images('concert.png');
-      }
-    },
-    isCategorySelected(name) {
-      return name === this.artist.category.name;
-    },
-    resetCategory() {
-      this.categoryName = null;
-      this.subCategories = [];
-    },
-    addSubcategory(subcategory) {
+    // async getSubcategories() {
+    //   // Only supporting 'banda' for now - therefore loading all categories as subcategories to support existing model
+    //   const { data } = await this.$axios.get('data/categories');
+    //   this.subCategoryOptions = this.$array.orderBy(data, [], ['asc']);
+    // },
+    // categoryImg(item) {
+    //   try {
+    //     if (this.$empty(item)) { throw 'invalid category'; }
+    //     return this.$images(`categories/${item}.jpg`);
+    //   } catch (error) {
+    //     return this.$images('concert.png');
+    //   }
+    // },
+    // isCategorySelected(name) {
+    //   return name === this.artist.category.name;
+    // },
+    // resetCategory() {
+    //   this.categoryName = null;
+    //   this.subCategories = [];
+    // },
+    async addSubcategory(subcategory) {
       if (this.subCategories.length >= this.$config.maxAllowedSubcategories) {
         this.$toast.error(`Máximo de ${this.$config.maxAllowedSubcategories} etilos permitidos`);
         return;
@@ -111,12 +103,18 @@ export default {
         this.subCategories = subcategories;
       }
 
-      this.saveProfile();
+      await this.saveProfile();
+      this.$toast.success('Categoria adicionada');
     },
-    removeSubcategory(subcategory) {
-      const index = this.$array.indexOf(this.subCategories, subcategory);
-      this.$delete(this.subCategories, index);
-      this.saveProfile();
+    async removeSubcategory(subcategory) {
+      let subcategories = [...this.subCategories];
+
+      const index = this.$array.indexOf(subcategories, subcategory);
+      this.$delete(subcategories, index);
+
+      this.subCategories = subcategories;
+      await this.saveProfile();
+      this.$toast.success('Categoria removida');
     }
   }
 }

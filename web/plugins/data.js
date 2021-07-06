@@ -14,6 +14,7 @@ Vue.use(VueFilters, {
 });
 
 // Custom filters
+const lowercaseFilter     = (value) => { return value.toLowerCase(); }
 const yesNoFilter         = (value) => { return value ? 'Sim' : 'Não'; }
 const notEmptyString      = (value) => { return value != null && value.length > 0 ? value : '-'; }
 const dateFilter          = (value) => { return moment(value).format('DD/MM/YYYY'); }
@@ -166,6 +167,7 @@ Object.byString = function(o, s) {
 Vue.use(VuePluralize);
 
 // Registering custom filters
+Vue.filter('lowercase',       lowercaseFilter);
 Vue.filter('yesNo',           yesNoFilter);
 Vue.filter('notEmptyString',  notEmptyString);
 Vue.filter('date',            dateFilter);
