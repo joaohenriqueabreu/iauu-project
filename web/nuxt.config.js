@@ -3,6 +3,7 @@ require('dotenv').config()
 export default {
   dev: process.env.NODE_ENV !== 'production',
   env: {
+    stage: process.env.STAGE,
     fileStackApiKey: process.env.FILESTACK_API_KEY,
     googleAnalyticsKey: process.env.GOOGLE_ANALYTICS_KEY,
     googleClientId: process.env.GOOGLE_CLIENT_ID,
@@ -127,7 +128,7 @@ export default {
     baseURL: '/api/v1/'
   },
   proxy: {
-    '/api/v1': `${process.env.API_URL}`
+    '/api/v1': `${process.env.API_URL}/${process.env.STAGE}`
   },
   auth: {
     plugins: [{ src: '@/plugins/auth.js', ssr: false }],

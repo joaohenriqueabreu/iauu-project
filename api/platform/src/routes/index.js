@@ -33,5 +33,4 @@ api.use('/files',         file);
 api.use('/statistics',    statistics);
 api.use('/feedbacks',     feedbacks);
 
-
 module.exports = api;

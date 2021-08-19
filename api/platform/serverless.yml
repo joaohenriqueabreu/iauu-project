@@ -1,0 +1,30 @@
+org: iauuserverless
+app: iauu-serverless
+service: iauu-serverless
+
+frameworkVersion: '2'
+
+custom:
+  serverless-offline:
+    httpPort: ${env:HTTP_PORT}
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: '20201221'
+  stage: dev
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+functions:
+  api:
+    handler: ./src/handler.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+      - http:
+          path: /{proxy+}
+          method: ANY
