@@ -3,8 +3,8 @@
  * Class for standalone script services (must self-contain db connection - compatible with services)
  */
 
-const db       = require('../data/db');
-const { InterfaceNotImplementdException } = require('../exception');
+const db = require('@iauu/connect');
+const { InterfaceNotImplementdException } = require('@iauu/exceptions');
 
 module.exports = class ScriptService {
   constructor(context) {

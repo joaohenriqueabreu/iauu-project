@@ -1,5 +1,5 @@
-const validateRequest     = require('joi');
-const BadRequestException = require('../exception/bad');
+const validateRequest         = require('joi');
+const { BadRequestException } = require('@iauu/exceptions');
 
 const validate = (data, req, next, schema) => {
   console.log('Validating Request...')

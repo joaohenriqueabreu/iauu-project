@@ -1,6 +1,6 @@
 const amqp                      = require('amqplib');
-const config                    = require('../env');
-const { EventBrokerException }  = require('../exception');
+const config                    = require('@iauu/env');
+const { EventBrokerException }  = require('@iauu/exceptions');
 
 async function connect(){
   const conn = await amqp.connect(`amqp://${config.broker.host}:${config.broker.port}`);

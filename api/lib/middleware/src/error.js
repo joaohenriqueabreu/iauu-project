@@ -1,4 +1,4 @@
-const Exception = require('../exception/exception');
+const { Exception } = require('@iauu/exceptions');
 
 module.exports = (error, req, res, next) => {  
     console.log('Something is wrong...');

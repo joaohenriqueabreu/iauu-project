@@ -16,3 +16,4 @@ api/lib/.env.testing
 broker/data
 broker/logs
 api/proxy/node_modules
+api/lib/connect/node_modules

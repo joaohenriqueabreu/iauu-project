@@ -16,7 +16,8 @@
         "test-file": "mocha --timeout 50000 --exit --grep"
     },
     "dependencies": {
-        "iauu": "file:/var/lib/iauu",
+        "@iauu/env": "1.0.0",
+        "@iauu/connect": "1.0.0",
         "app-module-path": "^2.2.0",
         "atob": "^2.1.2",
         "aws-sdk": "2.750.0",

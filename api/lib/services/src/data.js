@@ -1,5 +1,5 @@
-const { InvalidDataRequestException } = require('../exception');
-const RequestEndpointService  = require('../services/request');
+const { InvalidDataRequestException } = require('@iauu/exceptions');
+const RequestEndpointService          = require('../services/request');
 
 const requestEndpointSvc = new RequestEndpointService();
 

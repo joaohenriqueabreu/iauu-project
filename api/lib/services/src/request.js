@@ -1,7 +1,7 @@
+const config                  = require('@iauu/env');
+const { BadRequestException } = require('@iauu/exceptions');
 const axios                   = require('axios').default;
 const jwt                     = require('jwt-simple');
-const config                  = require('../env');
-const { BadRequestException } = require('../exception');
 
 module.exports = class RequestEndpointService {
   constructor(service) {

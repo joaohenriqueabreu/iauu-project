@@ -1,4 +1,4 @@
-const { EventBrokerException }        = require('../exception');
+const { EventBrokerException }        = require('@iauu/exceptions');
 const { connectBroker, consumeEvent } = require('./broker');
 const moment                          = require('moment');
 

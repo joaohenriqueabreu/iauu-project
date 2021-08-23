@@ -1,0 +1,16 @@
+{
+  "author": {
+    "name": "iauu"
+  },
+  "license": "ISC",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "name": "@iauu/models",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joaohenriqueabreu/iauu-models.git"
+  },
+  "dependencies": {
+    "mongoose": "^5.13.8"
+  }
+}

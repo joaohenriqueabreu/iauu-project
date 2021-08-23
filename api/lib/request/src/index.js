@@ -1,4 +1,4 @@
-const RequestEndpointService = require('../services/request');
+const RequestEndpointService = require('@iauu/services/request');
 
 const requestEndpointSvc = new RequestEndpointService();
 const get = async (endpoint, id, query) => {
