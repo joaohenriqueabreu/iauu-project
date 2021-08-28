@@ -1,5 +1,5 @@
-const config                = require('iauu/env');
-const { _, moment }         = require('iauu/utils');
+const config                = require('@iauu/env');
+const { _, moment }         = require('@iauu/utils');
 const BaseService           = require('../base');
 const { Presentation }      = require('../../models');
 const { PresentationData }  = require('../../config/data');

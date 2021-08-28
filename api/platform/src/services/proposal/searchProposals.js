@@ -1,9 +1,9 @@
-const { _, moment } = require('iauu/utils');
-const config        = require('iauu/env');
+const { _, moment } = require('@iauu/utils');
+const config        = require('@iauu/env');
 const BaseService   = require('../base');
 const { Proposal }  = require('../../models');
 const { ProposalData } = require('../../config/data');
-const { BadRequestException } = require('iauu/exception');
+const { BadRequestException } = require('@iauu/exceptions');
 
 module.exports = class SearchProposalsService extends BaseService
 {

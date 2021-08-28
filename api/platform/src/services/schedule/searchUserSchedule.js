@@ -1,5 +1,5 @@
 const _                     = require('lodash');
-const { get }               = require('iauu/request');
+const { get }               = require('@iauu/request');
 const SearchScheduleService = require('./searchSchedule');
 
 module.exports = class SearchUserScheduleService extends SearchScheduleService

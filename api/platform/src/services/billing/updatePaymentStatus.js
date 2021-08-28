@@ -3,7 +3,7 @@ const GatewayCallbackServiceBuilder = require('../builders/gatewayCallbackServic
 const { Billing }                   = require('../../models');
 const { Payment }                   = require('../../models/schemas');
 const { BillingData }               = require('../../config/data');
-const { EVENTS }                    = require('iauu/events');
+const { EVENTS }                    = require('@iauu/events');
 const { FailedChargingPaymentMethodException, BadRequestException, Exception } = require('../../exception');
 const SaveBillingService = require('./saveBilling');
 

@@ -1,7 +1,7 @@
 const { AuthService, AssignRoleService, GenerateTokenService } = require('.');
 const RegisterReferralSourceService = require('../referral/referralSource');
-const { BadRequestException }       = require('iauu/exception');
-const { EVENTS }                    = require('iauu/events');
+const { BadRequestException }       = require('@iauu/exceptions');
+const { EVENTS }                    = require('@iauu/events');
 const { User }                      = require('../../models');
 
 module.exports = class RegisterUserService extends AuthService {

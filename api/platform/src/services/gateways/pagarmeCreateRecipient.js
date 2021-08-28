@@ -1,5 +1,5 @@
-const config = require('iauu/env');
-const { Exception } = require('iauu/exception');
+const config = require('@iauu/env');
+const { Exception } = require('@iauu/exceptions');
 
 const VendorGatewayCreateAccountInterface = require('../interfaces/vendorGatewayCreateAccount');
 const PagarmeConnectService = require('./pagarmeConnect');

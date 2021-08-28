@@ -1,5 +1,5 @@
 const { Schema, model }       = require('mongoose');
-const { isEmpty }             = require('iauu/utils');
+const { isEmpty }             = require('@iauu/utils');
 
 const BaseRepository          = require('./repositories/base');
 const baseSchemaOptions 	    = require('./schemas/options');

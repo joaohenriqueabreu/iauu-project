@@ -1,7 +1,7 @@
-const config = require('iauu/env');
+const config = require('@iauu/env');
 
 // init db and connect
-const db      = require('iauu/data/db');
+const db      = require('@iauu/connect');
 const odm     = require('mongoose');
 const initDb  = async () => {
   try {

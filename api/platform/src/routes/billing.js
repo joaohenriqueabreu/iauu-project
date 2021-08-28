@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const billingController = require('../controller/billing');
-const { authorizationMiddleware, validationMiddleware } = require('iauu/middleware');
+const { authorizationMiddleware, validationMiddleware } = require('@iauu/middlewares');
 
 api.get('/account',         authorizationMiddleware.authorize, authorizationMiddleware.artist,      billingController.searchArtistAccount);
 api.put('/:id/instalments', authorizationMiddleware.authorize, authorizationMiddleware.artist,      validationMiddleware.id,          validationMiddleware.instalments, billingController.updateInstalments);

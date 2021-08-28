@@ -1,6 +1,6 @@
 const AssignRoleService       = require('./assignRole');
 const { Contractor }          = require('../../models');
-const { BadRequestException } = require('iauu/exception');
+const { BadRequestException } = require('@iauu/exceptions');
 
 module.exports = class AssignContractorRoleService extends AssignRoleService
 {

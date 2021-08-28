@@ -1,4 +1,4 @@
-const { ScriptService }     = require('iauu/services');
+const { ScriptService }     = require('@iauu/services');
 const { User }              = require('../../models');
 const bcrypt                = require('bcryptjs');
 const GenerateTokenService  = require('./generateToken');

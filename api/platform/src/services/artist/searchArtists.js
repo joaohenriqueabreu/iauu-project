@@ -1,4 +1,4 @@
-const config        = require('iauu/env');
+const config        = require('@iauu/env');
 const { Artist }    = require('../../models');
 const BaseService   = require('../base');
 const LocationUtils = require('../utils/location');

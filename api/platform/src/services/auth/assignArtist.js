@@ -1,6 +1,6 @@
 const AssignRoleService       = require('./assignRole');
 const { Artist }              = require('../../models');
-const { BadRequestException } = require('iauu/exception');
+const { BadRequestException } = require('@iauu/exceptions');
 
 
 module.exports = class AssignArtistRoleService extends AssignRoleService

@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const { findIndex } = require('lodash')
 const ArtistService = require('./base')
 const BadRequestException = require('../../exception/bad')
 

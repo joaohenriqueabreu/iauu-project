@@ -1,4 +1,4 @@
-const _ = require('lodash')
+const { forEach } = require('lodash')
 const { User } = require('../models')
 
 /**
@@ -6,7 +6,7 @@ const { User } = require('../models')
  */
 async function up () {
   const users = await User.find().select('+verification_token')
-  _.forEach(users, (user) => {
+  forEach(users, (user) => {
     console.log(`Migrating user ${user.id}...`)
     if (user.verification !== undefined && user.verification.token !== undefined) {
       console.log('Token exists...')

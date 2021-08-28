@@ -1,10 +1,10 @@
 const _                       = require('lodash');
 const moment                  = require('moment');
-const config                  = require('iauu/env');
+const config                  = require('@iauu/env');
 const BaseService             = require('../base');
 const { Billing }             = require('../../models');
 const { Payment }             = require('../../models/schemas');
-const { DataRequestService }  = require('iauu/services');
+const { DataRequestService }  = require('@iauu/services');
 const GatewaySplitPaymentServiceBuilder = require('../builders/gatewaySplitPaymentServiceBuilder');
 const { BadRequestException, ManualPaymentRequiredException, Exception } = require('../../exception');
 

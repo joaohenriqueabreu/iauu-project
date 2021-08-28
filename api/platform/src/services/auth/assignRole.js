@@ -4,8 +4,8 @@ const {
   BadRequestException,
   CannotConstructAbstractClassException,
   InterfaceOrAbstractNotImplementedException,
-} = require('iauu/exception');
-const { EVENTS }                    = require('iauu/events');
+} = require('@iauu/exceptions');
+const { EVENTS }                    = require('@iauu/events');
 
 module.exports = class AssignRoleService extends AuthService {
   constructor(id) {

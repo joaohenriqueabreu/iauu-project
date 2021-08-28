@@ -1,11 +1,11 @@
-const { EVENTS, EventConsumerService }  = require('iauu/events');
-const { DataRequestService }            = require('iauu/services');
+const { EVENTS, EventConsumerService }  = require('@iauu/events');
+const { DataRequestService }            = require('@iauu/services');
 const { Billing }                       = require('../../models');
 const SearchArtistAccountService        = require('./searchArtistAccount');
 const { 
   BadRequestException, 
   ManualPaymentRequiredException,
-} = require('iauu/exception');
+} = require('@iauu/exceptions');
 
 module.exports = class CreateBillingService extends EventConsumerService
 {

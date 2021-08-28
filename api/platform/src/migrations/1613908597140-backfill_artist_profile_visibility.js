@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { forEach } = require('lodash');
 
 const db = require('../data/db');
 const { Artist } = require('../models');
@@ -7,7 +7,7 @@ async function up () {
   // Write migration here
   await db.connect();
   const artists = await Artist.find({});
-  _.forEach(artists, async (artist) => {
+  forEach(artists, async (artist) => {
     artist.public = true;
 
     console.log(`Setting artist ${artist.name} as publicly visible`);

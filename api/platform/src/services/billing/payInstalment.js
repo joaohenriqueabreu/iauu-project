@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const PaymentService = require('./payment');
-const { Billing } = require('../../models');
+const { findIndex }           = require('lodash');
+const PaymentService          = require('./payment');
+const { Billing }             = require('../../models');
 const { Instalment, Payment } = require('../../models/schemas');
 const { BadRequestException, ManualPaymentRequiredException, Exception } = require('../../exception');
 
@@ -65,6 +65,6 @@ module.exports = class PayInstalmentPaymentService extends PaymentService
   }
 
   getInstalmentIndex() {
-    return _.findIndex(this.billing.instalments, (instalment) => instalment.id === this.instalmentId);
+    return findIndex(this.billing.instalments, (instalment) => instalment.id === this.instalmentId);
   }
 }

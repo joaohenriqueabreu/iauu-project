@@ -1,6 +1,6 @@
 const moment            = require('moment');
 const _                 = require('lodash');
-const config            = require('iauu/env');
+const config            = require('@iauu/env');
 const { Schema, model } = require('mongoose');
 const BaseRepository    = require('../repositories/base');
 const { PaymentData }   = require('../../config/data');

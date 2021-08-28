@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const artistController = require('../controller/artist');
-const { authorizationMiddleware, validationMiddleware }  = require('iauu/middleware');
+const { authorizationMiddleware, validationMiddleware }  = require('@iauu/middlewares');
 
 api.get('/search',        validationMiddleware.search,  artistController.searchArtists);
 api.get('/:id/private',   validationMiddleware.id,      authorizationMiddleware.authorize, artistController.privateInfo);

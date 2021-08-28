@@ -1,8 +1,8 @@
-const config                  = require('iauu/env');
+const config                  = require('@iauu/env');
 const bcrypt                  = require('bcryptjs');
 const BaseService             = require('../base');
 const { User }                = require('../../models');
-const { BadRequestException } = require('iauu/exception');
+const { BadRequestException } = require('@iauu/exceptions');
 const GenerateTokenService    = require('./generateToken');
 
 module.exports = class AuthService extends BaseService {

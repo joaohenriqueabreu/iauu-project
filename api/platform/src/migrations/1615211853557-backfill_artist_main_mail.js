@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { forEach } = require('lodash');
 
 const db = require('../data/db');
 const { Artist, User } = require('../models');
@@ -7,7 +7,7 @@ async function up () {
   // Write migration here
   await db.connect();
   const artists = await Artist.find({});
-  _.forEach(artists, async (artist) => {
+  forEach(artists, async (artist) => {
     if (artist.email !== undefined || ! Array.isArray(artist.users) || artist.users.length === 0) { 
       console.log(`Cannot change artist ${artist.name}`);
       return;

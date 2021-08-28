@@ -1,4 +1,4 @@
-const { EVENTS, EventConsumer }     = require('iauu/events');
+const { EVENTS, EventConsumer }     = require('@iauu/events');
 const { 
   CreatePresentationService,
   ManualPaymentService,

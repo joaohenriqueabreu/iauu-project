@@ -1,4 +1,4 @@
-const config = require('iauu/env');
+const config = require('@iauu/env');
 const util = require('util');
 
 module.exports = class Exception extends Error {

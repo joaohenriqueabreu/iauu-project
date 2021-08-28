@@ -1,5 +1,5 @@
 const BaseService             = require('../base');
-const { BadRequestException } = require('iauu/exception');
+const { BadRequestException } = require('@iauu/exceptions');
 const { User }                = require('../../models');
 
 module.exports = class RegisterReferralSourceService extends BaseService

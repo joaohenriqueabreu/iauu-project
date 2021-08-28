@@ -1,6 +1,5 @@
 const BaseService  = require('../base');
-const RequestEndpointService  = require('iauu/services/request');
-const { BadRequestException }  = require('../../exception');
+const { RequestEndpointService }  = require('@iauu/services');
 const { Feedback }  = require('../../models');
 
 module.exports = class SendFeedbackService extends BaseService

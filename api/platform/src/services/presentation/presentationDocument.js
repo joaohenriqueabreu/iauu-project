@@ -2,7 +2,7 @@ const { map, filter}      = require('lodash');
 const moment              = require('moment');
 const PresentationService = require('./base')
 const { Document }        = require('../../models/schemas');
-const { EVENTS } = require('iauu/events');
+const { EVENTS } = require('@iauu/events');
 
 module.exports = class PresentationDocumentService extends PresentationService
 {

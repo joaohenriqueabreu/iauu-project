@@ -17,3 +17,4 @@ broker/data
 broker/logs
 api/proxy/node_modules
 api/lib/connect/node_modules
+api/.env

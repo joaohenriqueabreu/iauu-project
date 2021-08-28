@@ -1,5 +1,4 @@
 const { Presentation } = require('../models');
-const _ = require('lodash');
 const db = require('../data/db');
 /**
  * Make any changes you need to make to the database here

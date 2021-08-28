@@ -1,5 +1,5 @@
 const BaseFactory = require('../base');
-const config      = require('iauu/env');
+const config      = require('@iauu/env');
 
 module.exports = class PagarmeTransactionFactory extends BaseFactory {
   make() {

@@ -1,4 +1,4 @@
-const { EVENTS, EventConsumer }                 = require('iauu/events');
+const { EVENTS, EventConsumer }                 = require('@iauu/events');
 const { RegisterPresentationReferralService }   = require('../services/referral');
 
 const presentationCompletedConsumer = new EventConsumer(EVENTS.PRESENTATION_COMPLETED_EVENT);

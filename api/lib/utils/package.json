@@ -3,7 +3,7 @@
     "name": "iauu"
   },
   "license": "ISC",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "src/index.js",
   "name": "@iauu/utils",
   "repository": {
@@ -11,8 +11,8 @@
     "url": "https://github.com/joaohenriqueabreu/iauu-utils.git"
   },
   "dependencies": {
-    "@iauu/env": "1.0.0",
-    "@iauu/exceptions": "1.0.0",
+    "@iauu/env": "1.0.x",
+    "@iauu/exceptions": "1.0.x",
     "amqplib": "^0.8.0",
     "dotenv": "8.2.0",
     "express-jwt": "^6.1.0",

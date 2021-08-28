@@ -1,8 +1,8 @@
 const _                         = require('lodash');
-const { EventConsumerService }  = require('iauu/events');
+const { EventConsumerService }  = require('@iauu/events');
 const BadRequestException       = require('../../exception/bad');
 const { Presentation }          = require('../../models');
-const { EVENTS }                = require('iauu/events');
+const { EVENTS }                = require('@iauu/events');
 const { PresentationData } = require('../../config/data');
 
 module.exports = class CreatePresentationService extends EventConsumerService

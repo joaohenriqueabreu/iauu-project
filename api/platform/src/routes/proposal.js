@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const proposalController = require('../controller/proposal');
-const { authorizationMiddleware, validationMiddleware } = require('iauu/middleware');
+const { authorizationMiddleware, validationMiddleware } = require('@iauu/middlewares');
 
 // Apps endpoints
 api.get('/',                authorizationMiddleware.authorize,  validationMiddleware.query,         proposalController.searchUserProposals);

@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const presentationController = require('../controller/presentation');
-const { authorizationMiddleware, validationMiddleware, dataMiddleware } = require('iauu/middleware');
+const { authorizationMiddleware, validationMiddleware, dataMiddleware } = require('@iauu/middlewares');
 
 // Apps endpoints
 api.get('/role/:id',              authorizationMiddleware.app,        validationMiddleware.id, validationMiddleware.query, presentationController.searchRolePresentations);

@@ -1,4 +1,4 @@
-const { EVENTS }          = require('iauu/events');
+const { EVENTS }          = require('@iauu/events');
 const PresentationService = require('./base');
 const BadRequestException = require('../../exception/bad');
 

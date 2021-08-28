@@ -1,4 +1,4 @@
-const config      = require('iauu/env');
+const config      = require('@iauu/env');
 const fs          = require('fs');
 const { v4: uid } = require('uuid');
 

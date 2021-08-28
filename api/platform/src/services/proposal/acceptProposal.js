@@ -1,7 +1,7 @@
-const { _, moment }         = require('iauu/utils');
+const { _, moment }         = require('@iauu/utils');
 const ReplyProposalService  = require('./replyProposal');
 const BadRequestException   = require('../../exception/bad');
-const { EVENTS }            = require('iauu/events');
+const { EVENTS }            = require('@iauu/events');
 
 module.exports = class AcceptProposalService extends ReplyProposalService
 {

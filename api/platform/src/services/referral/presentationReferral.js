@@ -1,4 +1,4 @@
-const { EventConsumerService } = require('iauu/events');
+const { EventConsumerService } = require('@iauu/events');
 
 module.exports = class RegisterPresentationReferralService extends EventConsumerService 
 {

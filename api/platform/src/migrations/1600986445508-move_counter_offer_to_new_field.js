@@ -1,5 +1,5 @@
 const { Presentation } = require('../models');
-const _ = require('lodash');
+const { forEach } = require('lodash');
 const db = require('../data/db');
 /**
  * Make any changes you need to make to the database here
@@ -9,7 +9,7 @@ async function up () {
 
   // Write migration here
   const presentations = await Presentation.find();
-  _.forEach(presentations, async (presentation) => {
+  forEach(presentations, async (presentation) => {
     if (typeof presentation.proposal.counterOffer !== 'object') {
       console.log(`No counter offer for presentation ${presentation.id}...`)
       return;

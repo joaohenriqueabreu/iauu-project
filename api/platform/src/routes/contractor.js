@@ -1,7 +1,7 @@
 const api = require('express').Router();
 
 const contractorController = require('../controller/contractor');
-const { authorizationMiddleware, validationMiddleware } = require('iauu/middleware');
+const { authorizationMiddleware, validationMiddleware } = require('@iauu/middlewares');
 
 api.get('/:id', authorizationMiddleware.app, validationMiddleware.id, contractorController.searchContractor);
 api.get('/:id/validate', authorizationMiddleware.app, validationMiddleware.id, contractorController.validateContractor);

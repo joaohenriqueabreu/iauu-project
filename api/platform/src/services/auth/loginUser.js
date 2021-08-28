@@ -1,4 +1,4 @@
-const { EVENTS }            = require('iauu/events');
+const { EVENTS }            = require('@iauu/events');
 const AuthService           = require('./auth');
 const User                  = require('../../models/user');
 const UnauthorizedException = require('../../exception/unauthorized');

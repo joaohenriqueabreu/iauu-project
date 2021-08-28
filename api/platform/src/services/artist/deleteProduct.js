@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { findIndex } = require('lodash');
 const ArtistService = require('./base');
 const BadRequestException = require('../../exception/bad');
 
@@ -22,7 +22,7 @@ module.exports = class DeleteProductService extends ArtistService
     ensureProductExists() {
       console.log('Checking if product exists...');
       const self  = this;
-      const index = _.findIndex(this.artist.products, (product) => product.id === self.productId);
+      const index = findIndex(this.artist.products, (product) => product.id === self.productId);
 
       if (index === -1) {
         throw new BadRequestException('Invalid product');

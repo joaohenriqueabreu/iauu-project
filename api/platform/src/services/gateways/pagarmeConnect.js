@@ -1,4 +1,4 @@
-const config = require('iauu/env');
+const config = require('@iauu/env');
 const pagarme = require('pagarme');
 const { FailedAPIConnectionException } = require('../../exception');
 
