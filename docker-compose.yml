@@ -29,6 +29,14 @@ services:
                         iauu_net:
                 depends_on:
                         - broker
+        identity:
+                extends:
+                        file: ./api/identity/docker-compose.yml
+                        service: keycloak
+        identity_db:
+                extends:
+                        file: ./api/identity/docker-compose.yml
+                        service: mysql
         mail:
                 build: 
                         context: ./api 
