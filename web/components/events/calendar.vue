@@ -522,6 +522,10 @@ td:not(.fc-minor) {
     flex-direction: column;
   }
 
+  h2 {
+    text-transform: capitalize;
+  }
+
   div {
     margin-bottom: $space;
   }
