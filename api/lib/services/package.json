@@ -13,7 +13,7 @@
   "dependencies": {
     "@iauu/env": "1.0.x",
     "@iauu/exceptions": "1.0.x",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "jwt-simple": "^0.5.6"
   }
 }
