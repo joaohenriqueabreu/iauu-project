@@ -18,7 +18,7 @@
     "dependencies": {
         "@iauu/env": "1.0.x",
         "lodash": "4.17.19",
-        "moment": "2.27.0",
+        "moment": "2.29.4",
         "mongodb": "3.6.0",
         "mongoose": "5.9.27",
         "mongoose-extend-schema": "1.0.0",
