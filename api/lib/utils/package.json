@@ -15,7 +15,7 @@
     "@iauu/exceptions": "1.0.x",
     "amqplib": "^0.8.0",
     "dotenv": "8.2.0",
-    "express-jwt": "^6.1.0",
+    "express-jwt": "^8.2.0",
     "joi": "^17.4.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1"
